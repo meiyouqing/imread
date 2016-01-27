@@ -1,0 +1,182 @@
+var Header = require('./header');
+var Img = require('./img');
+var Hammer = require('./hammer');
+
+var Shelf = React.createClass({
+	startReading: function(e){
+		var a = e.target.parentNode;
+		var bid = parseInt(a.getAttribute('data-bid'));
+		var sid = a.getAttribute('data-sid');
+		var cid = a.getAttribute('data-cid');
+		if(!this.state.setting){ //开始阅读
+			var data = this.state.data;
+			var readLog = GLOBAL.readLog[bid];
+			if (readLog){
+				//console.log(readLog)
+				cid = readLog.current_chapterid;
+			}
+			window.location.hash = Router.setHref('reading&crossDomain.'+sid+'.'+cid+'.'+bid);
+		}else{  //选择操作
+			var index = this.state.selected.indexOf(bid);
+			if(index == -1){
+				this.state.selected.push(bid);
+				this.setState({
+					selected:this.state.selected
+				});
+			}else{
+				this.state.selected.splice(index,1);
+				this.setState({
+					selected:this.state.selected
+				});
+			}
+		}
+	},
+	settingClick: function(){
+		var completion = <button className="f-fl textBtn" onClick={this.compClick} >退出编辑</button>;
+		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
+		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+		var delBtn = <button className="f-fl textBtn" onClick={this.delBtnClick} >删除</button>;
+		this.setState({
+			setting:true,
+			selected:[],
+			icon : <i className="iconfont icon-selected"></i>,
+			left:this.state.toggle? seNone : seAll,
+			right:completion,
+			delBtn:delBtn
+		})
+	},
+	compClick: function(){
+		var icon = <i className="u-recentRead"></i>;	
+		var setting = <button className="f-fr iconfont icon-setting" onClick={this.settingClick} ></button>;
+		this.setState({
+			setting:false,
+			left:null,
+			delBtn:null,
+			right:setting,
+			icon:icon
+		})
+	},
+	seAllClick :function(){
+		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+		this.props.shelfList.forEach(function(v){
+			this.state.selected.push(v.content_id);
+		}.bind(this))
+		this.setState({
+			left:seNone,
+			selected:this.state.selected
+		})
+	},
+	seNoneClick: function(){
+		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
+		this.setState({
+			left:seAll,
+			selected:[]
+		})
+	},
+	delBtnClick: function(){
+		if(!this.state.selected.length) {
+			alert('别闹~至少选择一本书先！')
+			return;
+		};
+		var param = []
+		this.state.selected.forEach(function(v){
+			var o = {type:3,bookId:v}
+			param.push(o);
+		});
+		param = JSON.stringify(param);
+		Router.ajax('deleteBook',{param:param},function(data){
+			// console.log(data);
+			Router.init('shelf&block.157.1.0');
+			this.props.getShelfList();
+			this.compClick();
+		}.bind(this))
+	},
+	getInitialState: function(){
+		var icon = <i className="u-recentRead"></i>;	
+		var setting = <div className="f-fr iconfont icon-setting" onClick={this.settingClick} ></div>;
+		return {
+			setting:false,
+			toggle:false,
+			left:null,
+			delBtn:null,
+			right:setting,
+			icon:icon,
+			selected:[]
+		}
+	},
+	mixins:[GLOBAL.lazyloadImageMixin()],
+	componentDidMount: function(){
+		this.lazyloadImage(this.refs.container);
+
+		var hammerTime = new Hammer(this.refs.container);
+		hammerTime.on('press', function() {
+			this.settingClick();
+		}.bind(this));
+	},
+	componentDidUpdate: function() {
+		var scrollUpdate = Router.parts[2]==='1';
+		this.lazyloadImage(this.refs.container);
+		//console.log(Router.parts)
+		if (scrollUpdate) {
+			this.refs.container.scrollTop = 0;
+		}
+	},
+	shouldComponentUpdate: function(nextProp,nextState){
+		//console.log(this.props,nextProp)
+		return true;
+	},
+	render:function(){
+		//console.log(this.state.selected);
+		var content,header,icon;
+		var curClass = '';
+		var recent = 0;
+		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
+		var addBook = this.state.setting? null:add;
+		this.props.shelfList.forEach(function(v,i){
+			recent = (recent<v.mark_time)?v.mark_time:recent;
+		})
+
+		var deleteLine = false;
+		if (this.state.delBtn) {
+			deleteLine = (
+				<div className="f-clearfix u-btn-1 u-delete-line">
+					{this.state.left}
+					{this.state.delBtn}
+					{this.state.right}
+				</div>
+			);
+		}
+		return (
+			<div className="shelf-block">
+				<div className={"g-main"}>
+					<div className="g-scroll g-scroll-noBG" onScroll={this.props.scrollHandle} ref="container">
+						<ul className="shelfWrap f-clearfix">
+							{
+								this.props.shelfList.map(function(v,i){
+									if(this.state.setting){
+										curClass = this.state.selected.indexOf(v.content_id)==-1?'':' z-active';
+									}
+									icon = this.state.setting? this.state.icon:(recent === v.mark_time? this.state.icon:null);
+									return(
+										<li key={i} className={"u-book-2"+curClass}>
+											<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sid={v.source_bid}>
+												{icon}
+												<Img src={v.big_coverlogo} />
+												<span className="f-ellipsis">{v.name}</span>
+											</a>
+										</li>
+										);
+									return <Book0 key={i} data={v} recent={recent === v.mark_time} setting={this.state.setting} />
+								}.bind(this))
+							}
+							{addBook}
+						</ul>
+					</div>
+				</div>
+				{deleteLine}
+			</div>
+		);
+	}
+});
+
+module.exports = Shelf;

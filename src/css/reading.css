@@ -1,0 +1,87 @@
+.m-reading{position: absolute;left: 0;right: 0;top: 0;bottom: 0;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;background: #f8f8f9;overflow-y: auto;-webkit-overflow-scrolling: touch;}
+.u-readingContent{padding: 0 15px;color: #333333;font-size: 20px;line-height: 2.0;text-indent: 2em;}
+.u-chapterName{margin: 90px 15px 40px 15px;font-size: 18px;color: #333333;font-weight: bold;}
+.u-action-top, .u-action-middle, .u-action-bottom{position: absolute;z-index: 4000;cursor: pointer;}
+.u-action-top, .u-action-bottom{width: 100%;height: 40%;left: 0;top: 0;}
+.u-action-bottom{top: 60%;}
+.u-action-middle{width: 80%;left: 10%;height: 20%;top: 40%;}
+.u-settings{position: absolute;left: 0;right: 0;background: rgba(0, 0, 0, .9);color: #FFFFFF;z-index: 4001;}
+.u-settings-top{top: 0;line-height: 60px;text-align: center;font-size: 16px;}
+.u-settings-top .icon-back{position:absolute; left: 15px;padding: 0 10px;line-height: 60px;color: #FFFFFF;cursor: pointer;}
+.u-settings-top .m-block{border-top: 0;border-bottom: 0;}
+.u-settings-top .icon-close{position: absolute;display:block;bottom: 10px;width: 24px;height: 24px;line-height: 24px;border-radius: 50%;right: 16px;color: #FFF;font-size: 12px;background: rgba(0, 0, 0, .7);}
+.u-settings-bottom{bottom: 0;height: 60px;}
+.u-settingitem{line-height: 60px;box-sizing: border-box;border-right: 1px solid #454545;color: #FFFFFF;font-size: 16px;text-align: center;}
+.u-settingitem .iconfont{font-size: 24px;}
+.u-settingitem:last-child{border-right: none;}
+.u-chapterlistc{position: absolute;left: -100%;width: 100%;top: 0;bottom: 0;transition: left 0.3s;z-index: 4002;overflow: hidden;}
+.u-chapterlistc.active{left: 0;}
+.u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;width: 20%;background: rgba(0, 0, 0, .3);cursor: pointer;}
+.u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 80%;background: #fff;}
+.u-chapterlist .u-bookname{padding-left: 20px;height: 60px;line-height: 60px;box-sizing: border-box;border-bottom: 1px solid #9a9a9a; font-weight: bold;color: #555555;font-size: 18px;}
+.u-chapterlist .u-scroll-y{position: absolute;top: 60px;bottom: 55px;width: 100%;}
+.u-chapterlist .chapterlist{padding: 0 20px;}
+.u-chapterlist .chapterlist .chapter{border-top: 1px solid #9a9a9a;font-size: 14px;color: #444444;cursor: pointer;}
+.u-chapterlist .chapterlist .chapter.current{color: #41c2c2;}
+.u-chapterlist .chapterlist .chapter:first-child{border-top: none;}
+.u-chapterlist .chapterlist .icon-lock{line-height: 32px;color: #999999;font-size: 16px;}
+.u-chapterlist .chapterlist .chapter .name{display: block;height: 30px;line-height: 32px;margin-right: 20px;}
+.u-chapter-action{position: absolute;bottom: 0;left: 0; right: 0;height: 55px;line-height: 35px;padding: 10px 0;box-sizing:border-box;border-top: 1px solid #9a9a9a;text-align: center;color: #444444;cursor: pointer;}
+.u-chapter-page:last-child{border-left: 1px solid #9a9a9a;}
+
+.m-reading.bg-1{background: #F7EBE7}
+.m-reading.bg-2{background: #E1D1B5}
+.m-reading.bg-3{background: #DCBFC8}
+.m-reading.bg-4{background: #B6C2AB}
+.m-reading.night-1{background: #292829}
+.m-reading.night-1 .u-readingContent{color: #7B797B}
+.m-reading.night-1 .u-chapterName{color: #7B797B}
+
+.m-reading.fontSize-1 .u-readingContent{font-size: 16px;}
+.m-reading.fontSize-2 .u-readingContent{font-size: 18px;}
+.m-reading.fontSize-3 .u-readingContent{font-size: 20px;}
+.m-reading.fontSize-4 .u-readingContent{font-size: 22px;}
+.m-reading.fontSize-5 .u-readingContent{font-size: 24px;}
+
+.m-reading.lineheight-1 .u-readingContent{line-height: 1.6}
+.m-reading.lineheight-2 .u-readingContent{line-height: 2.0}
+.m-reading.lineheight-3 .u-readingContent{line-height: 2.4}
+
+.m-reading.fontFamily-1 .u-readingContent{font-family: \5FAE\8F6F\96C5\9ED1, "Microsoft YaHei", Helvetica;}
+.m-reading.fontFamily-2 .u-readingContent{font-family: "宋体", "FangSong", Helvetica;}
+.m-reading.fontFamily-3 .u-readingContent{font-family: "黑体", "SimHei", Helvetica;}
+.m-reading.fontFamily-4 .u-readingContent{font-family: "楷体", "KaiTi", Helvetica;}
+
+.u-settings-font{bottom: 60px;padding: 15px;border-bottom: 1px solid #454545;}
+.setting-font-line{height: 44px;line-height: 44px;}
+.setting-font-line .title{width: 40px;line-height: 44px;text-align: center;font-size: 16px;}
+.setting-font-line .item{position:relative;height: 30px;line-height: 26px;box-sizing: border-box;margin: 5px 0px 5px 15px;border-radius: 15px;border: 2px solid #BBBBBB;text-align: center;font-size: 16px;}
+.setting-font-line .bg-1{background: #F7EBE7}
+.setting-font-line .bg-2{background: #E1D1B5}
+.setting-font-line .bg-3{background: #DCBFC8}
+.setting-font-line .bg-4{background: #B6C2AB}
+
+.setting-fontfamily .item.active, .setting-line-height .item.active, .setting-fontsize .item.active{background: #444444;}
+.setting-bg .item.active .active-border{position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px;border: 2px solid rgba(0, 0, 0, 0.8);border-radius: 12px;content: ""}
+
+.setting-fontfamily {display: none;}
+
+.reading-guide{ position: absolute;left: 0;right: 0;top: 0;bottom: 0;background: rgba(0, 0, 0, .5);color: #FFFFFF;text-align: center;line-height: 20px;font-size: 16px;cursor: pointer;z-index: 4002;}
+.reading-guide-item{position: absolute;left: 0;width: 100%;height: 40%;}
+.guide-top{top: 0;}
+.guide-bottom{top: 60%}
+.guide-middle{top: 40%;height: 20%;left: 10%;width: 80%;}
+.guide-tip{position: absolute;left: 0;right: 0;top: 50%;margin-top: -18px;}
+
+.guide-middle{ border: 2px #ccc solid;box-sizing: border-box;border-radius: 5px;background: rgba(0, 0, 0, .5);}
+.guide-icon img{position: absolute;right:0;width: 70px;top: 50%;margin-top: -35px;}
+.guide-content .guide-tip{text-align: left;}
+.guide-icon, .guide-content{position: relative;width: 50%;height: 100%;}
+
+.setting-line-height .item .iconfont{position: relative;top: -2px;pointer-events:none;}
+
+.m-intercut{position: relative;overflow: hidden;margin: 25px 0;}
+.m-intercut img{display:block;width: 100%;}
+.m-intercut .btn{position: absolute;bottom: 25px;left: 0;right: 0;text-align: center;}
+.m-intercut.full-screen{bottom: 50px;}
+.m-intercut .btn a{display: inline-block;text-align: center;padding: 0 18px;height: 46px;line-height: 46px;background: rgba(0, 0, 0, .6);color: #FFF;font-size: 18px;border-radius: 3px;}

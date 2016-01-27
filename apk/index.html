@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<title>原文阅读</title>
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="img/logo.png">
+		<link rel="apple-touch-icon" href="img/logo.png" />
+
+		<link rel="stylesheet" type="text/css" href="css/reset.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+	</head>
+
+	<body>
+		<div id="app-container" class="app-contaienr">
+			<div id="loading" class="u-loading">
+				<div class="u-moving-ball">
+					<i class="ball-1"></i><i class="ball-2"></i>
+				</div>
+				<i>正在加载中...</i>
+			</div>
+			<div id="no-data">
+				<div class="m-noData f-tac">
+					<img class="icon" src="img/UFO.png" />
+					<i class="tip">糟糕，服务器被外星人劫持了..</i>
+					<a class="u-btn" onclick="location.reload()">重新加载</a>
+				</div>
+			</div>
+			<div id="s-loading" class="u-loading">
+				<div class="u-moving-ball">
+					<i class="ball-1"></i><i class="ball-2"></i>
+				</div>
+				<i>正在加载中...</i>
+			</div>
+		</div>
+
+		<div class="template book" id="template">
+			<div class="img-c">
+				<a href="downloadApp.html?url=$redirect_url&packageName=$packgeName" target="download"><img data-src="$image_url"></a>
+			</div>
+			<div class="f-cb info-c">
+				<a class="d-btn f-fr" href="downloadApp.html?url=$redirect_url&packageName=$packgeName" target="download">下载</a>
+				<div class="info">
+					<div class="author">$author_name</div>
+					<div class="desc">$book_brief</div>
+				</div>
+			</div>
+		</div>
+
+		<iframe name="download" id="download"></iframe>
+
+		<script type="text/javascript" src="js/index.js"></script>
+
+		<span style="display: none;"><script src="http://v1.cnzz.com/z_stat.php?id=1253424580&web_id=1253424580 " language="JavaScript"></script></span>
+
+		<script>
+			(function() {
+				var s = "_" + Math.random().toString(36).slice(2);
+				document.write('<div id="' + s + '"></div>');
+				(window.slotbydup = window.slotbydup || []).push({
+					id: '2371735',
+					container: s,
+					size: '0,0',
+					display: 'inlay-fix'
+				});
+			})();
+		</script>
+		<script src="http://dup.baidustatic.com/js/os.js"></script>
+	</body>
+
+</html>

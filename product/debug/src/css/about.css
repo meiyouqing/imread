@@ -1,0 +1,10 @@
+.about-block > .title{margin: 15px auto 0; text-align: center; font-size: 14px; font-weight: bold; letter-spacing: .2em;color: #777;}
+.about-block > .desc, .about-block > .version, .about-block > .conpact, .about-block > .footer{position: absolute;left:0;right:0;text-align: center;}
+.about-block > .desc{bottom: 80px; font-size: 12px;letter-spacing: .6em;color: #777;}
+.about-block > .conpact{bottom: 110px;}
+.about-block > .conpact a{color: #41c2c2}
+.about-block > .version{text-align: center; color: #999; font-size: 12px;}
+.about-block > .footer{bottom: 0;height: 50px;line-height: 50px;padding-left:15px;text-align:left;background: #DFE0E0;letter-spacing: normal;color: #666;font-size: 14px;}
+.about-block > .footer .iconfont{margin-right: 15px;color: #999;}
+.about-block > .footer .home{display: block;font-size: 16px;}
+

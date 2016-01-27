@@ -1,0 +1,34 @@
+.introduce-container {position: absolute;left: 0;right: 0;top: 0;bottom: 0;overflow: auto;background: #FFFFFF;-webkit-overflow-scrolling: touch;}
+
+.u-bookIntroduce{margin: 60px 15px 0 15px;}
+.u-bookIntroduce .bookinfo{margin-left: 125px;}
+.u-bookIntroduce .title{color: #333333;font-weight: bold;font-size: 14px;}
+.u-bookIntroduce .author, .u-bookIntroduce .wordCount, .u-bookIntroduce .bookSource{font-size: 14px;color: #666666;}
+.u-bookIntroduce .bookSource span, .u-bookIntroduce .bookSource b{display: inline-block;vertical-align: middle;}
+.u-bookIntroduce .sourceIcon{width: 16px;height: 16px;margin-right: 8px;}
+.u-bookIntroduce .sourceIcon img{width: 100%;height: auto;}
+.u-bookIntroduce .buttons{margin-top: 25px;}
+.u-bookIntroduce .button{width:48.5%;height: 36px;line-height: 34px;box-sizing:border-box;text-align: center;border: 1px solid #B3B3B3;border-radius: 4px;cursor: pointer;}
+.u-bookIntroduce .button.disabled{border:none;background:#ddd;color: #fff;}
+.u-bookIntroduce .readButton{background: #41c2c2;color: #FFFFFF;border: 1px solid #41c2c2;}
+.u-bookIntroduce .chapter{line-height: 28px;color: #888888;cursor: pointer;}
+.u-bookIntroduce .chapter.current{color: #41c2c2}
+.u-bookIntroduce .chapter .name{display: block;line-height: 28px;margin-right: 20px;}
+.u-bookIntroduce .chapter .icon-lock{font-size: 14px;color: #888888;}
+
+.u-tabs{margin-top: 25px;}
+.g-body-3 .u-fixTabbar{left: 100%;}
+.g-body-3.active .u-fixTabbar{left: 0;transition: left 0.3s;}
+.u-fixTabbar{position: fixed;left: 15px;right: 15px;top: 44px;padding: 10px 0;background: #FFFFFF;}
+.u-tabbar{border: 1px solid #B3B3B3;border-radius: 4px;}
+.u-tabbar .tab{display: inline-block;box-sizing: border-box;width: 33.333%;height: 32px;line-height: 32px;text-align: center;color: #999;}
+.u-tabbar .tab:nth-child(2){border-left: 1px solid #B3B3B3;border-right: 1px solid #B3B3B3;}
+.u-tabbar .tab.active{background: #999;color: #FFF;}
+.u-tabs .contents{margin-top: 20px;}
+.u-tabs .content-0{text-indent: 2em;line-height: 2;color: #666666;}
+.u-tabs .contents .content{display: none;}
+.u-tabs .contents .active{display: block;}
+.introduce-cover{width: 100px;height: auto;}
+
+.introduce-container{top: 44px;}
+.u-bookIntroduce{margin-top: 12px;}

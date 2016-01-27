@@ -1,0 +1,38 @@
+.m-balance{background-color: #fff;}
+.u-balance{padding: 15px;text-align: center;}
+.u-balance .title{font-size: 16px;}
+.u-balance .count{margin-top: 0px;font-size: 32px;color: #fd9b65;}
+.u-balance .unit{margin-left: 6px;font-size: 14px;}
+
+.u-divider {height: 10px;background: #F5F5F5;}
+
+.m-paytip{padding: 10px 15px;margin-top: 40px;}
+.m-paytip .tipTitle{margin-bottom: 8px;font-size: 16px;color: #666666;}
+.m-paytip li{position: relative;line-height: 18px;margin-left: 20px;margin-bottom: 10px;font-size: 14px;color: #999999;}
+.m-paytip li:before{position: absolute;left: -16px;top: 6px;width: 6px;height: 6px;border-radius: 50%;background-color: #41c2c2;content: "";}
+
+.pay-list {padding: 20px 0 0 0;}
+.pay-list li {position:relative;width: 50%;padding: 0 7px 0 15px;margin-bottom: 14px;box-sizing: border-box;}
+.pay-list li:nth-child(2n+1) {padding: 0 7px 0 15px;}
+.pay-list li:nth-child(2n) {padding: 0 15px 0 7px;}
+.pay-list li img {display: block;max-width: 100%;}
+.pay-list li .count{position: absolute;top: 50%;left: 0;right: 30%;margin-top: -16px;height: 32px;line-height: 32px;font-size: 32px;text-align: center;color: #78A3B3;}
+.pay-list li:nth-child(2n) .count{left: 7px}
+.pay-list li:nth-child(2n+1) .count{left: 15px}
+.pay-list li.active .count{color: #fd9b65;}
+
+.m-balance .u-userform{padding-top: 20px;letter-spacing: 0.1em;}
+.m-balance .formTitle{margin-top: -10px;margin-bottom: 10px;}
+
+.m-recharge{}
+.m-recharge .title{margin-bottom: 12px;padding: 15px 0 20px;border-bottom: 1px solid #EEE;line-height: 1;text-align: center;}
+.m-recharge .result-suc td{font-size: 16px;}
+.m-recharge .result-note{margin-bottom: 5px;}
+.m-recharge .result-fail{padding: 15px 0;}
+.m-recharge .result-fail span{display: inline-block;line-height: 45px;font-size: 16px;color:#777;}
+.m-recharge .result-fail .u-btn{padding: 0 10px;letter-spacing: normal;}
+
+.m-order {background: #F9F9F9 !important;font-size: 16px;}
+.m-order .mt-100{margin-top: 80px;}
+.m-order .block{padding: 15px;background: #FFF;border-top:1px solid #EEE;border-bottom:1px solid #EEE;}
+.m-order .block .lh-40{line-height: 40px;}

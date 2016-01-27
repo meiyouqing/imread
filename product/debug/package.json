@@ -1,0 +1,29 @@
+{
+  "name": "imread",
+  "version": "1.0.0",
+  "description": "imread for html5",
+  "main": "route.js",
+  "dependencies": {
+    "request": "^2.63.0"
+  },
+  "devDependencies": {
+    "babel-core": "^5.8.32",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.23.0",
+    "file-loader": "^0.8.5",
+    "html-webpack-plugin": "^1.7.0",
+    "jsx-loader": "^0.13.2",
+    "path": "^0.12.7",
+    "react": "^0.14.1",
+    "react-dom": "^0.14.1",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Min",
+  "license": "ISC"
+}
