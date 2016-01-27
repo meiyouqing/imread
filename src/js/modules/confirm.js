@@ -39,15 +39,12 @@ var confirm = function() {
 	};
 	this.alert = function(msg,callback){
 		that.remove();
-		callback = callback || GLOBAL.noop;
 		UI_confirm.innerHTML = template_alert.replace('$content', msg);
 		that.onConfirmBtn(UI_confirm,callback)
 		document.body.appendChild(UI_confirm);
 	};
 	this.confirm = function(msg,callback,cancel){
 		that.remove();
-		callback = callback || GLOBAL.noop;
-		cancel = cancel || GLOBAL.noop;
 		UI_confirm.innerHTML = template_confirm.replace('$content', msg);
 		var cancelBtn = UI_confirm.querySelector('.cancelBtn');
 		that.onConfirmBtn(UI_confirm,callback);
@@ -56,8 +53,6 @@ var confirm = function() {
 	};
 	this._confirm = function(msg,callback,cancel,top){
 		that.remove();
-		callback = callback || GLOBAL.noop;
-		cancel = cancel || GLOBAL.noop;
 		UI_confirm.innerHTML = template__confirm.replace('$content', msg);
 		that.onConfirmBtn(UI_confirm,callback);
 		that.onCancelBtn(UI_confirm,cancel);
@@ -68,22 +63,22 @@ var confirm = function() {
 	};
 	this.onConfirmBtn = function(UI_confirm,callback){
 		var confirmBtn = UI_confirm.querySelector('.confirmBtn');
-		var confirmBtnHammer = new Hammer(confirmBtn);
-		confirmBtnHammer.on('tap', function(e) {
-			callback();
+		confirmBtn.onclick = function(e) {
+			if(typeof callback==='function'){callback()}
 			e.stopPropagation && (e.stopPropagation)();
-			setTimeout(that.remove,300);
-		});			
+			//setTimeout(that.remove,300);
+			that.remove();
+		};			
 	};
 	this.onCancelBtn = function(cancelBtn,callback){
-		var cancelBtnHammer = new Hammer(cancelBtn);
-		cancelBtnHammer.on('tap', function(e) {
-			setTimeout(callback,0)
+		cancelBtn.onclick = function(e) {
+			if(typeof callback==='function'){callback()}
 			//callback();
 			e.stopPropagation && (e.stopPropagation)();
-			setTimeout(that.remove,300);
+			//setTimeout(that.remove,300);
+			that.remove();
 			//alert('b')
-		});			
+		};			
 	}
 	this.remove = function() {
 		var blocks = document.body.querySelectorAll('.UI_confirm');
