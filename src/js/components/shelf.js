@@ -77,7 +77,7 @@ var Shelf = React.createClass({
 	},
 	delBtnClick: function(){
 		if(!this.state.selected.length) {
-			alert('别闹~至少选择一本书先！')
+			POP._alert('别闹~至少选择一本书先！')
 			return;
 		};
 		var param = []

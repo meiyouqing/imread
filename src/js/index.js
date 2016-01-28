@@ -4,6 +4,7 @@ var ReactDOM = require('react-dom');
 var Frame = require('./components/frame');
 var GLOBAL = require('./modules/global');
 var Token = require('./modules/token');
+require('./modules/readConfig');
 
 GLOBAL.setUser({
 	phone: GLOBAL.cookie('userPhone'),

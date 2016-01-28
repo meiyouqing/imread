@@ -108,26 +108,30 @@ var User = React.createClass({
 	},
 	requireLogin:function(e) {
 		var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
+		var that = this;
 		if (!this.isLogin()) {
 			var href = target.href;
-				alert(href)
 			if (!href) {
-				var that = this;
-				this.goLogin(function() {
-					setTimeout(function() {
-						that.setState({
-							needUpdate: that.state.needUpdate + 1
-						});
-					}, 0);
-					setTimeout(function() {
-						that.getUserInfo(function() {
-							window.location.replace(href || '#user');
-						});
-					}, 10);
-				});
+				var hash = window.location.hash+'/login';
+				window.location.replace(hash);
+				myEvent.setCallback('login', login_c);
+				return false;
 			}
+			this.goLogin(login_c);
 			e.preventDefault();
 			return false;
+		}
+		function login_c() {
+			setTimeout(function() {
+				that.setState({
+					needUpdate: that.state.needUpdate + 1
+				});
+			}, 0);
+			setTimeout(function() {
+				that.getUserInfo(function() {
+					window.location.replace(href || '#user');
+				});
+			}, 10);
 		}
 		return true;
 	},

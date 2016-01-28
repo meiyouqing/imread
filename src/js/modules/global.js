@@ -61,7 +61,7 @@ var GLOBAL = {
 	assertNotEmpty: function(s, msg) {
 		if (!s) {
 			if (msg) {
-				alert(msg);
+				POP.alert(msg);
 			}
 		}
 		return !!s;
@@ -69,7 +69,7 @@ var GLOBAL = {
 	assertMatchRegExp: function(s, reg, msg) {
 		if (!reg.test(s)) {
 			if (msg) {
-				alert(msg);
+				POP.alert(msg);
 			}
 			return false;
 		}
@@ -180,14 +180,14 @@ var GLOBAL = {
 			var errorMsg = '';
 			for (var key in res.error[0]) {
 				errorMsg = res.error[0][key];
-				alert(errorMsg);
+				POP.alert(errorMsg);
 				return true;
 			}
 		} else {
 			if (typeof res.error === 'string') {
-				alert(res.error);
+				POP.alert(res.error);
 			} else {
-				alert(res.error.detail);
+				POP.alert(res.error.detail);
 			}
 			return true;
 		}
@@ -203,11 +203,6 @@ var GLOBAL = {
 			storage.set('InfoUuid', uuid);
 		}
 		return uuid;
-	},
-	goTo: function (bid, cid) {
-		if (confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
-			window.location.href = Config.examplUrl.replace('$bid', bid).replace('$cid', cid);
-		}
 	}
 }
 

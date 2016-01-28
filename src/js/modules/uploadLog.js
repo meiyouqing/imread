@@ -1,8 +1,8 @@
 var isHidden = require('./isHidden');
 
 var config = {
-	intercut: '/api/intercut/logPost',
-	read: '/api/upload/log'
+	intercut: {method:'GET',url:'/api/intercut/log'},
+	read: {method:'POST',url:'/api/upload/log'}
 };
 
 var getJSON = require('./getJSON').getJSON;
@@ -10,7 +10,7 @@ var getJSON = require('./getJSON').getJSON;
 var uploadLog = {
 	send: function(page, params) {
 		if (config[page] && !isHidden()) {
-			getJSON('POST', config[page], params, GLOBAL.noop, GLOBAL.noop);
+			getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
 		}
 	}
 };

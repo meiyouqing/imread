@@ -44,7 +44,9 @@ var Recharge = React.createClass({
 		function success(data){
 			that.loading=false;
 			if(data.code===159){
-				POP.alert(data.reason, that.refs.key.focus);
+				POP.alert(data.reason, function(){
+					that.refs.key.select();
+				});
 				return;
 			}
 			window.location.replace(Router.setHref('recharge_result'));

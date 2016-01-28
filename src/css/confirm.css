@@ -12,7 +12,7 @@
 
 .UI_confirm_auto{position: absolute;z-index:9999;bottom: 25%;left: 0;right: 0;text-align: center;-webkit-animation:fadeUp .2s ease;animation:fadeUp .2s ease;}
 .UI_confirm_auto.dispear{-webkit-animation:fadeDown .2s ease forwards;animation:fadeDown .2s ease forwards;}
-.UI_confirm_auto .content{display: inline-block;max-width: 80%;min-width: 130px;min-height: 48px;line-height: 48px;padding: 0 15px;background: rgba(0,0,0,.7);border-radius: 4px;font-size: 17px;color: #FFF;}
+.UI_confirm_auto .content{display: inline-block;max-width: 80%;min-width: 130px;min-height: 25px;line-height: 25px;padding: 10px 15px;background: rgba(0,0,0,.6);border-radius: 6px;font-size: 15px;color: #FFF;}
 @keyframes fadeUp{
 	0%{opacity: 0; bottom: 0;}
 	100%{opacity: 1; bottom: 25%;}
@@ -22,10 +22,10 @@
 	100%{-webkit-opacity: 1; bottom: 25%;}
 }
 @keyframes fadeDown{
-	0%{opacity: 1; bottom: 25%;}
-	100%{opacity: 0; bottom: 0;}
+	0%{opacity: 1;}
+	100%{opacity: 0;}
 }
 @-webkit-keyframes fadeDown{
-	0%{-webkit-opacity: 1; bottom: 25%;}
-	100%{-webkit-opacity: 0; bottom: 0;}
+	0%{-webkit-opacity: 1;}
+	100%{-webkit-opacity: 0;}
 }

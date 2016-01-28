@@ -147,6 +147,7 @@ var Reading = React.createClass({
 	isOnShelf: true,
 	chargeMode: 1,
 	chapterCount: '1',
+	readTime: 1000,
 	mixins: [styleMixins, chapterMixins, Mixins()],
 	getInitialState: function() {
 		return {
@@ -204,6 +205,7 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
+			chapter_read_time: this.readTime
 		}];
 		if (this.isLogin()) {
 			uploadLog.send('read', {readLog:JSON.stringify(readLog)});
@@ -216,6 +218,8 @@ var Reading = React.createClass({
 		myEvent.execCallback('reading' + bid + '-fromReading', true);
 	},
 	componentWillUnmount: function() {
+		this.readTime = Date.now()-this.time;
+		console.log(this.readTime)
 		this.addRecentRead(this.props.localid, this.state.chapterid);
 	},
 	goOut:function(e){
@@ -341,14 +345,20 @@ var Reading = React.createClass({
 		that.setState({
 			data: data,
 			loading: false,
-			chapterid: that.state.chapterid,
 			page: currentPage,
 			pages: currentPage,
 			order: false
 		});
+		that.getNextContent(data);
 	},
 	getContent: function() {
 		if(!this.isMounted()){return;}
+		var nextChapter = storage.get('nextChapter');
+		//console.log(nextChapter.nextChapterId,this.state.chapterid)
+		if((nextChapter.nextChapterId-1)==this.state.chapterid){
+			this.gotContent(nextChapter);
+			return;
+		}
 		this.setState({
 			loading: true
 		});
@@ -370,6 +380,18 @@ var Reading = React.createClass({
 			}
 		});
 	},
+	getNextContent: function(data) {
+		if(!this.isMounted()){return;}
+		var that = this;
+		bookContent.get({
+			bid: that.state.bid,
+			cid: data.nextChapterId,
+			source_id : Router.parts[4],
+			callback: function(data){
+				storage.set('nextChapter',data);
+			}.bind(this)
+		});
+	},	
 	confirmOrder: function(data){
 		var that = this;
 		if(that.isLogin()){
@@ -410,7 +432,7 @@ var Reading = React.createClass({
 					that.setState({
 						order: true
 					})
-					POP.confirm('艾豆不足，请充值',that.getIntroduce.bind(that,that.confirmOrder.bind(that,orderData)));
+					that.getIntroduce(that.confirmOrder.bind(that,orderData));
 					// if(confirm('艾豆不足，请充值')){
 					// 	that.getIntroduce(that.confirmOrder.bind(that,orderData));
 					// }
@@ -459,7 +481,7 @@ var Reading = React.createClass({
 	},
 	componentDidMount:function(){
 		this.getContent();
-
+		this.time = Date.now();
 		if (GLOBAL.cookie('showGuide') != '1') {
 			this.setState({
 				showGuide: true
@@ -526,6 +548,8 @@ var Reading = React.createClass({
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} />;
+		var className = readingStyle.getClass(this.state.style);
+		var intercut;
 		if(this.state.UFO){
 			return (
 				<div>
@@ -553,8 +577,6 @@ var Reading = React.createClass({
 				</div>
 			);
 		}
-		var className = readingStyle.getClass(this.state.style);
-		var intercut;
 		if (this.state.intercut) {
 			intercut = <Intercut data={this.state.intercut} />
 

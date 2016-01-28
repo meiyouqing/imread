@@ -1,4 +1,3 @@
-var Hammer = require('./hammer');
 require('../../css/confirm.css');
 
 var confirm = function() {
@@ -24,6 +23,7 @@ var confirm = function() {
 
 	var UI_confirm = document.createElement("div");
 	UI_confirm.className = 'UI_confirm';
+
 
 	this._alert = function(msg){
 		var UI_confirm = document.createElement("div");

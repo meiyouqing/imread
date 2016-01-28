@@ -31,7 +31,7 @@ var tag = React.createClass({
 	addTag: function(e) {
 		var index = e.target.getAttribute('data-index');
 		if (this.state.myTagList.length >= 10) {
-			return alert('最多选择10个标签');
+			return POP.alert('最多选择10个标签');
 		}
 		Router.ajax('addTag', {
 			id: this.state.tagList[index].category_id

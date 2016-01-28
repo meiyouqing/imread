@@ -342,9 +342,7 @@ var Block15 = React.createClass({
 	configTag:function(e){
 		e.preventDefault();
 		if(!this.isLogin()){
-			if(confirm('请先登录哦！')){
-				this.goLogin(callback);
-			}	
+			this.goLogin(callback);
 			return;
 		}
 		callback();

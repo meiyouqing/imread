@@ -1,5 +1,5 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
-	webpackDevMiddleware = require("webpack-dev-middleware"),
+	//webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;
