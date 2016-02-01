@@ -49,7 +49,7 @@ var mixins = function() {
 		goLogin: function(callback){
 			var hash = window.location.hash+'/login';
 			window.location.replace(hash);
-			POP._alert('请先登录！');
+			POP._alert('请先登录');
 			myEvent.setCallback('login', callback);
 		}
 	};
