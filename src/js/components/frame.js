@@ -394,15 +394,13 @@ var Frame = React.createClass({
 		var that = this;
 		var inter;
 		var onhashchange = function(e) {
-			if (e) {
-				clearInterval(inter);
-			}
  			var lastRoute = Router.route;
 			var currentRoute = window.location.hash.substr(1).split('/');
 			Router.route = currentRoute;
 			//console.log(lastRoute,currentRoute)
 			var li = lastRoute.length-1,
 				ci = currentRoute.length-1;
+			
 			if(li>ci){
 				Router.init(currentRoute[ci]);
 				for (var i = li; i > ci; i--) {
@@ -437,7 +435,14 @@ var Frame = React.createClass({
 			}
 		}, 100);
 	
-		window.onhashchange = onhashchange;
+		var _totalFire = 0;
+		window.onhashchange = function() {
+			_totalFire++;
+			if (_totalFire > 1) {
+				clearInterval(inter);
+			}
+			onhashchange();
+		};
 		
 	},
 	// shouldComponentUpdate: function(nextProp,nextState){

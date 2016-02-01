@@ -595,7 +595,7 @@ var Reading = React.createClass({
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<div className="iconfont icon-back" onClick={this.goOut}></div>
-						<span>{this.state.data.name}</span>
+						<span className="title f-ellipsis">{this.state.data.name}</span>
 
 						<div className={this.state.showIntercut ? "" : "f-hide"}>
 							{this.state.intercutList}

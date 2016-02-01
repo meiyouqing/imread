@@ -188,8 +188,8 @@
 		};
 		var match = window.location.search.match(/user_id=(\d+)/);
 		var user_id = match && match[1];
-		request.open('GET', 'http://192.168.0.34:9090/api/me/experience?user_id=' + user_id);
-		//request.open('GET', 'http://readapi.imread.com/api/me/experience?user_id=' + user_id);
+		//request.open('GET', 'http://192.168.0.34:9090/api/me/experience?user_id=' + user_id);
+		request.open('GET', 'http://readapi.imread.com/api/me/experience?user_id=' + user_id);
 		request.send(null);
 	}
 
