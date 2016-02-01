@@ -317,7 +317,6 @@ var Frame = React.createClass({
 		function getList(){
 			//that.setPart();
 			if(!that.isMounted()){return;}
-			console.log(GLOBAL.forceGetJSON)
 			Router.get(function(data){
 				myEvent.setCallback('updateTopList',that.getTopList);
 				if (!data || !data.length) {
