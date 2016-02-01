@@ -10,6 +10,8 @@
 .u-settings-top .icon-back{position:absolute; left: 15px;padding: 0 10px;line-height: 60px;color: #FFFFFF;cursor: pointer;}
 .u-settings-top .m-block{border-top: 0;border-bottom: 0;}
 .u-settings-top .icon-close{position: absolute;display:block;bottom: 10px;width: 24px;height: 24px;line-height: 24px;border-radius: 50%;right: 16px;color: #FFF;font-size: 12px;background: rgba(0, 0, 0, .7);}
+.u-settings-top span.title{height: 60px;display: block;padding: 0 50px;}
+
 .u-settings-bottom{bottom: 0;height: 60px;}
 .u-settingitem{line-height: 60px;box-sizing: border-box;border-right: 1px solid #454545;color: #FFFFFF;font-size: 16px;text-align: center;}
 .u-settingitem .iconfont{font-size: 24px;}
