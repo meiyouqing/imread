@@ -38,6 +38,7 @@ var mixins = function() {
 			addBookCallback();
 			function addBookCallback() {
 				Router.ajax('addBook', {param:JSON.stringify(param)},function(data){
+					GLOBAL.onShelf[param[0].bookId]=1;
 					(typeof callback==='function') && callback(data);
 				},GLOBAL.noop);
 			}

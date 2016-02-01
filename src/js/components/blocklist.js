@@ -340,6 +340,7 @@ var Block14 = React.createClass({
 var Block15 = React.createClass({
 	mixins:[Mixins()],
 	configTag:function(e){
+		var that = this;
 		e.preventDefault();
 		if(!this.isLogin()){
 			this.goLogin(callback);
@@ -347,11 +348,21 @@ var Block15 = React.createClass({
 		}
 		callback();
 		function callback(){
-			window.location.hash = Router.setHref('tag&listTag');
-			myEvent.setCallback('configTag',function(){
-				myEvent.execCallback('updateTopList');
-				//TODO 重新加载本页				
-			}.bind(this))
+			//alert(that.isLogin());
+			Router.setAPI(['listTag']);
+			Router.get(function(data){
+				if(data.selected.length){
+					GLOBAL.forceGetJSON=true;
+					myEvent.execCallback('updateTopList');
+				}else{
+					window.location.hash = Router.setHref('tag&listTag');
+					myEvent.setCallback('configTag',function(){
+						GLOBAL.forceGetJSON=true;
+						myEvent.execCallback('updateTopList');
+						//TODO 重新加载本页				
+					});
+				}
+			});
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {

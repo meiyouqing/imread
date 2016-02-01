@@ -2,9 +2,13 @@ var transformRequest = require('./transformRequest');
 
 var imCache = (function() {
 	var config = {
-		cacheUrl: ['/api/group/page'],
-		needCache: false
+		cacheUrl: ['/api/group/page','/api/page/content','/api/book/introduce','/api/book/chapterlist'],
+		needCache: true
 	};
+	if(GLOBAL.forceGetJSON){
+		config.needCache=false;
+		GLOBAL.forceGetJSON=false;
+	}
 
 	var needCache = function(url) {
 		if (!config.needCache) {
@@ -68,8 +72,10 @@ function GETJSON(method, url, postdata, callback, onError, urlBase) {
 	if (imCache.needCache(cacheUrl)) {
 		cacheResponse = imCache.getFromCache(cacheUrl);
 		if (cacheResponse) {
-			console.log('getFromCache-' + cacheUrl)
-			callback(cacheResponse);
+			// console.log('getFromCache-' + cacheUrl)
+			setTimeout(function(){
+				callback(cacheResponse)
+			},0);
 		}
 	}
 	GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);

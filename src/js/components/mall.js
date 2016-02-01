@@ -3,6 +3,9 @@ var MallNav = require('./mallNav');
 
 var Mall = React.createClass({
 	mixins: [Mixins()],
+	// componentDidMount: function(){
+	// 	this.lazyloadImage(this.refs.container);
+	// },
 	componentDidUpdate: function() {
 		if(!this.props.mallList || !this.props.mallList.length){return;}
 		this.lazyloadImage(this.refs.container);

@@ -10,7 +10,7 @@ var About = React.createClass({
 				<Header title={Router.title} right={false} />
 				<i className="imreadLogo"><img src="src/img/logo.png" /></i>
 				<h1 className="title">艾美阅读</h1>
-            	<p className="version">版本1.0.0</p>
+            	<p className="version">版本2.1.0</p>
             	<p className="conpact"><a href="#user/about/compact">用户协议</a></p>
 				<h2 className="desc">发现阅读之美</h2>
             	<footer className="footer">

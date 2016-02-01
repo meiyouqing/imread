@@ -219,7 +219,6 @@ var Reading = React.createClass({
 	},
 	componentWillUnmount: function() {
 		this.readTime = Date.now()-this.time;
-		console.log(this.readTime)
 		this.addRecentRead(this.props.localid, this.state.chapterid);
 	},
 	goOut:function(e){
@@ -236,6 +235,8 @@ var Reading = React.createClass({
 				Router.goBack();
 			});
 		}.bind(this);
+		console.log(GLOBAL.onShelf)
+		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));
 		}else{
@@ -284,7 +285,7 @@ var Reading = React.createClass({
 			});
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
-			that.isOnShelf = !!(+data.is_self);
+			that.isOnShelf = +data.is_self;
 			//that.getAD_block5(data);
 			if(typeof callback==='function'){callback()}
 		}

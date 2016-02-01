@@ -288,6 +288,7 @@ var Frame = React.createClass({
 	},
 	getTopList: function(callback){
 		var that = this;
+		var forceGetJSON = GLOBAL.forceGetJSON;
 		// if(!that.state.topNav){
 			Router.setAPI(['group.6']);
 			Router.get(function(data){
@@ -301,6 +302,7 @@ var Frame = React.createClass({
 				// 	window.location.replace('#'+that.topNavHref);
 				// }else{
 					Router.init(that.topNavHref);
+					GLOBAL.forceGetJSON = forceGetJSON;
 					getList();
 				// }
 			},that.onerror);
@@ -315,6 +317,7 @@ var Frame = React.createClass({
 		function getList(){
 			//that.setPart();
 			if(!that.isMounted()){return;}
+			console.log(GLOBAL.forceGetJSON)
 			Router.get(function(data){
 				myEvent.setCallback('updateTopList',that.getTopList);
 				if (!data || !data.length) {
@@ -373,6 +376,11 @@ var Frame = React.createClass({
 		}
 	},
 	componentDidMount:function(){
+		if(/book_id=\d+/.test(window.location.search) && !window.location.hash){
+			var bookId = window.location.search.match(/book_id=(\d+)/)[1];
+			//console.log(bookId)
+			window.location.hash = '#mall/introduce.'+bookId;
+		}
 		if(window.location.hash.length){
 			Router.route = window.location.hash.substr(1).split('/');
 			Router.unRendered = window.location.hash.substr(1).split('/');
