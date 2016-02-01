@@ -282,8 +282,10 @@ html, body, #app-container{background: #FFFFFF;}
 
 .u-btn{display: inline-block;height: 40px;padding: 0 30px;line-height: 40px;background-color: #41c2c2;font-size: 15px;text-align: center;color: #ffffff !important;letter-spacing: 0.2em;-moz-border-radius: 5px;border-radius: 5px;}
 .u-btn-full{width: 100%;padding: 0;}
+.u-btn-disabled{background-color: #E1E1E1;color: #B1B1B1 !important;}
 .u-btn-1{display: block;position: absolute;z-index: 111;width:100%;bottom: 0;height: 51px;line-height: 51px;text-align: center;background-color: #41c2c2;font-size: 15px;text-align: center;color: #fff;letter-spacing: 0.2em;}
 .u-btn-1 .icon-delete{font-size: 15px;margin-right: 3px;}
+.u-btn-1-disabled{background-color: #DFDFDF;color: #333 !important;}
 
 .u-btn2{height: 30px;line-height: 26px;padding: 0 20px;border: 2px solid #fda676;color: #fda676;background-color: #fff;-moz-border-radius: 15px;border-radius: 15px;}
 .u-btn2-on{color: #fff;background-color: #fda676;}

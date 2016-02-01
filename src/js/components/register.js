@@ -92,7 +92,7 @@ var Register = React.createClass({
 								<input className="u-input" placeholder="验证码" type="tel" ref="key" />
 							</div>
 							<div className="u-buttonc f-fl">
-								<a className="u-btn u-btn-full" type="button" onClick={this.getCode}>{this.state.s && ('(' + this.state.s + 's)后可以重新发送') || '获取验证码'}</a>
+								<a className={"u-btn u-btn-full"+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 							</div>
 						</div>
 						<div className="u-inputline">

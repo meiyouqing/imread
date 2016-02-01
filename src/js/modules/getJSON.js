@@ -3,7 +3,7 @@ var transformRequest = require('./transformRequest');
 var imCache = (function() {
 	var config = {
 		cacheUrl: ['/api/group/page','/api/page/content','/api/book/introduce','/api/book/chapterlist'],
-		needCache: true
+		needCache: false
 	};
 	if(GLOBAL.forceGetJSON){
 		config.needCache=false;

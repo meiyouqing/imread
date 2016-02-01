@@ -64,7 +64,7 @@ var mod = React.createClass({
 						</div>
 						<div className="f-fc-777 f-tr f-pr-15">支付成功后将自动订购后续章节</div>
 						<div className="block f-clearfix">
-							<div className="f-fl lh-40"><span className="f-mr-5 f-fw-b">艾豆余额：</span><span className="f-fc-666">{this.state.aidou} （将优先扣除）</span></div>
+							<div className="f-fl lh-40"><span className="f-mr-5 f-fw-b">艾豆余额：</span><span className="f-fc-666">{this.state.aidou}</span></div>
 							<div className="f-fr"><input type="button" className="u-btn" onClick={this.rechargeHandle} value="充值" /></div>
 						</div>
 						<div className="f-p-15 mt-100"><input type="button" className="u-btn u-btn-full" onClick={this.payHandle} value="确认支付" /></div>

@@ -37,14 +37,12 @@ var Shelf = React.createClass({
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
 		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
 		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
-		var delBtn = <button className="u-btn-1" onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>;
 		this.setState({
 			setting:true,
 			selected:[],
 			icon : <i className="iconfont icon-selected"></i>,
 			left:this.state.toggle? seNone : seAll,
-			right:completion,
-			delBtn:delBtn
+			right:completion
 		})
 	},
 	compClick: function(){
@@ -53,7 +51,6 @@ var Shelf = React.createClass({
 		this.setState({
 			setting:false,
 			left:null,
-			delBtn:null,
 			right:setting,
 			icon:icon
 		})
@@ -77,7 +74,7 @@ var Shelf = React.createClass({
 	},
 	delBtnClick: function(){
 		if(!this.state.selected.length) {
-			POP._alert('别闹~至少选择一本书先！')
+			//POP._alert('别闹~至少选择一本书先！')
 			return;
 		};
 		var param = []
@@ -100,7 +97,6 @@ var Shelf = React.createClass({
 			setting:false,
 			toggle:false,
 			left:null,
-			delBtn:null,
 			right:setting,
 			icon:icon,
 			selected:[],
@@ -159,7 +155,7 @@ var Shelf = React.createClass({
 						</ul>
 					</div>
 				</div>
-				{this.state.delBtn}
+				<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
 			</div>
 		);
 	}
