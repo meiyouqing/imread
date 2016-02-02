@@ -3,7 +3,7 @@ var myEvent = require('../modules/myEvent');
 var Chapterlist = React.createClass({
 	getCurrentChapterId: function(bid) {
 		var currentChapterId = 0;
-		var readLog = storage.get('readLog')[bid];
+		var readLog = storage.get('readLogNew')[bid];
 		if (readLog) {
 			currentChapterId = readLog.current_chapterid;
 		}

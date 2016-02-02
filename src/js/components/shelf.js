@@ -11,7 +11,7 @@ var Shelf = React.createClass({
 		var sid = a.getAttribute('data-sid');
 		if(!this.state.setting){ //开始阅读
 			var data = this.state.data;
-			var readLog = storage.get('readLog')[bid];
+			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
 				//console.log(readLog)
 				cid = readLog.current_chapterid;
