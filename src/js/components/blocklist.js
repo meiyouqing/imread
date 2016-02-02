@@ -312,7 +312,7 @@ var Block14 = React.createClass({
 	render:function(){
 		var more;
 		if(!this.state.noMore){
-			more = (<div className="f-tc"><input type="button" className="u-readMore" onClick={this.readMoreHandle} value="点击查看更多..." /></div>);
+			more = (<div className="f-tc f-bt-eee"><input type="button" className="u-readMore" onClick={this.readMoreHandle} value="点击查看更多..." /></div>);
 		}
 		return (
 			<section className="m-block">
