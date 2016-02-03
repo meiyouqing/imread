@@ -491,11 +491,31 @@ var Reading = React.createClass({
 			});
 		}
 	},
+	handlePullToRrefresh: function(e) {
+		var scrollY = this.refs.scrollarea.scrollTop;
+		console.log(e.type, scrollY)
+		switch(e.type) {
+			case "pandown":
+				if (scrollY > 5) {
+					return ;
+				} else {
+					this.refs.tip_top.classList.remove("f-hide");
+				}
+				break;
+			case "panend":
+				console.log("panend")
+				break;
+		}
+	},
 	componentDidUpdate: function() {
-		if (this.refs.scrollarea && this.refs.scrollarea.getAttribute('data-events') != '1') {
-			this.refs.scrollarea.setAttribute('data-events', '1');
-			var hammerTime = new Hammer(this.refs.scrollarea);
+		var that = this;
+		var scrollarea = this.refs.scrollarea;
+		if (scrollarea && scrollarea.getAttribute('data-events') != '1') {
+			scrollarea.setAttribute('data-events', '1');
+			var hammerTime = new Hammer(scrollarea);
 			hammerTime.on('tap', this.handleClick);
+
+			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
 	},
 	toggleChapterlist: function() {
@@ -657,6 +677,7 @@ var Reading = React.createClass({
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
+					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent">
 						{
@@ -666,6 +687,7 @@ var Reading = React.createClass({
 						}
 					</section>
 					{intercut}
+					<button className="u-btn-1">点击阅读下一章</button>
 				</div>
 
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>
