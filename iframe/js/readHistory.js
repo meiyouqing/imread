@@ -93,16 +93,16 @@
 
 	function callback(data) {
 		
-		data.total_read_book = 6;
+		//data.total_read_book = 6;
 		var maxT = 1;
 		
 		for (var i = 0; i < data.list.length; i++) {
-			data.list[i].time = Math.random() * Math.random() * 8;
+			//data.list[i].time = Math.random() * Math.random() * 8;
 			maxT = Math.ceil(Math.min(8, Math.max(maxT, data.list[i].time + 1)));
 		}
 		
 		
-		console.log(maxT, data)
+		//console.log(maxT, data)
 		
 		if (data.total_read_book < 5) {
 			showLessData();
@@ -115,7 +115,10 @@
 		var isH5 = /referer=3/i.test(window.location.search);
 
 		$$('user_block').style.display = isSharedOut ? 'block' : 'none';
-		$$('m-download').style.display = isSharedOut && isAndroid ? 'block' : 'none';
+		//$$('m-download').style.display = isSharedOut && isAndroid ? 'block' : 'none';
+		if (isSharedOut && window.DlImRead) {
+			DlImRead();
+		}
 		$$('share-btn').style.display = !isSharedOut && !isH5 ? 'block' : 'none';
 		$$('container').className = isSharedOut && isAndroid ? 'download' : '';
 

@@ -177,7 +177,7 @@ var Reading = React.createClass({
 	},
 	cacheReadLog: function(readLog) {
 		var bookIntroduce = {};
-		var readLogs = {};
+		var readLogs = storage.get('readLogNew');
 		var books = storage.get('bookIntroduce', 'array');
 		for (var i = 0; i < books.length; i++) {
 			if (books[i].bid == readLog.content_id) {
@@ -193,7 +193,7 @@ var Reading = React.createClass({
 		readLog.source_id = this.state.source_id;
 		readLog.chapter_id = this.state.chapterid;
 		readLogs[readLog.content_id] = readLog;
-		storage.set('readLog', readLogs);
+		storage.set('readLogNew', readLogs);
 	},
 	addRecentRead: function(bid, chapterid) {
 		if (!this.state.data) {return ;}
@@ -235,7 +235,6 @@ var Reading = React.createClass({
 				Router.goBack();
 			});
 		}.bind(this);
-		console.log(GLOBAL.onShelf)
 		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));

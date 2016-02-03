@@ -1,3 +1,6 @@
+html,body{height: 100%;overflow: hidden;}
+body{overflow: auto;-webkit-overflow-scrolling: touch;}
+
 .compact-block h1{font-size: 18px; font-weight: bold;text-align: center;}
 .compact-block{padding: 10px;background: #FFF;}
 .compact-block h2{font-size: 15px; font-weight: bold;}

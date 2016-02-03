@@ -8,7 +8,8 @@
 
 body{font-family: PingFangSC-Regular,\5FAE\8F6F\96C5\9ED1,sans-serif;}
 
-html,body{height: 100%;}
+html,body{height: 100%;overflow: hidden;}
+body{overflow: auto;-webkit-overflow-scrolling: touch;}
 #loading, #no-data, #less-data{position: absolute;left: 0;height: 100%;top: 0;width: 100%;background: #FFFFFF;}
 #container{position: relative;padding-bottom: 20px;background: #FFFFFF;display: none;}
 #container.download{padding-bottom: 100px;}

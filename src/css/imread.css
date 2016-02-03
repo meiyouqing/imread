@@ -225,9 +225,7 @@ html, body, #app-container{background: #FFFFFF;}
 .u-book-5{height: 16px;line-height: 16px;padding: 5px 10px;margin-top: 10px;font-size: 15px;}
 .u-book-5:first-child{margin-top: 0}
 .u-book-5 .topNb{display: inline-block;width: 16px;height: 16px;margin-right: 10px;text-align: center;color: #fff;background-color: #CBC8C4;-moz-border-radius: 50%;border-radius: 50%;}
-.u-book-5 .topNb.NO1{background-color: #41C2C2;}
-.u-book-5 .topNb.NO2{background-color: #41C2C2;}
-.u-book-5 .topNb.NO3{background-color: #41C2C2;}
+.u-book-5 .topNb.NO1,.u-book-5 .topNb.NO2,.u-book-5 .topNb.NO3{background-color: #41C2C2;font-size: 13px;}
 .u-book-5 a span{vertical-align: middle;}
 
 .u-lines{background: #FFFFFF;border-top: 1px solid #EEE;border-bottom: 1px solid #EEE;}

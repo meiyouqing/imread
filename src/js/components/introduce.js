@@ -24,7 +24,7 @@ var Detail = React.createClass({
 		this.shelfAdding(param,this.props.onShelf);
 	},
 	startReading: function(){
-		var readLog = storage.get('readLog');
+		var readLog = storage.get('readLogNew');
 		var chapterid = this.props.book.current_chapter_id,
 			sourcebid = this.props.book.source_bid,
 			localid   = this.props.book.bid,
