@@ -55,6 +55,9 @@ var updateHtml = function(path, cPath, file) {
         console.log("正在更新" + cPath);
         var html = fs.readFileSync(cPath, 'utf8');
         html = html.replace(/(href|src)=\"([^\"]+[^\.min])[.](js|css)\"/g, function($0, $1, $2, $3) {
+        	if (/^http:\/\//.test($2)) {
+        		return $0;
+        	}
             return $1 + '="' + $2 + '.min.' + $3 + '?' + hash[$2 + '.' + $3] + '"';
         });
 

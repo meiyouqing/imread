@@ -122,12 +122,32 @@ var Shelf = React.createClass({
 		//console.log(this.state.selected);
 		var content,header,icon;
 		var curClass = '';
-		var recent = 0;
 		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
 		var addBook = this.state.setting? null:add;
-		this.props.shelfList.forEach(function(v,i){
-			recent = (recent<v.mark_time)?v.mark_time:recent;
-		})
+		
+		//获取最近阅读的时间和
+		var recent = 0;
+		var maxCurrentTime = 0;
+		var readLogs = storage.get('readLogNew');
+		for (var n in readLogs) {
+			if (readLogs[n].current_time > maxCurrentTime) {
+				maxCurrentTime = readLogs[n].current_time;
+				recent = readLogs[n].content_id;
+			}
+		}
+
+		var recentIndex = -1;
+		this.props.shelfList.map(function(v, i) {
+			if (v.content_id == recent) {
+				recentIndex = i;
+				return false;
+			}
+		});
+
+		if (recentIndex > 0) {
+			this.props.shelfList.unshift(this.props.shelfList.splice(recentIndex, 1)[0]);
+		}
+
 		return (
 			<div>
 				<Header title="书架" left={this.state.left} right={this.state.right} />
@@ -139,7 +159,7 @@ var Shelf = React.createClass({
 									if(this.state.setting){
 										curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
 									}
-									icon = this.state.setting? this.state.icon:(recent === v.mark_time? this.state.icon:null);
+									icon = this.state.setting? this.state.icon:(recent == v.content_id? this.state.icon:null);
 									return(
 										<li key={i} className={"u-book-2 "+curClass}>
 											<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
