@@ -6,7 +6,7 @@ caption,th{text-align:left;font-weight:normal;}
 html,body,fieldset,img,iframe,abbr,input{border:0;}
 i,cite,em,var,address,dfn{font-style:normal;}
 [hidefocus],summary{outline:0;}
-input[type="button"],input[type="submit"],button{-webkit-appearance: none;}
+input[type="button"],input[type="submit"],input[type="search"],button{-webkit-appearance: none;}
 li{list-style:none;}
 h5,h6,small{font-size:100%;}
 h1{font-size: 24px;}h2{font-size: 21px;}h3{font-size: 18px;}h4{font-size: 16px;}
@@ -111,10 +111,13 @@ html, body, #app-container{background: #FFFFFF;}
 
 .m-block-1 {margin-top: -12px;}
 .m-block-1:first-child{margin-top: 0;}
-.m-block-1 > .title{background-color: #EEE;}
+.m-block-1 > .title{background-color: #EEE;line-height: 25px;}
+.m-block-1 > .title h2{font-size: 12px;color: #777;}
 
-.m-block > .title.bsTitle{padding: 10px 0;height: 50px;line-height: 25px;color: #333;}
+.m-block > .title.bsTitle{display:block;padding: 10px 0;height: 50px;line-height: 25px;color: #333;}
 .m-block > .title.bsTitle .icon-lh3{letter-spacing: -7px;text-indent: -7px;}
+.m-block > .title.bsTitle .f-pa{height: 50px;line-height: 50px;right: 10px;}
+.m-block > .title.bsTitle .icon-heart{font-size: 24px;}
 /*.m-block > .title.bsTitle .icon-arrow-right{right: 10px; bottom: 10px;}*/
 
 .subCat-1 {margin-right: -20px;padding: 0 10px;}
@@ -253,11 +256,11 @@ html, body, #app-container{background: #FFFFFF;}
 .u-noteText{height: 40px;line-height: 40px;padding-left: 10px;border-bottom: 1px solid #EEEEEE;color: #999;background: #FFFFFF;}
 
 .u-search{ position: absolute; right: 45px; left: 45px;}
-.u-search .searchInput{ box-sizing: border-box;width: 100%;height: 26px;line-height: 26px;overflow: hidden;margin-top: 10px;padding: 0 8px;background-color: #36B1B1;color: #FFF;-moz-border-radius: 6px;border-radius: 6px;}
-.u-search .searchInput::-moz-placeholder { color: #FFF; }
+.u-search .searchInput{ box-sizing: border-box;width: 100%;height: 26px;line-height: 26px;overflow: hidden;margin-top: 10px;padding: 0 8px;font-size: 14px;background-color: #36B1B1;color: #FFF;-moz-border-radius: 4px;border-radius: 4px;}
+.u-search .searchInput::-moz-placeholder { color: #FFF;}
 .u-search .searchInput::-webkit-input-placeholder { color:#FFF; }
 .u-search .searchInput:-ms-input-placeholder { color:#FFF; }
-.u-search .searchBtn{width: 44px;height: 44px;line-height: 44px;margin-right: -44px;text-algin: center;color: #fff;}
+.u-search .searchBtn{width: 44px;height: 44px;line-height: 44px;margin-right: -44px;font-size: 14px;text-algin: center;color: #fff;}
 
 .u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;}
 .u-moving-ball ~ i{display: none;}

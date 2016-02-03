@@ -425,23 +425,29 @@ var Frame = React.createClass({
 				// }
 			}
 		};
-		var lastHash = window.location.hash;
-		inter = setInterval(function() {
-			var hash = window.location.hash;
-			if (hash !== lastHash) {
-				lastHash = hash;
-				onhashchange();
-			}
-		}, 100);
-	
-		var _totalFire = 0;
-		window.onhashchange = function() {
-			_totalFire++;
-			if (_totalFire > 1) {
-				clearInterval(inter);
-			}
-			onhashchange();
-		};
+		//不支持window.onhashchange：qq自带浏览器
+		if(typeof window.onhashchange === "undefined" || navigator.userAgent.match(/qq\//i)){
+			var lastHash = window.location.hash;
+			inter = setInterval(function() {
+				var hash = window.location.hash;
+				if (hash !== lastHash) {
+					lastHash = hash;
+					onhashchange();
+				}
+			}, 100);
+		} else {
+			window.onhashchange = onhashchange;
+		}
+		//alert(typeof window.onhashchange)
+		
+		// var _totalFire = 0;
+		// window.onhashchange = function() {
+		// 	_totalFire++;
+		// 	if (_totalFire > 1) {
+		// 		clearInterval(inter);
+		// 	}
+		// 	onhashchange();
+		// };
 		
 	},
 	// shouldComponentUpdate: function(nextProp,nextState){

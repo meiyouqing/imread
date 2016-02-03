@@ -193,7 +193,7 @@ var Block7 = React.createClass({
 		return (
 			<section className="m-block m-block-1">
 				<div className="title title-1">
-					<span className="batchChange f-fr" onClick={this.batchChange}>换一批</span>
+					<span className="batchChange f-fr" onClick={this.batchChange}><i className="iconfont icon-refresh"></i>&nbsp;换一批</span>
 					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="content">
@@ -226,7 +226,6 @@ var Block9 = React.createClass({
 		return (
 			<section className="m-block m-block-1">
 				<a className="title title-1" href={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2>{this.props.data.name}</h2>
 				</a>
 				<div className="content">
@@ -316,7 +315,7 @@ var Block14 = React.createClass({
 		}
 		return (
 			<section className="m-block">
-				<div className="title bsTitle f-pr">
+				<div className="title bsTitle f-pr" href={this.props.href}>
 					<i className="iconfont icon-lh3 f-block f-tc"></i>
 					<h2 className="f-tc">{this.props.data.name}</h2>
 				</div>
@@ -372,8 +371,9 @@ var Block15 = React.createClass({
 		if(!this.props.data.contentlist.length){
 			return (
 				<section className="m-block">
-					<div className="title">
-						<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<div className="title bsTitle f-pr">
+						<i className="iconfont icon-heart f-block f-tc"></i>
+						<h2 className="f-tc">{this.props.data.name}</h2>
 					</div>
 					<div className="content content-none">
 						<a onClick={this.configTag} className="u-btn3">+设置我的标签</a>
@@ -383,9 +383,10 @@ var Block15 = React.createClass({
 		}else{
 			return (
 				<section className="m-block">
-					<a className="title" href={this.props.href}>
-						<span className="iconfont icon-arrow-right f-fr"></span>
-						<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<a className="title bsTitle f-pr" href={this.props.href}>
+						<span className="iconfont icon-arrow-right f-pa"></span>
+						<i className="iconfont icon-heart f-block f-tc"></i>
+						<h2 className="f-tc">{this.props.data.name}</h2>
 					</a>
 					<div className="content">
 						{this.props.recommend}

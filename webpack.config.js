@@ -1,8 +1,10 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
+	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
 	//webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
-	debug   = process.argv.indexOf('-p')===-1;
+	debug   = process.argv.indexOf('-p')===-1,
+	o_path = debug? 'tmp/':'p/tmp/';
 	//console.log(process.argv)
 	
 module.exports = {
@@ -10,8 +12,8 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, 'tmp'),
-        publicPath: 'tmp/',
+        path: path.join(__dirname, o_path),
+        publicPath: o_path,
         filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
@@ -27,7 +29,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			filename: '../index.html',
+			filename: debug? '../index.html':'../index.html',
 		    template: 'indexTemplate.html', // Load a custom template 
 		    inject: 'body', // Inject all scripts into the body 
 		    hash: !debug
@@ -44,5 +46,6 @@ module.exports = {
 			myEvent: '../modules/myEvent',
 			POP: '../modules/confirm'
 		}),
+		new OpenBrowserPlugin({ url: 'http://192.168.0.251:8080'}),
 	] 
 };
