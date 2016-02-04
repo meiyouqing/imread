@@ -306,7 +306,7 @@ html, body, #app-container{background: #FFFFFF;}
 .z-active .icon-selected:before {background-color: #FDA676;-webkit-opacity: 1;opacity: 1;}
 /* /bookrack */
 
-.shelfWrap{padding: 10px; margin-right: -20px;}
+.shelfWrap{padding: 10px; width:100%;}
 
 /* 极细线条 */
 /*.border-1px{position: relative; }

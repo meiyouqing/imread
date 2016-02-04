@@ -10,3 +10,6 @@ node_modules
 tmp
 route.js
 webpack-dev-server.js
+indexTemplate.html
+index.html
+p

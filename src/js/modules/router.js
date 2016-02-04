@@ -171,6 +171,7 @@ Router.prototype.ajax = function(n,param,callback, onerror,setName){
 Router.prototype.init = function(str){
 	this.lastName = this.name;
 	if(!str || typeof str !== 'string'){return;}
+	//str = str.replace(/\&plg_[^\&]+=[^\&]+/g, '');
 	this.now = str.split('&');		
 	var nowFirst = this.now[0].split('.');
 	if(this.now.length===1||nowFirst.length>1){

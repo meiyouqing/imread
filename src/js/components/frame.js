@@ -149,7 +149,11 @@ var Frame = React.createClass({
 				})
 				break;
 			default:
-				if(refresh){Router.goBack();}
+				if(refresh){
+					Router.goBack();
+				}else{
+					window.location.replace('#mall');
+				}
 				break;
 		}
 		//console.log(Router.lastName,Router.name)
@@ -216,8 +220,7 @@ var Frame = React.createClass({
 	},
 	resetNav:function(){
 		this.setState({
-			mallNav:null,
-			topNav: null
+			mallNav:null
 		});				
 	},	
 	setPart:function(){
@@ -288,7 +291,7 @@ var Frame = React.createClass({
 	},
 	getTopList: function(callback){
 		var that = this;
-		var forceGetJSON = GLOBAL.forceGetJSON;
+		//var forceGetJSON = GLOBAL.forceGetJSON;
 		// if(!that.state.topNav){
 			Router.setAPI(['group.6']);
 			Router.get(function(data){
@@ -302,7 +305,7 @@ var Frame = React.createClass({
 				// 	window.location.replace('#'+that.topNavHref);
 				// }else{
 					Router.init(that.topNavHref);
-					GLOBAL.forceGetJSON = forceGetJSON;
+					//GLOBAL.forceGetJSON = forceGetJSON;
 					getList();
 				// }
 			},that.onerror);
@@ -334,6 +337,7 @@ var Frame = React.createClass({
 		}
 	},
 	getShelfList: function(callback){
+		Router.init('shelf&block.157.1.10000')
 		this.resetNav();
 		Router.get(function(data){
 			// if (!data || !data.length) {
@@ -380,6 +384,7 @@ var Frame = React.createClass({
 			//console.log(bookId)
 			window.location.hash = '#mall/introduce.'+bookId;
 		}
+		//var str = window.location.hash.replace(/\#?\&?plg_[^\&]+=[^\&]+/g, '');
 		if(window.location.hash.length){
 			Router.route = window.location.hash.substr(1).split('/');
 			Router.unRendered = window.location.hash.substr(1).split('/');
@@ -427,7 +432,7 @@ var Frame = React.createClass({
 		};
 		//不支持window.onhashchange：qq自带浏览器
 		if(typeof window.onhashchange === "undefined" || navigator.userAgent.match(/qq\//i)){
-			var lastHash = window.location.hash;
+			var lastHash = -1;
 			inter = setInterval(function() {
 				var hash = window.location.hash;
 				if (hash !== lastHash) {
@@ -438,17 +443,6 @@ var Frame = React.createClass({
 		} else {
 			window.onhashchange = onhashchange;
 		}
-		//alert(typeof window.onhashchange)
-		
-		// var _totalFire = 0;
-		// window.onhashchange = function() {
-		// 	_totalFire++;
-		// 	if (_totalFire > 1) {
-		// 		clearInterval(inter);
-		// 	}
-		// 	onhashchange();
-		// };
-		
 	},
 	// shouldComponentUpdate: function(nextProp,nextState){
 	// 	return this.state.needUpdate !== nextState.needUpdate;
@@ -462,12 +456,7 @@ var Frame = React.createClass({
 				header = <Header title={this.title} left={null} />
 				content = <Mall part={this.state.part}  navList={this.state.mallNav} mallList={this.state.list} noMore={this.state.noMore} scrollHandle={this.scrollHandle} />
 			break;
-			// case 'top':
-			// 	header = <Header title={this.title} left={null} />
-			// 	content = <Top part={this.state.part} navList={this.state.topNav} topList={this.state.list} scrollUpdate={this.state.scrollUpdate} scrollHandle={this.scrollHandle} /> 
-			// break;
 			case 'shelf':
-				//console.log(this.state.list)
 				if(this.state.list&&this.state.list.length){
 					content = <Shelf shelfList={this.state.list} getShelfList={this.getShelfList} /> 					
 				}else if(this.state.list&&!this.state.list.length){

@@ -151,6 +151,7 @@ var Reading = React.createClass({
 	getInitialState: function() {
 		return {
 			bookName: '艾美阅读',
+			chapterName: '',
 			style: readingStyle.get(),
 			data: null,
 			loading: true,
@@ -395,6 +396,9 @@ var Reading = React.createClass({
 	},	
 	confirmOrder: function(data){
 		var that = this;
+		that.setState({
+			chapterName : data.name
+		})
 		if(that.isLogin()){
 			goOrder();
 		}else{
@@ -406,8 +410,7 @@ var Reading = React.createClass({
 				var Order = require('./order');
 				that.props.popup(<Order 
 					paySuccess={that.gotContent} 
-					price={data.marketPrice} 
-					orderUrl={data.orderUrl} 
+					data={data} 
 					bookName={that.state.bookName} 
 					chargeMode={that.chargeMode} 
 					chapterCount={that.chapterCount} />);
@@ -582,8 +585,11 @@ var Reading = React.createClass({
 			return (
 				<div>
 					{head}
-					<p className="u-loading">本节为付费章节</p>
-					<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
+					<div className="g-main">
+						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
+						<p className="u-loading">本节为付费章节</p>
+						<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
+					</div>
 				</div>
 				);
 		}
