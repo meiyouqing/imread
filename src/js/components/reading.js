@@ -204,7 +204,8 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
-			chapter_read_time: this.readTime
+			chapter_read_time: this.readTime,
+			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
 			uploadLog.send('read', {readLog:JSON.stringify(readLog)});
@@ -338,7 +339,7 @@ var Reading = React.createClass({
 			return;
 		}
 		that.getIntroduce();
-		that.getChapterlist();
+		//that.getChapterlist();
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 		that.setState({
@@ -347,7 +348,7 @@ var Reading = React.createClass({
 			page: currentPage,
 			pages: currentPage,
 			order: false
-		});
+		}, that.getChapterlist);
 		that.getNextContent(data);
 	},
 	getContent: function() {
@@ -388,7 +389,8 @@ var Reading = React.createClass({
 			source_id : Router.parts[4],
 			callback: function(data){
 				storage.set('nextChapter',data);
-			}.bind(this)
+			}.bind(this),
+			onError: GLOBAL.noop
 		});
 	},	
 	confirmOrder: function(data){
@@ -492,7 +494,6 @@ var Reading = React.createClass({
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
-		console.log(e.type, scrollY)
 		switch(e.type) {
 			case "pandown":
 				if (scrollY > 5) {
@@ -502,7 +503,6 @@ var Reading = React.createClass({
 				}
 				break;
 			case "panend":
-				console.log("panend")
 				break;
 		}
 	},
@@ -513,7 +513,6 @@ var Reading = React.createClass({
 			scrollarea.setAttribute('data-events', '1');
 			var hammerTime = new Hammer(scrollarea);
 			hammerTime.on('tap', this.handleClick);
-
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
 	},
