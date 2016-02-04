@@ -138,7 +138,7 @@ Router.prototype.typeHref = function(data,spm, route_type){
 	}
 
 	if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
-		data.redirect_url = data.redirect_url.replace(/\?.*referer=\d/, "");
+		data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 	}
 	switch(type){
 		case 1://图书详情
