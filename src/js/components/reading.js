@@ -6,7 +6,6 @@ var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
-var UI_confirm = require('../modules/confirm');
 
 
 var styleMixins = {
@@ -508,7 +507,7 @@ var Reading = React.createClass({
 		}
 	},
 	componentDidUpdate: function() {
-		var that = this;
+		// var that = this;
 		var scrollarea = this.refs.scrollarea;
 		if (scrollarea && scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');

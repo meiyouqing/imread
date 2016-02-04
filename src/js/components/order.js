@@ -1,8 +1,5 @@
 var Header = require('./header');
-var PayTips = require('./payTips');
 var getJSON = require('../modules/getJSON').getJSON;
-var parseQuery = require('../modules/parseQuery');
-var Recharge_result = require('./Recharge_result');
 require('../../css/pay.css');
 
 var mod = React.createClass({

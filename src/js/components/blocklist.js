@@ -339,7 +339,7 @@ var Block14 = React.createClass({
 var Block15 = React.createClass({
 	mixins:[Mixins()],
 	configTag:function(e){
-		var that = this;
+		//var that = this;
 		e.preventDefault();
 		if(!this.isLogin()){
 			this.goLogin(callback);
@@ -479,13 +479,13 @@ var Blocklist = React.createClass({
 			comps: comps
 		});
 	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		var check = function(item){
-			return item == null;
-		}
-		return true;
-		return this.state.comps !== nextState.comps;
-	},
+	// shouldComponentUpdate: function(nextProps, nextState) {
+	// 	var check = function(item){
+	// 		return item == null;
+	// 	}
+	// 	return true;
+	// 	return this.state.comps !== nextState.comps;
+	// },
 	render: function(){
 		//console.log(this.state.comps)
 		return (

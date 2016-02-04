@@ -58,7 +58,7 @@ var Block5 = React.createClass({
 		if (!swipeNav) {
 			return ;
 		}
-		var swipeNavs = swipeNav.children;
+		// var swipeNavs = swipeNav.children;
 		this.swipe = new Swipe(this.refs.swipe, {
 			auto: 3000,
 			callback: swipeCallback

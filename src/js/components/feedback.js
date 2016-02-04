@@ -1,7 +1,4 @@
-;
-;
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
 
 var Feedback = React.createClass({
 	componentDidMount: function() {

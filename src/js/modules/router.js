@@ -75,8 +75,7 @@ Router.prototype.setAPI = function(now){
 Router.prototype.setTitle = function(){
 	// console.log(this.name)
 	var n=this.name,
-		id=this.parts[1],
-		lastTitle=this.title;
+		id=this.parts[1];
 	switch(n){
 		case 'shelf':
 			this.title = GLOBAL.group[0].name;
@@ -116,7 +115,7 @@ Router.prototype.goBack = function(callback) {
 	window.location.replace('#'+route.join('/'));
 };
 Router.prototype.setHref = function(str,type) {
-	if(!str || !typeof str==='string'){return '404';}
+	if(!str || typeof str!=='string'){return '404';}
 	switch (type){
 		case 'now':
 			var	route = this.route.slice(0,-1);
