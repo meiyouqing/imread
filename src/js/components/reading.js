@@ -286,7 +286,7 @@ var Reading = React.createClass({
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
 			that.isOnShelf = +data.is_self;
-			//that.getAD_block5(data);
+			that.getAD_block5(data);
 			if(typeof callback==='function'){callback()}
 		}
 	},

@@ -136,6 +136,10 @@ Router.prototype.typeHref = function(data,spm, route_type){
 			target = 'download';
 		}
 	}
+
+	if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
+		data.redirect_url = data.redirect_url.replace(/\?.*referer=\d/, "");
+	}
 	switch(type){
 		case 1://图书详情
 			return this.setHref('introduce.'+bid+'&'+spm+'&'+cpm,route_type);
