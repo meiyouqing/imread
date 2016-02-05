@@ -351,12 +351,10 @@ var Block15 = React.createClass({
 			Router.setAPI(['listTag']);
 			Router.get(function(data){
 				if(data.selected.length){
-					GLOBAL.forceGetJSON=true;
 					myEvent.execCallback('updateTopList');
 				}else{
 					window.location.hash = Router.setHref('tag&listTag');
 					myEvent.setCallback('configTag',function(){
-						GLOBAL.forceGetJSON=true;
 						myEvent.execCallback('updateTopList');
 						//TODO 重新加载本页				
 					});

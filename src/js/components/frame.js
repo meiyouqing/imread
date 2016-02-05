@@ -291,7 +291,6 @@ var Frame = React.createClass({
 	},
 	getTopList: function(callback){
 		var that = this;
-		//var forceGetJSON = GLOBAL.forceGetJSON;
 		// if(!that.state.topNav){
 			Router.setAPI(['group.6']);
 			Router.get(function(data){
@@ -305,7 +304,6 @@ var Frame = React.createClass({
 				// 	window.location.replace('#'+that.topNavHref);
 				// }else{
 					Router.init(that.topNavHref);
-					//GLOBAL.forceGetJSON = forceGetJSON;
 					getList();
 				// }
 			},that.onerror);

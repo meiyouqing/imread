@@ -22,7 +22,6 @@ var GLOBAL = {
 	bookList:{},
 	book:{},
 	onShelf:{},
-	forceGetJSON:false,
 	setBookName:function(data){
 		if(!data.length||!this.isArray(data)){return}
 		data.forEach(function(v){

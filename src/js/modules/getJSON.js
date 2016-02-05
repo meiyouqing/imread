@@ -5,10 +5,6 @@ var imCache = (function() {
 		cacheUrl: ['/api/group/page','/api/page/content','/api/book/introduce','/api/book/chapterlist'],
 		needCache: false
 	};
-	if(GLOBAL.forceGetJSON){
-		config.needCache=false;
-		GLOBAL.forceGetJSON=false;
-	}
 
 	var needCache = function(url) {
 		if (!config.needCache) {
