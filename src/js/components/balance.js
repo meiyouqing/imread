@@ -35,7 +35,7 @@ var Balance = React.createClass({
 		var that = this;
 		var hash = window.location.hash;
 		var ordered = this.state.list[this.state.active];
-		var href=Router.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
+		// var href=Router.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
 		var postData = {
 			productId:ordered.productId,
 			fee:'1',

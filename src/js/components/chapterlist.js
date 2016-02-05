@@ -3,7 +3,7 @@ var myEvent = require('../modules/myEvent');
 var Chapterlist = React.createClass({
 	getCurrentChapterId: function(bid) {
 		var currentChapterId = 0;
-		var readLog = storage.get('readLog')[bid];
+		var readLog = storage.get('readLogNew')[bid];
 		if (readLog) {
 			currentChapterId = readLog.current_chapterid;
 		}
@@ -17,7 +17,7 @@ var Chapterlist = React.createClass({
 	},
 	handleClick: function(e) {
 		var cid = e.target.getAttribute('data-cid') || e.target.parentNode.getAttribute('data-cid');		
-		var feeType = e.target.getAttribute('data-fee') || e.target.parentNode.getAttribute('data-fee');		
+		// var feeType = e.target.getAttribute('data-fee') || e.target.parentNode.getAttribute('data-fee');		
 
 		var targetUrl = this.props.hrefBase + '/reading&crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
 		if (this.props.fromReading) {

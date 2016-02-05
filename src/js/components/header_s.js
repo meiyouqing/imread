@@ -22,8 +22,7 @@ var Header_s = React.createClass({
 	handleClick: function(e){
 		e.preventDefault();
 		if(this.state.search){
-			var	initialKey = this.state.initialKey,
-				key = this.state.key;
+			var	key = this.state.key;
 			if(Router.name==='searchList'){
 				Router.init('searchList&search.'+key+'.1.0.0.0.0');
 				this.props.goSearch();

@@ -1,5 +1,4 @@
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
 var Book1 = require('./book1');
 var Chapterlist = require('./chapterlist');
 
@@ -24,7 +23,7 @@ var Detail = React.createClass({
 		this.shelfAdding(param,this.props.onShelf);
 	},
 	startReading: function(){
-		var readLog = storage.get('readLog');
+		var readLog = storage.get('readLogNew');
 		var chapterid = this.props.book.current_chapter_id,
 			sourcebid = this.props.book.source_bid,
 			localid   = this.props.book.bid,
@@ -225,7 +224,6 @@ var IntroduceTabs = React.createClass({
 		if (!containers.length) {return ;}
 		var container = containers[containers.length - 1];
 		var self = this;
-		var OFFSETTOP = 246;
 		container.onscroll = function(e) {
 			clearTimeout(self.timeout['fixTabbar']);
 			self.timeout['fixTabbar'] = setTimeout(function() {

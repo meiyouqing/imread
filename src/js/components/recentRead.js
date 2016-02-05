@@ -2,7 +2,6 @@ var Header = require('./header');
 var Mixins = require('../modules/mixins');
 var Book9 = require('./book9_recentRead');
 var Hammer = require('../modules/hammer');
-var Confirm = require('../modules/confirm');
 var NoData = require('./noData');
 
 require('../../css/recentRead.css');
@@ -42,13 +41,13 @@ var recentRead = React.createClass({
 						book_id: bid
 					}, ui_callback);
 				} else {
-					var readLog = storage.get('readLog');
+					var readLog = storage.get('readLogNew');
 					for (var content_id in readLog) {
 						if (content_id == bid) {
 							delete readLog[content_id];
 						}
 					}
-					storage.set('readLog', readLog);
+					storage.set('readLogNew', readLog);
 					ui_callback();
 				}
 			}
@@ -82,7 +81,7 @@ var recentRead = React.createClass({
 				});
 			});
 		} else {
-			var readLog = storage.get('readLog');
+			var readLog = storage.get('readLogNew');
 			var list = [];
 			for (var n in readLog) {
 				list.push(readLog[n]);

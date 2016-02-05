@@ -16,7 +16,7 @@ var Intercut = React.createClass({
 		return true;
 	},
 	render: function() {
-		var className = this.props.data.intercut_style === 6 ? " half-screen" : " fullscreen";
+		// var className = this.props.data.intercut_style === 6 ? " half-screen" : " fullscreen";
 		var hrefObj = Router.typeHref(this.props.data, []);
 		return (
 			<div className="m-intercut" style={{height: this.state.height}}>

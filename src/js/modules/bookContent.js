@@ -20,12 +20,12 @@ var BookContent = (function() {
 			type: 'post',
 			param: param
 		}, options.callback, function() {
-			if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
+			// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
 				Router.goBack();
 				window.location.href = sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging);
-			} else {
-				Router.goBack();
-			}
+			// } else {
+			// 	Router.goBack();
+			// }
 		});
 	}
 

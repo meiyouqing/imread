@@ -6,7 +6,6 @@ var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
-var UI_confirm = require('../modules/confirm');
 
 
 var styleMixins = {
@@ -152,6 +151,7 @@ var Reading = React.createClass({
 	getInitialState: function() {
 		return {
 			bookName: '艾美阅读',
+			chapterName: '',
 			style: readingStyle.get(),
 			data: null,
 			loading: true,
@@ -177,7 +177,7 @@ var Reading = React.createClass({
 	},
 	cacheReadLog: function(readLog) {
 		var bookIntroduce = {};
-		var readLogs = {};
+		var readLogs = storage.get('readLogNew');
 		var books = storage.get('bookIntroduce', 'array');
 		for (var i = 0; i < books.length; i++) {
 			if (books[i].bid == readLog.content_id) {
@@ -193,7 +193,7 @@ var Reading = React.createClass({
 		readLog.source_id = this.state.source_id;
 		readLog.chapter_id = this.state.chapterid;
 		readLogs[readLog.content_id] = readLog;
-		storage.set('readLog', readLogs);
+		storage.set('readLogNew', readLogs);
 	},
 	addRecentRead: function(bid, chapterid) {
 		if (!this.state.data) {return ;}
@@ -205,7 +205,8 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
-			chapter_read_time: this.readTime
+			chapter_read_time: this.readTime,
+			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
 			uploadLog.send('read', {readLog:JSON.stringify(readLog)});
@@ -235,7 +236,6 @@ var Reading = React.createClass({
 				Router.goBack();
 			});
 		}.bind(this);
-		console.log(GLOBAL.onShelf)
 		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));
@@ -286,7 +286,7 @@ var Reading = React.createClass({
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
 			that.isOnShelf = +data.is_self;
-			//that.getAD_block5(data);
+			that.getAD_block5(data);
 			if(typeof callback==='function'){callback()}
 		}
 	},
@@ -340,7 +340,7 @@ var Reading = React.createClass({
 			return;
 		}
 		that.getIntroduce();
-		that.getChapterlist();
+		//that.getChapterlist();
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 		that.setState({
@@ -349,7 +349,7 @@ var Reading = React.createClass({
 			page: currentPage,
 			pages: currentPage,
 			order: false
-		});
+		}, that.getChapterlist);
 		that.getNextContent(data);
 	},
 	getContent: function() {
@@ -390,11 +390,15 @@ var Reading = React.createClass({
 			source_id : Router.parts[4],
 			callback: function(data){
 				storage.set('nextChapter',data);
-			}.bind(this)
+			}.bind(this),
+			onError: GLOBAL.noop
 		});
 	},	
 	confirmOrder: function(data){
 		var that = this;
+		that.setState({
+			chapterName : data.name
+		})
 		if(that.isLogin()){
 			goOrder();
 		}else{
@@ -406,8 +410,7 @@ var Reading = React.createClass({
 				var Order = require('./order');
 				that.props.popup(<Order 
 					paySuccess={that.gotContent} 
-					price={data.marketPrice} 
-					orderUrl={data.orderUrl} 
+					data={data} 
 					bookName={that.state.bookName} 
 					chargeMode={that.chargeMode} 
 					chapterCount={that.chapterCount} />);
@@ -492,11 +495,28 @@ var Reading = React.createClass({
 			});
 		}
 	},
+	handlePullToRrefresh: function(e) {
+		var scrollY = this.refs.scrollarea.scrollTop;
+		switch(e.type) {
+			case "pandown":
+				if (scrollY > 5) {
+					return ;
+				} else {
+					this.refs.tip_top.classList.remove("f-hide");
+				}
+				break;
+			case "panend":
+				break;
+		}
+	},
 	componentDidUpdate: function() {
-		if (this.refs.scrollarea && this.refs.scrollarea.getAttribute('data-events') != '1') {
-			this.refs.scrollarea.setAttribute('data-events', '1');
-			var hammerTime = new Hammer(this.refs.scrollarea);
+		// var that = this;
+		var scrollarea = this.refs.scrollarea;
+		if (scrollarea && scrollarea.getAttribute('data-events') != '1') {
+			scrollarea.setAttribute('data-events', '1');
+			var hammerTime = new Hammer(scrollarea);
 			hammerTime.on('tap', this.handleClick);
+			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
 	},
 	toggleChapterlist: function() {
@@ -565,8 +585,11 @@ var Reading = React.createClass({
 			return (
 				<div>
 					{head}
-					<p className="u-loading">本节为付费章节</p>
-					<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
+					<div className="g-main">
+						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
+						<p className="u-loading">本节为付费章节</p>
+						<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
+					</div>
 				</div>
 				);
 		}
@@ -658,6 +681,7 @@ var Reading = React.createClass({
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
+					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent">
 						{
@@ -667,6 +691,7 @@ var Reading = React.createClass({
 						}
 					</section>
 					{intercut}
+					<button className="u-btn-1">点击阅读下一章</button>
 				</div>
 
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>

@@ -87,3 +87,5 @@
 .m-intercut .btn{position: absolute;bottom: 25px;left: 0;right: 0;text-align: center;}
 .m-intercut.full-screen{bottom: 50px;}
 .m-intercut .btn a{display: inline-block;text-align: center;padding: 0 18px;height: 46px;line-height: 46px;background: rgba(0, 0, 0, .6);color: #FFF;font-size: 18px;border-radius: 3px;}
+
+.m-reading .u-btn-1{position: relative;background: rgba(0, 0, 0, .1);color: #999;}
