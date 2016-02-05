@@ -35,7 +35,7 @@ var Balance = React.createClass({
 		var that = this;
 		var hash = window.location.hash;
 		var ordered = this.state.list[this.state.active];
-		var href=Router.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
+		// var href=Router.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
 		var postData = {
 			productId:ordered.productId,
 			fee:'1',
@@ -73,7 +73,7 @@ var Balance = React.createClass({
 					<div className="u-divider"></div>
 					<ul className="pay-list f-clearfix">
 					{	
-						this.state.list.map(function(item, i) {
+						(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
 							var active = i == this.state.active;
 							var activeClass = active ? ' active' : '';
 							var activeImg = active ? 'src/img/balance_select.png' : 'src/img/balance.png';

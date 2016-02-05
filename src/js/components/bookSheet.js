@@ -106,7 +106,7 @@ var Module = React.createClass({
 		if(!this.state.data){
 			content = <Loading />;
 		}else{
-			var m_time = this.state.data.modify_time.substr(0,4)+'.'+this.state.data.modify_time.substr(4,2)+'.'+this.state.data.modify_time.substr(6,2);
+			//var m_time = this.state.data.modify_time.substr(0,4)+'.'+this.state.data.modify_time.substr(4,2)+'.'+this.state.data.modify_time.substr(6,2);
 			if(!this.state.data.content.length){
 				noData = (<div className="g-main g-main-1"><NoData /></div>);
 				content = null;
@@ -120,7 +120,7 @@ var Module = React.createClass({
 									<h2>{this.state.data.sheet_name}</h2>
 									<p className="f-fs-14 f-mb-15">共计{this.state.data.content_cnt}本</p>
 									<p><input className={"u-btn2 f-fs-14 f-mb-30 "+(this.state.collected? "u-btn2-on":"")} type="button" value={this.state.collected? "已收藏":"收藏"} onClick={this.addFavaHandle} /></p>
-									<p className="f-clearfix"><span className="f-fr f-fc-777">更新于{m_time}</span></p>
+									<p className="f-clearfix"><span className="f-fl f-fc-777">已有{this.state.data.collect_uv}人收藏</span><span className="f-fr f-fc-777">更新于{this.state.data.update_time}</span></p>
 								</div>
 								<p className="bsBrief">{this.state.data.sheet_brief}</p>
 							</div>

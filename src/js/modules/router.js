@@ -75,8 +75,7 @@ Router.prototype.setAPI = function(now){
 Router.prototype.setTitle = function(){
 	// console.log(this.name)
 	var n=this.name,
-		id=this.parts[1],
-		lastTitle=this.title;
+		id=this.parts[1];
 	switch(n){
 		case 'shelf':
 			this.title = GLOBAL.group[0].name;
@@ -116,7 +115,7 @@ Router.prototype.goBack = function(callback) {
 	window.location.replace('#'+route.join('/'));
 };
 Router.prototype.setHref = function(str,type) {
-	if(!str || !typeof str==='string'){return '404';}
+	if(!str || typeof str!=='string'){return '404';}
 	switch (type){
 		case 'now':
 			var	route = this.route.slice(0,-1);
@@ -136,6 +135,10 @@ Router.prototype.typeHref = function(data,spm, route_type){
 		if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
 			target = 'download';
 		}
+	}
+
+	if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
+		data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 	}
 	switch(type){
 		case 1://图书详情
@@ -172,6 +175,7 @@ Router.prototype.ajax = function(n,param,callback, onerror,setName){
 Router.prototype.init = function(str){
 	this.lastName = this.name;
 	if(!str || typeof str !== 'string'){return;}
+	//str = str.replace(/\&plg_[^\&]+=[^\&]+/g, '');
 	this.now = str.split('&');		
 	var nowFirst = this.now[0].split('.');
 	if(this.now.length===1||nowFirst.length>1){

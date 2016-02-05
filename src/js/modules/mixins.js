@@ -6,18 +6,19 @@ var mixins = function() {
 				(function(i) {
 					var img = imgs[i];
 					var src = img.getAttribute('data-lazyload-src');
-					if (src != '1' && GLOBAL.isElementVisible(img)) {
+					if (src != 'loading' && src != "loaded" && GLOBAL.isElementVisible(img)) {
 						function callback(_src) {
 							if (img.nodeName == 'A') {
 								img.style.backgroundImage = 'url(' + src + ')';
 							} else {
 								img.src = _src;
 							}
-							img.setAttribute('data-lazyload-src', 1);
+							img.setAttribute('data-lazyload-src', "loaded");
 
 							container.dispatchEvent(new Event('scroll'));
 							//img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
 						}
+						img.setAttribute('data-lazyload-src', "loading");
 						GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'src/img/defaultCover.png'));
 					}
 				})(i);

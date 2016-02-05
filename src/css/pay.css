@@ -33,6 +33,8 @@
 .m-recharge .result-fail .u-btn{padding: 0 10px;letter-spacing: normal;}
 
 .m-order {background: #F9F9F9 !important;font-size: 16px;}
+.m-order .chapter,.m-order .payNote {font-size: 14px;}
+.m-order .payNote{line-height: 28px;}
 .m-order .mt-100{margin-top: 80px;}
 .m-order .block{padding: 15px;background: #FFF;border-top:1px solid #EEE;border-bottom:1px solid #EEE;}
 .m-order .block .lh-40{line-height: 40px;}

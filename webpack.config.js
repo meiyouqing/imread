@@ -1,4 +1,5 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
+	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
 	//webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
@@ -10,7 +11,7 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, 'tmp'),
+        path: path.join(__dirname, (debug? 'tmp/':'p/tmp/')),
         publicPath: 'tmp/',
         filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
@@ -44,5 +45,6 @@ module.exports = {
 			myEvent: '../modules/myEvent',
 			POP: '../modules/confirm'
 		}),
+		new OpenBrowserPlugin({ url: 'http://192.168.0.251:8080'}),
 	] 
 };

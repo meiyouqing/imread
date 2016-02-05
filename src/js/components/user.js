@@ -1,8 +1,6 @@
 var myEvent = require('../modules/myEvent');
-var getJSON = require('../modules/getJSON').getJSON;
 var Mixins = require('../modules/mixins');
 
-var ReactDOM = require('react-dom');
 require('../../css/user.css');
 
 var ULine = React.createClass({

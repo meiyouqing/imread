@@ -15,7 +15,6 @@ var Header = React.createClass({
 				|| this.props.right !== nextProps.right;
 	},
 	render: function(){
-		var color = ['red', 'green', 'black', 'yellow'];
 		return (
 			<header className="m-bar m-bar-head">
 				{this.props.left}

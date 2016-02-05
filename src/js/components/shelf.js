@@ -10,8 +10,7 @@ var Shelf = React.createClass({
 		var cid = a.getAttribute('data-cid');
 		var sid = a.getAttribute('data-sid');
 		if(!this.state.setting){ //开始阅读
-			var data = this.state.data;
-			var readLog = storage.get('readLog')[bid];
+			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
 				//console.log(readLog)
 				cid = readLog.current_chapterid;
@@ -37,14 +36,12 @@ var Shelf = React.createClass({
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
 		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
 		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
-		var delBtn = <button className="u-btn-1" onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>;
 		this.setState({
 			setting:true,
 			selected:[],
 			icon : <i className="iconfont icon-selected"></i>,
 			left:this.state.toggle? seNone : seAll,
-			right:completion,
-			delBtn:delBtn
+			right:completion
 		})
 	},
 	compClick: function(){
@@ -53,7 +50,6 @@ var Shelf = React.createClass({
 		this.setState({
 			setting:false,
 			left:null,
-			delBtn:null,
 			right:setting,
 			icon:icon
 		})
@@ -77,7 +73,7 @@ var Shelf = React.createClass({
 	},
 	delBtnClick: function(){
 		if(!this.state.selected.length) {
-			POP._alert('别闹~至少选择一本书先！')
+			//POP._alert('别闹~至少选择一本书先！')
 			return;
 		};
 		var param = []
@@ -100,7 +96,6 @@ var Shelf = React.createClass({
 			setting:false,
 			toggle:false,
 			left:null,
-			delBtn:null,
 			right:setting,
 			icon:icon,
 			selected:[],
@@ -126,12 +121,32 @@ var Shelf = React.createClass({
 		//console.log(this.state.selected);
 		var content,header,icon;
 		var curClass = '';
-		var recent = 0;
 		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
 		var addBook = this.state.setting? null:add;
-		this.props.shelfList.forEach(function(v,i){
-			recent = (recent<v.mark_time)?v.mark_time:recent;
-		})
+		
+		//获取最近阅读的时间和
+		var recent = 0;
+		var maxCurrentTime = 0;
+		var readLogs = storage.get('readLogNew');
+		for (var n in readLogs) {
+			if (readLogs[n].current_time > maxCurrentTime) {
+				maxCurrentTime = readLogs[n].current_time;
+				recent = readLogs[n].content_id;
+			}
+		}
+
+		var recentIndex = -1;
+		this.props.shelfList.map(function(v, i) {
+			if (v.content_id == recent) {
+				recentIndex = i;
+				return false;
+			}
+		});
+
+		if (recentIndex > 0) {
+			this.props.shelfList.unshift(this.props.shelfList.splice(recentIndex, 1)[0]);
+		}
+
 		return (
 			<div>
 				<Header title="书架" left={this.state.left} right={this.state.right} />
@@ -143,7 +158,7 @@ var Shelf = React.createClass({
 									if(this.state.setting){
 										curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
 									}
-									icon = this.state.setting? this.state.icon:(recent === v.mark_time? this.state.icon:null);
+									icon = this.state.setting? this.state.icon:(recent == v.content_id? this.state.icon:null);
 									return(
 										<li key={i} className={"u-book-2 "+curClass}>
 											<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
@@ -159,7 +174,7 @@ var Shelf = React.createClass({
 						</ul>
 					</div>
 				</div>
-				{this.state.delBtn}
+				<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
 			</div>
 		);
 	}

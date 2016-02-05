@@ -193,7 +193,7 @@ var Block7 = React.createClass({
 		return (
 			<section className="m-block m-block-1">
 				<div className="title title-1">
-					<span className="batchChange f-fr" onClick={this.batchChange}>换一批</span>
+					<span className="batchChange f-fr" onClick={this.batchChange}><i className="iconfont icon-refresh"></i>&nbsp;换一批</span>
 					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="content">
@@ -226,7 +226,6 @@ var Block9 = React.createClass({
 		return (
 			<section className="m-block m-block-1">
 				<a className="title title-1" href={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2>{this.props.data.name}</h2>
 				</a>
 				<div className="content">
@@ -312,11 +311,11 @@ var Block14 = React.createClass({
 	render:function(){
 		var more;
 		if(!this.state.noMore){
-			more = (<div className="f-tc"><input type="button" className="u-readMore" onClick={this.readMoreHandle} value="点击查看更多..." /></div>);
+			more = (<button className="u-readMore f-bt-eee f-mb--10" onClick={this.readMoreHandle}>点击查看更多...</button>);
 		}
 		return (
 			<section className="m-block">
-				<div className="title bsTitle f-pr">
+				<div className="title bsTitle f-pr" href={this.props.href}>
 					<i className="iconfont icon-lh3 f-block f-tc"></i>
 					<h2 className="f-tc">{this.props.data.name}</h2>
 				</div>
@@ -340,7 +339,7 @@ var Block14 = React.createClass({
 var Block15 = React.createClass({
 	mixins:[Mixins()],
 	configTag:function(e){
-		var that = this;
+		//var that = this;
 		e.preventDefault();
 		if(!this.isLogin()){
 			this.goLogin(callback);
@@ -352,12 +351,10 @@ var Block15 = React.createClass({
 			Router.setAPI(['listTag']);
 			Router.get(function(data){
 				if(data.selected.length){
-					GLOBAL.forceGetJSON=true;
 					myEvent.execCallback('updateTopList');
 				}else{
 					window.location.hash = Router.setHref('tag&listTag');
 					myEvent.setCallback('configTag',function(){
-						GLOBAL.forceGetJSON=true;
 						myEvent.execCallback('updateTopList');
 						//TODO 重新加载本页				
 					});
@@ -372,8 +369,9 @@ var Block15 = React.createClass({
 		if(!this.props.data.contentlist.length){
 			return (
 				<section className="m-block">
-					<div className="title">
-						<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<div className="title bsTitle f-pr">
+						<i className="iconfont icon-heart f-block f-tc"></i>
+						<h2 className="f-tc">{this.props.data.name}</h2>
 					</div>
 					<div className="content content-none">
 						<a onClick={this.configTag} className="u-btn3">+设置我的标签</a>
@@ -383,9 +381,10 @@ var Block15 = React.createClass({
 		}else{
 			return (
 				<section className="m-block">
-					<a className="title" href={this.props.href}>
-						<span className="iconfont icon-arrow-right f-fr"></span>
-						<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<a className="title bsTitle f-pr" href={this.props.href}>
+						<span className="iconfont icon-arrow-right f-pa"></span>
+						<i className="iconfont icon-heart f-block f-tc"></i>
+						<h2 className="f-tc">{this.props.data.name}</h2>
 					</a>
 					<div className="content">
 						{this.props.recommend}
@@ -478,13 +477,13 @@ var Blocklist = React.createClass({
 			comps: comps
 		});
 	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		var check = function(item){
-			return item == null;
-		}
-		return true;
-		return this.state.comps !== nextState.comps;
-	},
+	// shouldComponentUpdate: function(nextProps, nextState) {
+	// 	var check = function(item){
+	// 		return item == null;
+	// 	}
+	// 	return true;
+	// 	return this.state.comps !== nextState.comps;
+	// },
 	render: function(){
 		//console.log(this.state.comps)
 		return (

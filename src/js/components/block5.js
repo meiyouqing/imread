@@ -27,12 +27,9 @@ var Block5 = React.createClass({
 		var that = this;
 		var swipeNav = this.refs['swipe-nav'];
 		this.swipe && (this.swipe.kill());
-		if (!swipeNav) {
-			return ;
-		}
-		var swipeNavs = swipeNav.children;
+		
 		var swipeCallback = function(index, ele) {
-			var index = index % swipeNavs.length;
+			var index = index % that.props.data.contentlist.length;
 			if (Router.name === 'mall' || Router.name == 'reading' && that.props.fromReading) {
 				// 判断是否在书城
 				setTimeout(function() {
@@ -41,14 +38,33 @@ var Block5 = React.createClass({
 					}
 				}, 50);
 			}
+			ele = ele || that.refs['swipe'].querySelector("a");
+			if (ele &&　ele.querySelector("img")) {
+				var img = ele.querySelector("img");
+				if (!img.getAttribute("data-load-state")) {
+					var src = img.getAttribute("data-src");
+					img.setAttribute("data-load-state", 'loading');
+					GLOBAL.loadImage(src, function() {
+						img.src = src;
+						img.style.height = that.state.height + 'px';
+						img.setAttribute("data-load-state", 'loaded');
+					});
+				}
+			}
 			that.toggleSwipeNav(index);
 		}
+		swipeCallback(0);
+
+		if (!swipeNav) {
+			return ;
+		}
+		// var swipeNavs = swipeNav.children;
 		this.swipe = new Swipe(this.refs.swipe, {
 			auto: 3000,
 			callback: swipeCallback
 		});
-		swipeCallback(0);
 		this.toggleSwipeNav(0);
+		
 	},
 	handleResize: function(e) {
 		this.setState(this.getWidthAndHeight());
@@ -117,8 +133,8 @@ var Block5 = React.createClass({
                 					spm.splice(-1,1,i+1);
 									var hrefObj = Router.typeHref(v,spm);
 			                		return (
-			                			<a href={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
-			                				<img src={v.intercut_url} className="u-adimg" style={{width: '100%', height: this.state.height}}/>
+			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
 			                			</a>
 			                		);
 			                	}.bind(this))

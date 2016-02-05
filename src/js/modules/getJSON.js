@@ -3,12 +3,8 @@ var transformRequest = require('./transformRequest');
 var imCache = (function() {
 	var config = {
 		cacheUrl: ['/api/group/page','/api/page/content','/api/book/introduce','/api/book/chapterlist'],
-		needCache: true
+		needCache: false
 	};
-	if(GLOBAL.forceGetJSON){
-		config.needCache=false;
-		GLOBAL.forceGetJSON=false;
-	}
 
 	var needCache = function(url) {
 		if (!config.needCache) {
@@ -61,7 +57,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError, urlBase) {
 	var urlBase = 'http://readapi.imread.com';
-	// var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
