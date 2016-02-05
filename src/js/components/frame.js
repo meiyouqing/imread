@@ -151,8 +151,6 @@ var Frame = React.createClass({
 			default:
 				if(refresh){
 					Router.goBack();
-				}else{
-					window.location.replace('#mall');
 				}
 				break;
 		}

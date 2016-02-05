@@ -385,6 +385,7 @@ var Reading = React.createClass({
 		if(!this.isMounted()){return;}
 		var that = this;
 		bookContent.get({
+			noCross:true,
 			bid: that.state.bid,
 			cid: data.nextChapterId,
 			source_id : Router.parts[4],
