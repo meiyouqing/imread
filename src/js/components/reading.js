@@ -143,6 +143,7 @@ var chapterMixins = {
 };
 
 var Reading = React.createClass({
+	bookmarkFlag: true,
 	isOnShelf: true,
 	chargeMode: 1,
 	chapterCount: '1',
@@ -176,6 +177,7 @@ var Reading = React.createClass({
 		}
 	},
 	cacheReadLog: function(readLog) {
+		var scrollarea = this.refs.scrollarea;
 		var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
 		var books = storage.get('bookIntroduce', 'array');
@@ -192,6 +194,8 @@ var Reading = React.createClass({
 		readLog.source_bid = this.state.bid;
 		readLog.source_id = this.state.source_id;
 		readLog.chapter_id = this.state.chapterid;
+		readLog.offset = {};
+		readLog.offset[this.state.chapterid] = scrollarea.scrollTop;
 		readLogs[readLog.content_id] = readLog;
 		storage.set('readLogNew', readLogs);
 	},
@@ -513,7 +517,16 @@ var Reading = React.createClass({
 	componentDidUpdate: function() {
 		// var that = this;
 		var scrollarea = this.refs.scrollarea;
-		if (scrollarea && scrollarea.getAttribute('data-events') != '1') {
+		if(!scrollarea){return};
+		//第一次进入阅读跳到上次阅读的地方
+		if(this.bookmarkFlag){
+			//console.log(storage.get('readLogNew'))
+			var obj = storage.get('readLogNew')[Router.parts[3]];
+			var offset = obj? obj.offset[this.state.chapterid] : false;
+			scrollarea.scrollTop = offset? offset-200 : 0;
+		}
+		this.bookmarkFlag = false;
+		if (scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');
 			var hammerTime = new Hammer(scrollarea);
 			hammerTime.on('tap', this.handleClick);
@@ -604,7 +617,6 @@ var Reading = React.createClass({
 		}
 		if (this.state.intercut) {
 			intercut = <Intercut data={this.state.intercut} />
-
 			if (!this.uploadLogIntercut) {
 				uploadLog.send('intercut', {
 					intercut_id: this.state.intercut.content_id,
