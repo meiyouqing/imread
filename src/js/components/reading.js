@@ -179,7 +179,10 @@ var Reading = React.createClass({
 	},
 	cacheReadLog: function(readLog) {
 		var scrollarea = this.refs.scrollarea;
+<<<<<<< HEAD
 		if(!scrollarea){return}
+=======
+>>>>>>> 041443d3ba319706c2100601de7efd28443e951f
 		var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
 		var books = storage.get('bookIntroduce', 'array');
