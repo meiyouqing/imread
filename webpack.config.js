@@ -34,7 +34,7 @@ module.exports = {
 		    hash: !debug
 		  }),
 		new webpack.ProvidePlugin({
-			React: 'react',
+			//React: 'react',
 			storage: '../modules/storage',
 			GLOBAL: '../modules/global',
 			Loading: './loading',

@@ -1,6 +1,6 @@
 //"use strict"
 
-var ReactDOM = require('react-dom');
+//var ReactDOM = require('react-dom');
 var Frame = require('./components/frame');
 var GLOBAL = require('./modules/global');
 var Token = require('./modules/token');

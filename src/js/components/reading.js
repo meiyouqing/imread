@@ -6,6 +6,7 @@ var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
+var isHidden = require('../modules/isHidden');
 
 
 var styleMixins = {
@@ -147,10 +148,10 @@ var Reading = React.createClass({
 	isOnShelf: true,
 	chargeMode: 1,
 	chapterCount: '1',
-	readTime: 1000,
 	mixins: [styleMixins, chapterMixins, Mixins()],
 	getInitialState: function() {
 		return {
+			time: Date.now(),
 			bookName: '艾美阅读',
 			chapterName: '',
 			style: readingStyle.get(),
@@ -202,7 +203,6 @@ var Reading = React.createClass({
 	},
 	addRecentRead: function(bid, chapterid) {
 		if (!this.state.data) {return ;}
-		//console.log(this.state)
 		var readLog = [{
 			content_id: bid,
 			current_chapterid: chapterid,
@@ -210,7 +210,7 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
-			chapter_read_time: this.readTime,
+			chapter_read_time: Date.now()-this.time,
 			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
@@ -219,13 +219,13 @@ var Reading = React.createClass({
 		}
 
 		this.cacheReadLog(readLog[0]);
-
+		this.time = Date.now();
 		myEvent.execCallback('reading' + bid, true);
 		myEvent.execCallback('reading' + bid + '-fromReading', true);
 	},
 	componentWillUnmount: function() {
-		this.readTime = Date.now()-this.time;
 		this.addRecentRead(this.props.localid, this.state.chapterid);
+		document.removeEventListener && document.removeEventListener('visibilitychange',this.onVisibilitychange);
 	},
 	goOut:function(e){
 		var addShelf = function() {
@@ -489,12 +489,17 @@ var Reading = React.createClass({
 			showChapterlist: closeChapterlist && false || this.state.showChapterlist
 		});
 	},
+	onVisibilitychange: function(){
+		if(isHidden()){
+			this.addRecentRead(this.props.localid, this.state.chapterid);
+		}else{
+			this.time = Date.now();
+		}
+	},
 	componentDidMount:function(){
 		this.getContent();
-		document.addEvennListener('visibilitychange',function(){
-			this.addRecentRead(this.props.localid, this.state.chapterid);
-		}.bind(this));
-		this.time = Date.now();
+		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
+		window.onbeforeunload = this.addRecentRead.bind(this,this.props.localid, this.state.chapterid);
 		if (GLOBAL.cookie('showGuide') != '1') {
 			this.setState({
 				showGuide: true
