@@ -154,6 +154,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 }
 function setRequestHeaders(request) {
 	var headers = {};
+	//console.log(GLOBAL.header)
 	switch(vars.flag){
 		case 'default':
 		case 'collection':
@@ -161,7 +162,8 @@ function setRequestHeaders(request) {
 				//'Referer': 'readapi.imread.com',
 				'Info-Imsi': '',
 				'Info-Imei': '',
-				'Info-Channel': 'ImreadH5', 
+				'Info-Channel': GLOBAL.header.channel? GLOBAL.header.channel:'ImreadH5',
+				'Info-appid' : GLOBAL.header.appid? GLOBAL.header.appid:'ImreadH5',
 				'Info-Version': '1.0.1',
 				'Info-Model': '',
 				'Info-Os': '',

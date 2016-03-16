@@ -13,6 +13,7 @@ Date.prototype.Format = function (fmt) {
 };
 
 var GLOBAL = {
+	header:{},
 	group:[
 			{cla:"icon-shujia",href:'#shelf&block.157.1.10000',name:"书架"},
 			{cla:"icon-shucheng",href:'#mall',name:"书城"},

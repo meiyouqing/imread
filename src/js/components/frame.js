@@ -380,6 +380,14 @@ var Frame = React.createClass({
 			//console.log(bookId)
 			window.location.hash = '#mall/introduce.'+bookId;
 		}
+		if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
+			var appid = window.location.search.match(/appid=(\w+)&?/)[1];
+			GLOBAL.header.appid = appid;
+		}
+		if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
+			var channel = window.location.search.match(/channel=(\w+)&?/)[1];
+			GLOBAL.header.channel = channel;
+		}
 		//var str = window.location.hash.replace(/\#?\&?plg_[^\&]+=[^\&]+/g, '');
 		if(window.location.hash.length){
 			Router.route = window.location.hash.substr(1).split('/');
