@@ -4,6 +4,16 @@
 var Frame = require('./components/frame');
 var GLOBAL = require('./modules/global');
 var Token = require('./modules/token');
+
+if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
+	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
+	GLOBAL.header.appid = appid;
+}
+if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
+	var channel = window.location.search.match(/channel=(\w+)&?/)[1];
+	GLOBAL.header.channel = channel;
+}
+
 require('./modules/readConfig');
 
 GLOBAL.setUser({
