@@ -92,6 +92,8 @@ var Block5 = React.createClass({
 		}
 	},
 	componentWillUnmount: function() {
+		//console.log(uploadLog.result)
+		uploadLog.sending('intercut');
 		this.swipe && (this.swipe.kill());
 		window.removeEventListener('resize', this.handleResize, false);
 	},
