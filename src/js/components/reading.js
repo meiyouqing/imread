@@ -703,6 +703,7 @@ var Reading = React.createClass({
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
+					<i className="u-miguLogo"></i>
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent">

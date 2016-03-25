@@ -130,7 +130,7 @@ Router.prototype.typeHref = function(data,spm, route_type){
 	spm = spm.join('.');
 	var cpm = type+'.'+bid;
 	var target = '_self';
-	if(/3|4/.test(data.intercut_type)){
+	if(/2|3|4/.test(data.intercut_type)){
 		target = '_blank';
 		if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
 			target = 'download';
