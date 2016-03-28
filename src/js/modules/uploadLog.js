@@ -8,20 +8,26 @@ var config = {
 var getJSON = require('./getJSON').getJSON;
 
 var uploadLog = {
-	result : [],
+	result : {},
 	send: function(page, params) {
+		// console.log(page,params)
+		var id = params.intercut_id || params.content_id;
 		if (config[page] && !isHidden()) {
-			if(this[params.intercut_id]){
-				this[params.intercut_id]['count']++;
+			if(this.result[id]){
+				this.result[id]['count']++;
 			}else{
-				this[params.intercut_id]=params;
-				this[params.intercut_id]['count']=1;
-				this.result.push(this[params.intercut_id]);
+				this.result[id]=params;
+				this.result[id]['count']=1;
 			}
 		}
 	},
 	sending: function(page) {
-		getJSON(config[page].method, config[page].url, {intercutLog:this.result}, GLOBAL.noop, GLOBAL.noop);
+		if(Object.getOwnPropertyNames && Object.getOwnPropertyNames(this.result).length==0) return;
+		getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
+		this.result = {};
+	},
+	readlog: function (page, params) {
+		getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
 	}
 };
 

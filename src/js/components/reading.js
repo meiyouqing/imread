@@ -214,7 +214,7 @@ var Reading = React.createClass({
 			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
-			uploadLog.send('read', {readLog:JSON.stringify(readLog)});
+			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
 			//getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
 
@@ -483,6 +483,7 @@ var Reading = React.createClass({
 				event: 1,
 				show_class: this.intercutList.show_class
 			});
+			uploadLog.sending('intercut');
 		}
 		this.setState({
 			showSetting: !this.state.showSetting,
