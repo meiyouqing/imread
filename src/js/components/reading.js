@@ -224,6 +224,7 @@ var Reading = React.createClass({
 		myEvent.execCallback('reading' + bid + '-fromReading', true);
 	},
 	componentWillUnmount: function() {
+		uploadLog.sending('intercut');
 		this.addRecentRead(this.props.localid, this.state.chapterid);
 		document.removeEventListener && document.removeEventListener('visibilitychange',this.onVisibilitychange);
 	},
@@ -483,7 +484,6 @@ var Reading = React.createClass({
 				event: 1,
 				show_class: this.intercutList.show_class
 			});
-			uploadLog.sending('intercut');
 		}
 		this.setState({
 			showSetting: !this.state.showSetting,
