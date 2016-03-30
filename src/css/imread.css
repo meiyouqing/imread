@@ -29,6 +29,7 @@ html, body, #app-container{background: #FFFFFF;}
 
 /* function */
 .f-clearfix:after{display:block;visibility:hidden;clear:both;height:0;overflow:hidden;content:'.';}
+.f-vl-md{display: block;position: absolute;width: 100%;height: 100%;}.f-vl-md:before {display: inline-block;position: relative;visibility: hidden;width: 0;height: 100%;overflow: hidden;content: '.';vertical-align: middle;}
 .f-ellipsis-ib {display: inline-block;width: 86%;vertical-align: middle;}
 .f-ellipsis{overflow: hidden;white-space: nowrap !important;text-overflow: ellipsis;}
 .f-ellipsis-2{display: -webkit-box !important;overflow: hidden;white-space: normal !important;text-overflow: ellipsis;word-wrap: break-word;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
@@ -183,8 +184,9 @@ html, body, #app-container{background: #FFFFFF;}
 .subCat-8 li{float: left;margin: 10px 0 0 10px;}
 .subCat-8 li a{display: inline-block;height:32px;line-height:32px;padding: 0 20px;border:1px solid #999;font-size: 15px;-moz-border-radius: 16px;border-radius: 18px;}
 
+.m-noData {display: inline-block;width: 100%;vertical-align: middle;}
 .m-noData .icon, .m-noData .tip{display: block;}
-.m-noData .icon{width: 50%;max-width:205px;margin: 80px auto 15px;}
+.m-noData .icon{width: 50%;max-width:205px;margin: 0 auto 15px;}
 .m-noData .tip{font-size: 15px;color: #949494;}
 .m-noData .u-btn{margin-top: 30px;display: inline-block;}
 

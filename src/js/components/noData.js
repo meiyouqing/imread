@@ -27,10 +27,12 @@ var NoData = React.createClass({
 			break;
 		}
 		return (
-			<div className="m-noData f-tc">
-				<img className="icon" src={src} />
-				<i className="tip">{text}</i>
-				{btn}
+			<div className="f-vl-md">
+				<div className="m-noData f-tc">
+					<img className="icon" src={src} />
+					<i className="tip">{text}</i>
+					{btn}
+				</div>
 			</div>
 			);
 	}
