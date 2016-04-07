@@ -8,7 +8,7 @@ var Nav = React.createClass({
 	},
 	handleClick: function(e){
 		var targ = e.target.nodeName=='A'? e.target : e.target.parentNode;
-		console.log(targ,targ.href)
+		//console.log(targ,targ.href)
 		if(/#shelf/.test(targ.href)){
 			if(this.isLogin()){
 				return true;
