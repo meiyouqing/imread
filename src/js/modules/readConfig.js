@@ -7,7 +7,7 @@ var ReadConfig = (function() {
 	var update = false;
 	// console.log(_config,_config.time,(Date.now() - _config.time) > 2*24*60*60*60*1000)
 	//两天的过期时间
-	if(!_config || !_config.time || (Date.now() - _config.time) > 2*24*60*60*60*1000){
+	if(!_config || !_config.time || (Date.now() - _config.time) > 2*24*60*60*1000){
 		update = true;
 	}
 	//首次加载时更新

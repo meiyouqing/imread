@@ -6,6 +6,7 @@ Desktop.ini
 #my:
 .project
 .svn
+.idea
 node_modules
 tmp
 route.js
