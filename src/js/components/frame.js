@@ -374,6 +374,13 @@ var Frame = React.createClass({
 			onerror: false
 		}
 	},
+	componentDidUpdate:function(){
+		var dl = /\&dlimread/.test(location.hash);
+		var isNav = Router.route.length === 1;
+		if(dl && !isNav && this.refs.ggBody){
+			DlImRead({container:this.refs.ggBody});
+		}
+	},
 	componentDidMount:function(){
 		if(/book_id=\d+/.test(window.location.search) && !window.location.hash){
 			var bookId = window.location.search.match(/book_id=(\d+)/)[1];
@@ -477,7 +484,7 @@ var Frame = React.createClass({
 				{
 					this.state.popups.map(function(data, i) {
 						return (
-							<div key={'popups'+i} className="gg-body" style={{'zIndex': data.zIndex}}>
+							<div key={'popups'+i} className="gg-body" style={{'zIndex': data.zIndex}} ref="ggBody">
 								{data.ggbody}
 							</div>
 						);

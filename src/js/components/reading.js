@@ -542,11 +542,6 @@ var Reading = React.createClass({
 			hammerTime.on('tap', this.handleClick);
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
-		//console.log(this.refs.container,this.state.bid,Router.parts[3])
-		if(this.refs.container && (Router.parts[3]=='16202' || Router.parts[3]=='78456' || Router.parts[3]=='314410')){
-			DlImRead({container:this.refs.container});
-			//TODO this.refs.container.style.marginBottom = '80px';
-		}
 	},
 	toggleChapterlist: function() {
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
