@@ -15,6 +15,7 @@ var recentRead = React.createClass({
 			noMore: false
 		}
 	},
+
 	componentDidMount: function() {
 		this.getData();
 		this.lazyloadImage(this.refs.container);

@@ -17,7 +17,7 @@ module.exports = {
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
 	resolve:{
-		extensions: ['','.js','.jsx']
+		extensions: ['','.js','.jsx'] 
 	},
 	module: {
 		loaders:[
@@ -29,7 +29,7 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			filename: '../index.html',
-		    template: 'indexTemplate.html', // Load a custom template 
+		    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
 		    inject: 'body', // Inject all scripts into the body 
 		    hash: !debug
 		  }),
