@@ -9,6 +9,7 @@ Desktop.ini
 .idea
 node_modules
 tmp
+webpack.config.js
 route.js
 webpack-dev-server.js
 indexTemplate.html

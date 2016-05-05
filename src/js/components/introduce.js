@@ -1,6 +1,7 @@
 var Header = require('./header');
 var Book1 = require('./book1');
 var Chapterlist = require('./chapterlist');
+var parseQuery = require('../modules/parseQuery');
 
 var Detail = React.createClass({
 	mixins:[Mixins()],
@@ -147,28 +148,14 @@ var Introduce = React.createClass({
 		})
 	},
 	componentDidMount: function() {
-
-	     	var str = window.location.search.replace(/\?/,'');
-	     	if(str){
-			var arr = str.split('&')
-			var obj = {}
-
-			for(var i=0;i<arr.length;i++){
-				var keys = arr[i].split('=');
-				obj[keys[0]] = keys[1];
-			}
-
-		      if(obj.action && obj.action=='openapp'){
-		      	//console.log('imread://detail/[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]')
-		      	//var p = "imread://detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]');
-		      	var p = "detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id +'","type":"9"}],"pushcmd":"9"}]')
-		      		setTimeout(function(){
-					window.location.href = 'imread://'+p;
-		      	},3000)
-		      	//window.location.href = p;
-		      }
-	    	}
-
+		var obj = parseQuery(location.search);
+	      if(obj.action && obj.action=='openapp'){
+	      	//console.log('imread://detail/[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]')
+	      	//var p = "imread://detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]');
+	      	var p = "detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id +'","type":"9"}],"pushcmd":"9"}]');
+			window.location.href = 'imread://'+p;
+	      	//window.location.href = p;
+	      }
 		this.getBook();
 		myEvent.setCallback('updateShelfBtn',this.onShelf)
 	},

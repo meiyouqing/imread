@@ -1,7 +1,7 @@
 var parseQuery = function(search) {
 	var separator = '&';
 	var params = {};
-
+	if(search.length<2) return params;
 	search.replace(/^\?/, '').split(separator).map(function(param) {
 		var pair = param.split('=');
 		var key = pair.shift() || '';

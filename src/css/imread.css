@@ -38,8 +38,8 @@ html, body, #app-container{background: #FFFFFF;}
 .f-fl{float: left;} .f-fr{float: right;}
 .f-pr{position: relative;} .f-pa{position: absolute;}
 .f-oh{overflow: hidden;}
-.f-flexbox{display:-moz-box; /* Firefox */display:-webkit-box; /* Safari and Chrome */display:box;}
-.f-flex1{display:block;box-sizing:border-box;-moz-box-flex:1.0; /* Firefox */-webkit-box-flex:1.0; /* Safari and Chrome */box-flex:1.0;}
+.f-flexbox{display:-moz-flex; /* Firefox */display:-webkit-flex; /* Safari and Chrome */display:flex;}
+.f-flex1{display:block;box-sizing:border-box;-moz-box-flex:1.0; /* Firefox */-webkit-box-flex:1.0; /* Safari and Chrome */box-flex:1.0;flex:1;}
 .f-fs-14{font-size: 14px;}.f-fs-16{font-size: 16px;}.f-fs-18{font-size: 18px;}
 .f-tc{text-align: center;}.f-tl{text-align: left;}.f-tr{text-align: right;}
 .f-p-15{padding: 15px;}
