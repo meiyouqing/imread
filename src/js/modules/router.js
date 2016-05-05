@@ -166,7 +166,7 @@ Router.prototype.typeHref = function(data,spm, route_type){
 	}
 },
 Router.prototype.get = function(callback,onerror,setName){
-	setAJAX(setName);console.log(this.api.base)
+	setAJAX(setName);
 	getJSON(this.api.m, this.api.base, this.api.param, callback, onerror);
 };
 Router.prototype.ajax = function(n,param,callback, onerror,setName){
