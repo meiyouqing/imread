@@ -100,7 +100,7 @@ html, body, #app-container{background: #FFFFFF;}
 .m-block .content{padding: 16px 0;overflow: hidden;width: 100%;}
 .m-block .content .recommend{margin-bottom: 7px;padding: 0 10px;color: #777;}
 .m-block .content .recommend .iconWord{display: inline-block;padding: 0 5px;margin-right:7px;background-color: #FDA778;color: #FFF;}
-.m-block.m-ad .content{padding: 0;}
+.m-block.m-block-top .content{padding: 0;}
 .m-block > .title {display:block;padding: 0 10px;border-bottom: 1px solid #EEE;line-height: 42px;background-color: #FFFFFF;color: #777}
 .m-block > .title h2{font-size: 16px;color: #333;}
 .m-block > .title h2.style-2{color: #EA2510;}

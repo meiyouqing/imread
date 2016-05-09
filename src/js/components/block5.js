@@ -124,7 +124,7 @@ var Block5 = React.createClass({
 		}
 		var visibility = this.props.data.contentlist.length > 1 ? 'hidden' : 'visible';
 		return (
-			<section className="m-ad m-block">
+			<section className="m-block-top m-block">
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
 						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: this.state.height}}>
