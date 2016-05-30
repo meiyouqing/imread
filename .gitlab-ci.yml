@@ -9,3 +9,4 @@ build:
    - cp -r src/img p/src/img
    - webpack -p
    - scp -r /opt/ci_www/imread/p ebook_manager@182.92.184.171:/opt/imread_new
+   - ssh -t -t ebook_manager@182.92.184.171 "cd /opt/imread_new;rm -rf tmp'"
