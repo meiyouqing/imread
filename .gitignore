@@ -7,7 +7,6 @@ Desktop.ini
 .project
 .svn
 .idea
-node_modules
 tmp
 webpack.config.js
 route.js

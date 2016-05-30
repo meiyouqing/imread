@@ -1,0 +1,5 @@
+before_script:
+build:
+  script:
+   - cd /opt/ci_www/
+   - git clone git@git.jndl.mobi:web/imread.git
