@@ -11,5 +11,3 @@ build:
    - ssh -t -t ebook_manager@182.92.184.171 "cd /opt/imread_new;rm -rf tmp src;"
    - scp -r /opt/ci_www/imread/p/* ebook_manager@182.92.184.171:/opt/imread_new
    - ssh -t -t ebook_manager@182.92.184.171 "cd /opt/imread_new;python publish_real_cdn_dir.py   'http://m.imread.com/'"
-only:
-   - master
