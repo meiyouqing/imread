@@ -1,4 +1,6 @@
 before_script:
+only:
+ - master
 build:
   script:
    - cd /opt/ci_www/imread
