@@ -1,6 +1,6 @@
 var Header = require('./header');
 var PayTips = require('./payTips');
-var Recharge_result = require('./Recharge_result');
+var Recharge_result = require('./recharge_result');
 require('../../css/pay.css');
 
 var Recharge = React.createClass({

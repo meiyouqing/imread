@@ -1,6 +1,6 @@
 ;
 var Img = require('./img');
-var Stars = require('./Stars');
+var Stars = require('./stars');
 
 var Book4 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
