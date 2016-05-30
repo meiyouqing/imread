@@ -31,7 +31,7 @@
 .u-chapter-action{position: absolute;bottom: 0;left: 0; right: 0;height: 55px;line-height: 35px;padding: 10px 0;box-sizing:border-box;border-top: 1px solid #9a9a9a;text-align: center;color: #444444;cursor: pointer;}
 .u-chapter-page:last-child{border-left: 1px solid #9a9a9a;}
 
-.u-miguLogo {display: block;position: absolute;top: 16px;right: 16px;width: 86px;height: 21px;background: url(../img/migu.png) no-repeat;}
+.u-miguLogo {display: block;position: absolute;top: 16px;right: 16px;width: 56px;height: 14px;background-image: url(../img/migu.png);background-size: contain;}
 
 .m-reading.bg-1{background: #F7EBE7}
 .m-reading.bg-2{background: #E1D1B5}
