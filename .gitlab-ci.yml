@@ -1,5 +1,11 @@
 before_script:
 build:
   script:
-   - cd /opt/ci_www/
-   - git clone git@git.jndl.mobi:web/imread.git
+   - cd /opt/ci_www/imread
+   - git pull origin master
+   - rm -rf p
+   - mkdir p
+   - mkdir p/src
+   - cp -r src/img p/src/img
+   - webpack -p
+   - scp -r /opt/ci_www/imread/p ebook_manager@182.92.184.171:/opt/imread_new
