@@ -1,7 +1,7 @@
 before_script:
-only:
- - master
 build:
+  only:
+   - master
   script:
    - cd /opt/ci_www/imread
    - git pull origin master
