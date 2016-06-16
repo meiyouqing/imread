@@ -120,13 +120,6 @@ html, body, #app-container{background: #FFFFFF;}
 .m-block > .title.bsTitle .f-pa{height: 50px;line-height: 50px;right: 10px;}
 .m-block > .title.bsTitle .icon-heart{font-size: 24px;}
 
-.m-download{position: fixed;z-index: 999;bottom: 0;left: 0;right: 0;height: 80px;padding: 16px 10px;box-sizing: border-box;background: rgba(0,0,0,.7);}
-.m-download .info{margin-left: 10px;max-width: 35%;}
-.m-download .d-btn{display: block;height: 43px;width: 124px;line-height: 41px;text-align: center;font-size: 18px;border-radius: 3px;margin-top: 4px;color: #56d2ec;border: 1px solid #56d2ec;box-sizing: border-box;}
-.m-download .d-title{margin-left: 60px;}
-.m-download .title, .m-download .desc{margin: 0;padding:0;color: #fff;font-size: 15px;line-height: 20px;}
-.m-download .desc{margin-top: 6px;width: 100%;font-size: 12px;}
-
 /*.m-block > .title.bsTitle .icon-arrow-right{right: 10px; bottom: 10px;}*/
 
 .subCat-1 {margin-right: -20px;padding: 0 10px;}
