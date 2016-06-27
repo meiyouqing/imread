@@ -1,4 +1,5 @@
 var Blocklist2 = require('./blocklist');
+var Header = require('./header');
 
 var Selfbuild = React.createClass({
 	mixins: [Mixins()],
@@ -24,11 +25,14 @@ var Selfbuild = React.createClass({
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		return (
-			
-				<div className="g-scroll" ref="container">
-					<Blocklist2 blockList={this.state.data}></Blocklist2>
+			<div>
+				<Header title={Router.title} />
+				<div className="g-main g-main-1">
+					<div className="g-scroll" ref="container">
+						<Blocklist2 blockList={this.state.data}></Blocklist2>
+					</div>
 				</div>
-		
+			</div>
 		)
 	}
 });

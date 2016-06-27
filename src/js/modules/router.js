@@ -2,7 +2,7 @@ var getJSON = require('../modules/getJSON').getJSON;
 var setAJAX = require('../modules/getJSON').set;
 //var payAJAX = require('../modules/payAJAX');
 
-var title = {login:'登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
+var title = {login:'登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读',selfbuild:"艾豆随便花专区"};
 var Config = {
 	payURLBase: 'http://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
