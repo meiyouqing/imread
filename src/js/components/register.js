@@ -38,7 +38,16 @@ var Register = React.createClass({
 				phone: postData.mobile_num,
 				token: postData.token
 			});
-			Router.goBack();
+
+			//判断登陆后的跳转
+			var isneed = false;
+			if(window.from.skipurl){
+				isneed = /\?/.test(window.from.skipurl);
+				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+			}else{
+				Router.goBack();
+			}
+
 		}, function(res) {
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
@@ -77,6 +86,9 @@ var Register = React.createClass({
 	},
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
+
+		//判断来源from
+		window.from = parseQuery(location.search);
 	},
 	render: function() {
 		return (

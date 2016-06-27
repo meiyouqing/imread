@@ -51,15 +51,17 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		console.log(parseQuery(location.search))
 		window.from = parseQuery(location.search);
-
-
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
 	},
 	render: function() {
+
+		var skipurl = '';
+		if(window.from && window.from.skipurl)
+			skipurl = '?skipurl='+window.from.skipurl;
+
 		return (
 			<div>
 				<Header title={Router.title} right={null} />
@@ -77,7 +79,7 @@ var Login = React.createClass({
 
 						<div className="u-inputline f-clearfix">
 							<div className="u-buttonc f-fl">
-								<a className="tip" href={Router.setHref('register')}>注册新账号</a>
+								<a className="tip" href={skipurl+Router.setHref('register')}>注册新账号</a>
 							</div>
 							<div className="u-buttonc f-fl">
 								<a className="tip" href={Router.setHref('forget')}>忘记密码</a>
