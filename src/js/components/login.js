@@ -3,6 +3,11 @@ var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 
 var Login = React.createClass({
+	getInitialState: function(){
+		return {
+			skipurl:null
+		}
+	},
 	handleSubmit: function(e) {
 		e.preventDefault();
 		var that = this;
@@ -51,21 +56,25 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		
+		window.from = parseQuery(window.location.search);
+		if(window.from.skipurl)
+			this.setState({skipurl: window.from.skipurl});
+		console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		window.from = parseQuery(window.location.search);
+		
 		return false;
 	},
 	render: function() {
 
-		var skipurl = '';
-		if(window.from && window.from.skipurl)
-			skipurl = window.from.skipurl;
+		// var skipurl = '';
+		// if(window.from && window.from.skipurl)
+		// 	skipurl = window.from.skipurl;
+		// console.log(window.form)
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={skipurl?<a className="f-fl icon-back iconfont" href={skipurl+'?isH5=true'} ></a>:null}   />
+				<Header title={Router.title} right={null}  left={this.state.skipurl?<a className="f-fl icon-back iconfont" href={this.state.skipurl+'?isH5=true'} ></a>:null}   />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
