@@ -49,10 +49,6 @@ var Login = React.createClass({
 	},
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
-
-		//判断来源from
-		window.from = parseQuery(window.location.search);
-		console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
@@ -60,6 +56,7 @@ var Login = React.createClass({
 	render: function() {
 
 		var skipurl = '';
+		window.from = parseQuery(window.location.search);
 		if(window.from && window.from.skipurl)
 			skipurl = window.from.skipurl;
 		console.log(window.form)
