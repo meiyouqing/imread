@@ -51,8 +51,7 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		window.from = parseQuery(window.location.search);
-		// console.log(window.from)
+		window.from = parseQuery(location.search);
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
@@ -61,12 +60,11 @@ var Login = React.createClass({
 
 		var skipurl = '';
 		if(window.from && window.from.skipurl)
-			skipurl = window.from.skipurl;
-		// console.log(window.form)
+			skipurl = '?skipurl='+window.from.skipurl;
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={skipurl?<a className="f-fl icon-back iconfont" href={skipurl+'?isH5=true'} ></a>:null}   />
+				<Header title={Router.title} right={null}  leftBak={false} />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
