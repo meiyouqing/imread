@@ -24,9 +24,7 @@ var Selfbuild = React.createClass({
 	componentDidUpdate: function(){
 		this.lazyloadImage(this.refs.container);
 	},
-	goback: function(){
-		window.location.href=(skipurl+'?isH5=true')
-	},
+
 	render: function() {
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
@@ -36,7 +34,7 @@ var Selfbuild = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} closeRight={true} left={skipurl?<a className="f-fl icon-back iconfont" onClick={this.goback(skipurl+'?isH5=true')} ></a>:null} />
+				<Header title={Router.title} closeRight={true} left={skipurl?<a className="f-fl icon-back iconfont" href={skipurl+'?isH5=true'} ></a>:null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
