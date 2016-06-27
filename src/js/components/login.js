@@ -52,17 +52,17 @@ var Login = React.createClass({
 
 		//判断来源from
 		window.from = parseQuery(window.location.search);
-		console.log(window.from)
+		// console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		return false;
+		//return false;
 	},
 	render: function() {
 
 		var skipurl = '';
 		if(window.from && window.from.skipurl)
 			skipurl = window.from.skipurl;
-		console.log(window.form)
+		// console.log(window.form)
 
 		return (
 			<div>
