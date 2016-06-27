@@ -51,7 +51,8 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		window.from = parseQuery(location.search);
+		window.from = parseQuery(window.location.search);
+		console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
