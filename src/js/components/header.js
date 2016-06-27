@@ -17,7 +17,6 @@ var Header = React.createClass({
 	},
 	goback: function(){
 		//window.history.go(-1);
-		console.log(this.props.leftBak)
 		window.location.href=this.props.leftBak+"?isH5=true";
 	},
 	render: function(){
