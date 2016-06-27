@@ -27,9 +27,13 @@ var Selfbuild = React.createClass({
 	render: function() {
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
+		var skipurl = '';
+		if(window.from && window.from.skipurl)
+			skipurl = '?skipurl='+window.from.skipurl;
+
 		return (
 			<div>
-				<Header title={Router.title} closeRight={true} leftBak={window.from.skipurl?window.from.skipurl:false} />
+				<Header title={Router.title} closeRight={true} leftBak={skipurl?skipurl:false} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
