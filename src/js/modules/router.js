@@ -41,7 +41,8 @@ var API={
 	deleteRecentRead:{method: 'POST', base: '/api/me/recentReading/delete', param:{book_id: ''}},
 	listTag:{method: 'GET', base: '/api/me/label/list', param:{}},
 	addTag:{method: 'POST', base: '/api/me/label/add', param:{id: ''}},
-	deleteTag:{method: 'POST', base: '/api/me/label/delete', param:{id: ''}}
+	deleteTag:{method: 'POST', base: '/api/me/label/delete', param:{id: ''}},
+	selfbuild:{method:'GET', base:'/api/page/content/'+Config.ai, param:{page_id:1, pages:1, blocks:3}}
 };
 
 function Router(){
@@ -57,6 +58,7 @@ function Router(){
 	this.unRendered = [];
 };
 Router.prototype.setAPI = function(now){
+
 	var parts = now[0].split('.');
 	var ao = API[parts[0]];
 	if(!ao){return}
