@@ -1,7 +1,6 @@
 var mixins = function() {
 	return {
 		lazyloadImage: function(container) {
-			console.log(111)
 			var imgs = container.querySelectorAll('.u-lazyload-img');
 			for (var i = 0; i < imgs.length; i++) {
 				(function(i) {

@@ -28,7 +28,7 @@ var Selfbuild = React.createClass({
 			<div>
 				<Header title={Router.title} closeRight={true} />
 				<div className="g-main g-main-1">
-					<div className="g-scroll" ref="container">
+					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
 					</div>
 				</div>
