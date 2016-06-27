@@ -15,7 +15,7 @@ var Selfbuild = React.createClass({
 		Router.get(function(res){
 			that.setState({data: res.blocklist})
 		});
-		this.lazyloadImage(this.refs.container);
+		//this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(){
 		this.lazyloadImage(this.refs.container);
@@ -24,9 +24,11 @@ var Selfbuild = React.createClass({
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		return (
-			<div className="g-scroll" ref="container">
-				<Blocklist2 blockList={this.state.data}></Blocklist2>
-			</div>
+			
+				<div className="g-scroll" ref="container">
+					<Blocklist2 blockList={this.state.data}></Blocklist2>
+				</div>
+		
 		)
 	}
 });
