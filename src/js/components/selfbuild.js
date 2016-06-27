@@ -18,7 +18,7 @@ var Selfbuild = React.createClass({
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(){
-
+		this.lazyloadImage(this.refs.container);
 	},
 	render: function() {
 		//console.log(this.props.data)
