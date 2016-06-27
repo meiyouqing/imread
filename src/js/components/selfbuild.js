@@ -26,7 +26,7 @@ var Selfbuild = React.createClass({
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		return (
 			<div>
-				<Header title={Router.title} closeRight={true} />
+				<Header title={Router.title} closeRight={true} leftBak={true} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
