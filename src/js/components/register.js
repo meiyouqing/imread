@@ -17,7 +17,7 @@ var Register = React.createClass({
 			mobile_num: this.refs.mobile_num.value,
 			key: this.refs.key.value,
 			password: this.refs.password.value,
-			device_identifier: '12345678',
+			device_identifier: GLOBAL.getUuid(),
 			channel: 5,
 			promot: 'H5'
 		};
