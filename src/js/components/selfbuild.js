@@ -20,7 +20,9 @@ var Selfbuild = React.createClass({
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		return (
-			<Blocklist2 blockList={this.state.data}></Blocklist2>
+			<div className="g-scroll">
+				<Blocklist2 blockList={this.state.data}></Blocklist2>
+			</div>
 		)
 	}
 });
