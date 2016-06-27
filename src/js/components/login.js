@@ -63,7 +63,7 @@ var Login = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		
-		return false;
+		//return false;
 	},
 	render: function() {
 
@@ -75,7 +75,7 @@ var Login = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}    />
+				<Header title={Router.title} right={null}  left={this.state.skipurls?<a className="f-fl icon-back iconfont" href={this.state.skipurls+'?isH5=true'} ></a>:null}   />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
