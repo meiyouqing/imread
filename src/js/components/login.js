@@ -55,7 +55,6 @@ var Login = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		window.from = parseQuery(window.location.search);
-		console.log(window.from)
 		return false;
 	},
 	render: function() {
@@ -63,7 +62,6 @@ var Login = React.createClass({
 		var skipurl = '';
 		if(window.from && window.from.skipurl)
 			skipurl = window.from.skipurl;
-		console.log(window.form)
 
 		return (
 			<div>
