@@ -30,8 +30,17 @@ var Login = React.createClass({
 				phone: postData.phone,
 				token: postData.token
 			});
-			Router.goBack();
-			myEvent.execCallback('login');
+
+			//判断登陆后的跳转
+			switch(window.from){
+				case 'activity':
+					window.location.href = 'http://m.imread.com/iframe/lottery/?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+					break;
+				default:
+					Router.goBack();
+					myEvent.execCallback('login');
+			}
+			
 		}, function(res) {
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
@@ -40,6 +49,12 @@ var Login = React.createClass({
 	},
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
+
+		//判断来源from
+		window.from = null;
+		var search = window.location.hash.match(/from=[a-zA-z]+/);
+		if(search)
+			window.from = search[0].split('=')[1];
 
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
