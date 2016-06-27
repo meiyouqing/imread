@@ -3,11 +3,6 @@ var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 
 var Login = React.createClass({
-	getInitialState: function(){
-		return {
-			skipurls:null
-		}
-	},
 	handleSubmit: function(e) {
 		e.preventDefault();
 		var that = this;
@@ -38,7 +33,6 @@ var Login = React.createClass({
 
 			//判断登陆后的跳转
 			var isneed = false;
-			window.from = parseQuery(window.location.search);
 			if(window.from.skipurl){
 				isneed = /\?/.test(window.from.skipurl);
 				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid()+'&isH5=true';
@@ -58,22 +52,13 @@ var Login = React.createClass({
 
 		//判断来源from
 		window.from = parseQuery(window.location.search);
-		console.log(window.from)
-		// if(window.from.skipurl)
-		// 	this.setState({skipurls: window.from.skipurl});
-		// console.log(window.from)
+
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		
 		//return false;
 	},
 	render: function() {
-
-		// var skipurl = '';
-		// if(window.from && window.from.skipurl)
-		// 	skipurl = window.from.skipurl;
-		// console.log(window.form)
-		//console.log(this.state.skipurls)
 
 		return (
 			<div>
