@@ -5,7 +5,7 @@ var myEvent = require('../modules/myEvent');
 var Login = React.createClass({
 	getInitialState: function(){
 		return {
-			skipurl:null
+			skipurls:null
 		}
 	},
 	handleSubmit: function(e) {
@@ -58,7 +58,7 @@ var Login = React.createClass({
 		//判断来源from
 		window.from = parseQuery(window.location.search);
 		if(window.from.skipurl)
-			this.setState({skipurl: window.from.skipurl});
+			this.setState({skipurls: window.from.skipurl});
 		console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -71,11 +71,11 @@ var Login = React.createClass({
 		// if(window.from && window.from.skipurl)
 		// 	skipurl = window.from.skipurl;
 		// console.log(window.form)
-		console.log(this.state.skipurl)
+		console.log(this.state.skipurls)
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={this.state.skipurl?<a className="f-fl icon-back iconfont" href={this.state.skipurl+'?isH5=true'} ></a>:null}   />
+				<Header title={Router.title} right={null}  left={this.state.skipurls?<a className="f-fl icon-back iconfont" href={this.state.skipurls+'?isH5=true'} ></a>:null}   />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
