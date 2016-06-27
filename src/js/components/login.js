@@ -38,6 +38,7 @@ var Login = React.createClass({
 
 			//判断登陆后的跳转
 			var isneed = false;
+			window.from = parseQuery(window.location.search);
 			if(window.from.skipurl){
 				isneed = /\?/.test(window.from.skipurl);
 				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid()+'&isH5=true';
@@ -57,9 +58,10 @@ var Login = React.createClass({
 
 		//判断来源from
 		window.from = parseQuery(window.location.search);
-		if(window.from.skipurl)
-			this.setState({skipurls: window.from.skipurl});
 		console.log(window.from)
+		// if(window.from.skipurl)
+		// 	this.setState({skipurls: window.from.skipurl});
+		// console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		
@@ -71,11 +73,11 @@ var Login = React.createClass({
 		// if(window.from && window.from.skipurl)
 		// 	skipurl = window.from.skipurl;
 		// console.log(window.form)
-		console.log(this.state.skipurls)
+		//console.log(this.state.skipurls)
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={this.state.skipurls?<a className="f-fl icon-back iconfont" href={this.state.skipurls+'?isH5=true'} ></a>:null}   />
+				<Header title={Router.title} right={null}  />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
