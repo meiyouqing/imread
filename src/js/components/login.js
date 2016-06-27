@@ -55,7 +55,7 @@ var Login = React.createClass({
 		// console.log(window.from)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		//return false;
+		return false;
 	},
 	render: function() {
 
