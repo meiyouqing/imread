@@ -18,7 +18,7 @@ var Header = React.createClass({
 		return (
 			<header className="m-bar m-bar-head">
 				{this.props.left}
-				{this.props.right}
+				{this.props.closeRight?'':this.props.right}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);
