@@ -75,7 +75,7 @@ var Login = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={this.state.skipurls?<a className="f-fl icon-back iconfont" href={this.state.skipurls+'?isH5=true'} ></a>:null}   />
+				<Header title={Router.title} right={null}  ></a>:null}   />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
