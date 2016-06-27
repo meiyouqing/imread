@@ -32,13 +32,13 @@ var Login = React.createClass({
 			});
 
 			//判断登陆后的跳转
-			switch(window.from){
-				case 'activity':
-					window.location.href = 'http://m.imread.com/iframe/lottery/?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
-					break;
-				default:
-					Router.goBack();
-					myEvent.execCallback('login');
+			var isneed = false;
+			if(window.from.skipurl){
+				isneed = /\?/.test(window.from.skipurl);
+				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+			}else{
+				Router.goBack();
+				myEvent.execCallback('login');
 			}
 			
 		}, function(res) {
@@ -51,10 +51,9 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		window.from = null;
-		var search = window.location.hash.match(/from=[a-zA-z]+/);
-		if(search)
-			window.from = search[0].split('=')[1];
+		console.log(parseQuery(location.search))
+		window.from = parseQuery(location.search);
+
 
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
