@@ -71,6 +71,7 @@ var Login = React.createClass({
 		// if(window.from && window.from.skipurl)
 		// 	skipurl = window.from.skipurl;
 		// console.log(window.form)
+		console.log(this.state.skipurl)
 
 		return (
 			<div>
