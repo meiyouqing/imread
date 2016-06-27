@@ -29,7 +29,7 @@ var Selfbuild = React.createClass({
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		var skipurl = '';
 		if(window.from && window.from.skipurl)
-			skipurl = '?skipurl='+window.from.skipurl;
+			skipurl = window.from.skipurl;
 
 		return (
 			<div>
