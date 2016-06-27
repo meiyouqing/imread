@@ -49,14 +49,18 @@ var Login = React.createClass({
 	},
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
+
+		//判断来源from
+		
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
+		window.from = parseQuery(window.location.search);
+		console.log(window.from)
 		return false;
 	},
 	render: function() {
 
 		var skipurl = '';
-		window.from = parseQuery(window.location.search);
 		if(window.from && window.from.skipurl)
 			skipurl = window.from.skipurl;
 		console.log(window.form)
