@@ -1,6 +1,7 @@
 var Blocklist2 = require('./blocklist');
 
 var Selfbuild = React.createClass({
+	mixins: [Mixins()],
 	getInitialState: function(){
 		return {
 			data: []
@@ -14,13 +15,16 @@ var Selfbuild = React.createClass({
 		Router.get(function(res){
 			that.setState({data: res.blocklist})
 		});
+		this.lazyloadImage(this.refs.container);
+	},
+	componentDidUpdate: function(){
 
 	},
 	render: function() {
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		return (
-			<div className="g-scroll">
+			<div className="g-scroll" ref="container">
 				<Blocklist2 blockList={this.state.data}></Blocklist2>
 			</div>
 		)
