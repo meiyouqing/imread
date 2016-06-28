@@ -114,6 +114,9 @@ Router.prototype.setTitle = function(){
 	document.title = '艾美阅读' + rTitle;
 };
 Router.prototype.goBack = function(callback) {
+	// var from = parseQuery(location.search);
+	// if(from.skipurl)
+	// 	window.location.href = from.skipurl+'?isH5=true';
 	var	route = this.route.slice(0,-1);
 	window.location.replace('#'+route.join('/'));
 };

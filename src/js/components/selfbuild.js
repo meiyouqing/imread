@@ -34,7 +34,7 @@ var Selfbuild = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} closeRight={true} left={skipurl?<a className="f-fl icon-back iconfont" href={skipurl+'?isH5=true'} ></a>:null} />
+				<Header title={Router.title} closeRight={true} skipurl={true} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>

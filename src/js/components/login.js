@@ -3,6 +3,7 @@ var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 
 var Login = React.createClass({
+
 	handleSubmit: function(e) {
 		e.preventDefault();
 		var that = this;
@@ -35,7 +36,7 @@ var Login = React.createClass({
 			var isneed = false;
 			if(window.from.skipurl){
 				isneed = /\?/.test(window.from.skipurl);
-				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid()+'&isH5=true';
+				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
 				Router.goBack();
 				myEvent.execCallback('login');
@@ -64,7 +65,7 @@ var Login = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} right={null}  left={null} />
+				<Header title={Router.title} right={null}  skipurl={true} />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">

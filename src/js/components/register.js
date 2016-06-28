@@ -43,7 +43,7 @@ var Register = React.createClass({
 			var isneed = false;
 			if(window.from.skipurl){
 				isneed = /\?/.test(window.from.skipurl);
-				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid()+'&isH5=true';
+				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
 				Router.goBack();
 			}
