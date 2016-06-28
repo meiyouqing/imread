@@ -23,6 +23,8 @@ var Header = React.createClass({
 		if(this.props.skipurl && from.skipurl)
 			isskip = true;
 
+		console.log(isskip,from.skipurl)
+
 		return (
 			<header className="m-bar m-bar-head">
 				{isskip?<a className="f-fl icon-back iconfont" href={from.skipurl}></a>:this.props.left}
