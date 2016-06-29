@@ -3,6 +3,7 @@ var getJSON = require('../modules/getJSON').getJSON;
 
 var Register = React.createClass({
 	getInitialState: function() {
+
 		return {
 			s: 0
 		}
@@ -18,7 +19,7 @@ var Register = React.createClass({
 			key: this.refs.key.value,
 			password: this.refs.password.value,
 			device_identifier: GLOBAL.getUuid(),
-			channel: 5,
+			channel: window.from.channel?window.from.channel:5,
 			promot: 'H5'
 		};
 		if (!GLOBAL.assertNotEmpty(postData.mobile_num, '请输入手机号')) {return ;}
@@ -86,11 +87,11 @@ var Register = React.createClass({
 	},
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
-
 		//判断来源from
 		window.from = parseQuery(location.search);
 	},
 	render: function() {
+
 		return (
 			<div>
 				<Header title={Router.title} right={null} />
