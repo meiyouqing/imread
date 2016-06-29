@@ -19,8 +19,8 @@ var Register = React.createClass({
 			key: this.refs.key.value,
 			password: this.refs.password.value,
 			device_identifier: GLOBAL.getUuid(),
-			channel: window.from.channel?window.from.channel:5,
-			promot: 'H5'
+			channel: 5,
+			promot: window.from.channel?window.from.channel:'H5'
 		};
 		if (!GLOBAL.assertNotEmpty(postData.mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
