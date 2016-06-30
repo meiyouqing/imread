@@ -156,8 +156,12 @@ Router.prototype.typeHref = function(data,spm, route_type){
     			case 2://内部网页
     			case 3://外部网页
     			case 4://apk下载
-    			case 8: //活动
     				return {url:data.redirect_url || "javascript:void(0)",target:target};
+    			case 8: //活动
+    				var prams = '';
+    				if(GLOBAL.cookie('userToken'))
+    					prams = '?token='+GLOBAL.cookie('userToken')+'&devicetoken='+GLOBAL.getUuid();
+    				return {url:data.redirect_url+prams || "javascript:void(0)",target:target};
     			case 5://素材目录
     				return {url:this.setHref('category.' + data.source_contentid + '.1.0'+'&'+spm+'&'+cpm),target:target};
     		}
