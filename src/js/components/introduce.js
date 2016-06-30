@@ -184,9 +184,9 @@ var Introduce = React.createClass({
 			introduceTabs = <IntroduceTabs key="3" source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
-			<div>
+			<div className="g-scroll">
 				{header}
-				<div className="introduce-container">
+				<div className="introduce-container" >
 					{detail}
 					{introduceTabs}
 					{loading}
