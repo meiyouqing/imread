@@ -5,7 +5,7 @@ var Selfbuild = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function(){
 		return {
-			data: []
+			data: null
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -28,18 +28,23 @@ var Selfbuild = React.createClass({
 	render: function() {
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
-		var skipurl = '';
+		var skipurl = '',loading,content;
 		if(window.from && window.from.skipurl)
 			skipurl = window.from.skipurl;
 
-		return (
-			<div>
-				<Header title={Router.title} closeRight={true} skipurl={true} />
-				<div className="g-main g-main-1">
+		if(!this.state.data)
+			loading = <Loading />
+		else
+			content = <div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
 					</div>
 				</div>
+		return (
+			<div>
+				<Header title={Router.title} closeRight={true} skipurl={true} />
+				{content}
+				{loading}
 			</div>
 		)
 	}
