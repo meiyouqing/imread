@@ -36,7 +36,10 @@ var Login = React.createClass({
 			var isneed = false;
 			if(window.from.skipurl){
 				isneed = /\?/.test(window.from.skipurl);
-				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+				//window.location.href = window.from.skipurl+(isneed?(window.from.skipurl.split('?')[0]):'')+'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+
+				window.location.href = (isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+				//console.log((isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid())
 			}else{
 				Router.goBack();
 				myEvent.execCallback('login');
