@@ -33,9 +33,9 @@ var Login = React.createClass({
 
 			//判断登陆后的跳转
 			var isneed = false;
-			if(window.from.skipurl){
-				isneed = /\?/.test(window.from.skipurl);
-				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+			if(that.from && that.from.skipurl){
+				isneed = /\?/.test(that.from.skipurl);
+				window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
 				GLOBAL.goBack();
 				myEvent.execCallback('login');
@@ -51,7 +51,7 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		window.from = parseQuery(location.search);
+		this.from = parseQuery(location.search);
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
@@ -60,8 +60,8 @@ var Login = React.createClass({
 
 
 		var skipurl = '';
-		if(window.from && window.from.skipurl)
-			skipurl = '?skipurl='+window.from.skipurl;
+		if(this.from && this.from.skipurl)
+			skipurl = '?skipurl='+this.from.skipurl;
 
 
 		return (
