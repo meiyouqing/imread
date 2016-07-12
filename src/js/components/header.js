@@ -1,4 +1,5 @@
 import { browserHistory } from 'react-router';
+import parseQuery from '../modules/parseQuery';
 var Header = React.createClass({
 	getDefaultProps: function(){
 		var sHandle = function(e){
