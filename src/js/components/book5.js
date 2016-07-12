@@ -1,10 +1,11 @@
+import { Link } from 'react-router';
 
 var Book5 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data;
 	},
 	render: function() {
-		var hrefStr = Router.typeHref(this.props.data,this.props.spm);
+		var hrefStr = GLOBAL.typeHref(this.props.data);
 		var topCls = '';
 		var topNum = this.props.data.locate;
 		switch(topNum){
@@ -23,10 +24,10 @@ var Book5 = React.createClass({
 		}
 		return (
 			<li className="u-book-5">
-				<a href={hrefStr}>
+				<Link to={hrefStr}>
 					<span className={"topNb"+topCls}>{topNum}</span>
 					<span className="f-ellipsis f-ellipsis-ib">{this.props.data.name}</span>
-				</a>
+				</Link>
 			</li>
 		);
 	}

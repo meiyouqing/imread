@@ -32,7 +32,7 @@ var Detail = React.createClass({
 		if (readLog[this.props.book.bid]){
 			chapterid = readLog[this.props.book.bid].current_chapterid;
 		}
-		window.location.hash += ['/reading&crossDomain', sourcebid, chapterid, localid, source_id].join('.');
+		window.location.pathname+= ['/reading&crossDomain', sourcebid, chapterid, localid, source_id].join('.');
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.book !== nextProps.book || this.props.isOnshelf !== nextProps.isOnshelf;
@@ -63,7 +63,7 @@ var Introduce = React.createClass({
 	getInitialState: function() {
 		return {
 			isOnshelf: false,
-			bid: Router.parts[1],
+			bid: this.APIParts()[1],
 			chapterlist: null,
 			page: 1,
 			page_size: 20,
@@ -94,14 +94,14 @@ var Introduce = React.createClass({
 		storage.set('bookIntroduce', bookIntroduce);
 	},
 	getBook: function(){
-		Router.get(function(data){
+		AJAX.get(function(data){
 			if(data.status_code==='500'){
 				this.setState({
 					noData:true
 				});
 				return;
 			}
-			data.content_id = data.bid = Router.parts[1];
+			data.content_id = data.bid = this.APIParts()[1];
 			data.name = data.book_name;
 			data.orderList = data.orderList.concat(data.readList);
 			GLOBAL.setBookName([data]);
@@ -110,7 +110,7 @@ var Introduce = React.createClass({
 				isOnshelf: !!data.is_self
 			});
 			this.cacheBook(data);
-			Router.setTitle();
+			GLOBAL.setTitle();
 		}.bind(this), function(error){
 			this.setState({
 				UFO:true
@@ -125,9 +125,9 @@ var Introduce = React.createClass({
 		this.setState({
 			getChapterlistLoading: true
 		});
-		Router.setAPI([['chapterlist', this.state.book.bid, this.state.page + (next ? 1 : 0), '', this.state.page_size, 0].join('.')]);
+		AJAX.init(['chapterlist', this.state.book.bid, '', this.state.page_size, 0, this.state.page + (next ? 1 : 0)].join('.'));
 
-		Router.get(function(data) {
+		AJAX.get(function(data) {
 			this.setState({
 				noMoreChapterlist: Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + (next ? 1 : 0)),
 				chapterlist: (this.state.chapterlist || []).concat(data.chapterList),
@@ -274,7 +274,7 @@ var IntroduceTabs = React.createClass({
 				<div className="contents" ref="contents">
 					<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
 					<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
-						<Chapterlist hrefBase={window.location.hash} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
+						<Chapterlist hrefBase={window.location.pathname+} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
 					</div>
 					<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
 						<Readlist readlist={this.props.readlist} />
@@ -298,8 +298,7 @@ var Readlist = React.createClass({
 				<ul>
 				{
 					this.props.readlist.map(function(book, i) {
-						var spm = [Router.pgid, Router.parts[1], 2, i+1];
-						return <Book1 spm={spm} key={i} data={book} fromIntroduce="1" />
+						return <Book1 key={i} data={book} fromIntroduce="1" />
 					})
 				}
 				</ul>

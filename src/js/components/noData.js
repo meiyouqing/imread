@@ -9,7 +9,7 @@ var NoData = React.createClass({
 	render: function(){
 		var src = 'src/img/noData.png',
 			text = '抱歉!没有找到相关数据..',
-			btn = <a className="u-btn" href="#mall">去书城逛逛</a>;
+			btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
 		switch(this.props.type){
 			case 'emptyShelf':
 				src = 'src/img/bookrack.png';

@@ -7,7 +7,7 @@ var About = React.createClass({
 	render: function() {
 		return (
 			<div className="about-block">
-				<Header title={Router.title} right={false} />
+				<Header right={false} />
 				<i className="imreadLogo"><img src="src/img/logo_180.png" /></i>
 				<h1 className="title">艾美阅读</h1>
             	<p className="version">版本2.1.0</p>

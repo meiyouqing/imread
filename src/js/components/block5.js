@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 
@@ -30,7 +31,7 @@ var Block5 = React.createClass({
 		
 		var swipeCallback = function(index, ele) {
 			var index = index % that.props.data.contentlist.length;
-			if (Router.name === 'mall' || Router.name == 'reading' && that.props.fromReading) {
+			if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
 				// 判断是否在书城
 				setTimeout(function() {
 					if (!ele || GLOBAL.isElementVisible(ele)) {
@@ -131,13 +132,11 @@ var Block5 = React.createClass({
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
-			                		var spm = this.props.spm.slice(0);
-                					spm.splice(-1,1,i+1);
-									var hrefObj = Router.typeHref(v,spm);
+									var hrefObj = GLOBAL.typeHref(v);
 			                		return (
-			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                			<Link style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
-			                			</a>
+			                			</Link>
 			                		);
 			                	}.bind(this))
 			                }

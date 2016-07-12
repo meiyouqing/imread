@@ -30,13 +30,13 @@ var RechageRes = React.createClass({
 			note = '未能成功支付，建议您重新购买。如有疑问，请记录返回码后，请致电客服：4009679897';
 			content = (		
 					<div className="f-clearfix result-fail">
-						<span className="f-fl f-mr-10">返回码</span><span className="f-fl">{data.code}</span><button className="f-fr u-btn" onClick={Router.goBack.bind(Router)}>更换号码充值</button>
+						<span className="f-fl f-mr-10">返回码</span><span className="f-fl">{data.code}</span><button className="f-fr u-btn" onClick={GLOBAL.goBack()}>更换号码充值</button>
 					</div>
 					);
 		}
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header right={null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-recharge">
 						<div className="f-p-15 f-bg-fff">

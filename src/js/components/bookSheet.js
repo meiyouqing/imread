@@ -6,23 +6,9 @@ require('../../css/bookSheet.css');
 
 var Module = React.createClass({
 	 mixins: [Mixins()],
-	scrollHandleCallback: function(e) {
-		var parts = Router.parts.map(function(v,i){
-			return i===2? ++v:v;
-		});
-		Router.init(Router.name+'&'+parts.join('.'));
-		this.setState({
-			scrollUpdate:true
-		});
-		this.getData(function(){
-			this.setState({
-				scrollUpdate:false
-			})
-		}.bind(this));
-	},
 	getData: function(callback){
-		Router.get(function(data){
-			Router.title = data.sheet_name;
+		AJAX.get(function(data){
+			GLOBAL.title = data.sheet_name;
 			if(!data.content){return;}
 			if (!data.content.length) {
 				this.setState({
@@ -69,7 +55,7 @@ var Module = React.createClass({
 			}
 		}
 		function goAjax(which){
-			Router.ajax(which,{sheet_id:that.state.data.sheet_id}, function(){
+			AJAX.go(which,{sheet_id:that.state.data.sheet_id}, function(){
 				that.setState({
 					collected: which==='collectionAdd'
 				});
@@ -100,7 +86,7 @@ var Module = React.createClass({
 	},
 	render:function(){
 		var noData,content,sLoading;
-		var _spm = [Router.pgid, Router.parts[1], 1, 0];
+		var _spm = [GLOBAL.pgid, this.APIParts()[1], 1, 0];
 	//定义content
 	//console.log(this.state.noMore,this.state.scrollUpdate)
 		if(!this.state.data){
@@ -129,10 +115,8 @@ var Module = React.createClass({
 							<div className="content">
 								<ul className="bsList">
 									{
-										this.state.data.content.map(function(v,i){
-											var spm = _spm.slice(0);
-											spm.splice(-1,1,i+1);
-											return <Book1 spm={spm} key={i} data={v} />
+										this.state.data.content.map(function(v,i){;
+											return <Book1 key={i} data={v} />
 										}.bind(this))
 									}
 								</ul>
@@ -149,7 +133,7 @@ var Module = React.createClass({
 		}
 		return (
 			<div>
-				<Header title={Router.title} />
+				<Header />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						{content}

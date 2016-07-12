@@ -9,7 +9,7 @@ var readHistory = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header right={null} />
 				<iframe src={"iframe/readHistory.html?referer=3&user_id=" + GLOBAL.cookie('userId')} className="g-main" style={{height: this.props.height}}></iframe>
 			</div>
 		);

@@ -8,9 +8,8 @@ var Block8 = React.createClass({
 			<ul className="u-pWrap">
 			{	
 				this.props.bookList.map(function(v,i){
-					var spm = [Router.pgid, Router.parts[1], 1, i+1];
 					return (
-						<Book1 spm={spm} key={i} data={v} />
+						<Book1 key={i} data={v} />
 					)
 				}.bind(this))
 			}

@@ -2,8 +2,8 @@
 var Header_s = React.createClass({
 	getInitialState: function(){
 		var key = '';
-		if(Router.name === 'searchList'){
-			key = decodeURIComponent(Router.parts[1]);
+		if(GLOBAL.name === 'searchList'){
+			key = decodeURIComponent(this.APIParts()[1]);
 		} 
 		return{
 			initialKey: key,
@@ -23,24 +23,24 @@ var Header_s = React.createClass({
 		e.preventDefault();
 		if(this.state.search){
 			var	key = this.state.key;
-			if(Router.name==='searchList'){
-				Router.init('searchList&search.'+key+'.1.0.0.0.0');
+			if(GLOBAL.name==='searchList'){
+				AJAX.init('search.'+key+'.1');
 				this.props.goSearch();
 			}else{
-				window.location.replace(Router.setHref('searchList&search.'+key+'.1.0.0.0.0'));
+				window.location.replace(GLOBAL.setHref('search.'+key));
 			}			
 			this.setState({
 				initialKey: key
 			});
 		}else{
-			Router.goBack();
+			GLOBAL.goBack();
 		}
 	},
 	backClick: function(){
 		this.setState({
 			key: ''
 		});
-		Router.goBack();
+		GLOBAL.goBack();
 	},
 	componentDidMount: function(){
 		if(!this.state.key.length){
