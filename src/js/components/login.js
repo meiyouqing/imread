@@ -37,7 +37,7 @@ var Login = React.createClass({
 				isneed = /\?/.test(window.from.skipurl);
 				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
-				Router.goBack();
+				GLOBAL.goBack();
 				myEvent.execCallback('login');
 			}
 			
