@@ -10,7 +10,7 @@ var Search = React.createClass({
 		}
 	},
 	componentDidMount:function(){
-		Router.get(function(data){
+		AJAX.get(function(data){
 			this.setState({
 				blockList:data.blocklist
 			})

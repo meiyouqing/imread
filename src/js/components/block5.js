@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 
@@ -30,7 +31,7 @@ var Block5 = React.createClass({
 		
 		var swipeCallback = function(index, ele) {
 			var index = index % that.props.data.contentlist.length;
-			if (Router.name === 'mall' || Router.name == 'reading' && that.props.fromReading) {
+			if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
 				// 判断是否在书城
 				setTimeout(function() {
 					if (!ele || GLOBAL.isElementVisible(ele)) {
@@ -141,8 +142,9 @@ var Block5 = React.createClass({
 									var hrefObj = Router.typeHref(v,spm);
 			                		return (
 			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={urlflag?v.redirect_url:hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+
 			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
-			                			</a>
+			                			</Link>
 			                		);
 			                	}.bind(this))
 			                }

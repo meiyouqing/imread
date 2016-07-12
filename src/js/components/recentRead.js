@@ -38,7 +38,7 @@ var recentRead = React.createClass({
 					}
 				}
 				if (that.isLogin()) {
-					Router.ajax('deleteRecentRead', {
+					AJAX.go('deleteRecentRead', {
 						book_id: bid
 					}, ui_callback);
 				} else {
@@ -67,7 +67,7 @@ var recentRead = React.createClass({
 			that.setState({
 				scrollUpdate: true
 			});
-			Router.get(function(data) {
+			AJAX.get(function(data) {
 				if (data.content.length < 10) {
 					that.setState({
 						noMore: true,
@@ -99,14 +99,6 @@ var recentRead = React.createClass({
 	componentDidUpdate: function() {
 		this.lazyloadImage(this.refs.container);
 	},
-	scrollHandleCallback: function() {
-		if (!this.isLogin()) {return ;}
-		var parts = Router.parts.map(function(v,i){
-			return i===1? ++v:v;
-		});
-		Router.init(Router.name+'&'+parts.join('.'));
-		this.getData();
-	},
 	render: function() {
 		var content;
 		if (!this.state.list) {
@@ -126,7 +118,7 @@ var recentRead = React.createClass({
 		}
 		return (
 			<div className="recentRead-block">
-				<Header title={Router.title} right={false} />
+				<Header right={false} />
 				<div className="g-main g-main-1">
 					<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						{content}

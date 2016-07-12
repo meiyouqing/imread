@@ -18,8 +18,7 @@ var Login = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		//Router.init('login');
-		Router.ajax('login',postData, function(data) {
+		AJAX.go('login',postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -59,6 +58,7 @@ var Login = React.createClass({
 	},
 	render: function() {
 
+<<<<<<< HEAD
 		var skipurl = '';
 		if(window.from && window.from.skipurl)
 			skipurl = '?skipurl='+window.from.skipurl;
@@ -66,6 +66,11 @@ var Login = React.createClass({
 		return (
 			<div>
 				<Header title={Router.title} right={null}  skipurl={true} />
+=======
+		return (
+			<div className="gg-body">
+				<Header title={GLOBAL.setTitle('login')} right={null} />
+>>>>>>> a760818b0e269d1613523f4c5511b983d12f5663
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
@@ -80,10 +85,14 @@ var Login = React.createClass({
 
 						<div className="u-inputline f-clearfix">
 							<div className="u-buttonc f-fl">
+<<<<<<< HEAD
 								<a className="tip" href={skipurl+Router.setHref('register')}>注册新账号</a>
+=======
+								<Link className="tip" to={GLOBAL.setHref('register')}>注册新账号</Link>
+>>>>>>> a760818b0e269d1613523f4c5511b983d12f5663
 							</div>
 							<div className="u-buttonc f-fl">
-								<a className="tip" href={Router.setHref('forget')}>忘记密码</a>
+								<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
 							</div>
 						</div>
 						<div className="u-otherlogins-tip f-hide">其他方式登录</div>

@@ -1,12 +1,11 @@
-var getJSON = require('../modules/getJSON').getJSON;
-var setAJAX = require('../modules/getJSON').set;
+
+var setAJAX = require('../modules/AJAX.getJSON').set;
 //var payAJAX = require('../modules/payAJAX');
 
 var title = {login:'登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读',selfbuild:"艾豆随便花专区"};
 var Config = {
 	payURLBase: 'http://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
-	//payURLBase: ''
 };
 var API={
 	group:{method:'GET', base:'/api/group/page', param:{group_id:1}},
@@ -46,9 +45,6 @@ var API={
 };
 
 function Router(){
-	this.route = [];
-	this.now = ['mall'];
-	this.parts = [];
 	this.title = '艾美阅读';
 	this.titles = [];
 	this.name = '';
@@ -156,6 +152,7 @@ Router.prototype.typeHref = function(data,spm, route_type){
     			case 2://内部网页
     			case 3://外部网页
     			case 4://apk下载
+
     				return {url:data.redirect_url || "javascript:void(0)",target:target};
     			case 8: //活动
     				var prams = '';
@@ -177,11 +174,11 @@ Router.prototype.typeHref = function(data,spm, route_type){
 },
 Router.prototype.get = function(callback,onerror,setName){
 	setAJAX(setName);
-	getJSON(this.api.m, this.api.base, this.api.param, callback, onerror);
+	AJAX.getJSON(this.api.m, this.api.base, this.api.param, callback, onerror);
 };
 Router.prototype.ajax = function(n,param,callback, onerror,setName){
 	setAJAX(setName);
-	getJSON(API[n].method, API[n].base, param, callback, onerror);
+	AJAX.getJSON(API[n].method, API[n].base, param, callback, onerror);
 };
 Router.prototype.init = function(str){
 	this.lastName = this.name;
@@ -201,6 +198,5 @@ Router.prototype.init = function(str){
 	this.setTitle();
 	//console.log(this.name,this.title,this.api)
 };
-
 
 module.exports = new Router();

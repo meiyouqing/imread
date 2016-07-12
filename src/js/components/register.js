@@ -1,5 +1,5 @@
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
+
 
 var Register = React.createClass({
 	getInitialState: function() {
@@ -28,7 +28,7 @@ var Register = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		getJSON('POST', this.props.forget && '/api/auth/reset/password' || '/api/auth/register', postData, function(data) {
+		AJAX.getJSON('POST', this.props.forget && '/api/auth/reset/password' || '/api/auth/register', postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -60,7 +60,7 @@ var Register = React.createClass({
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 
-		getJSON('GET', '/api/auth/key?', {
+		AJAX.getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
 			type: this.props.forget && 'reset' || 'register'
 		}, function(data) {
@@ -94,7 +94,7 @@ var Register = React.createClass({
 
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header right={null} />
 				<div className="m-registerblock m-userblocks">
 					<form className="u-registerform u-userform">
 						<div className="u-inputline">

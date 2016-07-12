@@ -1,5 +1,5 @@
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
+
 var Chapterlist = require('./chapterlist');
 var readingStyle = require('../modules/readingStyle');
 var bookContent = require('../modules/bookContent');
@@ -92,9 +92,9 @@ var chapterMixins = {
 		this.setState({
 			getChapterlistLoading: true
 		});
-		Router.setAPI([['chapterlist', Router.parts[3], this.state.page + next , '', this.state.page_size, 0].join('.')]);
+		AJAX.init(['chapterlist', this.APIParts()[3], '', this.state.page_size, 0, this.state.page + next ].join('.'));
 
-		Router.get(function(data) {
+		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
 				chapterlist: data.chapterList,
@@ -134,7 +134,7 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		window.location.replace(window.location.hash.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+		window.location.replace(window.location.pathname.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading&crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
 	},
@@ -162,9 +162,9 @@ var Reading = React.createClass({
 			pages: 1,
 			page_size: 20,
 			vt: 9,
-			bid: Router.parts[1],
-			chapterid: Router.parts[2],
-			source_id: Router.parts[4],
+			bid: this.APIParts()[1],
+			chapterid: this.APIParts()[2],
+			source_id: this.APIParts()[4],
 			showSetting: false,
 			showChapterlist: false,
 			showSettingFont: false,
@@ -215,7 +215,7 @@ var Reading = React.createClass({
 		}];
 		if (this.isLogin()) {
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
-			//getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
+			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
 
 		this.cacheReadLog(readLog[0]);
@@ -231,7 +231,7 @@ var Reading = React.createClass({
 	goOut:function(e){
 		var addShelf = function() {
 			var param = [{
-				bookId: Router.parts[3],
+				bookId: this.APIParts()[3],
 				type: 3,
 				time: new Date().getTime(),
 				chapter_id: this.state.chapterid,
@@ -239,15 +239,15 @@ var Reading = React.createClass({
 			}];
 			this.shelfAdding(param,function(){
 				myEvent.execCallback('updateShelfBtn');
-				Router.goBack();
+				GLOBAL.goBack();
 			});
 		}.bind(this);
-		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
+		this.isOnShelf = GLOBAL.onShelf[this.APIParts()[3]]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
-			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));
+			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
 		}else{
 			myEvent.execCallback('refreshShelf');
-			Router.goBack();			
+			GLOBAL.goBack();			
 		}
 	},
 	getFormatContent: function(content) {
@@ -282,7 +282,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		getJSON('GET','/api/book/introduce',{bid:Router.parts[3]},function(data){
+		AJAX.getJSON('GET','/api/book/introduce',{bid:this.APIParts()[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
@@ -312,7 +312,7 @@ var Reading = React.createClass({
 						<div>
 							<Block5 data={{
 								contentlist: [data.intercutList[randIndex]]
-							}} spm={[]} type="11" fromReading={true} />
+							}} type="11" fromReading={true} />
 							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
 						</div>
 					);
@@ -373,7 +373,7 @@ var Reading = React.createClass({
 		bookContent.get({
 			bid: that.state.bid,
 			cid: that.state.chapterid,
-			source_id : Router.parts[4],
+			source_id : this.APIParts()[4],
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -394,7 +394,7 @@ var Reading = React.createClass({
 			noCross:true,
 			bid: that.state.bid,
 			cid: data.nextChapterId,
-			source_id : Router.parts[4],
+			source_id : this.APIParts()[4],
 			callback: function(data){
 				storage.set('nextChapter',data);
 			}.bind(this),
@@ -412,7 +412,7 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			window.location.replace(Router.setHref('confirmOrder'));
+			window.location.replace(GLOBAL.setHref('confirmOrder'));
 			require.ensure([], function(require) {
 				var Order = require('./order');
 				that.props.popup(<Order 
@@ -433,10 +433,10 @@ var Reading = React.createClass({
 			that.goLogin(pay);
 		}
 		function pay(){	
-			getJSON('GET','/api/auth/balance',{},function(data){
+			AJAX.getJSON('GET','/api/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				if((aidou-orderData.marketPrice)>=0){
-					getJSON('GET',orderData.orderUrl,{},function(data){
+					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
 						that.gotContent(data);
 					});
 				}else{
@@ -531,7 +531,7 @@ var Reading = React.createClass({
 		//第一次进入阅读跳到上次阅读的地方
 		if(this.bookmarkFlag){
 			//console.log(storage.get('readLogNew'))
-			var obj = storage.get('readLogNew')[Router.parts[3]];
+			var obj = storage.get('readLogNew')[this.APIParts()[3]];
 			var offset = obj? obj.offset[this.state.chapterid] : false;
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
@@ -589,7 +589,7 @@ var Reading = React.createClass({
 		});
 	},
 	render:function(){
-		var currentRoute = window.location.hash.split('/');
+		var currentRoute = window.location.pathname+.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} />;

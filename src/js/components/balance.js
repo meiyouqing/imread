@@ -7,7 +7,7 @@ require('../../css/pay.css')
 var Balance = React.createClass({
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		Router.get(function(data) {
+		AJAX.get(function(data) {
 			this.setState({
 				loading: false,
 				balance: data.success.balance,
@@ -33,9 +33,9 @@ var Balance = React.createClass({
 	},
 	orderHandle:function(){
 		var that = this;
-		var hash = window.location.hash;
+		var hash = window.location.pathname;
 		var ordered = this.state.list[this.state.active];
-		// var href=Router.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
+		// var href=GLOBAL.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
 		var postData = {
 			productId:ordered.productId,
 			fee:'1',
@@ -46,8 +46,8 @@ var Balance = React.createClass({
 			productDesc:'1',
 			others:'1'
 		}
-		Router.ajax('pay',postData,function(data){
-			window.location.replace(Router.setHref('recharge'));
+		AJAX.go('pay',postData,function(data){
+			window.location.replace(GLOBAL.setHref('recharge'));
 			setTimeout(function(){
 				window.location.replace(hash+'/recharge');
 				that.props.popup(<Recharge data={data.success} popup={that.props.popup} />);				
@@ -96,7 +96,7 @@ var Balance = React.createClass({
 		}
 		return (
 			<div>
-				<Header right={false} title={Router.title} />
+				<Header right={false} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

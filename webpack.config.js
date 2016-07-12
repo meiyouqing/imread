@@ -1,6 +1,6 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
 	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
-	//webpackDevMiddleware = require("webpack-dev-middleware"),
+	webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;
@@ -35,11 +35,13 @@ module.exports = {
 		  }),
 		new webpack.ProvidePlugin({
 			//React: 'react',
-			storage: '../modules/storage',
 			GLOBAL: '../modules/global',
+			AJAX: '../modules/AJAX',
+			Link: '../modules/link',
+			browserHistory: '../modules/history',
+			storage: '../modules/storage',
 			Loading: './loading',
 			NoData: './noData',
-			Router: '../modules/router',
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',

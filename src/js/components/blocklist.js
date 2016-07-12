@@ -1,3 +1,4 @@
+import { Link, browserHistory } from 'react-router';
 var Book1 = require('./book1');
 var Book2 = require('./book2');
 var Book3 = require('./book3');
@@ -14,18 +15,16 @@ var Block1 = React.createClass({
 		//this.props.data.contentlist.pop();
 		return (
 			<section className="m-block">
-				<a className="title" href={this.props.href}>
+				<Link className="title" to={this.props.href}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
-				</a>
+				</Link>
 				<div className="content">
 					{this.props.recommend}
 					<ul className="subCat-1 f-clearfix">
 					{
 						this.props.data.contentlist.slice(0,(this.props.data.contentlist.length - this.props.data.contentlist.length % 3)).map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
-							return <Book2 spm={spm} key={i} data={v} />
+							return <Book2 key={i} data={v} />
 						}.bind(this))
 					}
 					</ul>
@@ -41,19 +40,17 @@ var Block2 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<a className="title" href={this.props.href}>
+				<Link className="title" to={this.props.href}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
-				</a>
+				</Link>
 				<div className="content">
 					{this.props.recommend}
 					<ul className="subCat-2 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
 							//if(i > 4) return;
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
-							return <Book1 spm={spm} key={i} data={v} />
+							return <Book1 key={i} data={v} />
 						}.bind(this))
 					}
 					</ul>
@@ -69,10 +66,10 @@ var Block3 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<a className="title" href={this.props.href}>
+				<Link className="title" to={this.props.href}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
-				</a>
+				</Link>
 				<div className="content">
 					{this.props.recommend}
 					<ul className="subCat-3 f-clearfix">
@@ -80,21 +77,17 @@ var Block3 = React.createClass({
 						{
 							this.props.data.contentlist.map(function(v,i){
 								//if(i > 4) return;
-								var spm = this.props.spm.slice(0);
-								spm.splice(-1,1,i+1);
 								if(i<3){
-									return <Book2 spm={spm} key={i} data={v} />
+									return <Book2 key={i} data={v} />
 								}
 							}.bind(this))
 						}
 						</div>
 						{
 							this.props.data.contentlist.map(function(v,i){
-								var spm = this.props.spm.slice(0);
-								spm.splice(-1,1,i+1);
 								//if(i > 4) return;
 								if(i>=3){
-									return <Book3 spm={spm} key={i} data={v}/>
+									return <Book3 key={i} data={v}/>
 								}
 							}.bind(this))
 						}
@@ -111,22 +104,20 @@ var Block4 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<a className="title" href={this.props.href}>
+				<Link className="title" to={this.props.href}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
-				</a>
+				</Link>
 				<div className="content">
 					{this.props.recommend}
 					<ul className="subCat-4 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
 							if(i > 3) return;
 							if(i<1){
-								return <Book1 spm={spm} key={i} data={v}/>
+								return <Book1 key={i} data={v}/>
 							}else{
-								return <Book3 spm={spm} key={i} data={v}/>
+								return <Book3 key={i} data={v}/>
 							}
 						}.bind(this))
 					}
@@ -155,10 +146,8 @@ var Block6 = React.createClass({
 					<ul className="subCat-6 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
 							//if(i > 5) return;
-							return <Book6 spm={spm} key={i} data={v} noImage={i >= 2}/>
+							return <Book6 key={i} data={v} noImage={i >= 2}/>
 						}.bind(this))
 					}
 					{emptyBook6}
@@ -201,13 +190,11 @@ var Block7 = React.createClass({
 					<ul className={"subCat-"+this.props.data.style+" f-clearfix"}>
 					{
 						this.state.contentlist.map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
 							if(i > 5) return;
-							var hrefStr = Router.setHref('searchList&search.'+v.name+'.0.0.0.0.0'+'&'+spm.join('.')+'&'+v.type+'.'+v.content_id);
+							var hrefStr = GLOBAL.setHref('search.'+v.name);
 							return (
 								<li key={i}>
-									<a href={hrefStr} className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</a>
+									<Link to={hrefStr} className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</Link>
 								</li>
 							)
 						}.bind(this))
@@ -225,17 +212,15 @@ var Block9 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block m-block-1">
-				<a className="title title-1" href={this.props.href}>
+				<Link className="title title-1" to={this.props.href}>
 					<h2>{this.props.data.name}</h2>
-				</a>
+				</Link>
 				<div className="content">
 					{this.props.recommend}
 					<ul className="f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
-							return <Book5 spm={spm} key={i} data={v} />
+							return <Book5 key={i} data={v} />
 						}.bind(this))
 					}
 					</ul>
@@ -260,9 +245,7 @@ var Block12 = React.createClass({
 					<ul className={"f-clearfix subCat-"+this.props.data.style}>
 					{
 						this.props.data.contentlist.slice(0,this.props.data.contentlist.length-(this.props.data.contentlist.length%2)).map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
-							return <Book7 spm={spm} key={i} data={v} style={this.props.data.style} />
+							return <Book7 key={i} data={v} style={this.props.data.style} />
 						}.bind(this))
 					}
 					</ul>
@@ -277,8 +260,8 @@ var Block14 = React.createClass({
 	readMoreHandle: function(e){
 		var that = this;
 		this.pages++;
-		Router.setAPI(['block.'+this.props.data.id+'.'+this.pages+'.10', this.props.spm.join('.'), this.props.data.style+'.'+this.props.data.id])
-		Router.get(function(data){
+		AJAX.init('block.'+this.props.data.id)
+		AJAX.get(function(data){
 			if(!data && !data.length){
 				that.setState({
 					noMore: true
@@ -324,9 +307,7 @@ var Block14 = React.createClass({
 					<ul className="subCat-14">
 					{
 						this.state.contentList.map(function(v,i){
-							var spm = this.props.spm.slice(0);
-							spm.splice(-1,1,i+1);
-							return <Book8 spm={spm} key={i} data={v} />
+							return <Book8 key={i} data={v} />
 						}.bind(this))
 					}
 					</ul>
@@ -348,12 +329,12 @@ var Block15 = React.createClass({
 		callback();
 		function callback(){
 			//alert(that.isLogin());
-			Router.setAPI(['listTag']);
-			Router.get(function(data){
+			AJAX.init('listTag');
+			AJAX.get(function(data){
 				if(data.selected.length){
 					myEvent.execCallback('updateTopList');
 				}else{
-					window.location.hash = Router.setHref('tag&listTag');
+					browserHistory.push(GLOBAL.setHref('tag&listTag'));
 					myEvent.setCallback('configTag',function(){
 						myEvent.execCallback('updateTopList');
 						//TODO 重新加载本页				
@@ -381,19 +362,17 @@ var Block15 = React.createClass({
 		}else{
 			return (
 				<section className="m-block">
-					<a className="title bsTitle f-pr" href={this.props.href}>
+					<Link className="title bsTitle f-pr" to={this.props.href}>
 						<span className="iconfont icon-arrow-right f-pa"></span>
 						<i className="iconfont icon-heart f-block f-tc"></i>
 						<h2 className="f-tc">{this.props.data.name}</h2>
-					</a>
+					</Link>
 					<div className="content">
 						{this.props.recommend}
 						<ul className="subCat-4 f-clearfix">
 						{
 							this.props.data.contentlist.map(function(v,i){
-								var spm = this.props.spm.slice(0);
-								spm.splice(-1,1,i+1);
-								return <Book1 spm={spm} key={i} data={v}/>
+								return <Book1 key={i} data={v}/>
 							}.bind(this))
 						}
 						</ul>
@@ -421,23 +400,22 @@ var Blocklist = React.createClass({
 			var recommend = block.icon_word?
 							<p className="recommend"><span className="iconWord f-br-3">{block.icon_word}</span>{block.short_recommend_words}</p>
 							: null;
-			var spm = [Router.pgid, block.id, i+1, '-1']
-			var hrefStr = Router.setHref('more&block.'+block.id+'.1.10'+'&'+spm.join('.')+'&'+block.style+'.'+block.id);
+			var hrefStr = GLOBAL.setHref('more/block.'+block.id);
 			switch (block.style) {
 				case 1 :
-					return <Block1 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 2 :
-					return <Block2 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block2 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 3 :
-					return <Block3 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block3 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 4 :
-					return <Block4 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
 				case 5 : //banner铺满
 					require.ensure(['./block5'],function(require){
 						setTimeout(function() {
 							var Block5 = require('./block5');
-							var block5 = <Block5 key={i} spm={spm} data={block} href={hrefStr} style={block.style} />;
+							var block5 = <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
 							that.state.comps.splice(i,1,block5)
 							that.state.block5[i] = block5;
 							that.setState({
@@ -448,19 +426,19 @@ var Blocklist = React.createClass({
 					});
 					return that.state.block5[i];
 				case 6 :
-					return <Block6 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block6 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 7 : //7 圆形热词风格
 				case 8 : //8 方形热词风格
-					return <Block7 key={i} spm={spm} data={block} recommend={recommend} />;
+					return <Block7 key={i} data={block} recommend={recommend} />;
 				case 9 : //9文字瀑布流风格
-					return <Block9 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block9 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 12 : //12 半图偶数专题风格
 				case 13 : //13 半图偶数排行风格
-					return <Block12 key={i} data-id={i} spm={spm} data={block} recommend={recommend} />;
+					return <Block12 key={i} data-id={i} data={block} recommend={recommend} />;
 				case 14 : //14 书单风格
-					return <Block14 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block14 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 15 : //15 猜你喜欢风格
-					return <Block15 key={i} spm={spm} data={block} href={hrefStr} recommend={recommend} />;
+					return <Block15 key={i} data={block} href={hrefStr} recommend={recommend} />;
 			}
 		});
 		return comps;

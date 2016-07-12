@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router';
 var Header = require('./header');
 var Img = require('./img');
 
@@ -16,7 +17,7 @@ var Shelf = React.createClass({
 				cid = readLog.current_chapterid;
 			}
 			myEvent.setCallback('refreshShelf',this.props.getShelfList);
-			window.location.hash = Router.setHref('reading&crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid);
+			browserHistory.push(GLOBAL.setHref('crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){
@@ -56,7 +57,7 @@ var Shelf = React.createClass({
 	},
 	seAllClick :function(){
 		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
-		this.props.shelfList.forEach(function(v){
+		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
 		}.bind(this))
 		this.setState({
@@ -82,9 +83,7 @@ var Shelf = React.createClass({
 			param.push(o);
 		});
 		param = JSON.stringify(param);
-		Router.ajax('deleteBook',{param:param},function(data){
-			// console.log(data);
-			//Router.init('shelf&block.157.1.0');
+		AJAX.go('deleteBook',{param:param},function(data){
 			this.props.getShelfList();
 			this.compClick();
 		}.bind(this))
@@ -99,27 +98,38 @@ var Shelf = React.createClass({
 			right:setting,
 			icon:icon,
 			selected:[],
-			noMore:true
+			noMore:true,
+			shelfList:null
 		}
 	},
+	getList: function (){
+		AJAX.get((data)=>{
+			this.setState({
+				shelfList: data
+			});
+			//设置GLOBAL.booklist/book
+			GLOBAL.setBlocklist(data);
+		},this.onerror);
+	},			
 	componentDidMount: function(){
-		this.lazyloadImage(this.refs.container);
+		AJAX.init('block.157.10000');
+		this.getList();
 	},
 	componentDidUpdate: function() {
-		//var scrollUpdate = Router.parts[2]==='1';
-		this.lazyloadImage(this.refs.container);
-		// console.log(Router.parts)
-		// if (scrollUpdate) {
-		// 	this.refs.container.scrollTop = 0;
-		// }
-	},
-	shouldComponentUpdate: function(nextProp,nextState){
-		//console.log(this.props,nextProp)
-		return true;
+		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		//console.log(this.state.selected);
-		var content,header,icon;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right} />;
+		//console.log(this.state.shelfList);
+		if(!this.state.shelfList){
+
+			return (<div>{header}<Loading /></div>);
+		}else if(!this.state.shelfList.length){
+			{header}
+			return(<div>{header}<NoData type="emptyShelf" /></div>);
+		}
+
+		var icon;
 		var curClass = '';
 		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
 		var addBook = this.state.setting? null:add;
@@ -136,7 +146,7 @@ var Shelf = React.createClass({
 		}
 
 		var recentIndex = -1;
-		this.props.shelfList.map(function(v, i) {
+		this.state.shelfList.forEach(function(v, i) {
 			if (v.content_id == recent) {
 				recentIndex = i;
 				return false;
@@ -144,17 +154,16 @@ var Shelf = React.createClass({
 		});
 
 		if (recentIndex > 0) {
-			this.props.shelfList.unshift(this.props.shelfList.splice(recentIndex, 1)[0]);
+			this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 		}
-
 		return (
 			<div>
-				<Header title="书架" left={this.state.left} right={this.state.right} />
+				{header}
 				<div className="g-main">
 					<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
 						<ul className="shelfWrap f-clearfix">
 							{
-								this.props.shelfList.map(function(v,i){
+								this.state.shelfList.map(function(v,i){
 									if(this.state.setting){
 										curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
 									}

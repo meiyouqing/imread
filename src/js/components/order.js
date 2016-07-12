@@ -1,11 +1,11 @@
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
+
 require('../../css/pay.css');
 
 var mod = React.createClass({
 	rechargeHandle: function(e) {
-		var hash = window.location.hash;
-		window.location.replace(Router.setHref('balance'));
+		var hash = window.location.pathname;
+		window.location.replace(GLOBAL.setHref('balance'));
 		myEvent.setCallback('recharge',function(){
 			window.location.replace(hash);
 			this.getBalance();
@@ -14,8 +14,8 @@ var mod = React.createClass({
 	payHandle: function(e) {
 		var that = this;
 		if((this.state.aidou-this.props.price)>=0){
-			getJSON('GET',this.props.data.orderUrl,{},function(data){
-				Router.goBack();
+			AJAX.getJSON('GET',this.props.data.orderUrl,{},function(data){
+				GLOBAL.goBack();
 				var autoPay = that.props.chargeMode==2? true:false;
 				that.props.paySuccess(data, autoPay);
 			});
@@ -24,7 +24,7 @@ var mod = React.createClass({
 		}
 	},
 	getBalance: function(){
-		getJSON('GET','/api/auth/balance',{},function(data){
+		AJAX.getJSON('GET','/api/auth/balance',{},function(data){
 			this.setState({
 				aidou: data.success.balance/100
 			});
@@ -50,7 +50,7 @@ var mod = React.createClass({
 		}
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header right={null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-order">
 						<div className="block f-mt-20">

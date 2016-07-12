@@ -31,7 +31,7 @@ var Recharge = React.createClass({
 			verifyCode: verifyCode
 		};
 		that.loading = true;
-		Router.ajax('payConfirm', postData, success, null, 'recharge');
+		AJAX.go('payConfirm', postData, success, null, 'recharge');
 		// function fail(res){
 		// 	that.loading = false;
 		// 	console.log(res.code)
@@ -49,7 +49,7 @@ var Recharge = React.createClass({
 				});
 				return;
 			}
-			window.location.replace(Router.setHref('recharge_result'));
+			window.location.replace(GLOBAL.setHref('recharge_result'));
 			setTimeout(function(){
 				var rechargeRes = <Recharge_result data={data} />
 				if(data.code!==200){
@@ -101,15 +101,15 @@ var Recharge = React.createClass({
 					orderNo: this.params_init.orderNo,
 					r: data.vcurl
 				}
-				Router.ajax('payVcurl', postData, gotInit, initError, 'recharge');
+				AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
 			}
 		}.bind(this);
 		countDown();
 		if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
-			Router.ajax('paySign', this.params_init, function(data) {
+			AJAX.go('paySign', this.params_init, function(data) {
 				// console.log(data)
 				this.params_init.sign = data.content;
-				Router.ajax('payInit', this.params_init, gotInit, initError, 'recharge');
+				AJAX.go('payInit', this.params_init, gotInit, initError, 'recharge');
 			}.bind(this), initError, 'recharge');
 		}else{
 			gotInit(this.initData,true);
@@ -150,7 +150,7 @@ var Recharge = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header right={null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						<div className="u-balance f-tl">

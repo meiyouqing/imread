@@ -11,7 +11,7 @@ var tag = React.createClass({
 	},
 	getData: function() {
 		var that = this;
-		Router.get(function(data) {
+		AJAX.get(function(data) {
 			that.setState({
 				tagList: data.noChoice,
 				myTagList: data.selected,
@@ -33,7 +33,7 @@ var tag = React.createClass({
 		if (this.state.myTagList.length >= 10) {
 			return POP.alert('最多选择10个标签');
 		}
-		Router.ajax('addTag', {
+		AJAX.go('addTag', {
 			id: this.state.tagList[index].category_id
 		}, function() {
 			this.toggleTag(index, this.state.tagList, this.state.myTagList);
@@ -41,7 +41,7 @@ var tag = React.createClass({
 	},
 	removeTag: function(e) {
 		var index = e.target.getAttribute('data-index');
-		Router.ajax('deleteTag', {
+		AJAX.go('deleteTag', {
 			id: this.state.myTagList[index].category_id
 		}, function() {
 			this.toggleTag(index, this.state.myTagList, this.state.tagList);
@@ -60,7 +60,7 @@ var tag = React.createClass({
 		}
 		return (
 			<div className="tags-block">
-				<Header title={Router.title} right={false} />
+				<Header right={false} />
 				<div className="g-main g-main-1">
 					<div  className="g-scroll">
 						<div className="tag-block">
