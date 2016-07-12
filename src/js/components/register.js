@@ -20,7 +20,7 @@ var Register = React.createClass({
 			password: this.refs.password.value,
 			device_identifier: GLOBAL.getUuid(),
 			channel: 5,
-			promot: window.from.channel?window.from.channel:'H5'
+			promot: that.from.channel?that.from.channel:'H5'
 		};
 		if (!GLOBAL.assertNotEmpty(postData.mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
@@ -42,9 +42,9 @@ var Register = React.createClass({
 
 			//判断登陆后的跳转
 			var isneed = false;
-			if(window.from.skipurl){
-				isneed = /\?/.test(window.from.skipurl);
-				window.location.href = window.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+			if(that.from && that.from.skipurl){
+				isneed = /\?/.test(that.from.skipurl);
+				window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
 				Router.goBack();
 			}
@@ -88,7 +88,7 @@ var Register = React.createClass({
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
 		//判断来源from
-		window.from = parseQuery(location.search);
+		this.from = parseQuery(location.search);
 	},
 	render: function() {
 
