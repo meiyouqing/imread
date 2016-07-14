@@ -102,7 +102,6 @@ var chapterMixins = {
 				getChapterlistLoading: false
 			});
 
-			console.log(data)
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告

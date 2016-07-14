@@ -7,7 +7,8 @@ var Mall = React.createClass({
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-			browserHistory.push('mall/'+subnav);
+
+			browserHistory.replace('/mall/'+subnav);
 			this.setState({
 				navList:data.pagelist
 			});
