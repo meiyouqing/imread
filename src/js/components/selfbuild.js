@@ -19,7 +19,7 @@ var Selfbuild = React.createClass({
 		//this.lazyloadImage(this.refs.container);
 
 		//判断来源from
-		window.from = parseQuery(location.search);
+		this.from = parseQuery(location.search);
 	},
 	componentDidUpdate: function(){
 		this.lazyloadImage(this.refs.container);
@@ -29,8 +29,8 @@ var Selfbuild = React.createClass({
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
 		var skipurl = '',loading,content;
-		if(window.from && window.from.skipurl)
-			skipurl = window.from.skipurl;
+		if(this.from && this.from.skipurl)
+			skipurl = this.from.skipurl;
 
 		if(!this.state.data)
 			loading = <Loading />

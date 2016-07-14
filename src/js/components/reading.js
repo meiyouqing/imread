@@ -101,6 +101,8 @@ var chapterMixins = {
 				page: this.state.page + next,
 				getChapterlistLoading: false
 			});
+
+			console.log(data)
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
@@ -598,7 +600,7 @@ var Reading = React.createClass({
 		var intercut;
 		if(this.state.UFO){
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<div className="g-main g-main-1">
 						<NoData type="UFO" />
@@ -608,7 +610,7 @@ var Reading = React.createClass({
 		}
 		if(this.state.order){
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<div className="g-main">
 						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
@@ -620,7 +622,7 @@ var Reading = React.createClass({
 		}
 		if(this.state.loading) {
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<i className="u-loading u-book-loading">努力加载中...</i>
 				</div>
