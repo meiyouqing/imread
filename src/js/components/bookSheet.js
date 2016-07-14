@@ -84,7 +84,7 @@ var Module = React.createClass({
 					|| this.state.scrollUpdate !== nextState.scrollUpdate
 					|| this.state.UFO !== nextState.UFO
 					|| this.state.noMore !== nextState.noMore 
-					|| this.props.children !== nextProp.children;
+					|| this.props.children !== nextProps.children;
 	},
 	render:function(){
 		var noData,content,sLoading;
