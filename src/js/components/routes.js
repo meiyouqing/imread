@@ -20,6 +20,7 @@ import Feedback from './feedback'
 import About from './about'
 import Reading from './reading'
 import Order from './order'
+import Compact from './compact'
 
 const mallLeaveHandle = function(){
 	const n = AJAX.API._param['pages']? 'pages':'page';
@@ -97,7 +98,9 @@ module.exports = (
 			<Route path="myTags/:param" component={Tag}/>
 			<Route path="readHistory" component={ReadHistory}/>
 			<Route path="feedback" component={Feedback}/>
-			<Route path="about" component={About}/>
+			<Route path="about" component={About}>
+				<Route path="compact" component={Compact} />
+			</Route>
 		</Route>
 		<Route path="/shelf" component={Shelf}>
 			{loginWrap}
