@@ -94,7 +94,7 @@ module.exports = (
 			<Route path="recentRead" component={RecentRead}>
 				{readWrap}
 			</Route>
-			<Route path="myTags" component={Tag}/>
+			<Route path="myTags/:param" component={Tag}/>
 			<Route path="readHistory" component={ReadHistory}/>
 			<Route path="feedback" component={Feedback}/>
 			<Route path="about" component={About}/>
