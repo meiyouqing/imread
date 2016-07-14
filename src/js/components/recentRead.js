@@ -67,7 +67,7 @@ var recentRead = React.createClass({
 			that.setState({
 				scrollUpdate: true
 			});
-			AJAX.init(this.props.params.param);
+			AJAX.init(this.props.route.path);
 			AJAX.get(function(data) {
 				if (data.content.length < 10) {
 					that.setState({
