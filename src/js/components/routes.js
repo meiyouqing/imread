@@ -1,4 +1,4 @@
-import {Route, IndexRoute, WithRoute, IndexRedirect} from 'react-router';
+import {Route, IndexRoute, WithRoute, IndexRedirect, RouterContext} from 'react-router';
 import App from './app'
 import User from './user'
 import Shelf from './shelf'
