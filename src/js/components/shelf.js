@@ -131,7 +131,7 @@ var Shelf = React.createClass({
 
 		var icon;
 		var curClass = '';
-		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
+		var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
@@ -157,7 +157,7 @@ var Shelf = React.createClass({
 			this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 		}
 		return (
-			<div className="gg-body">
+			<div>
 				{header}
 				<div className="g-main">
 					<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
