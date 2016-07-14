@@ -157,7 +157,7 @@ var Shelf = React.createClass({
 			this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 		}
 		return (
-			<div>
+			<div className="gg-body">
 				{header}
 				<div className="g-main">
 					<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
@@ -184,6 +184,7 @@ var Shelf = React.createClass({
 					</div>
 				</div>
 				<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
+				{this.props.children}
 			</div>
 		);
 	}
