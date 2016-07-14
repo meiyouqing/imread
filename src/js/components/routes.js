@@ -91,7 +91,7 @@ module.exports = (
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:param" component={Recharge} />
 			</Route>
-			<Route path="recentRead" component={RecentRead}>
+			<Route path="recentRead" onLeave={mallLeaveHandle} component={RecentRead}>
 				{readWrap}
 			</Route>
 			<Route path="myTags/:param" component={Tag}/>
