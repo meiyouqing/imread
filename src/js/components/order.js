@@ -5,9 +5,9 @@ require('../../css/pay.css');
 var mod = React.createClass({
 	rechargeHandle: function(e) {
 		var hash = window.location.pathname;
-		window.location.replace(GLOBAL.setHref('balance'));
+		browserHistory.push(GLOBAL.setHref('balance'));
 		myEvent.setCallback('recharge',function(){
-			window.location.replace(hash);
+			browserHistory.push(hash);
 			this.getBalance();
 		}.bind(this))
  	},

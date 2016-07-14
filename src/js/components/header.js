@@ -3,7 +3,7 @@ import parseQuery from '../modules/parseQuery';
 var Header = React.createClass({
 	getDefaultProps: function(){
 		var sHandle = function(e){
-			browserHistory.push(GLOBAL.setHref('page.11'));
+			browserHistory.push(GLOBAL.setHref('search/page.11'));
 		};
 
 

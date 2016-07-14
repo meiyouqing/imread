@@ -22,7 +22,7 @@ var Book9 = React.createClass({
 		return date;
 	},
 	render: function() {
-		var href = 'crossDomain.'
+		var href = 'reading/crossDomain.'
 		         + this.props.book.source_bid + '.'
 		         + this.props.book.chapter_id + '.'
 		         + this.props.book.content_id + '.'

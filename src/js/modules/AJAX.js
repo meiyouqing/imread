@@ -13,7 +13,7 @@ var API={
 	collectionAdd:{method:'POST', base:'/api/bookSheet/collection/add', param:{sheet_id:1}},
 	collectionDelete:{method:'POST', base:'/api/bookSheet/collection/delete', param:{sheet_id:1}},
 	introduce:{method:'GET', base:'/api/book/introduce', param:{bid:1 }},
-	chapterlist:{method:'GET', base:'/api/book/chapterlist', param:{bid:1, order_type:'asc', page_size:1, vt:9, page:1}},
+	chapterlist:{method:'GET', base:'/api/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
 	search:{method:'GET', base:'/api/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
 	login:{method:'POST', base:'/api/auth/login/custom', param:{phone:'',password:''}},
 	register:{method:'POST', base:'/api/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
@@ -217,6 +217,9 @@ function setRequestHeaders(request) {
 export default AJAX = {
 	API: API,
 	init: function(now){
+		if(GLOBAL.isArray(now)){
+			now = now[now.length-1];
+		}
 		var parts = now.split('.');
 		var ao = API[parts[0]];
 		if(!ao){return}

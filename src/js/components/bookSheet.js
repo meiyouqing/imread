@@ -7,6 +7,7 @@ require('../../css/bookSheet.css');
 var Module = React.createClass({
 	 mixins: [Mixins()],
 	getData: function(callback){
+		AJAX.init(this.props.params.param);
 		AJAX.get(function(data){
 			GLOBAL.title = data.sheet_name;
 			if(!data.content){return;}
@@ -132,7 +133,7 @@ var Module = React.createClass({
 			content = null;
 		}
 		return (
-			<div>
+			<div className="gg-body">
 				<Header />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
@@ -140,6 +141,7 @@ var Module = React.createClass({
 					</div>
 				</div>
 				{noData}
+				{this.props.children}
 			</div>
 		);
 	}

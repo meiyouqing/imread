@@ -191,7 +191,7 @@ var Block7 = React.createClass({
 					{
 						this.state.contentlist.map(function(v,i){
 							if(i > 5) return;
-							var hrefStr = GLOBAL.setHref('search.'+v.name);
+							var hrefStr = GLOBAL.setHref('searchList/search.'+v.name);
 							return (
 								<li key={i}>
 									<Link to={hrefStr} className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</Link>

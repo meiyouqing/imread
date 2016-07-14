@@ -24,10 +24,10 @@ var Header_s = React.createClass({
 		if(this.state.search){
 			var	key = this.state.key;
 			if(GLOBAL.name==='searchList'){
-				AJAX.init('search.'+key+'.1');
+				AJAX.init('search.'+key);
 				this.props.goSearch();
 			}else{
-				window.location.replace(GLOBAL.setHref('search.'+key));
+				browserHistory.push(GLOBAL.setHref('searchList/search.'+key));
 			}			
 			this.setState({
 				initialKey: key

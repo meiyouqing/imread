@@ -10,6 +10,7 @@ var Search = React.createClass({
 		}
 	},
 	componentDidMount:function(){
+		AJAX.init(this.props.params.param)
 		AJAX.get(function(data){
 			this.setState({
 				blockList:data.blocklist
@@ -23,7 +24,8 @@ var Search = React.createClass({
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return this.state.blockList !== nextState.blockList
-				|| this.state.UFO !== nextState.UFO;
+				|| this.state.UFO !== nextState.UFO
+				|| this.props.children !== nextPros.children;
 	},
 	render: function(){
 		var content;
@@ -40,13 +42,14 @@ var Search = React.createClass({
 			content = <NoData type="UFO" />;
 		}
 		return (
-			<div>
+			<div className="gg-body">
 				<Header_s />
 				<div  className="g-main g-main-1">
 					<div className="g-scroll">
 						{content}
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 			);
 	}

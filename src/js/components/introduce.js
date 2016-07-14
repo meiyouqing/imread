@@ -2,6 +2,7 @@ var Header = require('./header');
 var Book1 = require('./book1');
 var Chapterlist = require('./chapterlist');
 var parseQuery = require('../modules/parseQuery');
+require('../../css/introduce.css')
 
 var Detail = React.createClass({
 	mixins:[Mixins()],
@@ -32,7 +33,7 @@ var Detail = React.createClass({
 		if (readLog[this.props.book.bid]){
 			chapterid = readLog[this.props.book.bid].current_chapterid;
 		}
-		window.location.pathname+= ['/reading&crossDomain', sourcebid, chapterid, localid, source_id].join('.');
+		browserHistory.push(location.pathname+['/reading/crossDomain', sourcebid, chapterid, localid, source_id].join('.'));
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.book !== nextProps.book || this.props.isOnshelf !== nextProps.isOnshelf;
@@ -60,6 +61,7 @@ var Detail = React.createClass({
 	}
 });
 var Introduce = React.createClass({
+	mixins:[Mixins()],
 	getInitialState: function() {
 		return {
 			isOnshelf: false,
@@ -94,6 +96,7 @@ var Introduce = React.createClass({
 		storage.set('bookIntroduce', bookIntroduce);
 	},
 	getBook: function(){
+		AJAX.init(this.props.params.param);
 		AJAX.get(function(data){
 			if(data.status_code==='500'){
 				this.setState({
@@ -110,7 +113,6 @@ var Introduce = React.createClass({
 				isOnshelf: !!data.is_self
 			});
 			this.cacheBook(data);
-			GLOBAL.setTitle();
 		}.bind(this), function(error){
 			this.setState({
 				UFO:true
@@ -125,7 +127,7 @@ var Introduce = React.createClass({
 		this.setState({
 			getChapterlistLoading: true
 		});
-		AJAX.init(['chapterlist', this.state.book.bid, '', this.state.page_size, 0, this.state.page + (next ? 1 : 0)].join('.'));
+		AJAX.init('chapterlist'+ this.state.book.bid+this.state.page_size);
 
 		AJAX.get(function(data) {
 			this.setState({
@@ -165,7 +167,8 @@ var Introduce = React.createClass({
 				|| this.state.isOnshelf !== nextState.isOnshelf
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.noData !== nextState.noData
-				|| this.state.UFO !== nextState.UFO;
+				|| this.state.UFO !== nextState.UFO
+				|| this.props.children !== nextProps.children;
 	},
 	render: function() {
 		var header, loading, introduceTabs, detail;
@@ -184,13 +187,16 @@ var Introduce = React.createClass({
 			introduceTabs = <IntroduceTabs key="3" source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
-			<div className="g-scroll">
-				{header}
-				<div className="introduce-container" >
-					{detail}
-					{introduceTabs}
-					{loading}
+			<div className="gg-body">
+				<div className="g-scroll">
+					{header}
+					<div className="introduce-container" >
+						{detail}
+						{introduceTabs}
+						{loading}
+					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}
@@ -263,24 +269,24 @@ var IntroduceTabs = React.createClass({
 	render: function() {
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
 		return (
-			<div className="u-tabs u-bookIntroduce">
-				<div className={fixTabbar}>
-					<div className={"u-tabbar"} ref="tabbar">
-						<span onClick={this.toggleTab} className={"tab tab-0" + (this.state.current == 0 ? ' active' : '')}>简介</span>
-						<span onClick={this.toggleTab} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录</span>
-						<span onClick={this.toggleTab} className={"tab tab-2" + (this.state.current == 2 ? ' active' : '')}>推荐</span>
+				<div className="u-tabs u-bookIntroduce">
+					<div className={fixTabbar}>
+						<div className={"u-tabbar"} ref="tabbar">
+							<span onClick={this.toggleTab} className={"tab tab-0" + (this.state.current == 0 ? ' active' : '')}>简介</span>
+							<span onClick={this.toggleTab} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录</span>
+							<span onClick={this.toggleTab} className={"tab tab-2" + (this.state.current == 2 ? ' active' : '')}>推荐</span>
+						</div>
+					</div>
+					<div className="contents" ref="contents">
+						<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
+						<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
+							<Chapterlist hrefBase={window.location.pathname} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
+						</div>
+						<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
+							<Readlist readlist={this.props.readlist} />
+						</div>
 					</div>
 				</div>
-				<div className="contents" ref="contents">
-					<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
-					<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
-						<Chapterlist hrefBase={window.location.pathname+} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
-					</div>
-					<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
-						<Readlist readlist={this.props.readlist} />
-					</div>
-				</div>
-			</div>
 		);
 	}
 });

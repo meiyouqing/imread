@@ -43,27 +43,27 @@ var GLOBAL = {
 		}
 		switch(type){
 			case 1://图书详情
-				return this.setHref('introduce.'+bid,route_type);
+				return this.setHref('book/introduce.'+bid,route_type);
 			case 2://广告
 	    		switch (data.intercut_type) {
 	    			case 1://图书详情
-	    				return {url:this.setHref('introduce.' + data.source_contentid),target:target};
+	    				return {url:this.setHref('book/introduce.' + data.source_contentid),target:target};
 	    			case 2://内部网页
 	    			case 3://外部网页
 	    			case 4://apk下载
 	    			case 8://app to H5
 	    				return {url:data.redirect_url || "javascript:void(0)",target:target};
 	    			case 5://素材目录
-	    				return {url:this.setHref('category.' + data.source_contentid ),target:target};
+	    				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
 	    		}
 			case 3://搜索
-				return this.setHref('searchList&search.'+data.name);
+				return this.setHref('search/search.'+data.name);
 			case 5://分类
-				return this.setHref('category.'+bid);
+				return this.setHref('cat/category.'+bid);
 			case 6://书城的子页面
-				return this.setHref('mall&page'+data.pgid);
+				return this.setHref('mall/page'+data.pgid);
 			case 7://书单
-				return this.setHref('bookSheet.'+bid);
+				return this.setHref('sheet/bookSheet.'+bid);
 		}
 	},
 	setTitle: function(parts){
@@ -110,7 +110,7 @@ var GLOBAL = {
 				break;
 				default:
 					GLOBAL.bookList[v.id || v.content_id] = v.name;
-					if(v.contentlist.length){
+					if(v.contentlist && v.contentlist.length){
 						v.contentlist.forEach(function(v3){
 							GLOBAL.book[v3.source_bid]=v3.name;
 							GLOBAL.book[v3.content_id]=v3.name;

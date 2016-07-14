@@ -1,4 +1,3 @@
-import { Link } from 'react-router';
 //var Img = require('./img');
 
 var Subject = React.createClass({
@@ -18,7 +17,7 @@ var Subject = React.createClass({
 		}
 		return (
 			<li className={cls}>
-				<Link to={hrefStr} target={target} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundImage: 'url(src/img/defaultTopBackground.png)',height: height}}>
+				<Link to={hrefStr} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundImage: 'url(src/img/defaultTopBackground.png)',height: height}}>
 					<span>{this.props.data.name}</span>
 				</Link>
 			</li>

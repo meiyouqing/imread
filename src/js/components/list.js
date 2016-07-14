@@ -9,7 +9,7 @@ var List = React.createClass({
 		//console.log(this.props.params)
 		AJAX.init(this.props.params.param);
 		AJAX.get(data => {
-			if(GLOBAL.name === 'searchList'){
+			if(/^searchList/.test(this.props.route.path)){
 				if (!data.contentlist.length) {
 					this.setState({
 						noMore:true
@@ -82,7 +82,8 @@ var List = React.createClass({
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
-				|| this.state.noMore !== nextState.noMore;
+				|| this.state.noMore !== nextState.noMore
+				|| this.props.children !== nextProps.children;
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
@@ -91,7 +92,7 @@ var List = React.createClass({
 			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		}
 		header = <Header title={GLOBAL.title} />;				
-		if(GLOBAL.name === 'searchList'){
+		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} />;
 		}
 		//定义content
@@ -127,6 +128,7 @@ var List = React.createClass({
 					</div>
 				</div>
 				{noData}
+				{this.props.children}
 			</div>
 		);
 	}

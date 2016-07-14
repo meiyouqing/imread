@@ -7,7 +7,7 @@ var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
 var isHidden = require('../modules/isHidden');
-
+require('../../css/reading.css');
 
 var styleMixins = {
 	cloneStyle: function(style) {
@@ -92,7 +92,7 @@ var chapterMixins = {
 		this.setState({
 			getChapterlistLoading: true
 		});
-		AJAX.init(['chapterlist', this.APIParts()[3], '', this.state.page_size, 0, this.state.page + next ].join('.'));
+		AJAX.init('chapterlist'+ this.APIParts()[3]+ this.state.page_size);
 
 		AJAX.get(function(data) {
 			this.setState({
@@ -134,8 +134,8 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		window.location.replace(window.location.pathname.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
-			return 'reading&crossDomain.' + $2 + '.' + chapterid;
+		browserHistory.push(window.location.pathname.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
 	},
 	handleClickChapter: function(e) {
@@ -412,16 +412,16 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			window.location.replace(GLOBAL.setHref('confirmOrder'));
-			require.ensure([], function(require) {
-				var Order = require('./order');
-				that.props.popup(<Order 
-					paySuccess={that.gotContent} 
-					data={data} 
-					bookName={that.state.bookName} 
-					chargeMode={that.chargeMode} 
-					chapterCount={that.chapterCount} />);
-			});						
+			browserHistory(GLOBAL.setHref('order'));
+			// require.ensure([], function(require) {
+			// 	var Order = require('./order');
+			// 	that.props.popup(<Order 
+			// 		paySuccess={that.gotContent} 
+			// 		data={data} 
+			// 		bookName={that.state.bookName} 
+			// 		chargeMode={that.chargeMode} 
+			// 		chapterCount={that.chapterCount} />);
+			// });						
 		}
 	},
 	autoPay: function(orderData) {
@@ -579,7 +579,8 @@ var Reading = React.createClass({
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
-				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true;
+				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
+				|| this.props.children !== nextProps.children;
 	},
 	
 	hideGuide:function(e) {
@@ -589,7 +590,7 @@ var Reading = React.createClass({
 		});
 	},
 	render:function(){
-		var currentRoute = window.location.pathname+.split('/');
+		var currentRoute = window.location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} />;
@@ -637,7 +638,7 @@ var Reading = React.createClass({
 			}
 		}
 		return (
-			<div ref="container">
+			<div className="gg-body" ref="container">
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<div className="iconfont icon-back" onClick={this.goOut}></div>
@@ -746,6 +747,7 @@ var Reading = React.createClass({
 						</div>
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		)
 	}

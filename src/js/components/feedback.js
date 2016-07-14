@@ -26,7 +26,7 @@ var Feedback = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
+			<div className="gg-body">
 				<Header right={null} />
 				<div className="m-feedbackblock m-userblocks">
 					<form className="u-feedbackform u-userform">

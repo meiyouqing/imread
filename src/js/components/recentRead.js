@@ -67,6 +67,7 @@ var recentRead = React.createClass({
 			that.setState({
 				scrollUpdate: true
 			});
+			AJAX.init(this.props.params.param);
 			AJAX.get(function(data) {
 				if (data.content.length < 10) {
 					that.setState({
@@ -117,13 +118,16 @@ var recentRead = React.createClass({
 			content = <NoData type="recentRead" />
 		}
 		return (
-			<div className="recentRead-block">
-				<Header right={false} />
-				<div className="g-main g-main-1">
-					<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
-						{content}
+			<div className="gg-body">
+				<div className="recentRead-block">
+					<Header right={false} />
+					<div className="g-main g-main-1">
+						<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
+							{content}
+						</div>
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

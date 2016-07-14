@@ -93,7 +93,7 @@ var Register = React.createClass({
 	render: function() {
 
 		return (
-			<div>
+			<div className="gg-body">
 				<Header right={null} />
 				<div className="m-registerblock m-userblocks">
 					<form className="u-registerform u-userform">

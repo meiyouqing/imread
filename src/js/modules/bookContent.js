@@ -29,7 +29,7 @@ var BookContent = (function() {
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
 
-				window.location.replace(sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+				browserHistory.push(sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 			// } else {
 			// 	GLOBAL.goBack();
 			// }

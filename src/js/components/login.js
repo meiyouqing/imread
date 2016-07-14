@@ -53,9 +53,6 @@ var Login = React.createClass({
 		//判断来源from
 		this.from = parseQuery(location.search);
 	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		return false;
-	},
 	render: function() {
 
 
@@ -105,6 +102,7 @@ var Login = React.createClass({
 						</div>
 					</form>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

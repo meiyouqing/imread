@@ -7,6 +7,7 @@ require('../../css/pay.css')
 var Balance = React.createClass({
 	getBalance:function(){
 		if(!this.isMounted()){return;}
+		AJAX.init(this.props.params.param)
 		AJAX.get(function(data) {
 			this.setState({
 				loading: false,
@@ -47,15 +48,15 @@ var Balance = React.createClass({
 			others:'1'
 		}
 		AJAX.go('pay',postData,function(data){
-			window.location.replace(GLOBAL.setHref('recharge'));
+			browserHistory.push(GLOBAL.setHref('recharge'));
 			setTimeout(function(){
-				window.location.replace(hash+'/recharge');
+				browserHistory.push(hash+'/recharge');
 				that.props.popup(<Recharge data={data.success} popup={that.props.popup} />);				
 			},0)
 			myEvent.setCallback('rechargeDef',rechCallback);
 		});
 		function rechCallback(){
-			window.location.replace(hash);
+			browserHistory.push(hash);
 			that.getBalance();
 		}
 	},
@@ -95,13 +96,14 @@ var Balance = React.createClass({
 			
 		}
 		return (
-			<div>
+			<div className="gg-body">
 				<Header right={false} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

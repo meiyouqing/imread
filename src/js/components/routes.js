@@ -1,4 +1,4 @@
-import {Route, IndexRoute, IndexRedirect} from 'react-router';
+import {Route, IndexRoute, WithRoute, IndexRedirect} from 'react-router';
 import App from './app'
 import User from './user'
 import Shelf from './shelf'
@@ -8,29 +8,101 @@ import Top from './top'
 import Search from './search'
 import List from './list'
 import Login from './login'
+import Register from './register'
+import Introduce from './introduce'
+import Balance from './balance'
+import Recharge from './recharge'
+import BookSheet from './bookSheet'
+import Tag from './tag'
+import RecentRead from './recentRead'
+import ReadHistory from './readHistory'
+import Feedback from './feedback'
+import About from './about'
+import Reading from './reading'
+import Order from './order'
 
 const mallLeaveHandle = function(){
 	const n = AJAX.API._param['pages']? 'pages':'page';
 	AJAX.API._param[n] = 1;
 }
-
-module.exports = (
-	<Route path="/" component={App}>
-	{
-		//<IndexRoute onLeave={mallLeaveHandle} component={Mall}/>
-		<IndexRedirect to="/mall" />
-	}
-		<Route path="/mall" component={Mall}>
-			<Route path="/mall/:subnav" onLeave={mallLeaveHandle} component={SubMall}>
-				<Route path="more/:param" component={List}/>
-				
+var loginWrap = (
+	<Route path="login" component={Login}>
+		<Route path="register" component={Register}/>
+		<Route path="forget" component={Register}/>
+	</Route>
+	)
+var readWrap = (
+		<Route path="reading/:param" component={Reading}>
+			<Route path="order" component={Order}>
+				<Route path="balance" component={Balance} >
+					<Route path="recharge" component={Recharge} />
+				</Route>
 			</Route>
 		</Route>
-		<Route path="/top" component={Top}/>
-		<Route path="/user" component={User}>
-			<Route path="/user/login" component={Login}/>
+	)
+var bookWrap = (
+	<Route path="book/:param" component={Introduce}>
+		{readWrap}
+		{loginWrap}
+	</Route>
+	)
+var searchWrap = (
+	<Route path="search/:param" component={Search}>
+		<Route path="searchList/:param" component={List}>
+			{bookWrap}
 		</Route>
-		<Route path="/shelf" component={Shelf}/>
+		{bookWrap}
+	</Route>
+	)
+module.exports = (
+	<Route path="/" component={App}>
+		<IndexRedirect to="/mall" />
+		<Route path="/mall" component={Mall}>
+			<Route path="/mall/:subnav" onLeave={mallLeaveHandle} component={SubMall}>
+				<Route path="more/:param" component={List}>
+					{bookWrap}
+					{searchWrap}
+				</Route>
+				{bookWrap}
+				{searchWrap}
+				<Route path="cat/:param" component={List}>
+					{bookWrap}
+					{searchWrap}
+				</Route>
+			</Route>
+		</Route>
+		<Route path="/top" component={Top}>
+			<Route path="more/:param" component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="cat/:param" component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="sheet/:param" component={BookSheet}>
+				{bookWrap}
+			</Route>
+			{bookWrap}
+			{searchWrap}
+		</Route>
+		<Route path="/user" component={User}>
+			{loginWrap}
+			<Route path="balance" component={Balance} >
+				<Route path="recharge" component={Recharge} />
+			</Route>
+			<Route path="recentRead" component={RecentRead}>
+				{readWrap}
+			</Route>
+			<Route path="myTags" component={Tag}/>
+			<Route path="readHistory" component={ReadHistory}/>
+			<Route path="feedback" component={Feedback}/>
+			<Route path="about" component={About}/>
+		</Route>
+		<Route path="/shelf" component={Shelf}>
+			{loginWrap}
+			{readWrap}
+		</Route>
 	</Route>
 
 )

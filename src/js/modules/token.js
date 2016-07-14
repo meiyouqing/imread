@@ -7,9 +7,14 @@ var Token = {
 			AJAX.getJSON('GET', '/api/upToken', {
 				//oldToken: encodeURIComponent(oldToken)
 			}, function(data) {
-				GLOBAL.cookie('userToken', data.token, {
-					expires: 1000
-				});
+				if(data.code==200){
+					GLOBAL.cookie('userToken', data.token, {
+						expires: 1000
+					});
+					
+				}else{
+					GLOBAL.removeCookie('userToken');
+				}
 			}, function(res) {
 				GLOBAL.removeCookie('userToken');
 			});

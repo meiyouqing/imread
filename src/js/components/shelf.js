@@ -17,7 +17,7 @@ var Shelf = React.createClass({
 				cid = readLog.current_chapterid;
 			}
 			myEvent.setCallback('refreshShelf',this.props.getShelfList);
-			browserHistory.push(GLOBAL.setHref('crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
+			browserHistory.push(GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){

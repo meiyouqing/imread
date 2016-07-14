@@ -49,7 +49,7 @@ var Recharge = React.createClass({
 				});
 				return;
 			}
-			window.location.replace(GLOBAL.setHref('recharge_result'));
+			browserHistory.push(GLOBAL.setHref('recharge_result'));
 			setTimeout(function(){
 				var rechargeRes = <Recharge_result data={data} />
 				if(data.code!==200){
@@ -149,7 +149,7 @@ var Recharge = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
+			<div className="gg-body">
 				<Header right={null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
@@ -181,6 +181,7 @@ var Recharge = React.createClass({
 						<PayTips />
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

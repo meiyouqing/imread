@@ -1,7 +1,9 @@
 var mixins = function() {
 	return {
 		APIParts: function () {
-			return this.props.params.APIParts.split('.');
+			var params = this.props.params.param;
+			var parts = typeof params === 'string'? params : params[params.length-1];
+			return parts.split('.');
 		},
 		lazyloadImage: function(container) {
 			var imgs = container.querySelectorAll('.u-lazyload-img');
@@ -77,7 +79,7 @@ var mixins = function() {
 		},
 		goLogin: function(callback){
 			var hash = window.location.pathname+'/login';
-			window.location.replace(hash);
+			browserHistory.push(hash);
 			POP._alert('请先登录');
 			myEvent.setCallback('login', callback);
 		}
