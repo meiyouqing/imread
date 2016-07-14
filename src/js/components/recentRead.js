@@ -17,7 +17,7 @@ var recentRead = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.getData();
+		this.getList();
 		this.lazyloadImage(this.refs.container);
 		var that = this;
 		var hammertime = new Hammer(this.refs.container);
@@ -58,7 +58,7 @@ var recentRead = React.createClass({
 			window.location.href = href;
 		});
 	},
-	getData: function() {
+	getList: function() {
 		if (this.state.scrollUpdate || this.state.noMore) {
 			return ;
 		}
@@ -67,7 +67,8 @@ var recentRead = React.createClass({
 			that.setState({
 				scrollUpdate: true
 			});
-			AJAX.init('recentRead');
+			AJAX.init(this.props.route.path);
+
 			AJAX.get(function(data) {
 				if (data.content.length < 10) {
 					that.setState({

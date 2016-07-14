@@ -7,7 +7,7 @@ require('../../css/pay.css')
 var Balance = React.createClass({
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		AJAX.init('balance')
+		AJAX.init(this.props.route.path)
 		AJAX.get(function(data) {
 			this.setState({
 				loading: false,
@@ -33,32 +33,8 @@ var Balance = React.createClass({
 		});
 	},
 	orderHandle:function(){
-		var that = this;
-		var hash = window.location.pathname;
 		var ordered = this.state.list[this.state.active];
-		// var href=GLOBAL.setHref('recharge.'+ordered.productId+'.'+ordered.productPrice);
-		var postData = {
-			productId:ordered.productId,
-			fee:'1',
-			payType:'1',
-			spType:'1',
-			mobileNum:'1',
-			productName:'1',
-			productDesc:'1',
-			others:'1'
-		}
-		AJAX.go('pay',postData,function(data){
-			browserHistory.push(GLOBAL.setHref('recharge'));
-			setTimeout(function(){
-				browserHistory.push(hash+'/recharge');
-				that.props.popup(<Recharge data={data.success} popup={that.props.popup} />);				
-			},0)
-			myEvent.setCallback('rechargeDef',rechCallback);
-		});
-		function rechCallback(){
-			browserHistory.push(hash);
-			that.getBalance();
-		}
+		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
 		var content;
