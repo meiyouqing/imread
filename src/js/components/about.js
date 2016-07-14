@@ -1,5 +1,5 @@
 var Header = require('./header');
-
+require('../../css/about.css')
 var About = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;

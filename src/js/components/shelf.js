@@ -112,7 +112,11 @@ var Shelf = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-		AJAX.init('block.157.10000');
+		if(!this.isLogin()){
+			this.goLogin();
+			return;
+		}
+		AJAX.init('block.157.100');
 		this.getList();
 	},
 	componentDidUpdate: function() {
@@ -157,7 +161,7 @@ var Shelf = React.createClass({
 			this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 		}
 		return (
-			<div>
+			<div className="gg-wraper">
 				{header}
 				<div className="g-main">
 					<div className="g-scroll g-scroll-noBG" ref="container">
