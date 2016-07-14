@@ -35,7 +35,7 @@ var readWrap = (
 		<Route path="reading/:param" component={Reading}>
 			<Route path="order" component={Order}>
 				<Route path="balance" component={Balance} >
-					<Route path="recharge" component={Recharge} />
+					<Route path="recharge/:param" component={Recharge} />
 				</Route>
 			</Route>
 		</Route>
@@ -89,7 +89,7 @@ module.exports = (
 		<Route path="/user" component={User}>
 			{loginWrap}
 			<Route path="balance" component={Balance} >
-				<Route path="recharge" component={Recharge} />
+				<Route path="recharge/:param" component={Recharge} />
 			</Route>
 			<Route path="recentRead" component={RecentRead}>
 				{readWrap}

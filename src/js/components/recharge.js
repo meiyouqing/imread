@@ -115,17 +115,52 @@ var Recharge = React.createClass({
 			gotInit(this.initData,true);
 		}
 	},
+	getPay: function(){
+		var that = this;
+		var postData = {
+			productId:this.props.params.param,
+			fee:'1',
+			payType:'1',
+			spType:'1',
+			mobileNum:'1',
+			productName:'1',
+			productDesc:'1',
+			others:'1'
+		}
+
+		AJAX.go('pay',postData,function(data){
+			that.setState({
+				aidou: data.success.fee/100,
+				sum: data.success.fee/100
+			});
+			var params = data.success;
+			that.params_init = {
+				fee: params.fee,
+				orderNo: params.orderNo,
+				others: params.others,
+				payType: params.payType,
+				productDesc: params.productDesc,
+				productName: params.productName,
+				reqTime: params.reqTime,
+				spType: params.spType,
+				thirdPartyId: params.thirdPartyId			
+			}
+		});
+	},
 	getInitialState: function() {
 		return {
-			s:0
+			s:0,
+			aidou: 0,
+			sum: 0
 		}
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
-		return nextState.s != this.state.s;
+		return nextState.s != this.state.s 
+			    || nextState.aidou != this.state.aidou
+			    || nextState.sum != this.state.sum;
 	},
 	componentWillMount: function(){
-		this.aidou = this.props.data.fee/100;
-		this.sum = this.props.data.fee/100;
+		this.getPay();
 	},
 	componentDidMount: function() {
 		var phoneNumber = GLOBAL.cookie('payUser');
@@ -133,18 +168,6 @@ var Recharge = React.createClass({
 			this.refs.mobile_num.value = phoneNumber;
 		}else{
 			this.refs.mobile_num.focus();
-		}
-		var params = this.props.data;
-		this.params_init = {
-			fee: params.fee,
-			orderNo: params.orderNo,
-			others: params.others,
-			payType: params.payType,
-			productDesc: params.productDesc,
-			productName: params.productName,
-			reqTime: params.reqTime,
-			spType: params.spType,
-			thirdPartyId: params.thirdPartyId			
 		}
 	},
 	render: function() {
@@ -155,8 +178,8 @@ var Recharge = React.createClass({
 					<div className="g-scroll m-balance">
 						<div className="u-balance f-tl">
 							<h5 className="tipTitle f-mb5">充值订单</h5>
-							<p className="f-fc-777">充值艾豆：{this.aidou}艾豆</p>
-							<p className="f-fc-777">支付金额：{this.sum}元</p>
+							<p className="f-fc-777">充值艾豆：{this.state.aidou}艾豆</p>
+							<p className="f-fc-777">支付金额：{this.state.sum}元</p>
 						</div>
 						<div className="u-divider"></div>
 						<div className="m-registerblock">
