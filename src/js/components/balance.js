@@ -7,7 +7,7 @@ require('../../css/pay.css')
 var Balance = React.createClass({
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		AJAX.init(this.props.params.param)
+		AJAX.init('balance')
 		AJAX.get(function(data) {
 			this.setState({
 				loading: false,
