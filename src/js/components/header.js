@@ -1,4 +1,3 @@
-import { browserHistory } from 'react-router';
 import parseQuery from '../modules/parseQuery';
 var Header = React.createClass({
 	getDefaultProps: function(){
@@ -8,7 +7,7 @@ var Header = React.createClass({
 
 
 		return {
-			left:<a className="f-fl icon-back iconfont" onClick={GLOBAL.goBack()} ></a>,
+			left:<a className="f-fl icon-back iconfont" onClick={GLOBAL.goBack} ></a>,
 			right:<a className="f-fr icon-search iconfont" onClick={sHandle}></a>,
 			title: GLOBAL.title || '艾美阅读'
 		};

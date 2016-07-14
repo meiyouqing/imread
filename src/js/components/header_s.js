@@ -33,18 +33,14 @@ var Header_s = React.createClass({
 				initialKey: key
 			});
 		}else{
-			this.goBack();
+			GLOBAL.goBack();
 		}
 	},
 	backClick: function(){
 		this.setState({
 			key: ''
 		});
-		this.goBack();
-	},
-	goBack:function(){
-		console.log(this.context)
-		console.log(this.context.router)
+		GLOBAL.goBack();
 	},
 	componentDidMount: function(){
 		if(!this.state.key.length){

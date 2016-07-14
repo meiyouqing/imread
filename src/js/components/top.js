@@ -44,7 +44,8 @@ var Top = React.createClass({
 	shouldComponentUpdate: function(nextProp,nextState){
 		//console.log(this.props,nextProp)
 		return this.state.noMore !== nextState.noMore
-				|| this.state.list !== nextState.list || nextProp.children;
+				|| this.state.list !== nextState.list 
+				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
 		var list;

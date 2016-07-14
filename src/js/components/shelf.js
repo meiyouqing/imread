@@ -157,10 +157,10 @@ var Shelf = React.createClass({
 			this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 		}
 		return (
-			<div className="gg-body">
+			<div>
 				{header}
 				<div className="g-main">
-					<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
+					<div className="g-scroll g-scroll-noBG" ref="container">
 						<ul className="shelfWrap f-clearfix">
 							{
 								this.state.shelfList.map(function(v,i){

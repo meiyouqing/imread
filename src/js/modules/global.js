@@ -22,7 +22,8 @@ var GLOBAL = {
 	route:[],
 	unRendered:[],
 	goBack:function(){
-		//TODO
+		console.log('back')
+		browserHistory.goBack();
 	},
 	setHref:function(str,type){
 		//TODO
