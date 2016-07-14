@@ -2,7 +2,7 @@ var getJSON = require('../modules/getJSON').getJSON;
 var setAJAX = require('../modules/getJSON').set;
 //var payAJAX = require('../modules/payAJAX');
 
-var title = {login:'登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
+var title = {login:'登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读',selfbuild:"艾豆随便花专区"};
 var Config = {
 	payURLBase: 'http://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
@@ -41,7 +41,8 @@ var API={
 	deleteRecentRead:{method: 'POST', base: '/api/me/recentReading/delete', param:{book_id: ''}},
 	listTag:{method: 'GET', base: '/api/me/label/list', param:{}},
 	addTag:{method: 'POST', base: '/api/me/label/add', param:{id: ''}},
-	deleteTag:{method: 'POST', base: '/api/me/label/delete', param:{id: ''}}
+	deleteTag:{method: 'POST', base: '/api/me/label/delete', param:{id: ''}},
+	selfbuild:{method:'GET', base:'/api/page/content/'+Config.ai, param:{page_id:1, pages:1, blocks:3}}
 };
 
 function Router(){
@@ -57,6 +58,7 @@ function Router(){
 	this.unRendered = [];
 };
 Router.prototype.setAPI = function(now){
+
 	var parts = now[0].split('.');
 	var ao = API[parts[0]];
 	if(!ao){return}
@@ -112,6 +114,9 @@ Router.prototype.setTitle = function(){
 	document.title = '艾美阅读' + rTitle;
 };
 Router.prototype.goBack = function(callback) {
+	// var from = parseQuery(location.search);
+	// if(from.skipurl)
+	// 	window.location.href = from.skipurl+'?isH5=true';
 	var	route = this.route.slice(0,-1);
 	window.location.replace('#'+route.join('/'));
 };
@@ -152,6 +157,11 @@ Router.prototype.typeHref = function(data,spm, route_type){
     			case 3://外部网页
     			case 4://apk下载
     				return {url:data.redirect_url || "javascript:void(0)",target:target};
+    			case 8: //活动
+    				var prams = '';
+    				if(GLOBAL.cookie('userToken'))
+    					prams = '?token='+GLOBAL.cookie('userToken')+'&devicetoken='+GLOBAL.getUuid();
+    				return {url:data.redirect_url+prams || "javascript:void(0)",target:target};
     			case 5://素材目录
     				return {url:this.setHref('category.' + data.source_contentid + '.1.0'+'&'+spm+'&'+cpm),target:target};
     		}

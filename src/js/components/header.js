@@ -3,6 +3,8 @@ var Header = React.createClass({
 		var sHandle = function(e){
 			window.location.hash = Router.setHref('searchPage&page.11.1.3');
 		};
+
+
 		return {
 			left:<a className="f-fl icon-back iconfont" onClick={Router.goBack.bind(Router)} ></a>,
 			right:<a className="f-fr icon-search iconfont" onClick={sHandle}></a>,
@@ -15,10 +17,16 @@ var Header = React.createClass({
 				|| this.props.right !== nextProps.right;
 	},
 	render: function(){
+		var from = parseQuery(location.search);
+		var isskip = false;
+
+		if(this.props.skipurl && from.skipurl)
+			isskip = true;
+
 		return (
 			<header className="m-bar m-bar-head">
-				{this.props.left}
-				{this.props.right}
+				{isskip?<a className="f-fl icon-back iconfont" href={from.skipurl}></a>:this.props.left}
+				{this.props.closeRight?'':this.props.right}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);

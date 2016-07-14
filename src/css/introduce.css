@@ -1,4 +1,4 @@
-.introduce-container {position: absolute;left: 0;right: 0;top: 0;bottom: 0;overflow: auto;background: #FFFFFF;-webkit-overflow-scrolling: touch;}
+.introduce-container {position: absolute;left: 0;right: 0;top: 0;bottom: 0;width:100%;height:calc(100% - (43px));height:-webkit-calc(100% - (43px));overflow: auto;background: #FFFFFF;-webkit-overflow-scrolling: touch;}
 
 .u-bookIntroduce{margin: 60px 15px 0 15px;}
 .u-bookIntroduce .bookinfo{margin-left: 125px;}

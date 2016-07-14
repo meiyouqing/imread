@@ -43,8 +43,9 @@ module.exports = {
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
-			POP: '../modules/confirm'
+			POP: '../modules/confirm',
+			parseQuery: '../modules/parseQuery'
 		}),
-		new OpenBrowserPlugin({ url: 'http://192.168.0.251:8080'}),
+		new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
 	] 
 };

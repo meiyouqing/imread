@@ -112,12 +112,21 @@ var Frame = React.createClass({
 				break;
 			case 'more':
 			case 'searchList':
+
 			case 'category':
 				require.ensure([],function(require){
 					var List = require('./list');
 					ggbody = <List />
 					setPop(ggbody);
 				})
+				break;
+			case 'selfbuild':
+				require.ensure([],function(require){
+					require('../../css/introduce.css')
+					var Selfbuild = require('./selfbuild');
+					ggbody = <Selfbuild />
+					setPop(ggbody);
+				});
 				break;
 			case 'reading':
 				require.ensure([],function(require){

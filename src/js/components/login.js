@@ -3,6 +3,7 @@ var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 
 var Login = React.createClass({
+
 	handleSubmit: function(e) {
 		e.preventDefault();
 		var that = this;
@@ -30,8 +31,20 @@ var Login = React.createClass({
 				phone: postData.phone,
 				token: postData.token
 			});
-			Router.goBack();
-			myEvent.execCallback('login');
+
+			//判断登陆后的跳转
+			var isneed = false;
+			if(window.from.skipurl){
+				isneed = /\?/.test(window.from.skipurl);
+				//window.location.href = window.from.skipurl+(isneed?(window.from.skipurl.split('?')[0]):'')+'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+
+				window.location.href = (isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+				//console.log((isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid())
+			}else{
+				Router.goBack();
+				myEvent.execCallback('login');
+			}
+			
 		}, function(res) {
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
@@ -41,14 +54,21 @@ var Login = React.createClass({
 	componentDidMount: function() {
 		this.refs.mobile_num.focus();
 
+		//判断来源from
+		window.from = parseQuery(location.search);
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
 	},
 	render: function() {
+
+		var skipurl = '';
+		if(window.from && window.from.skipurl)
+			skipurl = '?skipurl='+window.from.skipurl;
+
 		return (
 			<div>
-				<Header title={Router.title} right={null} />
+				<Header title={Router.title} right={null}  skipurl={true} />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
@@ -63,7 +83,7 @@ var Login = React.createClass({
 
 						<div className="u-inputline f-clearfix">
 							<div className="u-buttonc f-fl">
-								<a className="tip" href={Router.setHref('register')}>注册新账号</a>
+								<a className="tip" href={skipurl+Router.setHref('register')}>注册新账号</a>
 							</div>
 							<div className="u-buttonc f-fl">
 								<a className="tip" href={Router.setHref('forget')}>忘记密码</a>

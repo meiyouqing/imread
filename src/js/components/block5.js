@@ -131,11 +131,16 @@ var Block5 = React.createClass({
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
+
+			                		var urlflag = false;
+			                		if(v.redirect_url && v.redirect_url.indexOf('lottery')>=0)
+			                			urlflag = true;
+
 			                		var spm = this.props.spm.slice(0);
                 					spm.splice(-1,1,i+1);
 									var hrefObj = Router.typeHref(v,spm);
 			                		return (
-			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={urlflag?v.redirect_url:hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
 			                			</a>
 			                		);
