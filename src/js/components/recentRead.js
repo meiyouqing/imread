@@ -55,7 +55,7 @@ var recentRead = React.createClass({
 		}).on('tap', function(e) {
 			var href = e.target.getAttribute('data-href');
 			if (!href) {return ;}
-			window.location.href = href;
+			 browserHistory.push(href);
 		});
 	},
 	getList: function() {
