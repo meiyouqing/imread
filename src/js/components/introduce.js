@@ -226,12 +226,6 @@ var IntroduceTabs = React.createClass({
 		};
 	},
 	shouldComponentUpdate: function(nextProps, netxtState) {
-
-		if (this.props.bid !== nextProps.bid) {
-			this.setState({current: 0});
-			// 	this.toggleTab(null, '', 0);
-			// 	return false;
-		}
 		return true;
 	},
 	toggleTab: function(e) {
@@ -259,9 +253,10 @@ var IntroduceTabs = React.createClass({
 		container.onscroll = function(e) {
 			clearTimeout(self.timeout['fixTabbar']);
 			self.timeout['fixTabbar'] = setTimeout(function() {
-				self.setState({
-					fixTabbar: container.scrollTop > 202
-				});
+				if (self.isMounted()) 
+					self.setState({
+						fixTabbar: container.scrollTop > 202
+					});
 			}, 100);
 			if (self.state.current == 2) {
 				self.lazyloadImage(container);
@@ -275,7 +270,8 @@ var IntroduceTabs = React.createClass({
 			}
 		};
 	},
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextProps, netxtState) {
+
 		if (this.state.current == 2) {
 			var containers = document.getElementsByClassName("introduce-container");
 			if (!containers.length) {return ;}
