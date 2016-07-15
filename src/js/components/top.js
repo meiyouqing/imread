@@ -36,6 +36,7 @@ var Top = React.createClass({
 	},			
 	componentDidMount: function(){
 		this.getData();
+		myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function() {
 		if(!this.state.list || !this.state.list.length){return;}

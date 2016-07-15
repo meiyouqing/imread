@@ -1,4 +1,3 @@
-import { browserHistory } from 'react-router';
 var Header = require('./header');
 var Img = require('./img');
 
@@ -16,7 +15,7 @@ var Shelf = React.createClass({
 				//console.log(readLog)
 				cid = readLog.current_chapterid;
 			}
-			myEvent.setCallback('refreshShelf',this.props.getShelfList);
+			myEvent.setCallback('refreshShelf',this.getList);
 			browserHistory.push(GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
@@ -84,7 +83,7 @@ var Shelf = React.createClass({
 		});
 		param = JSON.stringify(param);
 		AJAX.go('deleteBook',{param:param},function(data){
-			this.props.getShelfList();
+			this.getList();
 			this.compClick();
 		}.bind(this))
 	},

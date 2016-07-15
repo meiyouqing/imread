@@ -54,13 +54,9 @@ var Login = React.createClass({
 		this.from = parseQuery(location.search);
 	},
 	render: function() {
-
-
 		var skipurl = '';
 		if(this.from && this.from.skipurl)
 			skipurl = '?skipurl='+this.from.skipurl;
-
-
 		return (
 			<div className="gg-body">
 				<Header title={GLOBAL.setTitle('login')} right={null}  skipurl={true} />

@@ -334,11 +334,11 @@ var Block15 = React.createClass({
 				if(data.selected.length){
 					myEvent.execCallback('updateTopList');
 				}else{
-					browserHistory.push(GLOBAL.setHref('tag&listTag'));
 					myEvent.setCallback('configTag',function(){
 						myEvent.execCallback('updateTopList');
 						//TODO 重新加载本页				
 					});
+					browserHistory.push(GLOBAL.setHref('myTags'));
 				}
 			});
 		}

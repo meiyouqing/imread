@@ -149,7 +149,7 @@ var User = React.createClass({
 			}, {
 				title: '我的标签',
 				icon: 'icon-tag',
-				href: 'myTags/listTag',
+				href: 'myTags',
 				requireLogin: this.requireLogin
 			}, {
 				title: '我的成就',

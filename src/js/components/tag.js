@@ -11,7 +11,7 @@ var tag = React.createClass({
 	},
 	getData: function() {
 		var that = this;
-		AJAX.init(this.props.params.param);
+		AJAX.init('listTag');
 		AJAX.get(function(data) {
 			that.setState({
 				tagList: data.noChoice,

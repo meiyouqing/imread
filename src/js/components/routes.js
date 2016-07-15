@@ -83,6 +83,8 @@ module.exports = (
 			<Route path="sheet/:param" component={BookSheet}>
 				{bookWrap}
 			</Route>
+			<Route path="myTags" component={Tag}/>
+			{loginWrap}
 			{bookWrap}
 			{searchWrap}
 		</Route>
@@ -94,7 +96,7 @@ module.exports = (
 			<Route path="recentRead" onLeave={mallLeaveHandle} component={RecentRead}>
 				{readWrap}
 			</Route>
-			<Route path="myTags/:param" component={Tag}/>
+			<Route path="myTags" component={Tag}/>
 			<Route path="readHistory" component={ReadHistory}/>
 			<Route path="feedback" component={Feedback}/>
 			<Route path="about" component={About}/>
