@@ -10,7 +10,11 @@ var Search = React.createClass({
 		}
 	},
 	componentDidMount:function(){
-		AJAX.init(this.props.params.param)
+		AJAX.init(this.props.params.param);
+
+		const n = AJAX.API._param['pages']? 'pages':'page';
+		AJAX.API._param[n] = 1;	
+
 		AJAX.get(function(data){
 			this.setState({
 				blockList:data.blocklist

@@ -11,11 +11,6 @@ var List = React.createClass({
 		var hash = param?param:this.props.params.param;
 
 		AJAX.init(hash);
-
-		const n = AJAX.API._param['pages']? 'pages':'page';
-		console.log(AJAX.API._param)
-		AJAX.API._param[n] = 1;	
-
 		AJAX.get(data => {
 			this.isLoading = false;
 			if(/^searchList/.test(this.props.route.path)){
