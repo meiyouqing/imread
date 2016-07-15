@@ -5,13 +5,12 @@ var Mixins = require('../modules/mixins');
 
 var List = React.createClass({
 	mixins: [Mixins()],
-	getList: function(scrollUpdate){
-		AJAX.init(this.props.params.param);
-		if(scrollUpdate){
-			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;			
-		}		
+	isLoading: false,
+	getList: function(param){
+		var hash = param?param:this.props.params.param;
+		AJAX.init(hash);
 		AJAX.get(data => {
+			this.isLoading = false;
 			if(/^searchList/.test(this.props.route.path)){
 				if (!data.contentlist.length) {
 					this.setState({
@@ -75,18 +74,31 @@ var List = React.createClass({
 	componentDidMount: function(){
 		this.getList();
 	},
+	update: function(){
+
+	},
 	// componentWillReceiveProps: function(nextProps){
 	// 	this.getData();
 	// },
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextProps,nextState) {
+
+
 		this.lazyloadImage(this.refs.container);
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
+		//console.log(this.props.params.param[1],nextProps.params.param[1])
+				
+		if(this.props.params.param !== nextProps.params.param){
+			this.isLoading = true;
+			this.getList(nextProps.params.param);
+		}
+
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
 				|| this.state.noMore !== nextState.noMore
-				|| this.props.children !== nextProps.children;
+				|| this.props.children !== nextProps.children
+				|| this.props.params.param !== nextProps.params.param;
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
@@ -99,7 +111,7 @@ var List = React.createClass({
 			header = <Header_s goSearch={this.goSearch} />;
 		}
 		//定义content
-		if(!this.state.bookList){
+		if(!this.state.bookList || this.isLoading){
 			content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
