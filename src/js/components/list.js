@@ -30,6 +30,7 @@ var List = React.createClass({
 						noMore:true
 					})
 				}
+
 				this.setState({
 					bookList:this.state.scrollUpdate? this.state.bookList.concat(data):data,
 					scrollUpdate: false
@@ -87,8 +88,10 @@ var List = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		//console.log(this.props.params.param[1],nextProps.params.param[1])
-				
-		if(this.props.params.param !== nextProps.params.param){
+		var p1 = this.props.params.param.length;
+		var p2 = nextProps.params.param.length;
+		if(this.props.params.param !== nextProps.params.param && p1==p2){
+			console.log('now')
 			this.isLoading = true;
 			this.getList(nextProps.params.param);
 		}

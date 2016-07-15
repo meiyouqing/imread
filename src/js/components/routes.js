@@ -61,7 +61,7 @@ var bookWrap = (
 	)
 var searchWrap = (
 	<Route path="search/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Search}>
-		<Route path="searchList/:param" component={List}>
+		<Route path="searchList/:param" onEnter={dubleHandle} component={List}>
 			{bookWrap}
 		</Route>
 		{bookWrap}
