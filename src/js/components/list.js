@@ -7,8 +7,15 @@ var List = React.createClass({
 	mixins: [Mixins()],
 	isLoading: false,
 	getList: function(param){
+
 		var hash = param?param:this.props.params.param;
+
 		AJAX.init(hash);
+
+		const n = AJAX.API._param['pages']? 'pages':'page';
+		console.log(AJAX.API._param)
+		AJAX.API._param[n] = 1;	
+
 		AJAX.get(data => {
 			this.isLoading = false;
 			if(/^searchList/.test(this.props.route.path)){
@@ -86,15 +93,17 @@ var List = React.createClass({
 
 		this.lazyloadImage(this.refs.container);
 	},
-	shouldComponentUpdate: function(nextProps,nextState){
-		//console.log(this.props.params.param[1],nextProps.params.param[1])
+	componentWillReceiveProps: function(nextProps){
 		var p1 = this.props.params.param.length;
 		var p2 = nextProps.params.param.length;
 		if(this.props.params.param !== nextProps.params.param && p1==p2){
-			console.log('now')
 			this.isLoading = true;
 			this.getList(nextProps.params.param);
 		}
+	},
+	shouldComponentUpdate: function(nextProps,nextState){
+		//console.log(this.props.params.param[1],nextProps.params.param[1])
+		
 
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate

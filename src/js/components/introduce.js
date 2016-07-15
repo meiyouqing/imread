@@ -166,13 +166,14 @@ var Introduce = React.createClass({
 		this.getBook();
 		myEvent.setCallback('updateShelfBtn',this.onShelf)
 	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-
+	componentWillReceiveProps: function(nextProps, nextState) {
 		if(this.props.params.param !== nextProps.params.param){
 			this.getBook(nextProps.params.param);
 			this.isUpdate = false;
 		}
 			
+	},
+	shouldComponentUpdate: function(nextProps, nextState) {
 
 		return this.state.book !== nextState.book 
 				|| this.state.chapterlist !== nextState.chapterlist
