@@ -58,16 +58,17 @@ var recentRead = React.createClass({
 			 browserHistory.push(href);
 		});
 	},
-	getList: function() {
-		if (this.state.scrollUpdate || this.state.noMore) {
-			return ;
-		}
+	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
 			var that = this;
 			that.setState({
 				scrollUpdate: true
 			});
 			AJAX.init(this.props.route.path);
+			if(scrollUpdate){
+				var n = AJAX.API._param['pages']? 'pages':'page';
+				AJAX.API._param[n]++;			
+			}
 
 			AJAX.get(function(data) {
 				if (data.content.length < 10) {

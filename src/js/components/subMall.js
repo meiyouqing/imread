@@ -22,14 +22,17 @@ var Mall = React.createClass({
 		//console.log(nextProp.params.subnav !== this.props.params.subnav)
 		if(nextProp.params.subnav !== this.props.params.subnav){
 			this.reset();
-			this.getData(nextProp.params.subnav);
+			this.APIparam = nextProp.params.subnav;
+			this.getList();
 		}
 	},
-	getData: function(pram){
-		AJAX.init(pram);
-		this.getList();
-	},
-	getList: function (){
+
+	getList: function (scrollUpdate){
+		AJAX.init(this.APIparam);
+		if(scrollUpdate){
+			var n = AJAX.API._param['pages']? 'pages':'page';
+			AJAX.API._param[n]++;			
+		}
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
 			if (!data.blocklist.length) {
@@ -46,7 +49,8 @@ var Mall = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-		this.getData(this.props.params.subnav);
+		this.APIparam = this.props.params.subnav;
+		this.getList();
 	},
 	componentDidUpdate: function() {
 		if(!this.state.list || !this.state.list.length){return;}

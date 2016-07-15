@@ -45,9 +45,7 @@ var mixins = function() {
 			this.setState({
 				scrollUpdate:true
 			})
-			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;
-			this.getList();
+			this.getList(true);
 		},
 		onerror:function(error){
 			if(this.state.scrollUpdate){

@@ -5,9 +5,12 @@ var Mixins = require('../modules/mixins');
 
 var List = React.createClass({
 	mixins: [Mixins()],
-	getList: function(){
-		//console.log(this.props.params)
+	getList: function(scrollUpdate){
 		AJAX.init(this.props.params.param);
+		if(scrollUpdate){
+			var n = AJAX.API._param['pages']? 'pages':'page';
+			AJAX.API._param[n]++;			
+		}		
 		AJAX.get(data => {
 			if(/^searchList/.test(this.props.route.path)){
 				if (!data.contentlist.length) {
