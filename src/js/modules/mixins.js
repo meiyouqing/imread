@@ -1,5 +1,10 @@
 var mixins = function() {
 	return {
+		APIParts: function () {
+			var params = this.props.params.param;
+			var parts = typeof params === 'string'? params : params[params.length-1];
+			return parts.split('.');
+		},
 		lazyloadImage: function(container) {
 			var imgs = container.querySelectorAll('.u-lazyload-img');
 			for (var i = 0; i < imgs.length; i++) {
@@ -30,11 +35,31 @@ var mixins = function() {
 			clearTimeout(this.timeoutId);
 			this.timeoutId = setTimeout(function() {
 				this.lazyloadImage(list);
-				//console.log(!this.state.noMore,!this.state.scrollLoading,document.body.scrollHeight + list.scrollTop + (-30) > list.scrollHeight,document.body.scrollHeight , list.scrollHeight)
+				//console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
 				if (!this.state.noMore && !this.state.scrollUpdate &&  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight) {
-					this.scrollHandleCallback && this.scrollHandleCallback();
+					this.scrollHandleCallback();
 				}
 			}.bind(this), 100);
+		},
+		scrollHandleCallback: function(){
+			this.setState({
+				scrollUpdate:true
+			})
+			var n = AJAX.API._param['pages']? 'pages':'page';
+			AJAX.API._param[n]++;			
+			this.getList();
+		},
+		onerror:function(error){
+			if(this.state.scrollUpdate){
+				this.setState({
+					scrollUpdate:false,
+					noMore:true
+				});
+				return;
+			}
+			this.setState({
+				onerror:true
+			});
 		},
 		shelfAdding: function(param,callback){
 			if(!this.isLogin()){
@@ -43,7 +68,7 @@ var mixins = function() {
 			}
 			addBookCallback();
 			function addBookCallback() {
-				Router.ajax('addBook', {param:JSON.stringify(param)},function(data){
+				AJAX.go('addBook', {param:JSON.stringify(param)},function(data){
 					GLOBAL.onShelf[param[0].bookId]=1;
 					(typeof callback==='function') && callback(data);
 				},GLOBAL.noop);
@@ -53,8 +78,8 @@ var mixins = function() {
 			return !!GLOBAL.cookie('userToken');
 		},
 		goLogin: function(callback){
-			var hash = window.location.hash+'/login';
-			window.location.replace(hash);
+			var hash = window.location.pathname+'/login';
+			browserHistory.push(hash);
 			POP._alert('请先登录');
 			myEvent.setCallback('login', callback);
 		}

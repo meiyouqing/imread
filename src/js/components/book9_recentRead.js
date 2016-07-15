@@ -22,13 +22,13 @@ var Book9 = React.createClass({
 		return date;
 	},
 	render: function() {
-		var href = 'reading&crossDomain.'
+		var href = 'reading/crossDomain.'
 		         + this.props.book.source_bid + '.'
 		         + this.props.book.chapter_id + '.'
 		         + this.props.book.content_id + '.'
 		         + this.props.book.source_id;
 		return (
-			<li className="u-book-9" data-bid={this.props.book.content_id} data-href={Router.setHref(href)}>
+			<li className="u-book-9" data-bid={this.props.book.content_id} data-href={GLOBAL.setHref(href)}>
 				<a className="f-clearfix">
 					<div className="f-fl">
 						<Img src={this.props.book.big_coverlogo} />

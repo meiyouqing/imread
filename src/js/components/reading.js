@@ -1,5 +1,5 @@
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
+
 var Chapterlist = require('./chapterlist');
 var readingStyle = require('../modules/readingStyle');
 var bookContent = require('../modules/bookContent');
@@ -7,7 +7,7 @@ var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
 var isHidden = require('../modules/isHidden');
-
+require('../../css/reading.css');
 
 var styleMixins = {
 	cloneStyle: function(style) {
@@ -92,15 +92,16 @@ var chapterMixins = {
 		this.setState({
 			getChapterlistLoading: true
 		});
-		Router.setAPI([['chapterlist', Router.parts[3], this.state.page + next , '', this.state.page_size, 0].join('.')]);
+		AJAX.init('chapterlist'+ this.APIParts()[3]+ this.state.page_size);
 
-		Router.get(function(data) {
+		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
 				chapterlist: data.chapterList,
 				page: this.state.page + next,
 				getChapterlistLoading: false
 			});
+
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
@@ -134,8 +135,8 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		window.location.replace(window.location.hash.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
-			return 'reading&crossDomain.' + $2 + '.' + chapterid;
+		browserHistory.push(window.location.pathname.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
 	},
 	handleClickChapter: function(e) {
@@ -162,9 +163,9 @@ var Reading = React.createClass({
 			pages: 1,
 			page_size: 20,
 			vt: 9,
-			bid: Router.parts[1],
-			chapterid: Router.parts[2],
-			source_id: Router.parts[4],
+			bid: this.APIParts()[1],
+			chapterid: this.APIParts()[2],
+			source_id: this.APIParts()[4],
 			showSetting: false,
 			showChapterlist: false,
 			showSettingFont: false,
@@ -215,7 +216,7 @@ var Reading = React.createClass({
 		}];
 		if (this.isLogin()) {
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
-			//getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
+			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
 
 		this.cacheReadLog(readLog[0]);
@@ -231,7 +232,7 @@ var Reading = React.createClass({
 	goOut:function(e){
 		var addShelf = function() {
 			var param = [{
-				bookId: Router.parts[3],
+				bookId: this.APIParts()[3],
 				type: 3,
 				time: new Date().getTime(),
 				chapter_id: this.state.chapterid,
@@ -239,15 +240,15 @@ var Reading = React.createClass({
 			}];
 			this.shelfAdding(param,function(){
 				myEvent.execCallback('updateShelfBtn');
-				Router.goBack();
+				GLOBAL.goBack();
 			});
 		}.bind(this);
-		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
+		this.isOnShelf = GLOBAL.onShelf[this.APIParts()[3]]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
-			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));
+			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
 		}else{
 			myEvent.execCallback('refreshShelf');
-			Router.goBack();			
+			GLOBAL.goBack();			
 		}
 	},
 	getFormatContent: function(content) {
@@ -282,7 +283,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		getJSON('GET','/api/book/introduce',{bid:Router.parts[3]},function(data){
+		AJAX.getJSON('GET','/api/book/introduce',{bid:this.APIParts()[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
@@ -312,7 +313,7 @@ var Reading = React.createClass({
 						<div>
 							<Block5 data={{
 								contentlist: [data.intercutList[randIndex]]
-							}} spm={[]} type="11" fromReading={true} />
+							}} type="11" fromReading={true} />
 							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
 						</div>
 					);
@@ -373,7 +374,7 @@ var Reading = React.createClass({
 		bookContent.get({
 			bid: that.state.bid,
 			cid: that.state.chapterid,
-			source_id : Router.parts[4],
+			source_id : this.APIParts()[4],
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -394,7 +395,7 @@ var Reading = React.createClass({
 			noCross:true,
 			bid: that.state.bid,
 			cid: data.nextChapterId,
-			source_id : Router.parts[4],
+			source_id : this.APIParts()[4],
 			callback: function(data){
 				storage.set('nextChapter',data);
 			}.bind(this),
@@ -412,16 +413,16 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			window.location.replace(Router.setHref('confirmOrder'));
-			require.ensure([], function(require) {
-				var Order = require('./order');
-				that.props.popup(<Order 
-					paySuccess={that.gotContent} 
-					data={data} 
-					bookName={that.state.bookName} 
-					chargeMode={that.chargeMode} 
-					chapterCount={that.chapterCount} />);
-			});						
+			browserHistory(GLOBAL.setHref('order'));
+			// require.ensure([], function(require) {
+			// 	var Order = require('./order');
+			// 	that.props.popup(<Order 
+			// 		paySuccess={that.gotContent} 
+			// 		data={data} 
+			// 		bookName={that.state.bookName} 
+			// 		chargeMode={that.chargeMode} 
+			// 		chapterCount={that.chapterCount} />);
+			// });						
 		}
 	},
 	autoPay: function(orderData) {
@@ -433,10 +434,10 @@ var Reading = React.createClass({
 			that.goLogin(pay);
 		}
 		function pay(){	
-			getJSON('GET','/api/auth/balance',{},function(data){
+			AJAX.getJSON('GET','/api/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				if((aidou-orderData.marketPrice)>=0){
-					getJSON('GET',orderData.orderUrl,{},function(data){
+					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
 						that.gotContent(data);
 					});
 				}else{
@@ -531,7 +532,7 @@ var Reading = React.createClass({
 		//第一次进入阅读跳到上次阅读的地方
 		if(this.bookmarkFlag){
 			//console.log(storage.get('readLogNew'))
-			var obj = storage.get('readLogNew')[Router.parts[3]];
+			var obj = storage.get('readLogNew')[this.APIParts()[3]];
 			var offset = obj? obj.offset[this.state.chapterid] : false;
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
@@ -579,7 +580,8 @@ var Reading = React.createClass({
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
-				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true;
+				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
+				|| this.props.children !== nextProps.children;
 	},
 	
 	hideGuide:function(e) {
@@ -589,7 +591,7 @@ var Reading = React.createClass({
 		});
 	},
 	render:function(){
-		var currentRoute = window.location.hash.split('/');
+		var currentRoute = window.location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} />;
@@ -597,7 +599,7 @@ var Reading = React.createClass({
 		var intercut;
 		if(this.state.UFO){
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<div className="g-main g-main-1">
 						<NoData type="UFO" />
@@ -607,7 +609,7 @@ var Reading = React.createClass({
 		}
 		if(this.state.order){
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<div className="g-main">
 						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
@@ -619,7 +621,7 @@ var Reading = React.createClass({
 		}
 		if(this.state.loading) {
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<i className="u-loading u-book-loading">努力加载中...</i>
 				</div>
@@ -637,7 +639,7 @@ var Reading = React.createClass({
 			}
 		}
 		return (
-			<div ref="container">
+			<div className="gg-body" ref="container">
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<div className="iconfont icon-back" onClick={this.goOut}></div>
@@ -746,6 +748,7 @@ var Reading = React.createClass({
 						</div>
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		)
 	}

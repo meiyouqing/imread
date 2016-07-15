@@ -1,5 +1,5 @@
 var ReadConfig = require('../modules/readConfig');
-var getJSON = require('../modules/getJSON').getJSON;
+
 
 var BookContent = (function() {
 	//移动咪咕阅读
@@ -15,23 +15,23 @@ var BookContent = (function() {
 							.replace('$cm', sourceConfig.cm);
 
 		//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
-		getJSON('GET', '/api/crossDomain', {
+		AJAX.getJSON('GET', '/api/crossDomain', {
 			url : url,
 			type: 'post',
 			param: param
 		}, options.callback, function() {
 			// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
 				if(options.noCross){return} //不要跳转
-				Router.goBack();
+				GLOBAL.goBack();
 				//去掉referrer
 				var meta = document.createElement('meta');
 				meta.name = "referrer";
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
 
-				window.location.replace(sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+				browserHistory.push(sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 			// } else {
-			// 	Router.goBack();
+			// 	GLOBAL.goBack();
 			// }
 		});
 	}
@@ -46,7 +46,7 @@ var BookContent = (function() {
 					      .replace('$cid', options.cid)
 					      .replace('$cm', sourceConfig.cm);
 
-		getJSON('GET', url, {}, options.callback, options.onError);
+		AJAX.getJSON('GET', url, {}, options.callback, options.onError);
 	}
 
 	//千马阅读

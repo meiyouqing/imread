@@ -1,14 +1,15 @@
+import parseQuery from '../modules/parseQuery';
 var Header = React.createClass({
 	getDefaultProps: function(){
 		var sHandle = function(e){
-			window.location.hash = Router.setHref('searchPage&page.11.1.3');
+			browserHistory.push(GLOBAL.setHref('search/page.11'));
 		};
 
 
 		return {
-			left:<a className="f-fl icon-back iconfont" onClick={Router.goBack.bind(Router)} ></a>,
+			left:<a className="f-fl icon-back iconfont" onClick={GLOBAL.goBack} ></a>,
 			right:<a className="f-fr icon-search iconfont" onClick={sHandle}></a>,
-			title: Router.title
+			title: GLOBAL.title || '艾美阅读'
 		};
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {

@@ -17,7 +17,7 @@ var recentRead = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.getData();
+		this.getList();
 		this.lazyloadImage(this.refs.container);
 		var that = this;
 		var hammertime = new Hammer(this.refs.container);
@@ -38,7 +38,7 @@ var recentRead = React.createClass({
 					}
 				}
 				if (that.isLogin()) {
-					Router.ajax('deleteRecentRead', {
+					AJAX.go('deleteRecentRead', {
 						book_id: bid
 					}, ui_callback);
 				} else {
@@ -55,19 +55,22 @@ var recentRead = React.createClass({
 		}).on('tap', function(e) {
 			var href = e.target.getAttribute('data-href');
 			if (!href) {return ;}
-			window.location.href = href;
+			 browserHistory.push(href);
 		});
 	},
-	getData: function() {
-		if (this.state.scrollUpdate || this.state.noMore) {
-			return ;
-		}
+	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
 			var that = this;
 			that.setState({
 				scrollUpdate: true
 			});
-			Router.get(function(data) {
+			AJAX.init(this.props.route.path);
+			if(scrollUpdate){
+				var n = AJAX.API._param['pages']? 'pages':'page';
+				AJAX.API._param[n]++;			
+			}
+
+			AJAX.get(function(data) {
 				if (data.content.length < 10) {
 					that.setState({
 						noMore: true,
@@ -99,14 +102,6 @@ var recentRead = React.createClass({
 	componentDidUpdate: function() {
 		this.lazyloadImage(this.refs.container);
 	},
-	scrollHandleCallback: function() {
-		if (!this.isLogin()) {return ;}
-		var parts = Router.parts.map(function(v,i){
-			return i===1? ++v:v;
-		});
-		Router.init(Router.name+'&'+parts.join('.'));
-		this.getData();
-	},
 	render: function() {
 		var content;
 		if (!this.state.list) {
@@ -125,13 +120,16 @@ var recentRead = React.createClass({
 			content = <NoData type="recentRead" />
 		}
 		return (
-			<div className="recentRead-block">
-				<Header title={Router.title} right={false} />
-				<div className="g-main g-main-1">
-					<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
-						{content}
+			<div className="gg-body">
+				<div className="recentRead-block">
+					<Header right={false} />
+					<div className="g-main g-main-1">
+						<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
+							{content}
+						</div>
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

@@ -5,23 +5,14 @@ var Mixins = require('../modules/mixins');
 
 var List = React.createClass({
 	mixins: [Mixins()],
-	scrollHandleCallback: function(e) {
-		var parts = Router.parts.map(function(v,i){
-			return i===2? ++v:v;
-		});
-		Router.init(Router.name+'&'+parts.join('.'));
-		this.setState({
-			scrollUpdate:true
-		});
-		this.getData(function(){
-			this.setState({
-				scrollUpdate:false
-			})
-		}.bind(this));
-	},
-	getData: function(callback){
-		Router.get(function(data){
-			if(Router.name === 'searchList'){
+	getList: function(scrollUpdate){
+		AJAX.init(this.props.params.param);
+		if(scrollUpdate){
+			var n = AJAX.API._param['pages']? 'pages':'page';
+			AJAX.API._param[n]++;			
+		}		
+		AJAX.get(data => {
+			if(/^searchList/.test(this.props.route.path)){
 				if (!data.contentlist.length) {
 					this.setState({
 						noMore:true
@@ -29,7 +20,8 @@ var List = React.createClass({
 				}
 				this.setState({
 					resultCount: data.result_count,
-					bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist
+					bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
+					scrollUpdate: false
 				})
 				//设置GLOBAL book name
 				GLOBAL.setBookName(data.contentlist);
@@ -40,13 +32,13 @@ var List = React.createClass({
 					})
 				}
 				this.setState({
-					bookList:this.state.scrollUpdate? this.state.bookList.concat(data):data
+					bookList:this.state.scrollUpdate? this.state.bookList.concat(data):data,
+					scrollUpdate: false
 				});				
 				//设置GLOBAL book name
 				GLOBAL.setBookName(data);
 			}
-			typeof callback==='function'&&callback();
-		}.bind(this), function(error){
+		}, error => {
 			if(this.state.scrollUpdate){
 				this.setState({
 					scrollUpdate:false,
@@ -58,7 +50,7 @@ var List = React.createClass({
 				UFO:true
 			});
 			//console.log(error);
-		}.bind(this));
+		});
 	},
 	goSearch: function(){
 		if(!this.state.scrollUpdate){
@@ -69,7 +61,7 @@ var List = React.createClass({
 				resultCount:null
 			})
 		}
-		this.getData();
+		this.getList();
 	},
 	getInitialState: function(){
 		return {
@@ -81,7 +73,7 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getData();
+		this.getList();
 	},
 	// componentWillReceiveProps: function(nextProps){
 	// 	this.getData();
@@ -93,19 +85,17 @@ var List = React.createClass({
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
-				|| this.state.noMore !== nextState.noMore;
+				|| this.state.noMore !== nextState.noMore
+				|| this.props.children !== nextProps.children;
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
-		var spm = [Router.pgid, Router.parts[1], 1, 0];
 		//定义头部
 		if(this.state.resultCount){
 			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		}
-		if(Router.name === 'category' || Router.name === 'more'){
-			header = <Header title={Router.title} />;				
-		}
-		if(Router.name === 'searchList'){
+		header = <Header title={GLOBAL.title} />;				
+		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} />;
 		}
 		//定义content
@@ -117,7 +107,7 @@ var List = React.createClass({
 				content = null;
 				result_count = null;
 			}else{
-				content = <Block7 spm={spm} bookList={this.state.bookList}/>;
+				content = <Block7 bookList={this.state.bookList}/>;
 				sLoading = <Loading cls='u-sLoading' />;
 			}							
 		}
@@ -131,7 +121,7 @@ var List = React.createClass({
 			sLoading = null;
 		}
 		return (
-			<div>
+			<div className="gg-body">
 				{header}
 				<div className="g-main g-main-1">
 					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
@@ -141,6 +131,7 @@ var List = React.createClass({
 					</div>
 				</div>
 				{noData}
+				{this.props.children}
 			</div>
 		);
 	}

@@ -1,9 +1,9 @@
 //"use strict"
 
-//var ReactDOM = require('react-dom');
-var Frame = require('./components/frame');
-var GLOBAL = require('./modules/global');
-var Token = require('./modules/token');
+import { Router, Route, browserHistory, hashHistory} from 'react-router';
+import routes from './components/routes'
+import GLOBAL from './modules/global';
+import Token from './modules/token';
 
 if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
 	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
@@ -22,11 +22,9 @@ GLOBAL.setUser({
 });
 
 Token.refreshToken();
-window.headerIndex = 0;
 
-ReactDOM.render(<Frame />, document.getElementById('app-container'));
+ReactDOM.render(
+	<Router routes={routes} history={browserHistory}/>, 
+	document.getElementById('app-container')
+);
 
-// setTimeout(Router.visitMiGu, 3000);
-
-//var Balance = require('./balance');
-//ReactDOM.render(<Balance />, document.getElementById('app-container'));

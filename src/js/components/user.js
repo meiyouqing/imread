@@ -1,3 +1,4 @@
+import { Link, browserHistory } from 'react-router';
 var myEvent = require('../modules/myEvent');
 var Mixins = require('../modules/mixins');
 
@@ -5,13 +6,14 @@ require('../../css/user.css');
 
 var ULine = React.createClass({
 	render: function() {
+		
 		return (
 			<li className="u-line">
-				<a href={Router.setHref(this.props.line.href)} className="f-cb" onClick={this.props.line.requireLogin}>
+				<Link to={GLOBAL.setHref(this.props.line.href)} className="f-cb" onClick={this.props.line.requireLogin}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<span className={"iconfont" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
-				</a>
+				</Link>
 			</li>
 		);
 	}
@@ -68,9 +70,10 @@ var User = React.createClass({
 			this.requireLogin(e);
 		}
 	},
-	shouldComponentUpdate: function(nextPros, nextState) {
+	shouldComponentUpdate: function(nextProp, nextState) {
 		return this.state.user.phone !== nextState.user.phone 
-		    || this.state.needUpdate !== nextState.needUpdate;
+		    || this.state.needUpdate !== nextState.needUpdate
+		    || this.props.children !== nextProp.children;
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
@@ -78,8 +81,8 @@ var User = React.createClass({
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;
 		if (this.isLogin()) {
-			Router.setAPI(['me']);
-			Router.get(function(data) {
+			AJAX.init('me');
+			AJAX.get(function(data) {
 				var newPortraitUrl = data.portraitUrl;
 				data.portraitUrl = that.state.userInfo.portraitUrl;
 				that.setState({
@@ -110,8 +113,8 @@ var User = React.createClass({
 		if (!this.isLogin()) {
 			var href = target.href;
 			if (!href) {
-				var hash = window.location.hash+'/login';
-				window.location.replace(hash);
+				var hash = window.location.pathname+'/login';
+				browserHistory.push(hash);
 				myEvent.setCallback('login', login_c);
 				return false;
 			}
@@ -127,7 +130,7 @@ var User = React.createClass({
 			}, 0);
 			setTimeout(function() {
 				that.getUserInfo(function() {
-					window.location.replace(href || '#user');
+					browserHistory.push(href || '/user');
 				});
 			}, 10);
 		}
@@ -138,7 +141,7 @@ var User = React.createClass({
 			[{
 				title: '最近阅读',
 				icon: 'icon-read',
-				href: 'recentRead.1.10'
+				href: 'recentRead'
 			}, {
 				title: '艾豆充值',
 				icon: 'icon-balance',
@@ -147,7 +150,7 @@ var User = React.createClass({
 			}, {
 				title: '我的标签',
 				icon: 'icon-tag',
-				href: 'tag&listTag',
+				href: 'myTags',
 				requireLogin: this.requireLogin
 			}, {
 				title: '我的成就',
@@ -178,24 +181,27 @@ var User = React.createClass({
 			);
 		}
 		return (
-			<div className="g-main g-main-2">
-				<div className="m-userblock g-scroll">
-					<section className="avatar-block f-pr">
-						<img src="src/img/bg_me.png" className="bg"/>
-						<div onClick={this.login}>
-							<div className="avatar-wrap">
-								<img src={this.state.userInfo.portraitUrl} />
+			<div className="g-ggWraper">
+				<div className="g-main g-main-2">
+					<div className="m-userblock g-scroll">
+						<section className="avatar-block f-pr">
+							<img src="src/img/bg_me.png" className="bg"/>
+							<div onClick={this.login}>
+								<div className="avatar-wrap">
+									<img src={this.state.userInfo.portraitUrl} />
+								</div>
+								<div className="username">{userName}</div>
 							</div>
-							<div className="username">{userName}</div>
-						</div>
-					</section>
-					{
-						blockData.map(function(lines, i) {
-							return (<MUblock key={i} lines={lines} />);
-						})
-					}
-					{logoutBtn}
+						</section>
+						{
+							blockData.map(function(lines, i) {
+								return (<MUblock key={i} lines={lines} />);
+							})
+						}
+						{logoutBtn}
+					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

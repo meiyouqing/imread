@@ -1,55 +1,41 @@
-var Blocklist = require('./blocklist');
+import {browserHistory} from 'react-router';
+var Header = require('./header');
 var MallNav = require('./mallNav');
 
 var Mall = React.createClass({
-	mixins: [Mixins()],
-	// componentDidMount: function(){
-	// 	this.lazyloadImage(this.refs.container);
-	// },
-	componentDidUpdate: function() {
-		if(!this.props.mallList || !this.props.mallList.length){return;}
-		this.lazyloadImage(this.refs.container);
-		//console.log(this.scrollUpdate)
-		if (Router.parts[2]==='1' && Router.name==='mall') {
-			this.refs.container.scrollTop = 0;
+	getNav: function(){
+		AJAX.init('group.1');
+		AJAX.get((data)=>{
+			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+
+			browserHistory.replace('/mall/'+subnav);
+			this.setState({
+				navList:data.pagelist
+			});
+		});
+	},
+	getInitialState: function(){
+		return {
+			navList: null
 		}
+	},
+	componentDidMount: function(){
+		this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-		//console.log(this.props,nextProp)
-		return this.props.noMore !== nextProp.noMore
-				|| this.props.mallList !== nextProp.mallList
-				|| this.props.part !== nextProp.part
-				|| this.props.navList !== nextProp.navList;
+		return this.state.navList !== nextState.navList
+				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
-		var mallList;
-		var mallNav = Router.name==='mall'?
-						<MallNav part={this.props.part} navList={this.props.navList}/>
-						:null;
-		var scrollLoading = <Loading cls="u-sLoading" />;
-		if(this.props.noMore){
-			scrollLoading = null;
-		}
-		if(!this.props.mallList){
-			mallList = <Loading />
-		}else{
-			if(this.props.mallList.length){
-				mallList = (
-					<div className="g-main">
-						<div className="g-scroll" onScroll={this.props.scrollHandle} ref="container">
-							<Blocklist blockList={this.props.mallList} />
-							{scrollLoading}
-						</div>
-					</div>
-					);
-			}else{
-				mallList = (<div className="g-main"><NoData /></div>);
-			}
+		var mallNav;
+		if(this.state.navList){
+			mallNav = <MallNav navList={this.state.navList} />;
 		}
 		return (
-			<div>
+			<div className="g-mall">
+				<Header title="书城" left={null} />
 				{mallNav}
-				{mallList}
+				{this.props.children}
 			</div>
 			)
 	}

@@ -18,8 +18,7 @@ var Login = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		//Router.init('login');
-		Router.ajax('login',postData, function(data) {
+		AJAX.go('login',postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -34,14 +33,11 @@ var Login = React.createClass({
 
 			//判断登陆后的跳转
 			var isneed = false;
-			if(window.from.skipurl){
-				isneed = /\?/.test(window.from.skipurl);
-				//window.location.href = window.from.skipurl+(isneed?(window.from.skipurl.split('?')[0]):'')+'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
-
-				window.location.href = (isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid();
-				//console.log((isneed?(window.from.skipurl.split('?')[0]):window.from.skipurl) +'?token='+data.token+'&devicetoken='+GLOBAL.getUuid())
+			if(that.from && that.from.skipurl){
+				isneed = /\?/.test(that.from.skipurl);
+				window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
 			}else{
-				Router.goBack();
+				GLOBAL.goBack();
 				myEvent.execCallback('login');
 			}
 			
@@ -55,20 +51,15 @@ var Login = React.createClass({
 		this.refs.mobile_num.focus();
 
 		//判断来源from
-		window.from = parseQuery(location.search);
-	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		return false;
+		this.from = parseQuery(location.search);
 	},
 	render: function() {
-
 		var skipurl = '';
-		if(window.from && window.from.skipurl)
-			skipurl = '?skipurl='+window.from.skipurl;
-
+		if(this.from && this.from.skipurl)
+			skipurl = '?skipurl='+this.from.skipurl;
 		return (
-			<div>
-				<Header title={Router.title} right={null}  skipurl={true} />
+			<div className="gg-body">
+				<Header title={GLOBAL.setTitle('login')} right={null}  skipurl={true} />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">
@@ -83,10 +74,11 @@ var Login = React.createClass({
 
 						<div className="u-inputline f-clearfix">
 							<div className="u-buttonc f-fl">
-								<a className="tip" href={skipurl+Router.setHref('register')}>注册新账号</a>
+
+								<Link className="tip" to={GLOBAL.setHref('register')}>注册新账号</Link>
 							</div>
 							<div className="u-buttonc f-fl">
-								<a className="tip" href={Router.setHref('forget')}>忘记密码</a>
+								<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
 							</div>
 						</div>
 						<div className="u-otherlogins-tip f-hide">其他方式登录</div>
@@ -106,6 +98,7 @@ var Login = React.createClass({
 						</div>
 					</form>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

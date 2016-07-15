@@ -11,13 +11,13 @@ var Feedback = React.createClass({
 		if (!GLOBAL.assertNotEmpty(message, '内容不能为空')) {return ;}
 		if (!GLOBAL.assertNotEmpty(contact, '内容不能为空')) {return ;}  
 
-		Router.ajax("advice", {
+		AJAX.go("advice", {
 			'message': message,
 			'contact': contact,
 			'type': 'unEncode'
 		}, function(data) {
 			POP._alert(data.success);
-			Router.goBack();
+			GLOBAL.goBack();
 		});
 		return false;
 	},
@@ -26,8 +26,8 @@ var Feedback = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
-				<Header title={Router.title} right={null} />
+			<div className="gg-body">
+				<Header right={null} />
 				<div className="m-feedbackblock m-userblocks">
 					<form className="u-feedbackform u-userform">
 						<div className="u-inputline">

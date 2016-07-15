@@ -31,7 +31,7 @@ var Recharge = React.createClass({
 			verifyCode: verifyCode
 		};
 		that.loading = true;
-		Router.ajax('payConfirm', postData, success, null, 'recharge');
+		AJAX.go('payConfirm', postData, success, null, 'recharge');
 		// function fail(res){
 		// 	that.loading = false;
 		// 	console.log(res.code)
@@ -49,7 +49,7 @@ var Recharge = React.createClass({
 				});
 				return;
 			}
-			window.location.replace(Router.setHref('recharge_result'));
+			browserHistory.push(GLOBAL.setHref('recharge_result'));
 			setTimeout(function(){
 				var rechargeRes = <Recharge_result data={data} />
 				if(data.code!==200){
@@ -101,31 +101,66 @@ var Recharge = React.createClass({
 					orderNo: this.params_init.orderNo,
 					r: data.vcurl
 				}
-				Router.ajax('payVcurl', postData, gotInit, initError, 'recharge');
+				AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
 			}
 		}.bind(this);
 		countDown();
 		if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
-			Router.ajax('paySign', this.params_init, function(data) {
+			AJAX.go('paySign', this.params_init, function(data) {
 				// console.log(data)
 				this.params_init.sign = data.content;
-				Router.ajax('payInit', this.params_init, gotInit, initError, 'recharge');
+				AJAX.go('payInit', this.params_init, gotInit, initError, 'recharge');
 			}.bind(this), initError, 'recharge');
 		}else{
 			gotInit(this.initData,true);
 		}
 	},
+	getPay: function(){
+		var that = this;
+		var postData = {
+			productId:this.props.params.param,
+			fee:'1',
+			payType:'1',
+			spType:'1',
+			mobileNum:'1',
+			productName:'1',
+			productDesc:'1',
+			others:'1'
+		}
+
+		AJAX.go('pay',postData,function(data){
+			that.setState({
+				aidou: data.success.fee/100,
+				sum: data.success.fee/100
+			});
+			var params = data.success;
+			that.params_init = {
+				fee: params.fee,
+				orderNo: params.orderNo,
+				others: params.others,
+				payType: params.payType,
+				productDesc: params.productDesc,
+				productName: params.productName,
+				reqTime: params.reqTime,
+				spType: params.spType,
+				thirdPartyId: params.thirdPartyId			
+			}
+		});
+	},
 	getInitialState: function() {
 		return {
-			s:0
+			s:0,
+			aidou: 0,
+			sum: 0
 		}
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
-		return nextState.s != this.state.s;
+		return nextState.s != this.state.s 
+			    || nextState.aidou != this.state.aidou
+			    || nextState.sum != this.state.sum;
 	},
 	componentWillMount: function(){
-		this.aidou = this.props.data.fee/100;
-		this.sum = this.props.data.fee/100;
+		this.getPay();
 	},
 	componentDidMount: function() {
 		var phoneNumber = GLOBAL.cookie('payUser');
@@ -134,29 +169,17 @@ var Recharge = React.createClass({
 		}else{
 			this.refs.mobile_num.focus();
 		}
-		var params = this.props.data;
-		this.params_init = {
-			fee: params.fee,
-			orderNo: params.orderNo,
-			others: params.others,
-			payType: params.payType,
-			productDesc: params.productDesc,
-			productName: params.productName,
-			reqTime: params.reqTime,
-			spType: params.spType,
-			thirdPartyId: params.thirdPartyId			
-		}
 	},
 	render: function() {
 		return (
-			<div>
-				<Header title={Router.title} right={null} />
+			<div className="gg-body">
+				<Header right={null} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						<div className="u-balance f-tl">
 							<h5 className="tipTitle f-mb5">充值订单</h5>
-							<p className="f-fc-777">充值艾豆：{this.aidou}艾豆</p>
-							<p className="f-fc-777">支付金额：{this.sum}元</p>
+							<p className="f-fc-777">充值艾豆：{this.state.aidou}艾豆</p>
+							<p className="f-fc-777">支付金额：{this.state.sum}元</p>
 						</div>
 						<div className="u-divider"></div>
 						<div className="m-registerblock">
@@ -181,6 +204,7 @@ var Recharge = React.createClass({
 						<PayTips />
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 		);
 	}

@@ -15,8 +15,8 @@ var Shelf = React.createClass({
 				//console.log(readLog)
 				cid = readLog.current_chapterid;
 			}
-			myEvent.setCallback('refreshShelf',this.props.getShelfList);
-			window.location.hash = Router.setHref('reading&crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid);
+			myEvent.setCallback('refreshShelf',this.getList);
+			browserHistory.push(GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){
@@ -56,7 +56,7 @@ var Shelf = React.createClass({
 	},
 	seAllClick :function(){
 		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
-		this.props.shelfList.forEach(function(v){
+		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
 		}.bind(this))
 		this.setState({
@@ -82,10 +82,8 @@ var Shelf = React.createClass({
 			param.push(o);
 		});
 		param = JSON.stringify(param);
-		Router.ajax('deleteBook',{param:param},function(data){
-			// console.log(data);
-			//Router.init('shelf&block.157.1.0');
-			this.props.getShelfList();
+		AJAX.go('deleteBook',{param:param},function(data){
+			this.getList();
 			this.compClick();
 		}.bind(this))
 	},
@@ -99,82 +97,100 @@ var Shelf = React.createClass({
 			right:setting,
 			icon:icon,
 			selected:[],
-			noMore:true
+			noMore:true,
+			shelfList:null
 		}
 	},
+	getList: function (){
+		AJAX.get((data)=>{
+			this.setState({
+				shelfList: data
+			});
+			//设置GLOBAL.booklist/book
+			GLOBAL.setBlocklist(data);
+		},this.onerror);
+	},			
 	componentDidMount: function(){
-		this.lazyloadImage(this.refs.container);
+		if(!this.isLogin()){
+			this.goLogin(() => {
+				AJAX.init('block.157.100');
+				this.getList();
+			});
+			return;
+		}
+		AJAX.init('block.157.100');
+		this.getList();
 	},
 	componentDidUpdate: function() {
-		//var scrollUpdate = Router.parts[2]==='1';
-		this.lazyloadImage(this.refs.container);
-		// console.log(Router.parts)
-		// if (scrollUpdate) {
-		// 	this.refs.container.scrollTop = 0;
-		// }
-	},
-	shouldComponentUpdate: function(nextProp,nextState){
-		//console.log(this.props,nextProp)
-		return true;
+		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		//console.log(this.state.selected);
-		var content,header,icon;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right} />;
+		//console.log(this.state.shelfList);
+		var icon,content;
 		var curClass = '';
-		var add = <li className="u-book-0"><a className="add f-pr" href="#mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></a></li>;
+		var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
 		var recent = 0;
 		var maxCurrentTime = 0;
 		var readLogs = storage.get('readLogNew');
-		for (var n in readLogs) {
-			if (readLogs[n].current_time > maxCurrentTime) {
-				maxCurrentTime = readLogs[n].current_time;
-				recent = readLogs[n].content_id;
+		if(!this.state.shelfList){
+			content = <Loading />;
+		}else if(!this.state.shelfList.length){
+			content = <NoData type="emptyShelf" />;
+		}else{
+			for (var n in readLogs) {
+				if (readLogs[n].current_time > maxCurrentTime) {
+					maxCurrentTime = readLogs[n].current_time;
+					recent = readLogs[n].content_id;
+				}
 			}
-		}
+			var recentIndex = -1;
+			this.state.shelfList.forEach(function(v, i) {
+				if (v.content_id == recent) {
+					recentIndex = i;
+					return false;
+				}
+			});
 
-		var recentIndex = -1;
-		this.props.shelfList.map(function(v, i) {
-			if (v.content_id == recent) {
-				recentIndex = i;
-				return false;
+			if (recentIndex > 0) {
+				this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
 			}
-		});
-
-		if (recentIndex > 0) {
-			this.props.shelfList.unshift(this.props.shelfList.splice(recentIndex, 1)[0]);
-		}
-
-		return (
-			<div>
-				<Header title="书架" left={this.state.left} right={this.state.right} />
-				<div className="g-main">
-					<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
-						<ul className="shelfWrap f-clearfix">
-							{
-								this.props.shelfList.map(function(v,i){
-									if(this.state.setting){
-										curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
-									}
-									icon = this.state.setting? this.state.icon:(recent == v.content_id? this.state.icon:null);
-									return(
-										<li key={i} className={"u-book-2 "+curClass}>
-											<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
-												{icon}
-												<Img src={v.big_coverlogo} />
-												<span className="f-ellipsis">{v.name}</span>
-											</a>
-										</li>
-										);
-								}.bind(this))
-							}
-							{addBook}
-						</ul>
+			content = (
+					<div className="g-main">
+						<div className="g-scroll g-scroll-noBG" ref="container">
+							<ul className="shelfWrap f-clearfix">
+								{
+									this.state.shelfList.map(function(v,i){
+										if(this.state.setting){
+											curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
+										}
+										icon = this.state.setting? this.state.icon:(recent == v.content_id? this.state.icon:null);
+										return(
+											<li key={i} className={"u-book-2 "+curClass}>
+												<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													{icon}
+													<Img src={v.big_coverlogo} />
+													<span className="f-ellipsis">{v.name}</span>
+												</a>
+											</li>
+											);
+									}.bind(this))
+								}
+								{addBook}
+							</ul>
+						</div>
+						<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
 					</div>
-				</div>
-				<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
+				)
+		}
+		return (
+			<div className="gg-wraper">
+				{header}
+				{content}
+				{this.props.children}
 			</div>
 		);
 	}
