@@ -95,6 +95,7 @@ module.exports = (
 			</Route>
 			<Route path="sheet/:param" onLeave={scrollResetHandle} component={BookSheet}>
 				{bookWrap}
+				{searchWrap}
 			</Route>
 			<Route path="myTags" component={Tag}/>
 			{loginWrap}
