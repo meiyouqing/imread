@@ -16,7 +16,7 @@ var Detail = React.createClass({
 		var cId = this.props.book.current_chapter_id,
 			cOffset = this.props.book.current_chapter_offest;
 		var param = [{
-				bookId: this.props.bid,
+				bookId: this.props.book.bid,
 				type: 3,
 				time: new Date().getTime(),
 				chapter_id: cId?cId:0,
