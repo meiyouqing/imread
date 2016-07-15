@@ -62,6 +62,7 @@ var Detail = React.createClass({
 });
 var Introduce = React.createClass({
 	mixins:[Mixins()],
+	isUpdate: true,
 	getInitialState: function() {
 		return {
 			isOnshelf: false,
@@ -95,8 +96,10 @@ var Introduce = React.createClass({
 		}
 		storage.set('bookIntroduce', bookIntroduce);
 	},
-	getBook: function(){
-		AJAX.init(this.props.params.param);
+	getBook: function(param){
+
+		var hash = param?param:this.props.params.param;
+		AJAX.init(hash);
 		AJAX.get(function(data){
 			if(data.status_code==='500'){
 				this.setState({
@@ -108,6 +111,7 @@ var Introduce = React.createClass({
 			data.name = data.book_name;
 			data.orderList = data.orderList.concat(data.readList);
 			GLOBAL.setBookName([data]);
+			this.isUpdate = true;
 			this.setState({
 				book: data,
 				isOnshelf: !!data.is_self
@@ -163,17 +167,26 @@ var Introduce = React.createClass({
 		myEvent.setCallback('updateShelfBtn',this.onShelf)
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
+
+		if(this.props.params.param !== nextProps.params.param){
+			this.getBook(nextProps.params.param);
+			this.isUpdate = false;
+		}
+			
+
 		return this.state.book !== nextState.book 
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.isOnshelf !== nextState.isOnshelf
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.noData !== nextState.noData
 				|| this.state.UFO !== nextState.UFO
-				|| this.props.children !== nextProps.children;
+				|| this.props.children !== nextProps.children
+				|| this.props.params.param !== nextProps.params.param;
 	},
 	render: function() {
+
 		var header, loading, introduceTabs, detail;
-		if (!this.state.book) {
+		if (!this.state.book || !this.isUpdate) {
 			header = <Header title={GLOBAL.book[this.state.bid]} right={false} />
 			loading = <Loading />
 			if(this.state.noData){
@@ -190,6 +203,7 @@ var Introduce = React.createClass({
 		return (
 			<div className="gg-body">
 				<div className="g-scroll">
+					<p>{this.state.book?this.state.book.book_name:''} </p>
 					{header}
 					<div className="introduce-container" >
 						{detail}
@@ -212,9 +226,11 @@ var IntroduceTabs = React.createClass({
 		};
 	},
 	shouldComponentUpdate: function(nextProps, netxtState) {
+
 		if (this.props.bid !== nextProps.bid) {
-			this.toggleTab(null, '', 0);
-			return false;
+			this.setState({current: 0});
+			// 	this.toggleTab(null, '', 0);
+			// 	return false;
 		}
 		return true;
 	},
