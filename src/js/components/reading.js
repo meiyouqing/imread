@@ -92,8 +92,7 @@ var chapterMixins = {
 		this.setState({
 			getChapterlistLoading: true
 		});
-		AJAX.init('chapterlist'+ this.APIParts()[3]+ this.state.page_size);
-
+		AJAX.init('chapterlist.'+ this.APIParts()[3]+ '.' +this.state.page_size);
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
@@ -101,7 +100,6 @@ var chapterMixins = {
 				page: this.state.page + next,
 				getChapterlistLoading: false
 			});
-
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
@@ -175,7 +173,7 @@ var Reading = React.createClass({
 			order: false,
 			intercutList: false, //呼出页广告
 			showIntercut: false, //是否显示呼出页广告
-			intercut: false //插页广告
+			intercut: false, //插页广告
 		}
 	},
 	cacheReadLog: function(readLog) {

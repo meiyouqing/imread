@@ -32,8 +32,6 @@ var List = React.createClass({
 					})
 				}
 
-				console.log(this.state.scrollUpdate)
-				console.log(this.state.bookList)
 				this.setState({
 					bookList:this.state.scrollUpdate? this.state.bookList.concat(data):data,
 					scrollUpdate: false
