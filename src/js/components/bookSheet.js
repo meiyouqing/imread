@@ -6,7 +6,7 @@ require('../../css/bookSheet.css');
 
 var Module = React.createClass({
 	 mixins: [Mixins()],
-	getData: function(callback){
+	getList: function(){
 		AJAX.init(this.props.params.param);
 		AJAX.get(function(data){
 			GLOBAL.title = data.sheet_name;
@@ -22,11 +22,11 @@ var Module = React.createClass({
 			}
 			this.setState({
 				data: data,
-				collected: +data.collection
+				collected: +data.collection,
+				scrollUpdate: false
 			});	
 			//设置GLOBAL book name
 			GLOBAL.setBookName(data.content);
-			typeof callback==='function'&&callback();
 		}.bind(this), function(error){
 			if(this.state.scrollUpdate){
 				this.setState({
@@ -73,7 +73,7 @@ var Module = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getData();
+		this.getList();
 	},
 	componentDidUpdate: function() {
 		this.lazyloadImage(this.refs.container);

@@ -230,6 +230,7 @@ export default AJAX = {
 			}		
 			i++;
 		}
+		this.API.now = now;
 		this.API._m = ao.method;
 		this.API._base = ao.base;
 		this.API._param = ao.param;

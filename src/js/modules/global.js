@@ -149,18 +149,17 @@ var GLOBAL = {
 		// write
         if (value !== undefined) {
                 options = options || {};
-
+                options.path = options.path? options.path:'/';
                 if (typeof options.expires === 'number') {
                         var days = options.expires, t = options.expires = new Date();
                         t.setDate(t.getDate() + days);
                 }
-
                 return (document.cookie = [
                         encodeURIComponent(key),
                         '=',
                         encodeURIComponent(value),
                         options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                        '; path=/',
+                        '; path='+options.path,
                         options.domain ? '; domain=' + options.domain : '',
                         options.secure ? '; secure' : ''
                 ].join(''));
@@ -185,9 +184,9 @@ var GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key) {
+	removeCookie: function(key,path) {
 		if (GLOBAL.cookie(key) !== undefined) {
-                GLOBAL.cookie(key, '', {expires: -1});
+                GLOBAL.cookie(key, '', {expires: -1,path:path});
                 return true;
         }
         return false;
