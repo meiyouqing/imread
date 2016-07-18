@@ -20,6 +20,9 @@ var Chapterlist = React.createClass({
 		// var feeType = e.target.getAttribute('data-fee') || e.target.parentNode.getAttribute('data-fee');		
 		var targetUrl = this.props.hrefBase + '/crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
 		//if (this.props.fromReading) {
+		if(this.props.fromReading)
+			browserHistory.replace(targetUrl);
+		else
 			browserHistory.push(targetUrl);
 		// } else {
 		// 	window.location.href = targetUrl;
