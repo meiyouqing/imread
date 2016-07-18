@@ -1,6 +1,8 @@
 var Header = require('./header');
 
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var mod = React.createClass({
 	rechargeHandle: function(e) {

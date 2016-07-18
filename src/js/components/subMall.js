@@ -29,10 +29,6 @@ var Mall = React.createClass({
 
 	getList: function (scrollUpdate){
 		AJAX.init(this.APIparam);
-		if(scrollUpdate){
-			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;			
-		}
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
 			if (!data.blocklist.length) {

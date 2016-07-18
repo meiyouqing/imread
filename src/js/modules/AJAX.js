@@ -220,6 +220,7 @@ export default AJAX = {
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
 		}
+
 		var parts = now.split('.');
 		var ao = API[parts[0]];
 		if(!ao){return}

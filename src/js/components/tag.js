@@ -1,5 +1,7 @@
 var Header = require('./header');
-require('../../css/tag.css');
+if(typeof window !== 'undefined'){
+	require('../../css/tag.css');
+}
 
 var tag = React.createClass({
 	getInitialState: function() {

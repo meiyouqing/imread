@@ -7,7 +7,9 @@ var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
 var isHidden = require('../modules/isHidden');
-require('../../css/reading.css');
+if(typeof window !== 'undefined'){
+	require('../../css/reading.css');
+}
 
 var styleMixins = {
 	cloneStyle: function(style) {
