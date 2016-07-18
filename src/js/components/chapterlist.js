@@ -18,13 +18,12 @@ var Chapterlist = React.createClass({
 	handleClick: function(e) {
 		var cid = e.target.getAttribute('data-cid') || e.target.parentNode.getAttribute('data-cid');		
 		// var feeType = e.target.getAttribute('data-fee') || e.target.parentNode.getAttribute('data-fee');		
-
-		var targetUrl = this.props.hrefBase + '/reading/crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
-		if (this.props.fromReading) {
+		var targetUrl = this.props.hrefBase + '/crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
+		//if (this.props.fromReading) {
 			browserHistory.push(targetUrl);
-		} else {
-			window.location.href = targetUrl;
-		}
+		// } else {
+		// 	window.location.href = targetUrl;
+		// }
 	},
 	componentDidMount: function () {
 		var surfix = this.props.fromReading ? '-fromReading' : '';
@@ -55,11 +54,12 @@ var Chapterlist = React.createClass({
 				{
 					this.props.chapterlist.map(function(chapter, i) {
 						var lock;
+						var currentChapterId = this.props.currentChapterId || this.state.currentChapterId;
 						if (chapter.feeType != '0') {
 							lock = <i className="f-fr iconfont u-icon icon-lock"></i>;
 						}
 						return (
-							<li key={i} className={"chapter f-clearfix" + (chapter.cid == this.state.currentChapterId ? ' current' : '')} onClick={this.handleClick} data-cid={chapter.cid} data-fee={chapter.feeType}>
+							<li key={i} className={"chapter f-clearfix" + (chapter.cid == currentChapterId ? ' current' : '')} onClick={this.handleClick} data-cid={chapter.cid} data-fee={chapter.feeType}>
 								{lock}
 								<span className="name f-ellipsis">{chapter.chapterName}</span>
 							</li>

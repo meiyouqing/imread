@@ -92,7 +92,8 @@ var chapterMixins = {
 		this.setState({
 			getChapterlistLoading: true
 		});
-		AJAX.init('chapterlist.'+ this.APIParts()[3]+ '.' +this.state.page_size);
+
+		AJAX.init('chapterlist.'+ this.APIParts()[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
@@ -101,7 +102,7 @@ var chapterMixins = {
 				getChapterlistLoading: false
 			});
 			for (var i = 0; i < data.chapterList.length; i++) {
-				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
+				if (data.chapterList[i].cid == this.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
 					var intercut = data.chapterList[i].intercut;				
 					GLOBAL.loadImage(intercut.intercut_url, function() {
@@ -133,9 +134,10 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		browserHistory.push(window.location.pathname.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+		browserHistory.replace(window.location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
+		this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -161,9 +163,9 @@ var Reading = React.createClass({
 			pages: 1,
 			page_size: 20,
 			vt: 9,
-			bid: this.APIParts()[1],
-			chapterid: this.APIParts()[2],
-			source_id: this.APIParts()[4],
+			// bid: this.APIParts()[1],
+			// chapterid: this.APIParts()[2],
+			// source_id: this.APIParts()[4],
 			showSetting: false,
 			showChapterlist: false,
 			showSettingFont: false,
@@ -192,11 +194,11 @@ var Reading = React.createClass({
 		readLog.author = bookIntroduce.author;
 		readLog.big_coverlogo = bookIntroduce.big_coverlogo;
 		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
-		readLog.source_bid = this.state.bid;
-		readLog.source_id = this.state.source_id;
-		readLog.chapter_id = this.state.chapterid;
+		readLog.source_bid = this.bid;
+		readLog.source_id = this.source_id;
+		readLog.chapter_id = this.chapterid;
 		readLog.offset = {};
-		readLog.offset[this.state.chapterid] = scrollarea.scrollTop;
+		readLog.offset[this.chapterid] = scrollarea.scrollTop;
 		readLogs[readLog.content_id] = readLog;
 		storage.set('readLogNew', readLogs);
 	},
@@ -224,16 +226,16 @@ var Reading = React.createClass({
 	},
 	componentWillUnmount: function() {
 		uploadLog.sending('intercut');
-		this.addRecentRead(this.props.localid, this.state.chapterid);
+		this.addRecentRead(this.book_id, this.chapterid);
 		document.removeEventListener && document.removeEventListener('visibilitychange',this.onVisibilitychange);
 	},
 	goOut:function(e){
 		var addShelf = function() {
 			var param = [{
-				bookId: this.APIParts()[3],
+				bookId: this.book_id,
 				type: 3,
 				time: new Date().getTime(),
-				chapter_id: this.state.chapterid,
+				chapter_id: this.chapterid,
 				chapter_offset: 0
 			}];
 			this.shelfAdding(param,function(){
@@ -241,7 +243,7 @@ var Reading = React.createClass({
 				GLOBAL.goBack();
 			});
 		}.bind(this);
-		this.isOnShelf = GLOBAL.onShelf[this.APIParts()[3]]? 1:this.isOnShelf;
+		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
 		}else{
@@ -250,7 +252,6 @@ var Reading = React.createClass({
 		}
 	},
 	getFormatContent: function(content) {
-		//console.log(content)
 		var passages = content
 							.replace(/&amp;/g, '&')
 							.replace(/(&\#160;){2,4}|\s{2,4}/g, '<br/>')
@@ -331,10 +332,10 @@ var Reading = React.createClass({
 		var that = this;
 		//设置auto pay cookie
 		if(autoPay){
-			GLOBAL.cookie(that.state.bid,'autoPay',7)
+			GLOBAL.cookie(that.bid,'autoPay',7)
 		}
 		if(data.pageType==='order'){
-			if(GLOBAL.cookie(that.state.bid)==='autoPay'){
+			if(GLOBAL.cookie(that.bid)==='autoPay'){
 				that.autoPay(data);
 				return;
 			}
@@ -348,6 +349,7 @@ var Reading = React.createClass({
 		//that.getChapterlist();
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
+
 		that.setState({
 			data: data,
 			loading: false,
@@ -358,10 +360,18 @@ var Reading = React.createClass({
 		that.getNextContent(data);
 	},
 	getContent: function() {
+
+		var book_info = this.APIParts();
+		this.bid = book_info[1];
+		this.chapterid = book_info[2];
+		this.source_id = book_info[4];
+		this.book_id = book_info[3];
+
+
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
 		//console.log(nextChapter.nextChapterId,this.state.chapterid)
-		if((nextChapter.nextChapterId-1)==this.state.chapterid){
+		if((nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
 		}
@@ -369,10 +379,11 @@ var Reading = React.createClass({
 			loading: true
 		});
 		var that = this;
+
 		bookContent.get({
-			bid: that.state.bid,
-			cid: that.state.chapterid,
-			source_id : this.APIParts()[4],
+			bid: this.bid,
+			cid: this.chapterid,
+			source_id : this.source_id,
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -391,9 +402,9 @@ var Reading = React.createClass({
 		var that = this;
 		bookContent.get({
 			noCross:true,
-			bid: that.state.bid,
+			bid: that.bid,
 			cid: data.nextChapterId,
-			source_id : this.APIParts()[4],
+			source_id : this.source_id,
 			callback: function(data){
 				storage.set('nextChapter',data);
 			}.bind(this),
@@ -491,7 +502,7 @@ var Reading = React.createClass({
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){
-			this.addRecentRead(this.props.localid, this.state.chapterid);
+			this.addRecentRead(this.book_id, this.chapterid);
 		}else{
 			this.time = Date.now();
 		}
@@ -499,7 +510,7 @@ var Reading = React.createClass({
 	componentDidMount:function(){
 		this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
-		window.onbeforeunload = this.addRecentRead.bind(this,this.props.localid, this.state.chapterid);
+		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
 		if (GLOBAL.cookie('showGuide') != '1') {
 			this.setState({
 				showGuide: true
@@ -523,7 +534,7 @@ var Reading = React.createClass({
 				break;
 		}
 	},
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextProps, nextState) {
 		// var that = this;
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
@@ -531,7 +542,7 @@ var Reading = React.createClass({
 		if(this.bookmarkFlag){
 			//console.log(storage.get('readLogNew'))
 			var obj = storage.get('readLogNew')[this.APIParts()[3]];
-			var offset = obj? obj.offset[this.state.chapterid] : false;
+			var offset = obj? obj.offset[this.chapterid] : false;
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
 		this.bookmarkFlag = false;
@@ -541,6 +552,8 @@ var Reading = React.createClass({
 			hammerTime.on('tap', this.handleClick);
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
+		if(this.props.params !== nextProps.params)
+			this.getContent();
 	},
 	toggleChapterlist: function() {
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
@@ -579,7 +592,8 @@ var Reading = React.createClass({
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
 				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
-				|| this.props.children !== nextProps.children;
+				|| this.props.children !== nextProps.children
+				|| this.props.params !== nextProps.params;
 	},
 	
 	hideGuide:function(e) {
@@ -694,7 +708,7 @@ var Reading = React.createClass({
 							{this.state.data.name}
 						</div>
 						<div className="u-scroll-y">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.chapterlist} source_bid={this.state.bid} bid={this.props.localid} currentChapterId={this.state.chapterid} fromReading={true} source_id={this.state.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.chapterlist} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 						<div className="u-chapter-action f-flexbox">
 							<div className="u-chapter-page f-flex1" onClick={this.prevPage}>上一页</div>
