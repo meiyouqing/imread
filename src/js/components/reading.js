@@ -422,7 +422,7 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			browserHistory(GLOBAL.setHref('order'));
+			browserHistory.push(GLOBAL.setHref('order'));
 			// require.ensure([], function(require) {
 			// 	var Order = require('./order');
 			// 	that.props.popup(<Order 

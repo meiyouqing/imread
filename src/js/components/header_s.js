@@ -30,11 +30,10 @@ var Header_s = React.createClass({
 				var tester = /searchList\/search.([^\"]*)/,
 					link = '';
 				if(tester.test(location.pathname))
-					link = location.pathname.replace(tester,'')+'searchList/search.'+key;
+					browserHistory.replace(location.pathname.replace(tester,'')+'searchList/search.'+key);
 				else
-					link = GLOBAL.setHref('searchList/search.'+key);
+					browserHistory.push(GLOBAL.setHref('searchList/search.'+key));
 
-				browserHistory.push(link);
 			}			
 			this.setState({
 				initialKey: key
