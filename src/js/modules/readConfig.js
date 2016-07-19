@@ -1,6 +1,6 @@
 
 var parseQuery = require('../modules/parseQuery');
-
+var AJAX = require('../modules/AJAX');
 
 var ReadConfig = (function() {
 	var _config = storage.get('readConfig');

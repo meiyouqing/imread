@@ -214,7 +214,7 @@ function setRequestHeaders(request) {
 	} 
 }
 
-export default AJAX = {
+var AJAX = {
 	API: API,
 	init: function(now){
 		if(GLOBAL.isArray(now)){
@@ -245,3 +245,4 @@ export default AJAX = {
 	},
 	getJSON: GETJSON
 }
+module.exports = AJAX;
