@@ -4,6 +4,7 @@ var Mixins = require('../modules/mixins');
 
 if(typeof window !== 'undefined'){
 	require('../../css/user.css');
+	var POP = require('../modules/confirm')
 }
 
 var ULine = React.createClass({

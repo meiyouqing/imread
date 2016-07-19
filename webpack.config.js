@@ -20,9 +20,10 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader'},
-			{test: /\.css$/, loader: "style!css" },
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
+			// {test: /\.js[x]?$/,  exclude: /node_modules/,loader: 'babel-loader'},
+			{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
+			{test: /\.css$/,  exclude: /node_modules/,loader: "style!css" },
+			{test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
 		]
 	},
 	plugins: [
@@ -33,7 +34,7 @@ module.exports = {
 		    hash: !debug
 		  }),
 		new webpack.ProvidePlugin({
-			//React: 'react',
+			React: 'react',
 			GLOBAL: '../modules/global',
 			AJAX: '../modules/AJAX',
 			Link: '../modules/link',
@@ -44,7 +45,6 @@ module.exports = {
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
-			POP: '../modules/confirm',
 			parseQuery: '../modules/parseQuery'
 		})
 	] 

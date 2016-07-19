@@ -1,6 +1,6 @@
 var fs = require('fs')
 var path = require('path')
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+var webpack = require('webpack')
 module.exports = {
 
   entry: path.resolve(__dirname, 'server.js'),
@@ -30,22 +30,20 @@ module.exports = {
     ]
   },
 
-	plugins: [
-		new webpack.ProvidePlugin({
-			//React: 'react',
-			GLOBAL: '../modules/global',
-			AJAX: '../modules/AJAX',
-			Link: '../modules/link',
-			browserHistory: '../modules/history',
-			storage: '../modules/storage',
-			Loading: './loading',
-			NoData: './noData',
-			Token: '../modules/token',
-			Mixins: '../modules/mixins',
-			myEvent: '../modules/myEvent',
-			POP: '../modules/confirm',
-			parseQuery: '../modules/parseQuery'
-		})
-	] 
-
+  plugins: [
+    new webpack.ProvidePlugin({
+      React: 'react',
+      GLOBAL: '../modules/global',
+      AJAX: '../modules/AJAX',
+      Link: '../modules/link',
+      browserHistory: '../modules/history',
+      storage: '../modules/storage',
+      Loading: './loading',
+      NoData: './noData',
+      Token: '../modules/token',
+      Mixins: '../modules/mixins',
+      myEvent: '../modules/myEvent',
+      parseQuery: '../modules/parseQuery'
+    })
+  ] 
 }

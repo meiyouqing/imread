@@ -1,3 +1,6 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1,
@@ -34,9 +37,6 @@ var GLOBAL = {
 		var target = '_self';
 		if(/2|3|4/.test(data.intercut_type)){
 			target = '_blank';
-			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
-				target = 'download';
-			}
 		}
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
@@ -123,7 +123,11 @@ var GLOBAL = {
 		})
 	},
 	isAndroid: function(){
-		return /linux|android/i.test(navigator.userAgent);
+		if(typeof window !== 'undefined'){
+			return /linux|android/i.test(navigator.userAgent);
+		}else{
+			return true;
+		}
 	},
 	isArray:function(obj) {
 		return Object.prototype.toString.call(obj) === '[object Array]';

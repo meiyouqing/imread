@@ -1,3 +1,9 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+	var Hammer = require('../modules/hammer');
+	var isHidden = require('../modules/isHidden');
+	require('../../css/reading.css');
+}
 var Header = require('./header');
 
 var Chapterlist = require('./chapterlist');
@@ -5,11 +11,6 @@ var readingStyle = require('../modules/readingStyle');
 var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
-var Hammer = require('../modules/hammer');
-var isHidden = require('../modules/isHidden');
-if(typeof window !== 'undefined'){
-	require('../../css/reading.css');
-}
 
 var styleMixins = {
 	cloneStyle: function(style) {

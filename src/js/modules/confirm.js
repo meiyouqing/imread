@@ -1,5 +1,7 @@
+// if(typeof window === 'undefined'){
+// 	return false;
+// }
 require('../../css/confirm.css');
-
 var confirm = function() {
 	var that = this;
 

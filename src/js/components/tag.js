@@ -1,5 +1,6 @@
 var Header = require('./header');
 if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
 	require('../../css/tag.css');
 }
 

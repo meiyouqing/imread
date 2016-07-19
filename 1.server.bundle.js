@@ -1,15 +1,15 @@
 exports.ids = [1];
 exports.modules = {
 
-/***/ 30:
+/***/ 40:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(React, GLOBAL) {'use strict';
 
 	var _reactRouter = __webpack_require__(3);
 
-	var Swipe = __webpack_require__(31).swipe;
-	var uploadLog = __webpack_require__(32);
+	var Swipe = __webpack_require__(41).swipe;
+	var uploadLog = __webpack_require__(42);
 
 	var Block5 = React.createClass({
 		displayName: 'Block5',
@@ -169,10 +169,11 @@ exports.modules = {
 	});
 
 	module.exports = Block5;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
 
 /***/ },
 
-/***/ 31:
+/***/ 41:
 /***/ function(module, exports) {
 
 	'use strict';

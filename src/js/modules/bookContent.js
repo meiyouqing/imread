@@ -1,5 +1,6 @@
-var ReadConfig = require('../modules/readConfig');
-
+if(typeof window !== 'undefined'){
+	var ReadConfig = require('../modules/readConfig');	
+}
 
 var BookContent = (function() {
 	//移动咪咕阅读

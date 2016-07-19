@@ -1,3 +1,6 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 var mixins = function() {
 	return {
 		APIParts: function () {

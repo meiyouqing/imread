@@ -3,6 +3,7 @@ var PayTips = require('./payTips');
 var Recharge_result = require('./recharge_result');
 if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
+	var POP = require('../modules/confirm')
 }
 
 var Recharge = React.createClass({
