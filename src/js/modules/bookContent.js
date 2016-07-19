@@ -22,14 +22,13 @@ var BookContent = (function() {
 		}, options.callback, function() {
 			// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
 				if(options.noCross){return} //不要跳转
-				GLOBAL.goBack();
+				//GLOBAL.goBack();
 				//去掉referrer
 				var meta = document.createElement('meta');
 				meta.name = "referrer";
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
-
-				browserHistory.push(sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 			// } else {
 			// 	GLOBAL.goBack();
 			// }

@@ -149,7 +149,8 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 			try {
 				res = JSON.parse(request.responseText);
 			} catch (e) {
-				res = '连接超时！';
+				//res = '连接超时！';
+				onError(res);
 			}
 			// if (res.code !== 200) {
 			// 	onError(res);
