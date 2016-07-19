@@ -360,13 +360,11 @@ var Reading = React.createClass({
 		that.getNextContent(data);
 	},
 	getContent: function() {
-
 		var book_info = this.APIParts();
 		this.bid = book_info[1];
 		this.chapterid = book_info[2];
 		this.source_id = book_info[4];
 		this.book_id = book_info[3];
-
 
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');

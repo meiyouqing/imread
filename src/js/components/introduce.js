@@ -66,7 +66,7 @@ var Introduce = React.createClass({
 	getInitialState: function() {
 		return {
 			isOnshelf: false,
-			bid: this.APIParts()[1],
+			bid: this.APIParts(this.props.params.introduceId)[1],
 			chapterlist: null,
 			page: 1,
 			page_size: 20,
@@ -98,7 +98,7 @@ var Introduce = React.createClass({
 	},
 	getBook: function(param){
 
-		var hash = param?param:this.props.params.param;
+		var hash = param?param:this.props.params.introduceId;
 		AJAX.init(hash);
 		AJAX.get(function(data){
 			if(data.status_code==='500'){
@@ -107,7 +107,7 @@ var Introduce = React.createClass({
 				});
 				return;
 			}
-			data.content_id = data.bid = this.APIParts()[1];
+			data.content_id = data.bid = this.APIParts(this.props.params.introduceId)[1];
 			data.name = data.book_name;
 			data.orderList = data.orderList.concat(data.readList);
 			GLOBAL.setBookName([data]);
@@ -167,14 +167,14 @@ var Introduce = React.createClass({
 		myEvent.setCallback('updateShelfBtn',this.onShelf)
 	},
 	componentWillReceiveProps: function(nextProps, nextState) {
-		if(this.props.params.param !== nextProps.params.param){
-			this.getBook(nextProps.params.param);
+		if(this.props.params.introduceId !== nextProps.params.introduceId){
+			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
 		}
 			
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-
+		//console.log(this.APIParts(this.props.params.param),this.APIParts(nextProps.params.param))
 		return this.state.book !== nextState.book 
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.isOnshelf !== nextState.isOnshelf
@@ -182,7 +182,7 @@ var Introduce = React.createClass({
 				|| this.state.noData !== nextState.noData
 				|| this.state.UFO !== nextState.UFO
 				|| this.props.children !== nextProps.children
-				|| this.props.params.param !== nextProps.params.param;
+				|| this.props.params.introduceId !== nextProps.params.introduceId;
 	},
 	render: function() {
 

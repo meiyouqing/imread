@@ -1,7 +1,7 @@
 var mixins = function() {
 	return {
-		APIParts: function () {
-			var params = this.props.params.param;
+		APIParts: function (param) {
+			var params = param?param:this.props.params.param;
 			var parts = typeof params === 'string'? params : params[params.length-1];
 			return parts.split('.');
 		},

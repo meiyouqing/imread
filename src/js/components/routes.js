@@ -54,7 +54,7 @@ var readWrap = (
 		</Route>
 	)
 var bookWrap = (
-	<Route path="book/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Introduce}>
+	<Route path="book/:introduceId" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Introduce}>
 		{readWrap}
 		{loginWrap}
 	</Route>

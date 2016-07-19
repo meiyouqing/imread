@@ -23,7 +23,7 @@ var Mall = React.createClass({
 		this.getNav();
 	},
 	componentDidUpdate: function(nextProp,nextState){
-
+		
 		if(!this.props.params.subnav)
 			this.getNav();
 	},
