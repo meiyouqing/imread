@@ -21,7 +21,7 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader'},
+			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
 			{test: /\.css$/, loader: "style!css" },
 			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
 		]
@@ -34,7 +34,7 @@ module.exports = {
 		    hash: !debug
 		  }),
 		new webpack.ProvidePlugin({
-			//React: 'react',
+			React: 'react',
 			GLOBAL: '../modules/global',
 			AJAX: '../modules/AJAX',
 			Link: '../modules/link',

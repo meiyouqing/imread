@@ -22,20 +22,22 @@ import Reading from './reading'
 import Order from './order'
 import Compact from './compact'
 
-var APImemory;
+var APImemory = {};
 const scrollResetHandle = function(){
 	const n = AJAX.API._param['pages']? 'pages':'page';
 	AJAX.API._param[n] = 1;		
 }
 const wrapEnterHandle = function(){
-	APImemory = AJAX.API.now;
+	APImemory[this.path] = AJAX.API.now;
+	console.log(APImemory[this.path])
 }
 const wrapLeaveHandle = function(){
-	AJAX.init(APImemory);
+	console.log(APImemory[this.path])
+	AJAX.init(APImemory[this.path]);
 }
 const dubleHandle = function(){
 	scrollResetHandle()
-	wrapLeaveHandle();
+	wrapLeaveHandle.call(this);
 }
 
 var loginWrap = (
@@ -60,8 +62,8 @@ var bookWrap = (
 	</Route>
 	)
 var searchWrap = (
-	<Route path="search/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Search}>
-		<Route path="searchList/:param" onEnter={dubleHandle} component={List}>
+	<Route path="search/:param" onEnter={wrapEnterHandle} onLeave={dubleHandle} component={Search}>
+		<Route path="searchList/:param" onLeave={dubleHandle} component={List}>
 			{bookWrap}
 		</Route>
 		{bookWrap}

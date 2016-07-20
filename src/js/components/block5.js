@@ -136,10 +136,7 @@ var Block5 = React.createClass({
 			                		var urlflag = false;
 			                		if(v.redirect_url && v.redirect_url.indexOf('lottery')>=0)
 			                			urlflag = true;
-
-			                		var spm = this.props.spm.slice(0);
-                					spm.splice(-1,1,i+1);
-									var hrefObj = Router.typeHref(v,spm);
+									var hrefObj = GLOBAL.typeHref(v);
 			                		return (
 			                			<Link style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} to={urlflag?v.redirect_url:hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 

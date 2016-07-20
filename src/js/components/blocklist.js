@@ -1,4 +1,3 @@
-import { Link, browserHistory } from 'react-router';
 var Book1 = require('./book1');
 var Book2 = require('./book2');
 var Book3 = require('./book3');

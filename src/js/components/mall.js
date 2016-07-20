@@ -1,4 +1,3 @@
-import {browserHistory} from 'react-router';
 var Header = require('./header');
 var MallNav = require('./mallNav');
 
