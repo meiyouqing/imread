@@ -216,7 +216,7 @@ function setRequestHeaders(request) {
 	} 
 }
 
-export default AJAX = {
+var AJAX = {
 	API: API,
 	init: function(now){
 		if(!now) return;
@@ -224,6 +224,7 @@ export default AJAX = {
 			now = now[now.length-1];
 		}
 		var parts = now.split('.');
+		this.API.now = parts[0];
 		var ao = API[parts[0]];
 		if(!ao){return}
 		var i = 1;
@@ -232,8 +233,8 @@ export default AJAX = {
 				ao.param[n] = parts[i];
 			}		
 			i++;
+			this.API.now += '.'+ao.param[n];
 		}
-		this.API.now = now;
 		this.API._m = ao.method;
 		this.API._base = ao.base;
 		this.API._param = ao.param;
@@ -247,3 +248,4 @@ export default AJAX = {
 	},
 	getJSON: GETJSON
 }
+module.exports = AJAX;

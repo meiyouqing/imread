@@ -1,4 +1,3 @@
-import { browserHistory } from 'react-router';
 import NavLink from './navLink'
 
 var Nav = React.createClass({

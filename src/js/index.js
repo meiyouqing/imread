@@ -1,9 +1,10 @@
 //"use strict"
-
-import { Router, Route, browserHistory, hashHistory} from 'react-router';
+import browserHistory from './modules/history'
+import { Router, Route} from 'react-router'
+import ReactDOM from 'react-dom'
 import routes from './components/routes'
-import GLOBAL from './modules/global';
-import Token from './modules/token';
+import GLOBAL from './modules/global'
+import Token from './modules/token'
 
 if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
 	var appid = window.location.search.match(/appid=(\w+)&?/)[1];

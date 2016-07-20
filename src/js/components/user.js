@@ -1,4 +1,3 @@
-import { Link, browserHistory } from 'react-router';
 var myEvent = require('../modules/myEvent');
 var Mixins = require('../modules/mixins');
 
