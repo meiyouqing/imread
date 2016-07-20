@@ -28,12 +28,15 @@ var Balance = React.createClass({
 		this.getBalance();
 	},
 	handleClick: function(e) {
+		console.log((e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index')))
 		this.setState({
 			active: (e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index'))
 		});
 	},
 	orderHandle:function(){
+
 		var ordered = this.state.list[this.state.active];
+		console.log(ordered)
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
@@ -73,7 +76,7 @@ var Balance = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header right={false} />
+				<Header right={false} title={'艾豆充值'}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

@@ -311,7 +311,9 @@ html, body, #app-container{background: #FFFFFF;}
 /* /bookrack */
 
 .shelfWrap{padding: 10px; width:100%;}
-
+progress::-moz-progress-bar { background: #0064B4; }
+progress::-webkit-progress-bar { background: #e6e6e6; }
+progress::-webkit-progress-value  { background: #0064B4; }
 /* 极细线条 */
 /*.border-1px{position: relative; }
 .border-1px:before{border-bottom: 1px solid #E0E0E0; content: ' '; display: block; width: 100%; position: absolute; left: 0; }

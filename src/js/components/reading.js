@@ -246,6 +246,7 @@ var Reading = React.createClass({
 				GLOBAL.goBack();
 			});
 		}.bind(this);
+
 		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
@@ -285,7 +286,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		AJAX.getJSON('GET','/api/book/introduce',{bid:this.APIParts()[3]},function(data){
+		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts()[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){

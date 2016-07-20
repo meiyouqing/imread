@@ -26,14 +26,14 @@ var List = React.createClass({
 				//设置GLOBAL book name
 				GLOBAL.setBookName(data.contentlist);
 			}else{
-				if (!data || !data.length) {
+				if (!data || !data.content.length) {
 					this.setState({
 						noMore:true
 					})
 				}
 
 				this.setState({
-					bookList:this.state.scrollUpdate? this.state.bookList.concat(data):data,
+					bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
 					scrollUpdate: false
 				});				
 				//设置GLOBAL book name

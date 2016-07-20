@@ -4,39 +4,40 @@ var Config = {
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
 var API={
-	group:{method:'GET', base:'/api/group/page', param:{group_id:1}},
-	page:{method:'GET', base:'/api/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
-	nav:{method:'GET', base:'/api/page/block', param:{page_id:1, blocks:6, pages:1}},
-	block:{method:'GET', base:'/api/block/content', param:{block_id:1,contents:15,pages:1}},
-	category:{method:'GET', base:'/api/category/content', param:{category_id:1, contents:15, pages:1}},
-	bookSheet:{method:'GET', base:'/api/bookSheet/list', param:{sheet_id:1, contents:15, pages:1}},
-	collectionAdd:{method:'POST', base:'/api/bookSheet/collection/add', param:{sheet_id:1}},
-	collectionDelete:{method:'POST', base:'/api/bookSheet/collection/delete', param:{sheet_id:1}},
-	introduce:{method:'GET', base:'/api/book/introduce', param:{bid:1 }},
-	chapterlist:{method:'GET', base:'/api/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
-	search:{method:'GET', base:'/api/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
-	login:{method:'POST', base:'/api/auth/login/custom', param:{phone:'',password:''}},
-	register:{method:'POST', base:'/api/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
-	key:{method:'GET', base:'/api/auth/key', param:{phone:'',type:''}},
-	password:{method:'POST', base:'/api/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
-	me:{method:'GET', base:'/api/me', param:{}},
-	upToken:{method:'GET', base:'/api/upToken', param:{oldToken:''}},
-	advice:{method:'POST', base:'/api/person/advice', param:{message:'',contact:'', type: 'unEncode'}},
-	addBook:{method:'POST', base:'/api/shelf/add', param:{param:''}},
-	deleteBook:{method:'POST', base:'/api/shelf/delete', param:{param:''}},
-	log:{method:'POST', base:'/api/upload/log', param:{readLog: {}}},
-	balance:{method:'GET', base:'/api/auth/balance', param:{}},
-	pay:{method:'POST', base:'/api/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
+	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
+	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
+	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
+	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
+	category:{method:'GET', base:'/api/v1/category/content', param:{category_id:1, contents:15, pages:1}},
+	bookSheet:{method:'GET', base:'/api/v1/bookSheet/list', param:{sheet_id:1, contents:15, pages:1}},
+	collectionAdd:{method:'POST', base:'/api/v1/bookSheet/collection/add', param:{sheet_id:1}},
+	collectionDelete:{method:'POST', base:'/api/v1/bookSheet/collection/delete', param:{sheet_id:1}},
+	introduce:{method:'GET', base:'/api/v1/book/introduce', param:{bid:1 }},
+	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
+	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
+	login:{method:'POST', base:'/api/v1/auth/login/custom', param:{phone:'',password:''}},
+	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
+	key:{method:'GET', base:'/api/v1/auth/key', param:{phone:'',type:''}},
+	password:{method:'POST', base:'/api/v1/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
+	me:{method:'GET', base:'/api/v1/me', param:{}},
+	upToken:{method:'GET', base:'/api/v1/upToken', param:{oldToken:''}},
+	advice:{method:'POST', base:'/api/v1/person/advice', param:{message:'',contact:'', type: 'unEncode'}},
+	addBook:{method:'POST', base:'/api/v1/shelf/add', param:{param:''}},
+	deleteBook:{method:'POST', base:'/api/v1/shelf/delete', param:{param:''}},
+	log:{method:'POST', base:'/api/v1/upload/log', param:{readLog: {}}},
+	balance:{method:'GET', base:'/api/v1/auth/balance', param:{}},
+	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
 	payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
 	paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
 	payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
-	crossDomain:{method:'GET',base:'/api/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
-	recentRead:{method: 'GET', base: '/api/me/recentReading', param:{pages: 1, contents: 10}},
-	deleteRecentRead:{method: 'POST', base: '/api/me/recentReading/delete', param:{book_id: ''}},
-	listTag:{method: 'GET', base: '/api/me/label/list', param:{}},
-	addTag:{method: 'POST', base: '/api/me/label/add', param:{id: ''}},
-	deleteTag:{method: 'POST', base: '/api/me/label/delete', param:{id: ''}}
+	crossDomain:{method:'GET',base:'/api/v1/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
+	recentRead:{method: 'GET', base: '/api/v1/me/recentReading', param:{pages: 1, contents: 10}},
+	deleteRecentRead:{method: 'POST', base: '/api/v1/me/recentReading/delete', param:{book_id: ''}},
+	listTag:{method: 'GET', base: '/api/v1/me/label/list', param:{}},
+	addTag:{method: 'POST', base: '/api/v1/me/label/add', param:{id: ''}},
+	deleteTag:{method: 'POST', base: '/api/v1/me/label/delete', param:{id: ''}},
+	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}}
 };
 
 //接口缓存机制
@@ -204,7 +205,7 @@ function setRequestHeaders(request) {
 		'Info-Vcode': '101',
 		'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.getUuid(),
-		'Token': GLOBAL.cookie('userToken') || '',
+		'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2)
@@ -218,6 +219,7 @@ function setRequestHeaders(request) {
 export default AJAX = {
 	API: API,
 	init: function(now){
+		if(!now) return;
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
 		}

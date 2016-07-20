@@ -12,12 +12,12 @@ var Book4 = React.createClass({
 		return (
 			<li className="u-book-1 f-clearfix">
 				<Link to={hrefStr}>
-					<Img src={this.props.data.big_coverlogo || this.props.data.small_coverlogo} />
+					<Img src={this.props.data.big_coverlogo || this.props.data.small_coverlogo || this.props.data.image_url} />
 					<div className="info">
 						<span className="f-ellipsis title">{this.props.data.name}</span>
 						<span className="author">{this.props.data.author}</span>
 						<span className="bookStar"><Stars score={this.props.data.score} /></span>
-						<span className="summary f-ellipsis-3">{this.props.data.book_brief}</span>
+						<span className="summary f-ellipsis-3">{this.props.data.brief}</span>
 					</div>
 				</Link>
 			</li>

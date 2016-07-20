@@ -274,7 +274,7 @@ var Block14 = React.createClass({
 				});
 			}
 			that.setState({
-				contentList:that.state.contentList.concat(data)
+				contentList:that.state.contentList.concat(data.content)
 			});
 		})
 	},

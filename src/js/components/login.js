@@ -1,4 +1,3 @@
-
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 

@@ -31,13 +31,13 @@ var Book9 = React.createClass({
 			<li className="u-book-9" data-bid={this.props.book.content_id} data-href={GLOBAL.setHref(href)}>
 				<a className="f-clearfix">
 					<div className="f-fl">
-						<Img src={this.props.book.big_coverlogo} />
+						<Img src={this.props.book.big_coverlogo || this.props.book.image_url} />
 					</div>
 					<div className="info">
 						<div className="f-ellipsis-2 name">{this.props.book.name}</div>
 						<div className="author">{this.props.book.author}</div>
 						<div className="f-ellipsis-2 chapter-name">{this.props.book.chapter_name}</div>
-						<div className="date">{this.prettyDate(this.props.book.recent_time)}</div>
+						<div className="date">{this.prettyDate(this.props.book.mark_time)}</div>
 					</div>
 				</a>
 			</li>

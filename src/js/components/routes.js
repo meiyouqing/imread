@@ -21,6 +21,7 @@ import About from './about'
 import Reading from './reading'
 import Order from './order'
 import Compact from './compact'
+import Purchased from './purchased'
 
 var APImemory;
 const scrollResetHandle = function(){
@@ -111,6 +112,7 @@ module.exports = (
 				{readWrap}
 			</Route>
 			<Route path="myTags" component={Tag}/>
+			<Route path="purchased" component={Purchased}/>
 			<Route path="readHistory" component={ReadHistory}/>
 			<Route path="feedback" component={Feedback}/>
 			<Route path="about" component={About}>

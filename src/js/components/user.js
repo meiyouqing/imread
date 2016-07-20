@@ -9,7 +9,7 @@ var ULine = React.createClass({
 		
 		return (
 			<li className="u-line">
-				<Link to={GLOBAL.setHref(this.props.line.href)} className="f-cb" onClick={this.props.line.requireLogin}>
+				<Link to={GLOBAL.setHref(this.props.line.href)} className="f-cb" data-href={GLOBAL.setHref(this.props.line.href)} onClick={this.props.line.requireLogin}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<span className={"iconfont" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
@@ -111,7 +111,7 @@ var User = React.createClass({
 		var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
 		var that = this;
 		if (!this.isLogin()) {
-			var href = target.href;
+			var href = target.getAttribute('data-href');
 			if (!href) {
 				var hash = window.location.pathname+'/login';
 				browserHistory.push(hash);
@@ -146,6 +146,11 @@ var User = React.createClass({
 				title: '艾豆充值',
 				icon: 'icon-balance',
 				href: 'balance',
+				requireLogin: this.requireLogin
+			},{
+				title: '已购书籍',
+				icon: 'icon-tag',
+				href: 'purchased',
 				requireLogin: this.requireLogin
 			}, {
 				title: '我的标签',
