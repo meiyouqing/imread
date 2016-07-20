@@ -137,7 +137,10 @@ var chapterMixins = {
 		browserHistory.replace(window.location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
-		this.refs.scrollarea.scrollTop = 0;
+
+
+		if(this.refs.scrollarea)
+			this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -705,7 +708,7 @@ var Reading = React.createClass({
 						<div className="u-bookname f-ellipsis">
 							{this.state.data.name}
 						</div>
-						<div className="u-scroll-y">
+						<div className="u-scroll-y"  onClick={this.toggleChapterlist}>
 							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.chapterlist} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 						<div className="u-chapter-action f-flexbox">
