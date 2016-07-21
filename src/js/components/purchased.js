@@ -1,12 +1,11 @@
 var Header = require('./header');
 var Mixins = require('../modules/mixins');
-var Book9 = require('./book9_recentRead');
+var Book1 = require('./book1');
 var Hammer = require('../modules/hammer');
 var NoData = require('./noData');
 
-require('../../css/recentRead.css');
 
-var recentRead = React.createClass({
+var Purchased = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function () {
 		return {
@@ -15,48 +14,9 @@ var recentRead = React.createClass({
 			noMore: false
 		}
 	},
-
 	componentDidMount: function() {
 		this.getList();
 		this.lazyloadImage(this.refs.container);
-		var that = this;
-		var hammertime = new Hammer(this.refs.container);
-		hammertime.on('press', function(e) {
-			var bid = e.target.getAttribute('data-bid');
-			if (!bid) {return ;}
-			POP._confirm('删除记录',confirm_c,null,e.target.getBoundingClientRect().top + e.target.offsetHeight / 2);
-		 	function confirm_c() {	
-				var ui_callback = function() {
-					for (var i = 0; i < that.state.list.length; i++) {
-						if (that.state.list[i].content_id == bid) {
-							that.state.list.splice(i, 1);
-							that.setState({
-								list: that.state.list
-							});
-							break;
-						}
-					}
-				}
-				if (that.isLogin()) {
-					AJAX.go('deleteRecentRead', {
-						book_id: bid
-					}, ui_callback);
-				} else {
-					var readLog = storage.get('readLogNew');
-					for (var content_id in readLog) {
-						if (content_id == bid) {
-							delete readLog[content_id];
-						}
-					}
-					storage.set('readLogNew', readLog);
-					ui_callback();
-				}
-			}
-		}).on('tap', function(e) {
-			var href = e.target.getAttribute('data-href');
-			if (!href) {return ;}
-			 browserHistory.push(href);
-		});
 	},
 	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
@@ -111,7 +71,7 @@ var recentRead = React.createClass({
 				<ul>
 				{
 					this.state.list.map(function(book, i) {
-						return <Book9 book={book} key={i} />
+						return <Book1 book={book} key={i} />
 					})
 				}
 				</ul>
@@ -122,7 +82,7 @@ var recentRead = React.createClass({
 		return (
 			<div className="gg-body">
 				<div className="recentRead-block">
-					<Header right={false} title={'最近阅读'}/>
+					<Header right={false} title={'已购书籍'}/>
 					<div className="g-main g-main-1">
 						<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 							{content}
@@ -135,4 +95,4 @@ var recentRead = React.createClass({
 	}
 });
 
-module.exports = recentRead;
+module.exports = Purchased;

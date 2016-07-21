@@ -42,12 +42,13 @@ var mixins = function() {
 			}.bind(this), 100);
 		},
 		scrollHandleCallback: function(){
+
 			this.setState({
 				scrollUpdate:true
 			})
-			console.log(AJAX.API._param)
+
 			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;			
+			AJAX.API._param[n]++;		
 			this.getList();
 		},
 		onerror:function(error){

@@ -4,7 +4,7 @@ var Img = require('./img');
 var Shelf = React.createClass({
 	mixins:[Mixins()],
 	startReading: function(e){
-		var a = e.target.parentNode;
+		var a = e.target.parentNode.parentNode;
 		var bid = parseInt(a.getAttribute('data-bid'));
 		var sbid = a.getAttribute('data-sbid');
 		var cid = a.getAttribute('data-cid');
@@ -104,7 +104,7 @@ var Shelf = React.createClass({
 	getList: function (){
 		AJAX.get((data)=>{
 			this.setState({
-				shelfList: data
+				shelfList: data.content
 			});
 			//设置GLOBAL.booklist/book
 			GLOBAL.setBlocklist(data);
@@ -113,12 +113,12 @@ var Shelf = React.createClass({
 	componentDidMount: function(){
 		if(!this.isLogin()){
 			this.goLogin(() => {
-				AJAX.init('block.157.100');
+				AJAX.init('block.156.100.1');
 				this.getList();
 			});
 			return;
 		}
-		AJAX.init('block.157.100');
+		AJAX.init('block.156.100.1');
 		this.getList();
 	},
 	componentDidUpdate: function() {
@@ -160,8 +160,8 @@ var Shelf = React.createClass({
 			}
 			content = (
 					<div className="g-main">
-						<div className="g-scroll g-scroll-noBG" ref="container">
-							<ul className="shelfWrap f-clearfix">
+						<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
+							<ul className="shelfWrap f-clearfix active">
 								{
 									this.state.shelfList.map(function(v,i){
 										if(this.state.setting){
@@ -171,8 +171,11 @@ var Shelf = React.createClass({
 										return(
 											<li key={i} className={"u-book-2 "+curClass}>
 												<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													<div style={{position:'relative'}}>
 													{icon}
-													<Img src={v.big_coverlogo} />
+													<Img src={v.image_url} />
+													<progress style={{position:'absolute',bottom:'2px',left:'0',width:'100%',height:'5px',backgroundColor: '#fff',color:'#0064B4'}} value={v.playorder/v.count} max="1"></progress>
+													</div>
 													<span className="f-ellipsis">{v.name}</span>
 												</a>
 											</li>

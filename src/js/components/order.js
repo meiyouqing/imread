@@ -24,11 +24,15 @@ var mod = React.createClass({
 		}
 	},
 	getBalance: function(){
-		AJAX.getJSON('GET','/api/auth/balance',{},function(data){
+		AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 			this.setState({
 				aidou: data.success.balance/100
 			});
 		}.bind(this))
+
+		// AJAX.getJSON('GET',this.props.params.orderUrl,{},function(data){
+		// 	console.log(data);
+		// }.bind(this))
 	},
 	getInitialState: function(){
 		return {
@@ -39,19 +43,20 @@ var mod = React.createClass({
 		return this.state.aidou !== nextState.aidou;
 	},
 	componentDidMount: function() {
+		console.log('order')
 		this.getBalance();
 	},
 	render: function() {
-		var chapter;
-		if(this.props.chargeMode==1){
-			chapter = '总共： '+this.props.chapterCount+'章';
-		}else if(this.props.chargeMode==2){
-			chapter = this.props.data.name;
-		}
+		// var chapter;
+		// if(this.props.chargeMode==1){
+		// 	chapter = '总共： '+this.props.chapterCount+'章';
+		// }else if(this.props.chargeMode==2){
+		// 	chapter = this.props.data.name;
+		// }
 		return (
 			<div>
 				<Header right={null} />
-				<div className="g-main g-main-1">
+				{/*<div className="g-main g-main-1">
 					<div className="g-scroll m-order">
 						<div className="block f-mt-20">
 							<h5 className="f-mb10 f-fw-b">《{this.props.bookName}》</h5>
@@ -65,7 +70,7 @@ var mod = React.createClass({
 						</div>
 						<div className="f-p-15 mt-100"><input type="button" className="u-btn u-btn-full" onClick={this.payHandle} value="确认支付" /></div>
 					</div>
-				</div>
+				</div>*/}
 			</div>
 		);
 	}

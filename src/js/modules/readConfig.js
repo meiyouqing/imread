@@ -12,7 +12,7 @@ var ReadConfig = (function() {
 	}
 	//首次加载时更新
 	if (update) {
-		AJAX.getJSON('GET', '/api/read/config', {}, function(data) {
+		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
 			var queryParams = parseQuery(window.location.search);
 			for (var i = 0 ; i < data.length; i++) {
 				_config['config-' + data[i]['source_id']] = data[i];

@@ -21,6 +21,7 @@ import About from './about'
 import Reading from './reading'
 import Order from './order'
 import Compact from './compact'
+import Purchased from './purchased'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -48,7 +49,7 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Reading}>
-			<Route path="order" component={Order}>
+			<Route path="order/:orderUrl" component={Order}>
 				<Route path="balance" component={Balance} >
 					<Route path="recharge/:param" component={Recharge} />
 				</Route>
@@ -62,7 +63,7 @@ var bookWrap = (
 	</Route>
 	)
 var searchWrap = (
-	<Route path="search/:param" onEnter={wrapEnterHandle} onLeave={dubleHandle} component={Search}>
+	<Route path="search/:searchId" onEnter={wrapEnterHandle} onLeave={dubleHandle} component={Search}>
 		<Route path="searchList/:param" onLeave={dubleHandle} component={List}>
 			{bookWrap}
 		</Route>
@@ -113,6 +114,7 @@ module.exports = (
 				{readWrap}
 			</Route>
 			<Route path="myTags" component={Tag}/>
+			<Route path="purchased" component={Purchased}/>
 			<Route path="readHistory" component={ReadHistory}/>
 			<Route path="feedback" component={Feedback}/>
 			<Route path="about" component={About}>

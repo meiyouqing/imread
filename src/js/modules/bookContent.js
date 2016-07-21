@@ -13,7 +13,6 @@ var BookContent = (function() {
 
 		var param = totalUrl.replace(/(.*\?)/, '')
 							.replace('$cm', sourceConfig.cm);
-
 		//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
 		AJAX.getJSON('GET', '/api/crossDomain', {
 			url : url,

@@ -246,6 +246,7 @@ var Reading = React.createClass({
 				GLOBAL.goBack();
 			});
 		}.bind(this);
+
 		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
 			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
@@ -285,7 +286,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		AJAX.getJSON('GET','/api/book/introduce',{bid:this.APIParts()[3]},function(data){
+		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts()[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
@@ -338,6 +339,7 @@ var Reading = React.createClass({
 			GLOBAL.cookie(that.bid,'autoPay',7)
 		}
 		if(data.pageType==='order'){
+
 			if(GLOBAL.cookie(that.bid)==='autoPay'){
 				that.autoPay(data);
 				return;
@@ -423,7 +425,7 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			browserHistory.push(GLOBAL.setHref('order'));
+			browserHistory.push(GLOBAL.setHref('order/'+encodeURIComponent(data.orderUrl)));
 			// require.ensure([], function(require) {
 			// 	var Order = require('./order');
 			// 	that.props.popup(<Order 
@@ -444,7 +446,7 @@ var Reading = React.createClass({
 			that.goLogin(pay);
 		}
 		function pay(){	
-			AJAX.getJSON('GET','/api/auth/balance',{},function(data){
+			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
@@ -629,6 +631,7 @@ var Reading = React.createClass({
 						<p className="u-loading">本节为付费章节</p>
 						<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
 					</div>
+					{this.props.children}
 				</div>
 				);
 		}
