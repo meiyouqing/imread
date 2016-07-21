@@ -78,7 +78,7 @@ var mixins = function() {
 			return !!GLOBAL.cookie('userToken');
 		},
 		goLogin: function(callback){
-			var hash = window.location.pathname+'/login';
+			var hash = location.pathname+'/login';
 			browserHistory.push(hash);
 			POP._alert('请先登录');
 			myEvent.setCallback('login', callback);

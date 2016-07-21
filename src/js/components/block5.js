@@ -133,12 +133,9 @@ var Block5 = React.createClass({
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
 
-			                		var urlflag = false;
-			                		if(v.redirect_url && v.redirect_url.indexOf('lottery')>=0)
-			                			urlflag = true;
 									var hrefObj = GLOBAL.typeHref(v);
 			                		return (
-			                			<Link style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} to={urlflag?v.redirect_url:hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                			<Link style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 
 			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
 			                			</Link>

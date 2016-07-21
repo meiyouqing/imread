@@ -21,15 +21,16 @@ var Login = React.createClass({
 		AJAX.go('login',postData, function(data) {
 			that.loading = false;
 			var options = {
-				expires: 1000
+				expires: 1000,
+				secure: 'HttpOnly'
 			};
-			GLOBAL.cookie('userPhone', postData.phone, options);
+			GLOBAL.cookie('userPhone', postData.phone, {expires:1000});
 			GLOBAL.cookie('userToken', data.token, options);
 			GLOBAL.cookie('userId', data.user_id, options);
-			GLOBAL.setUser({
-				phone: postData.phone,
-				token: postData.token
-			});
+			// GLOBAL.setUser({
+			// 	phone: postData.phone,
+			// 	token: postData.token
+			// });
 
 			//判断登陆后的跳转
 			var isneed = false;

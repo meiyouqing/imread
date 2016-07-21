@@ -55,6 +55,10 @@ var GLOBAL = {
 	    				return {url:data.redirect_url || "javascript:void(0)",target:target};
 	    			case 5://素材目录
 	    				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
+    				case 6: //自搭页面
+    					return {url:this.setHref('selfbuild/page.62'),target:target}
+    				default:
+    					return {url:"javascript:void(0)",target:target}
 	    		}
 			case 3://搜索
 				return this.setHref('search/search.'+data.name);
@@ -149,7 +153,6 @@ var GLOBAL = {
 		// write
         if (value !== undefined) {
                 options = options || {};
-                options.path = options.path? options.path:'/';
                 if (typeof options.expires === 'number') {
                         var days = options.expires, t = options.expires = new Date();
                         t.setDate(t.getDate() + days);
@@ -159,9 +162,9 @@ var GLOBAL = {
                         '=',
                         encodeURIComponent(value),
                         options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                        '; path='+options.path,
+                        options.path?'; path='+options.path:'/',
                         options.domain ? '; domain=' + options.domain : '',
-                        options.secure ? '; secure' : ''
+                        options.secure ? '; secure=' + options.secure :''
                 ].join(''));
         }
         // read
@@ -206,14 +209,14 @@ var GLOBAL = {
 	decoded: function(s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
 	},
-	user: {},
-	setUser: function(user) {
-		for (var i in user) {
-			if (user.hasOwnProperty(i)) {
-				GLOBAL.user[i] = user[i];
-			}
-		}
-	},
+	// user: {},
+	// setUser: function(user) {
+	// 	for (var i in user) {
+	// 		if (user.hasOwnProperty(i)) {
+	// 			GLOBAL.user[i] = user[i];
+	// 		}
+	// 	}
+	// },
 	isElementVisible: function(el) {
 		var rect = el.getBoundingClientRect();
 		return (  (rect.top > 0 && rect.top < window.innerHeight && 0x02)

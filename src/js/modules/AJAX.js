@@ -202,9 +202,9 @@ function setRequestHeaders(request) {
 		'Info-Os': '',
 		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
 		'Info-Vcode': '101',
-		'Info-Userid': GLOBAL.cookie('userId') || '',
+		//'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.getUuid(),
-		'Token': GLOBAL.cookie('userToken') || '',
+		// 'Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2)
@@ -218,6 +218,7 @@ function setRequestHeaders(request) {
 var AJAX = {
 	API: API,
 	init: function(now){
+		console.log(now)
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
 		}

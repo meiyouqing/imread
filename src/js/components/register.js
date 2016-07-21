@@ -31,14 +31,15 @@ var Register = React.createClass({
 		AJAX.getJSON('POST', this.props.forget && '/api/auth/reset/password' || '/api/auth/register', postData, function(data) {
 			that.loading = false;
 			var options = {
-				expires: 1000
+				expires: 1000,
+				secure: 'HttpOnly'
 			};
-			GLOBAL.cookie('userPhone', postData.mobile_num, options);
+			GLOBAL.cookie('userPhone', postData.mobile_num, {expires:1000});
 			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.setUser({
-				phone: postData.mobile_num,
-				token: postData.token
-			});
+			// GLOBAL.setUser({
+			// 	phone: postData.mobile_num,
+			// 	token: postData.token
+			// });
 
 			//判断登陆后的跳转
 			var isneed = false;
