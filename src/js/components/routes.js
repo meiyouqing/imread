@@ -29,10 +29,10 @@ const scrollResetHandle = function(){
 }
 const wrapEnterHandle = function(){
 	APImemory[this.path] = AJAX.API.now;
-	console.log(APImemory[this.path])
+	//console.log(APImemory[this.path])
 }
 const wrapLeaveHandle = function(){
-	console.log(APImemory[this.path])
+	//console.log(APImemory[this.path])
 	AJAX.init(APImemory[this.path]);
 }
 const dubleHandle = function(){
