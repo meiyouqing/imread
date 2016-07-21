@@ -88,24 +88,20 @@ var List = React.createClass({
 		this.lazyloadImage(this.refs.container);
 	},
 	componentWillReceiveProps: function(nextProps){
-		var p1 = this.props.params.param.length,
-		 	p2 = nextProps.params.param.length,
-			isSearch = /searchList/.test(this.props.route.path);
+		var isSearch = /searchList/.test(this.props.route.path);
 
-		if(this.props.params.param !== nextProps.params.param && p1==p2 && isSearch){
+		if(this.props.params.param.toString() !== nextProps.params.param.toString() && isSearch){
 			this.isLoading = true;
 			this.getList(nextProps.params.param);
 		}
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
-		//console.log(this.props.params.param[1],nextProps.params.param[1])
-		
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
 				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProps.children
-				|| this.props.params.param !== nextProps.params.param;
+				|| this.props.params.param.toString() !== nextProps.params.param.toString();
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;

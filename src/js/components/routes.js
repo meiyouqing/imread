@@ -30,10 +30,8 @@ const scrollResetHandle = function(){
 }
 const wrapEnterHandle = function(){
 	APImemory[this.path] = AJAX.API.now;
-	console.log(APImemory[this.path])
 }
 const wrapLeaveHandle = function(){
-	console.log(APImemory[this.path])
 	AJAX.init(APImemory[this.path]);
 }
 const dubleHandle = function(){
@@ -49,7 +47,7 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Reading}>
-			<Route path="order" component={Order}>
+			<Route path="order/:orderUrl" component={Order}>
 				<Route path="balance" component={Balance} >
 					<Route path="recharge/:param" component={Recharge} />
 				</Route>
