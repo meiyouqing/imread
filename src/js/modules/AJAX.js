@@ -43,7 +43,7 @@ var API={
 //接口缓存机制
 var imCache = (function() {
 	var config = {
-		cacheUrl: ['/api/group/page','/api/page/content','/api/book/introduce','/api/book/chapterlist'],
+		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
 		needCache: false
 	};
 
