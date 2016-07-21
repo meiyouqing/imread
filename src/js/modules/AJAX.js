@@ -31,7 +31,7 @@ var API={
 	paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
 	payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
-	crossDomain:{method:'GET',base:'/api/v1/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
+	crossDomain:{method:'GET',base:'/api/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
 	recentRead:{method: 'GET', base: '/api/v1/me/recentReading', param:{pages: 1, contents: 10}},
 	deleteRecentRead:{method: 'POST', base: '/api/v1/me/recentReading/delete', param:{book_id: ''}},
 	listTag:{method: 'GET', base: '/api/v1/me/label/list', param:{}},

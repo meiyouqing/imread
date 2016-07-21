@@ -10,7 +10,7 @@ var Search = React.createClass({
 		}
 	},
 	componentDidMount:function(){
-		AJAX.init(this.props.params.param);
+		AJAX.init(this.props.params.searchId);
 
 		AJAX.get(function(data){
 			this.setState({
