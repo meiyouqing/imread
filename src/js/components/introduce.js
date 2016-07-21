@@ -295,7 +295,7 @@ var IntroduceTabs = React.createClass({
 					<div className="contents" ref="contents">
 						<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
 						<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
-							<Chapterlist hrefBase={window.location.pathname+'/reading'} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
+							<Chapterlist hrefBase={location.pathname+'/reading'} source_id={this.props.source_id} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={this.props.chapterlist} loading={this.props.getChapterlistLoading}/>
 						</div>
 						<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
 							<Readlist readlist={this.props.readlist} />

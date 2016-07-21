@@ -11,8 +11,8 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, (debug? 'tmp/':'p/tmp/')),
-        publicPath: 'tmp/',
+        path: path.join(__dirname, (debug? 'tmp':'p/tmp')),
+        publicPath: '/',
         filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},

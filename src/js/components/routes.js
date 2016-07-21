@@ -32,6 +32,7 @@ const wrapEnterHandle = function(){
 	APImemory[this.path] = AJAX.API.now;
 }
 const wrapLeaveHandle = function(){
+	//console.log(APImemory[this.path])
 	AJAX.init(APImemory[this.path]);
 }
 const dubleHandle = function(){

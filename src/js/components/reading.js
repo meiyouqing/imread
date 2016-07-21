@@ -134,7 +134,7 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		browserHistory.replace(window.location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+		browserHistory.replace(location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)));
 
@@ -606,7 +606,7 @@ var Reading = React.createClass({
 		});
 	},
 	render:function(){
-		var currentRoute = window.location.pathname.split('/');
+		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} />;

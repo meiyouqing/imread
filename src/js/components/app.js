@@ -1,4 +1,4 @@
-import {Route} from 'react-router'
+import route from 'react-router'
 import Nav from './nav'
 
 require('../../css/iconfont1.css');

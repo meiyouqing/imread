@@ -203,7 +203,7 @@ function setRequestHeaders(request) {
 		'Info-Os': '',
 		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
 		'Info-Vcode': '101',
-		'Info-Userid': GLOBAL.cookie('userId') || '',
+		//'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.getUuid(),
 		'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,

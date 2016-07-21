@@ -112,7 +112,7 @@ var User = React.createClass({
 		if (!this.isLogin()) {
 			var href = target.getAttribute('data-href');
 			if (!href) {
-				var hash = window.location.pathname+'/login';
+				var hash = location.pathname+'/login';
 				browserHistory.push(hash);
 				myEvent.setCallback('login', login_c);
 				return false;

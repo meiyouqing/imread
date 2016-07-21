@@ -17,10 +17,10 @@ if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
 
 require('./modules/readConfig');
 
-GLOBAL.setUser({
-	phone: GLOBAL.cookie('userPhone'),
-	token: GLOBAL.cookie('userToken')
-});
+// GLOBAL.setUser({
+// 	phone: GLOBAL.cookie('userPhone'),
+// 	token: GLOBAL.cookie('userToken')
+// });
 
 Token.refreshToken();
 
