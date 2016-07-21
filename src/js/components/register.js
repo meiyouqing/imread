@@ -33,7 +33,7 @@ var Register = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			GLOBAL.cookie('userPhone', postData.mobile_num},options);
+			GLOBAL.cookie('userPhone', postData.mobile_num,options);
 			GLOBAL.cookie('userToken', data.token, options);
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
