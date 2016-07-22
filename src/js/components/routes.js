@@ -25,46 +25,34 @@ import Purchased from './purchased'
 
 var APImemory = {};
 const scrollResetHandle = function(){
-	const n = AJAX.API._param['pages']? 'pages':'page';
-	AJAX.API._param[n] = 1;	
-}
-const wrapEnterHandle = function(){
-	APImemory[this.path] = AJAX.API.now;
-	//console.log('APImemory: '+APImemory[this.path])
-}
-const wrapLeaveHandle = function(){
-	//console.log('initAPImemory: '+APImemory[this.path])
-	AJAX.init(APImemory[this.path]);
-}
-const dubleHandle = function(){
-	scrollResetHandle()
-	wrapLeaveHandle.call(this);
+	const p = AJAX.API._param['pages']? 'pages':'page';
+	AJAX.API._param[p] = 1;	
 }
 
 var loginWrap = (
-	<Route path="login" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Login}>
+	<Route path="login" component={Login}>
 		<Route path="register" component={Register}/>
 		<Route path="forget" component={Register}/>
 	</Route>
 	)
 var readWrap = (
-		<Route path="reading/:param" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Reading}>
+		<Route path="reading/:readingId" component={Reading}>
 			<Route path="order/:orderUrl" component={Order}>
 				<Route path="balance" component={Balance} >
-					<Route path="recharge/:param" component={Recharge} />
+					<Route path="recharge/:rechargeId" component={Recharge} />
 				</Route>
 			</Route>
 		</Route>
 	)
 var bookWrap = (
-	<Route path="book/:introduceId" onEnter={wrapEnterHandle} onLeave={wrapLeaveHandle} component={Introduce}>
+	<Route path="book/:introduceId" component={Introduce}>
 		{readWrap}
 		{loginWrap}
 	</Route>
 	)
 var searchWrap = (
-	<Route path="search/:searchId" onEnter={wrapEnterHandle} onLeave={dubleHandle} component={Search}>
-		<Route path="searchList/:param" onLeave={dubleHandle} component={List}>
+	<Route path="search/:searchId" onLeave={scrollResetHandle} component={Search}>
+		<Route path="searchList/:listId" onLeave={scrollResetHandle} component={List}>
 			{bookWrap}
 		</Route>
 		{bookWrap}
@@ -75,28 +63,28 @@ module.exports = (
 		<IndexRedirect to="/mall" />
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
-				<Route path="more/:param" onLeave={dubleHandle} onEnter={wrapEnterHandle} component={List}>
+				<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 					{bookWrap}
 					{searchWrap}
 				</Route>
 				{bookWrap}
 				{searchWrap}
-				<Route path="cat/:param" component={List}>
+				<Route path="cat/:listId" component={List}>
 					{bookWrap}
 					{searchWrap}
 				</Route>
 			</Route>
 		</Route>
 		<Route path="/top" component={Top}>
-			<Route path="more/:param" onLeave={scrollResetHandle} component={List}>
+			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="cat/:param" onLeave={scrollResetHandle} component={List}>
+			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="sheet/:param" onLeave={scrollResetHandle} component={BookSheet}>
+			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
@@ -108,7 +96,7 @@ module.exports = (
 		<Route path="/user" component={User}>
 			{loginWrap}
 			<Route path="balance" component={Balance} >
-				<Route path="recharge/:param" component={Recharge} />
+				<Route path="recharge/:rechargeId" component={Recharge} />
 			</Route>
 			<Route path="recentRead" onLeave={scrollResetHandle} component={RecentRead}>
 				{readWrap}

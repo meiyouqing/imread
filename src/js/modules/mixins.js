@@ -4,7 +4,7 @@ if(typeof window !== 'undefined'){
 var mixins = function() {
 	return {
 		APIParts: function (param) {
-			var params = param?param:this.props.params.param;
+			var params = this.props.params[param];
 			var parts = typeof params === 'string'? params : params[params.length-1];
 			return parts.split('.');
 		},
@@ -27,7 +27,7 @@ var mixins = function() {
 							//img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
 						}
 						img.setAttribute('data-lazyload-src', "loading");
-						GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'src/img/defaultCover.png'));
+						GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'http://m.imread.com/src/img/defaultCover.png'));
 					}
 				})(i);
 			}
@@ -39,7 +39,7 @@ var mixins = function() {
 			this.timeoutId = setTimeout(function() {
 				this.lazyloadImage(list);
 				//console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
-				if (!this.state.noMore && !this.state.scrollUpdate &&  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight) {
+				if (!this.state.noMore && !this.state.scrollUpdate &&  ((list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)) {
 					this.scrollHandleCallback();
 				}
 			}.bind(this), 100);
@@ -49,9 +49,10 @@ var mixins = function() {
 			this.setState({
 				scrollUpdate:true
 			})
-
-			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;		
+			var n = this.props.params[(this.props.route.path.split(':')[1])];
+			n = n.split('.')[0];
+			var p = AJAX.API[n].param['pages']? 'pages':'page';
+			AJAX.API[n].param[p]++;		
 			this.getList();
 		},
 		onerror:function(error){

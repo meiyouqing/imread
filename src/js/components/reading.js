@@ -96,7 +96,7 @@ var chapterMixins = {
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.APIParts()[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
+		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
@@ -289,7 +289,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts()[3]},function(data){
+		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts('readingId')[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
@@ -368,7 +368,7 @@ var Reading = React.createClass({
 		that.getNextContent(data);
 	},
 	getContent: function() {
-		var book_info = this.APIParts();
+		var book_info = this.APIParts('readingId');
 		this.bid = book_info[1];
 		this.chapterid = book_info[2];
 		this.source_id = book_info[4];
@@ -547,7 +547,7 @@ var Reading = React.createClass({
 		//第一次进入阅读跳到上次阅读的地方
 		if(this.bookmarkFlag){
 			//console.log(storage.get('readLogNew'))
-			var obj = storage.get('readLogNew')[this.APIParts()[3]];
+			var obj = storage.get('readLogNew')[this.APIParts('readingId')[3]];
 			var offset = obj? obj.offset[this.chapterid] : false;
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}

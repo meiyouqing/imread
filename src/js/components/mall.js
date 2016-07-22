@@ -3,7 +3,6 @@ var MallNav = require('./mallNav');
 
 var Mall = React.createClass({
 	getNav: function(){
-		//if(this.props.route.childRoutes.length) return;
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
@@ -32,7 +31,6 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
-		console.log(browserHistory)
 		var mallNav;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;

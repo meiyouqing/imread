@@ -8,7 +8,7 @@ var List = React.createClass({
 	isLoading: false,
 	getList: function(param){
 
-		var hash = param?param:this.props.params.param;
+		var hash = param?param:this.props.params.listId;
 		AJAX.init(hash);
 		AJAX.get(data => {
 			this.isLoading = false;
@@ -90,9 +90,9 @@ var List = React.createClass({
 	componentWillReceiveProps: function(nextProps){
 		var isSearch = /searchList/.test(this.props.route.path);
 
-		if(this.props.params.param.toString() !== nextProps.params.param.toString() && isSearch){
+		if(this.props.params.listId !== nextProps.params.listId && isSearch){
 			this.isLoading = true;
-			this.getList(nextProps.params.param);
+			this.getList(nextProps.params.listId);
 		}
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
@@ -101,7 +101,7 @@ var List = React.createClass({
 				|| this.state.UFO !== nextState.UFO
 				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProps.children
-				|| this.props.params.param.toString() !== nextProps.params.param.toString();
+				|| this.props.params.listId !== nextProps.params.listId;
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;

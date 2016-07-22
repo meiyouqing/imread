@@ -3,7 +3,7 @@ var Img = React.createClass({
 		return this.props.src !== nextProps.src;
 	},
 	render: function() {
-		return <img src="src/img/defaultCover.png" data-lazyload-src={this.props.src} className="u-lazyload-img" />
+		return <img src="http://m.imread.com/src/img/defaultCover.png" data-lazyload-src={this.props.src} className="u-lazyload-img" />
 	}
 });
 

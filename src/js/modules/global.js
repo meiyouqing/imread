@@ -26,13 +26,15 @@ var GLOBAL = {
 	unRendered:[],
 	goBack:function(){
 		browserHistory.goBack();
+		// browserHistory.replaceState();
+		// console.log(browserHistory)
 	},
 	setHref:function(str,type){
 		//TODO
 		return location.pathname+'/'+str
 	},
 	typeHref: function(data,spm, route_type){
-		var bid = data.content_id || data.book_id;
+		var bid = data.content_id || data.book_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
 		if(/2|3|4/.test(data.intercut_type)){
@@ -60,6 +62,12 @@ var GLOBAL = {
     				default:
     					return {url:"javascript:void(0)",target:target}
 	    		}
+	    		case 11:
+	    		case 12:
+	    		case 13:
+	    		case 14: 
+	    		case 15:
+	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 			case 3://搜索
 				return this.setHref('search/search.'+data.name);
 			case 5://分类

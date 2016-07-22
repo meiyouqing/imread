@@ -3,7 +3,7 @@ var Header_s = React.createClass({
 	getInitialState: function(){
 		var key = '';
 		if(GLOBAL.name === 'searchList'){
-			key = decodeURIComponent(this.APIParts()[1]);
+			key = decodeURIComponent(this.APIParts('searchListId')[1]);
 		} 
 		return{
 			initialKey: key,
