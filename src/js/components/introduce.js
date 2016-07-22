@@ -66,7 +66,7 @@ var Introduce = React.createClass({
 	getInitialState: function() {
 		return {
 			isOnshelf: false,
-			bid: this.APIParts(this.props.params.introduceId)[1],
+			bid: this.APIParts('introduceId')[1],
 			chapterlist: null,
 			page: 1,
 			page_size: 20,
@@ -107,7 +107,7 @@ var Introduce = React.createClass({
 				});
 				return;
 			}
-			data.content_id = data.bid = this.APIParts(this.props.params.introduceId)[1];
+			data.content_id = data.bid = this.APIParts('introduceId')[1];
 			data.name = data.book_name;
 			data.orderList = data.orderList.concat(data.readList);
 			GLOBAL.setBookName([data]);
@@ -174,7 +174,6 @@ var Introduce = React.createClass({
 			
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		//console.log(this.APIParts(this.props.params.param),this.APIParts(nextProps.params.param))
 		return this.state.book !== nextState.book 
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.isOnshelf !== nextState.isOnshelf
