@@ -217,14 +217,14 @@ var GLOBAL = {
 	decoded: function(s) {
 		return decodeURIComponent(s.replace(/\+/g, ' '));
 	},
-	// user: {},
-	// setUser: function(user) {
-	// 	for (var i in user) {
-	// 		if (user.hasOwnProperty(i)) {
-	// 			GLOBAL.user[i] = user[i];
-	// 		}
-	// 	}
-	// },
+	user: {},
+	setUser: function(user) {
+		for (var i in user) {
+			if (user.hasOwnProperty(i)) {
+				GLOBAL.user[i] = user[i];
+			}
+		}
+	},
 	isElementVisible: function(el) {
 		var rect = el.getBoundingClientRect();
 		return (  (rect.top > 0 && rect.top < window.innerHeight && 0x02)

@@ -26,13 +26,14 @@ import Purchased from './purchased'
 var APImemory = {};
 const scrollResetHandle = function(){
 	const n = AJAX.API._param['pages']? 'pages':'page';
-	AJAX.API._param[n] = 1;		
+	AJAX.API._param[n] = 1;	
 }
 const wrapEnterHandle = function(){
 	APImemory[this.path] = AJAX.API.now;
+	//console.log('APImemory: '+APImemory[this.path])
 }
 const wrapLeaveHandle = function(){
-	//console.log(APImemory[this.path])
+	//console.log('initAPImemory: '+APImemory[this.path])
 	AJAX.init(APImemory[this.path]);
 }
 const dubleHandle = function(){

@@ -32,6 +32,7 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
+		console.log(browserHistory)
 		var mallNav;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;

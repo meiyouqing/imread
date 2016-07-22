@@ -2,7 +2,7 @@
 
 var Token = {
 	refreshToken: function () {
-		var oldToken = GLOBAL.cookie('userPhone');
+		var oldToken = GLOBAL.cookie('userToken');
 		if (oldToken) {
 			AJAX.getJSON('GET', '/api/v1/upToken', {
 				//oldToken: encodeURIComponent(oldToken)
