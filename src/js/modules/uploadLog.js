@@ -1,4 +1,6 @@
-var isHidden = require('./isHidden');
+if(typeof window !== 'undefined'){
+	var isHidden = require('./isHidden');
+}
 
 var config = {
 	intercut: {method:'GET',url:'/api/intercut/log'},

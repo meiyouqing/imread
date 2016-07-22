@@ -223,6 +223,7 @@ var AJAX = {
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
 		}
+
 		var parts = now.split('.');
 		this.API.now = parts[0];
 		var ao = API[parts[0]];

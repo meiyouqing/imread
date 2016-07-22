@@ -1,5 +1,7 @@
 var Header = require('./header');
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var RechageRes = React.createClass({
 	completed: function(){

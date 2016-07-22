@@ -1,6 +1,11 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 var Header = require('./header');
 
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var mod = React.createClass({
 	rechargeHandle: function(e) {

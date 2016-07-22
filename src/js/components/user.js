@@ -1,7 +1,10 @@
 var myEvent = require('../modules/myEvent');
 var Mixins = require('../modules/mixins');
 
-require('../../css/user.css');
+if(typeof window !== 'undefined'){
+	require('../../css/user.css');
+	var POP = require('../modules/confirm')
+}
 
 var ULine = React.createClass({
 	render: function() {

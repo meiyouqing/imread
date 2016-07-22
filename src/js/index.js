@@ -3,28 +3,35 @@ import browserHistory from './modules/history'
 import { Router, Route} from 'react-router'
 import ReactDOM from 'react-dom'
 import routes from './components/routes'
-import GLOBAL from './modules/global'
-import Token from './modules/token'
-
-if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
-	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
-	GLOBAL.header.appid = appid;
-}
-if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
-	var channel = window.location.search.match(/channel=(\w+)&?/)[1];
-	GLOBAL.header.channel = channel;
-}
-
+import GLOBAL from './modules/global';
+import Token from './modules/token';
+import { render } from 'react-dom';
 require('./modules/readConfig');
 
-// GLOBAL.setUser({
-// 	phone: GLOBAL.cookie('userPhone'),
-// 	token: GLOBAL.cookie('userToken')
-// });
+if(typeof window === 'undefined'){
+	window.isNode = true;
+}else{
+	global.isNode = false;
+}
 
-Token.refreshToken();
 
-ReactDOM.render(
+if(!isNode){
+	if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
+		var appid = window.location.search.match(/appid=(\w+)&?/)[1];
+		GLOBAL.header.appid = appid;
+	}
+	if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
+		var channel = window.location.search.match(/channel=(\w+)&?/)[1];
+		GLOBAL.header.channel = channel;
+	}
+	GLOBAL.setUser({
+		phone: GLOBAL.cookie('userPhone'),
+		token: GLOBAL.cookie('userToken')
+	});
+	Token.refreshToken();	
+}
+
+render(
 	<Router routes={routes} history={browserHistory}/>, 
 	document.getElementById('app-container')
 );

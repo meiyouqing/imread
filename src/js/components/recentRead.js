@@ -1,10 +1,13 @@
 var Header = require('./header');
 var Mixins = require('../modules/mixins');
 var Book9 = require('./book9_recentRead');
-var Hammer = require('../modules/hammer');
 var NoData = require('./noData');
 
-require('../../css/recentRead.css');
+if(typeof window !== 'undefined'){
+	require('../../css/recentRead.css');
+	var POP = require('../modules/confirm')
+	var Hammer = require('../modules/hammer');
+}
 
 var recentRead = React.createClass({
 	mixins: [Mixins()],

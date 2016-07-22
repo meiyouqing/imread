@@ -1,8 +1,10 @@
 import route from 'react-router'
 import Nav from './nav'
 
-require('../../css/iconfont1.css');
-require('../../css/imread.css');
+if(typeof window !== 'undefined'){
+	require('../../css/iconfont1.css');
+	require('../../css/imread.css');
+}
 
 
 export default React.createClass({

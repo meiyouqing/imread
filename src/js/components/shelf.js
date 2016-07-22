@@ -1,3 +1,6 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 var Header = require('./header');
 var Img = require('./img');
 

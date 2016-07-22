@@ -1,5 +1,8 @@
 var Header = require('./header');
-require('../../css/tag.css');
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+	require('../../css/tag.css');
+}
 
 var tag = React.createClass({
 	getInitialState: function() {

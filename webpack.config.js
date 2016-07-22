@@ -1,5 +1,4 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
-	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
 	webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
@@ -21,9 +20,10 @@ module.exports = {
 	},
 	module: {
 		loaders:[
+			// {test: /\.js[x]?$/,  exclude: /node_modules/,loader: 'babel-loader'},
 			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
-			{test: /\.css$/, loader: "style!css" },
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
+			{test: /\.css$/,  exclude: /node_modules/,loader: "style!css" },
+			{test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
 		]
 	},
 	plugins: [
@@ -35,8 +35,8 @@ module.exports = {
 		  }),
 		new webpack.ProvidePlugin({
 			React: 'react',
-			GLOBAL: '../modules/global',
 			AJAX: '../modules/AJAX',
+			GLOBAL: '../modules/global',
 			Link: '../modules/link',
 			browserHistory: '../modules/history',
 			storage: '../modules/storage',
@@ -45,9 +45,7 @@ module.exports = {
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
-			POP: '../modules/confirm',
 			parseQuery: '../modules/parseQuery'
-		}),
-		new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
+		})
 	] 
 };
