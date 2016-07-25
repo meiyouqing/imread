@@ -3,7 +3,6 @@ var MallNav = require('./mallNav');
 
 var Mall = React.createClass({
 	getNav: function(){
-		//if(this.props.route.childRoutes.length) return;
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;

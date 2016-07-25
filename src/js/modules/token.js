@@ -9,8 +9,7 @@ var Token = {
 			}, function(data) {
 				if(data.code==200){
 					GLOBAL.cookie('userToken', data.token, {
-						expires: 1000,
-						secure: 'HttpOnly'
+						expires: 1000
 					});
 					
 				}else{

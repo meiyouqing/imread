@@ -219,6 +219,7 @@ function setRequestHeaders(request) {
 var AJAX = {
 	API: API,
 	init: function(now){
+		console.log(now)
 		if(!now) return;
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];

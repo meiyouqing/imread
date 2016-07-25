@@ -117,9 +117,8 @@ var Recharge = React.createClass({
 	},
 	getPay: function(){
 		var that = this;
-		console.log(this.props.params.param)
 		var postData = {
-			productId:this.props.params.param,
+			productId:this.props.params.rechargeId,
 			fee:'1',
 			payType:'1',
 			spType:'1',

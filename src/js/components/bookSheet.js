@@ -7,7 +7,7 @@ require('../../css/bookSheet.css');
 var Module = React.createClass({
 	 mixins: [Mixins()],
 	getList: function(){
-		AJAX.init(this.props.params.param);
+		AJAX.init(this.props.params.sheetId);
 		AJAX.get(function(data){
 			GLOBAL.title = data.sheet_name;
 			if(!data.content){return;}
@@ -88,7 +88,6 @@ var Module = React.createClass({
 	},
 	render:function(){
 		var noData,content,sLoading;
-		var _spm = [GLOBAL.pgid, this.APIParts()[1], 1, 0];
 	//定义content
 	//console.log(this.state.noMore,this.state.scrollUpdate)
 		if(!this.state.data){

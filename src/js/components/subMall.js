@@ -63,6 +63,7 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
+		console.log(this.props)
 		var list;
 		var scrollLoading = <Loading cls="u-sLoading" />;
 
