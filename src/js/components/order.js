@@ -30,9 +30,9 @@ var mod = React.createClass({
 			});
 		}.bind(this))
 
-		// AJAX.getJSON('GET',this.props.params.orderUrl,{},function(data){
-		// 	console.log(data);
-		// }.bind(this))
+		AJAX.getJSON('GET',this.props.params.orderUrl,{},function(data){
+			console.log(data);
+		}.bind(this))
 	},
 	getInitialState: function(){
 		return {

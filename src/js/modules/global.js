@@ -24,7 +24,6 @@ var GLOBAL = {
 	route:[],
 	unRendered:[],
 	goBack:function(path){
-		console.log(path)
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
@@ -53,8 +52,6 @@ var GLOBAL = {
 			route_id = route_key;
 
 		var route_path = window.location.pathname.split('/');
-
-		console.log(route_path[route_path.length-1] ,route_id)
 
 		if(route_path[route_path.length-1] == route_id)	return true;
 		else return false;
@@ -229,7 +226,6 @@ var GLOBAL = {
         return result;
 	},
 	removeCookie: function(key,path) {
-		console.log(GLOBAL.cookie(key))
 		if (GLOBAL.cookie(key) !== undefined) {
                 GLOBAL.cookie(key, '', {expires: -1,path:path});
                 return true;
