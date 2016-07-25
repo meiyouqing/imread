@@ -30,13 +30,37 @@ var GLOBAL = {
 		// else
 		// 	browserHistory.goBack();
 		if(path)
-			browserHistory.replace(path);
+			browserHistory.push(path);
 		else
 			browserHistory.goBack();
 	},
 	setHref:function(str,type){
 		//TODO
 		return location.pathname+'/'+str
+	},
+	isRouter: function(route){
+		var route_id = null,
+			route_arr = route.route.path.replace(/\//,'').split(':'),
+			route_key = route_arr[route_arr.length-1];
+
+		if(route.routeParams[route_key]){
+			route_id = route.routeParams[route_key];
+			if(typeof route_id !== 'string')
+				route_id = route_id[route_id.length-1];
+			route_id = encodeURIComponent(route_id);
+		}
+		else 
+			route_id = route_key;
+
+		var route_path = window.location.pathname.split('/');
+
+		console.log(route_path[route_path.length-1] ,route_id)
+
+		if(route_path[route_path.length-1] == route_id)	return true;
+		else return false;
+
+		// var path = route.route.path.replace(/:([^\"]*)/,'');
+		// return window.location.pathname.split('/'+path)[0];
 	},
 	typeHref: function(data,spm, route_type){
 		var bid = data.content_id || data.book_id || 0;
@@ -204,7 +228,8 @@ var GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key,path) {
+	removeCookie: function(key,path='/') {
+		console.log(GLOBAL.cookie(key))
 		if (GLOBAL.cookie(key) !== undefined) {
                 GLOBAL.cookie(key, '', {expires: -1,path:path});
                 return true;

@@ -36,7 +36,6 @@ var Balance = React.createClass({
 	orderHandle:function(){
 
 		var ordered = this.state.list[this.state.active];
-		console.log(ordered)
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
@@ -76,7 +75,7 @@ var Balance = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header right={false} title={'艾豆充值'}/>
+				<Header right={false} title={'艾豆充值'} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

@@ -12,7 +12,8 @@ var List = React.createClass({
 		AJAX.init(hash);
 		AJAX.get(data => {
 			this.isLoading = false;
-			if(/^searchList/.test(this.props.route.path)){
+			var pathname = location.pathname.split('/');
+			if(/^search./.test(pathname[pathname.length-1])){
 				if (!data.contentlist.length) {
 					this.setState({
 						noMore:true
@@ -74,7 +75,8 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getList();
+		console.log(GLOBAL.isRouter(this.props))
+		if(GLOBAL.isRouter(this.props)) this.getList();
 	},
 	update: function(){
 
@@ -83,7 +85,7 @@ var List = React.createClass({
 	// 	this.getData();
 	// },
 	componentDidUpdate: function(nextProps,nextState) {
-
+		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
 		this.lazyloadImage(this.refs.container);
 	},

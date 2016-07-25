@@ -54,6 +54,7 @@ var User = React.createClass({
 				phone: null,
 				token: ''
 			});
+			console.log('remove')
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('userId');
@@ -70,12 +71,18 @@ var User = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextProp, nextState) {
+		console.log(this.state.user.phone !== nextState.user.phone 
+		    || this.state.needUpdate !== nextState.needUpdate
+		    || this.props.children !== nextProp.children)
 		return this.state.user.phone !== nextState.user.phone 
 		    || this.state.needUpdate !== nextState.needUpdate
 		    || this.props.children !== nextProp.children;
 	},
 	componentDidMount: function() {
-		this.getUserInfo();
+		if(GLOBAL.isRouter(this.props))	this.getUserInfo();
+	},
+	componentDidUpdate: function(){
+		if(GLOBAL.isRouter(this.props) && !this.state.userInfo)	this.getUserInfo();
 	},
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;

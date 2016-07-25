@@ -9,9 +9,9 @@ var Search = React.createClass({
 			UFO:false
 		}
 	},
-	componentDidMount:function(){
-		AJAX.init(this.props.params.searchId);
+	getDate: function(){
 
+		AJAX.init(this.props.params.searchId);
 		AJAX.get(function(data){
 			this.setState({
 				blockList:data.blocklist
@@ -20,8 +20,15 @@ var Search = React.createClass({
 			this.setState({
 				UFO:true
 			});
-			//console.log(error);
+				//console.log(error);
 		}.bind(this))
+	},
+	componentDidMount:function(){
+
+		if(GLOBAL.isRouter(this.props))	this.getDate();
+	},
+	componentDidUpdate: function(){
+		if(GLOBAL.isRouter(this.props) && !this.state.blockList) 	this.getDate();		
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return this.state.blockList !== nextState.blockList

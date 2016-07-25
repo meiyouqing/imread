@@ -50,9 +50,10 @@ var Mall = React.createClass({
 	},			
 	componentDidMount: function(){
 		this.APIparam = this.props.params.subnav;
-		this.getList();
+		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList();
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);
 	},
@@ -65,7 +66,6 @@ var Mall = React.createClass({
 	render:function(){
 		var list;
 		var scrollLoading = <Loading cls="u-sLoading" />;
-
 		if(this.state.noMore){
 			scrollLoading = null;
 		}
@@ -76,7 +76,7 @@ var Mall = React.createClass({
 				list = (
 					<div className="g-main">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<Blocklist blockList={this.state.list} />
+							<Blocklist blockList={this.state.list} path={this.props.route}/>
 							{scrollLoading}
 						</div>
 					</div>

@@ -163,8 +163,11 @@ var Introduce = React.createClass({
 			window.location.href = 'imread://'+p;
 	      	//window.location.href = p;
 	      }
-		this.getBook();
+	      if(GLOBAL.isRouter(this.props))	this.getBook();
 		myEvent.setCallback('updateShelfBtn',this.onShelf);
+	},
+	componentDidUpdate: function(){
+		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillReceiveProps: function(nextProps, nextState) {
 		if(this.props.params.introduceId !== nextProps.params.introduceId){
@@ -184,7 +187,6 @@ var Introduce = React.createClass({
 				|| this.props.params.introduceId !== nextProps.params.introduceId;
 	},
 	render: function() {
-
 		var header, loading, introduceTabs, detail;
 		if (!this.state.book || !this.isUpdate) {
 			header = <Header title={GLOBAL.book[this.state.bid]} right={false}  path={this.props.route} />

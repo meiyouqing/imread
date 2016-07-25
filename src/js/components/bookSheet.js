@@ -73,9 +73,10 @@ var Module = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getList();
+		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
