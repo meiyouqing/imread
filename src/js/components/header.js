@@ -43,7 +43,7 @@ var Header = React.createClass({
 	render: function(){
 		var from = parseQuery(location.search);
 		var isskip = false;
-		var defaultLeft = <a className="f-fl icon-back iconfont" onClick={this.goBack} ></a> || this.props.left;
+		var defaultLeft = this.props.left === undefined?<a className="f-fl icon-back iconfont" onClick={this.goBack} ></a>:this.props.left;
 
 		if(this.props.skipurl && from.skipurl)
 			isskip = true;

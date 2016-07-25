@@ -244,12 +244,12 @@ var Reading = React.createClass({
 			this.shelfAdding(param,function(){
 				myEvent.execCallback('updateShelfBtn');
 				GLOBAL.goBack(this.path);
-			});
+			}.bind(this));
 		}.bind(this);
 
 		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
-			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack);
+			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack.bind(null,this.path));
 		}else{
 			myEvent.execCallback('refreshShelf');
 			GLOBAL.goBack(this.path);			
