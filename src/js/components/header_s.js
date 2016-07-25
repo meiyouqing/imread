@@ -46,12 +46,15 @@ var Header_s = React.createClass({
 		this.setState({
 			key: ''
 		});
-		GLOBAL.goBack();
+		GLOBAL.goBack(this.path);
 	},
 	componentDidMount: function(){
 		if(!this.state.key.length){
 			this.refs.searchInput.focus();
 		}
+
+		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.key !== nextState.key || this.state.btn !== nextState.btn;

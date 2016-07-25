@@ -35,10 +35,11 @@ var Top = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-		this.getData();
+		if(GLOBAL.isRouter(this.props))	this.getData();
 		myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function() {
+		if(GLOBAL.isRouter(this.props) &&!this.state.list)	  this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);
 	},
@@ -71,7 +72,7 @@ var Top = React.createClass({
 
 		return (
 			<div>
-				<Header title="发现" left={null} />
+				<Header title="发现" left={null}  path={this.props.route} />
 				{list}
 				{this.props.children}
 			</div>

@@ -58,7 +58,7 @@ var Login = React.createClass({
 			skipurl = '?skipurl='+this.from.skipurl;
 		return (
 			<div className="gg-body">
-				<Header title={GLOBAL.setTitle('login')} right={null}  skipurl={true} />
+				<Header title={GLOBAL.setTitle('login')} right={null}  skipurl={true}  path={this.props.route}  />
 				<div className="m-loginblock m-userblocks">
 					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
 						<div className="u-inputline">

@@ -55,7 +55,7 @@ var mod = React.createClass({
 		// }
 		return (
 			<div>
-				<Header right={null} />
+				<Header right={null} path={this.props.route}/>
 				{/*<div className="g-main g-main-1">
 					<div className="g-scroll m-order">
 						<div className="block f-mt-20">

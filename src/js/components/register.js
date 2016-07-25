@@ -94,7 +94,7 @@ var Register = React.createClass({
 
 		return (
 			<div className="gg-body">
-				<Header right={null} />
+				<Header right={null} path={this.props.route}/>
 				<div className="m-registerblock m-userblocks">
 					<form className="u-registerform u-userform">
 						<div className="u-inputline">

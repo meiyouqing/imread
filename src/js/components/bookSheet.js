@@ -73,9 +73,10 @@ var Module = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getList();
+		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
@@ -134,7 +135,7 @@ var Module = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header />
+				<Header path={this.props.route} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						{content}

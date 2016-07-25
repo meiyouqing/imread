@@ -37,6 +37,7 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:readingId" component={Reading}>
+			{loginWrap}
 			<Route path="order/:orderUrl" component={Order}>
 				<Route path="balance" component={Balance} >
 					<Route path="recharge/:rechargeId" component={Recharge} />

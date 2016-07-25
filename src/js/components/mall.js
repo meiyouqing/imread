@@ -37,7 +37,7 @@ var Mall = React.createClass({
 		}
 		return (
 			<div className="g-mall">
-				<Header title="书城" left={null} />
+				<Header title="书城" left={null}  path={this.props.route}/>
 				{mallNav}
 				{this.props.children}
 			</div>

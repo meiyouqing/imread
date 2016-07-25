@@ -12,7 +12,8 @@ var List = React.createClass({
 		AJAX.init(hash);
 		AJAX.get(data => {
 			this.isLoading = false;
-			if(/^searchList/.test(this.props.route.path)){
+			var pathname = location.pathname.split('/');
+			if(/^search./.test(pathname[pathname.length-1])){
 				if (!data.contentlist.length) {
 					this.setState({
 						noMore:true
@@ -74,7 +75,8 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getList();
+		console.log(GLOBAL.isRouter(this.props))
+		if(GLOBAL.isRouter(this.props)) this.getList();
 	},
 	update: function(){
 
@@ -83,7 +85,7 @@ var List = React.createClass({
 	// 	this.getData();
 	// },
 	componentDidUpdate: function(nextProps,nextState) {
-
+		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
 		this.lazyloadImage(this.refs.container);
 	},
@@ -109,9 +111,10 @@ var List = React.createClass({
 		if(this.state.resultCount){
 			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		}
-		header = <Header title={GLOBAL.title} right={null} />;				
+
+		header = <Header title={GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
-			header = <Header_s goSearch={this.goSearch} />;
+			header = <Header_s goSearch={this.goSearch} path={this.props.route}  />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){

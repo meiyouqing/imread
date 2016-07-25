@@ -163,8 +163,11 @@ var Introduce = React.createClass({
 			window.location.href = 'imread://'+p;
 	      	//window.location.href = p;
 	      }
-		this.getBook();
-		myEvent.setCallback('updateShelfBtn',this.onShelf)
+	      if(GLOBAL.isRouter(this.props))	this.getBook();
+		myEvent.setCallback('updateShelfBtn',this.onShelf);
+	},
+	componentDidUpdate: function(){
+		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillReceiveProps: function(nextProps, nextState) {
 		if(this.props.params.introduceId !== nextProps.params.introduceId){
@@ -184,10 +187,9 @@ var Introduce = React.createClass({
 				|| this.props.params.introduceId !== nextProps.params.introduceId;
 	},
 	render: function() {
-
 		var header, loading, introduceTabs, detail;
 		if (!this.state.book || !this.isUpdate) {
-			header = <Header title={GLOBAL.book[this.state.bid]} right={false} />
+			header = <Header title={GLOBAL.book[this.state.bid]} right={false}  path={this.props.route} />
 			loading = <Loading />
 			if(this.state.noData){
 				loading = <NoData />
@@ -196,7 +198,7 @@ var Introduce = React.createClass({
 				loading = <NoData type="UFO" />
 			}
 		}else{
-			header = <Header title={this.state.book.book_name} right={false} />
+			header = <Header title={this.state.book.book_name} right={false}  path={this.props.route} />
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
 			introduceTabs = <IntroduceTabs key="3" source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}

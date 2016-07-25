@@ -62,7 +62,7 @@ var tag = React.createClass({
 		return (
 			<div className="gg-body">
 				<div className="tags-block">
-					<Header right={false} />
+					<Header right={false} path={this.props.route}/>
 					<div className="g-main g-main-1">
 						<div  className="g-scroll">
 							<div className="tag-block">

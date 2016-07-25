@@ -102,6 +102,7 @@ var Shelf = React.createClass({
 		}
 	},
 	getList: function (){
+		AJAX.init('block.156.100.1');
 		AJAX.get((data)=>{
 			this.setState({
 				shelfList: data.content
@@ -113,19 +114,19 @@ var Shelf = React.createClass({
 	componentDidMount: function(){
 		if(!this.isLogin()){
 			this.goLogin(() => {
-				AJAX.init('block.156.100.1');
-				this.getList();
+				if(GLOBAL.isRouter(this.props))	this.getList();
 			});
 			return;
 		}
-		AJAX.init('block.156.100.1');
-		this.getList();
+		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+
+		if(GLOBAL.isRouter(this.props) && !this.state.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right} />;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right}  path={this.props.route}  />;
 		//console.log(this.state.shelfList);
 		var icon,content;
 		var curClass = '';
