@@ -71,7 +71,7 @@ var Top = React.createClass({
 
 		return (
 			<div>
-				<Header title="发现" left={null} />
+				<Header title="发现" left={null}  path={this.props.route} />
 				{list}
 				{this.props.children}
 			</div>

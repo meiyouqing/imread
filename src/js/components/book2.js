@@ -6,7 +6,6 @@ var Book2 = React.createClass({
 	},
 	render: function() {
 		var hrefStr = GLOBAL.typeHref(this.props.data);
-
 		return (
 			<li className="u-book-2">
 				<Link to={hrefStr}>

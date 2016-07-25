@@ -82,7 +82,7 @@ var Purchased = React.createClass({
 		return (
 			<div className="gg-body">
 				<div className="recentRead-block">
-					<Header right={false} title={'已购书籍'}/>
+					<Header right={false} title={'已购书籍'} path={this.props.route}/>
 					<div className="g-main g-main-1">
 						<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 							{content}

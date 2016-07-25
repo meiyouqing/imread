@@ -44,7 +44,7 @@ var Search = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header_s />
+				<Header_s  path={this.props.route}  />
 				<div  className="g-main g-main-1">
 					<div className="g-scroll">
 						{content}

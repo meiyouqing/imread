@@ -27,7 +27,7 @@ var Feedback = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} />
+				<Header right={null} path={this.props.route}/>
 				<div className="m-feedbackblock m-userblocks">
 					<form className="u-feedbackform u-userform">
 						<div className="u-inputline">

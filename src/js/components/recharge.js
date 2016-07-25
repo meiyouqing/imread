@@ -174,7 +174,7 @@ var Recharge = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} />
+				<Header right={null} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						<div className="u-balance f-tl">

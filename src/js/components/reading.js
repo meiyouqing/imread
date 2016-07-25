@@ -243,16 +243,16 @@ var Reading = React.createClass({
 			}];
 			this.shelfAdding(param,function(){
 				myEvent.execCallback('updateShelfBtn');
-				GLOBAL.goBack();
+				GLOBAL.goBack(this.path);
 			});
 		}.bind(this);
 
 		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
-			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack());
+			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack);
 		}else{
 			myEvent.execCallback('refreshShelf');
-			GLOBAL.goBack();			
+			GLOBAL.goBack(this.path);			
 		}
 	},
 	getFormatContent: function(content) {
@@ -522,6 +522,9 @@ var Reading = React.createClass({
 				expires: 1000
 			});
 		}
+
+		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
@@ -609,7 +612,7 @@ var Reading = React.createClass({
 		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
-		var head = <Header title={this.state.bookName} right={null} />;
+		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
 		var className = readingStyle.getClass(this.state.style);
 		var intercut;
 		if(this.state.UFO){

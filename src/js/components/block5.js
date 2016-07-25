@@ -134,11 +134,9 @@ var Block5 = React.createClass({
 			                	this.props.data.contentlist.map(function(v, i) {
 
 									var hrefObj = GLOBAL.typeHref(v);
-									if(!hrefObj.url)
-										hrefObj = {url: hrefObj,target:null};
+									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:'_self'};
 			                		return (
 			                			<Link style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
-
 			                				<img data-src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>
 			                			</Link>
 			                		);

@@ -32,14 +32,13 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
-		console.log(browserHistory)
 		var mallNav;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
 		}
 		return (
 			<div className="g-mall">
-				<Header title="书城" left={null} />
+				<Header title="书城" left={null}  path={this.props.route}/>
 				{mallNav}
 				{this.props.children}
 			</div>

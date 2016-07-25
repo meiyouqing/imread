@@ -135,7 +135,7 @@ var Module = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header />
+				<Header path={this.props.route} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						{content}

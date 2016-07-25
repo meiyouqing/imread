@@ -13,6 +13,8 @@ Date.prototype.Format = function (fmt) {
 };
 
 var GLOBAL = {
+	// state:1,
+	// historyPath: null,
 	header:{},
 	onShelf:{},
 	bookList:{},
@@ -21,10 +23,16 @@ var GLOBAL = {
 	name:'',
 	route:[],
 	unRendered:[],
-	goBack:function(){
-		browserHistory.goBack();
-		// browserHistory.replaceState();
-		// console.log(browserHistory)
+	goBack:function(path){
+		console.log(path)
+		// if(!GLOBAL.state)
+		// 	browserHistory.replace(GLOBAL.historyPath);
+		// else
+		// 	browserHistory.goBack();
+		if(path)
+			browserHistory.replace(path);
+		else
+			browserHistory.goBack();
 	},
 	setHref:function(str,type){
 		//TODO
@@ -46,36 +54,37 @@ var GLOBAL = {
 		switch(type){
 			case 1://图书详情
 				return this.setHref('book/introduce.'+bid,route_type);
-			case 2://广告
-	    		switch (data.intercut_type) {
-	    			case 1://图书详情
-	    				return {url:this.setHref('book/introduce.' + data.source_contentid),target:target};
-	    			case 2://内部网页
-	    			case 3://外部网页
-	    			case 4://apk下载
-	    			case 8://app to H5
-	    				return {url:data.redirect_url || "javascript:void(0)",target:target};
-	    			case 5://素材目录
-	    				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
-    				case 6: //自搭页面
-    					return {url:this.setHref('selfbuild/page.62'),target:target}
-    				default:
-    					return {url:"javascript:void(0)",target:target}
-	    		}
-	    		case 11:
-	    		case 12:
-	    		case 13:
-	    		case 14: 
-	    		case 15:
-	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
+			// case 2://广告
+	  //   		switch (data.intercut_type) {
+	  //   			case 1://图书详情
+	  //   				return {url:this.setHref('book/introduce.' + data.source_contentid),target:target};
+	  //   			case 2://内部网页
+	  //   			case 3://外部网页
+	  //   			case 4://apk下载
+	  //   			case 8://app to H5
+	  //   				return {url:data.redirect_url || "javascript:void(0)",target:target};
+	  //   			case 5://素材目录
+	  //   				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
+   //  				case 6: //自搭页面
+   //  					return {url:this.setHref('selfbuild/page.62'),target:target}
+   //  				default:
+   //  					return {url:"javascript:void(0)",target:target}
+	  //   		}
 			case 3://搜索
 				return this.setHref('search/search.'+data.name);
+			case 4://目录
 			case 5://分类
 				return this.setHref('cat/category.'+bid);
 			case 6://书城的子页面
 				return this.setHref('mall/page'+data.pgid);
 			case 7://书单
 				return this.setHref('sheet/bookSheet.'+bid);
+			case 11://跳h5下载游戏
+	    		case 12://跳下载apk
+	    		case 13://跳内部网页
+	    		case 14: //跳外部网页
+	    		case 15://app to H5
+	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
 	},
 	setTitle: function(parts){

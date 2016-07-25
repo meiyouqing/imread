@@ -42,7 +42,7 @@ var Selfbuild = React.createClass({
 				</div>
 		return (
 			<div>
-				<Header title={Router.title} closeRight={true} skipurl={true} />
+				<Header title={Router.title} closeRight={true} skipurl={true} path={this.props.route}/>
 				{content}
 				{loading}
 			</div>

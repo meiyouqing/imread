@@ -125,7 +125,7 @@ var Shelf = React.createClass({
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right} />;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right}  path={this.props.route}  />;
 		//console.log(this.state.shelfList);
 		var icon,content;
 		var curClass = '';
