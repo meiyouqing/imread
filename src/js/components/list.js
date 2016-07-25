@@ -109,7 +109,7 @@ var List = React.createClass({
 		if(this.state.resultCount){
 			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		}
-		header = <Header title={GLOBAL.title} />;				
+		header = <Header title={GLOBAL.title} right={null} />;				
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} />;
 		}
