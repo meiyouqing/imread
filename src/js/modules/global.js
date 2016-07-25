@@ -228,7 +228,7 @@ var GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key,path='/') {
+	removeCookie: function(key,path) {
 		console.log(GLOBAL.cookie(key))
 		if (GLOBAL.cookie(key) !== undefined) {
                 GLOBAL.cookie(key, '', {expires: -1,path:path});
