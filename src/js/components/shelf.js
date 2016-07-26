@@ -130,7 +130,7 @@ var Shelf = React.createClass({
 		//console.log(this.state.shelfList);
 		var icon,content;
 		var curClass = '';
-		var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和

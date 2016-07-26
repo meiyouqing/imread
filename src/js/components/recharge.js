@@ -69,7 +69,8 @@ var Recharge = React.createClass({
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-		this.params_init.mobileNum = mobile_num;
+		console.log(mobile_num)
+		//this.params_init.mobileNum = mobile_num;
 		var countDown = function(){
 			this.setState({
 				s: 60
@@ -91,41 +92,36 @@ var Recharge = React.createClass({
 			});
 			POP.alert((res.reason+', 错误码：'+res.code));
 		}.bind(this);
-		var gotInit = function(data,again){
-			this.initData = data;
-			this.refs.key.focus();
-			GLOBAL.cookie('payUser',this.params_init.mobileNum);
-			if(again){
-				var postData = {
-					mobileNum: this.params_init.mobileNum,
-					orderNo: this.params_init.orderNo,
-					r: data.vcurl
-				}
-				AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
-			}
-		}.bind(this);
+		// var gotInit = function(data,again){
+		// 	this.initData = data;
+		// 	this.refs.key.focus();
+		// 	GLOBAL.cookie('payUser',this.params_init.mobileNum);
+		// 	if(again){
+		// 		var postData = {
+		// 			mobileNum: this.params_init.mobileNum,
+		// 			orderNo: this.params_init.orderNo,
+		// 			r: data.vcurl
+		// 		}
+		// 		AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
+		// 	}
+		// }.bind(this);
+		this.getPay();
 		countDown();
-		if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
-			AJAX.go('paySign', this.params_init, function(data) {
-				// console.log(data)
-				this.params_init.sign = data.content;
-				AJAX.go('payInit', this.params_init, gotInit, initError, 'recharge');
-			}.bind(this), initError, 'recharge');
-		}else{
-			gotInit(this.initData,true);
-		}
+		// if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
+		// 	AJAX.go('paySign', this.params_init, function(data) {
+		// 		// console.log(data)
+		// 		this.params_init.sign = data.content;
+		// 		AJAX.go('payInit', this.params_init, gotInit, initError, 'recharge');
+		// 	}.bind(this), initError, 'recharge');
+		// }else{
+		// 	gotInit(this.initData,true);
+		// }
 	},
 	getPay: function(){
 		var that = this;
 		var postData = {
 			productId:this.props.params.rechargeId,
-			fee:'1',
-			payType:'1',
-			spType:'1',
-			mobileNum:'1',
-			productName:'1',
-			productDesc:'1',
-			others:'1'
+			mobileNum:that.refs.mobile_num.value,
 		}
 
 		AJAX.go('pay',postData,function(data){
@@ -147,6 +143,19 @@ var Recharge = React.createClass({
 			}
 		});
 	},
+	getFee: function(){
+		var _this = this;
+		AJAX.go('balance',null,function(data){
+			data.success.list.map(function(v,i){
+				if(v.productId == _this.props.params.rechargeId){
+					_this.setState({
+						aidou: v.fee/100,
+						sum: v.fee/100
+					});
+				}
+			});	
+		});
+	},
 	getInitialState: function() {
 		return {
 			s:0,
@@ -160,7 +169,9 @@ var Recharge = React.createClass({
 			    || nextState.sum != this.state.sum;
 	},
 	componentWillMount: function(){
-		this.getPay();
+		//this.getPay();
+		this.getFee();
+		console.log(this.props.params.rechargeId)
 	},
 	componentDidMount: function() {
 		var phoneNumber = GLOBAL.cookie('payUser');

@@ -28,13 +28,11 @@ var Balance = React.createClass({
 		this.getBalance();
 	},
 	handleClick: function(e) {
-		console.log((e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index')))
 		this.setState({
 			active: (e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index'))
 		});
 	},
 	orderHandle:function(){
-
 		var ordered = this.state.list[this.state.active];
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
