@@ -174,7 +174,8 @@ var Reading = React.createClass({
 			order: false,
 			intercutList: false, //呼出页广告
 			showIntercut: false, //是否显示呼出页广告
-			intercut: false //插页广告
+			intercut: false, //插页广告
+			download: false //界面底部下载浮层
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -509,6 +510,7 @@ var Reading = React.createClass({
 				expires: 1000
 			});
 		}
+		this.isdownLoad();
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
@@ -567,9 +569,30 @@ var Reading = React.createClass({
 		}
 	},
 	handleScroll: function(e) {
+		
+		if(this.showDownload) {
+			var scroller = this.refs.scrollarea,
+				reader = this.refs.reading;
+
+			if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
+				if(this.state.download)	  this.setState({download: false});
+			} else {
+				if(!this.state.download)	  this.setState({download: true});
+			}
+		}	//下载客户端提示
+
 		if (this.state.showSetting) {
 			this.toggleSettings(1);
 		}
+	},
+	isdownLoad: function(){
+		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
+		var index = book_isload.indexOf(Router.parts[1])>=0;
+		this.showDownload = index;
+		if(index)	
+			setTimeout(function(){
+				this.setState({download: true});
+			}.bind(this),500);
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.loading !== nextState.loading 
@@ -707,7 +730,7 @@ var Reading = React.createClass({
 					<i className="u-miguLogo"></i>
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
-					<section className="u-readingContent">
+					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
 								return <p key={i}>{p}</p>;
@@ -717,6 +740,21 @@ var Reading = React.createClass({
 					{intercut}
 					<button className="u-btn-1">点击阅读下一章</button>
 				</div>
+
+				
+			        <div id="reading-download" className={this.state.download?'active':''}>
+			        	<a href="http://readapi.imread.com/api/upgrade/download?channel=aidouhd">
+			            <img src="http://www.imread.com/img/mobile-logo.png?2" />
+			            <div className="detail">
+			                <p>你想看的好书</p>
+			                <p>艾美阅读都有</p>
+			            </div>
+			            <div className="down-button">
+			                立即下载
+			            </div>
+			           </a>
+			        </div>
+			    
 
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>
 					<div className="reading-guide-item guide-top">

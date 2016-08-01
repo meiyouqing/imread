@@ -91,3 +91,9 @@
 .m-intercut .btn a{display: inline-block;text-align: center;padding: 0 18px;height: 46px;line-height: 46px;background: rgba(0, 0, 0, .6);color: #FFF;font-size: 18px;border-radius: 3px;}
 
 .m-reading .u-btn-1{position: relative;background: rgba(0, 0, 0, .1);color: #999;}
+
+#reading-download {position: fixed;bottom: 0;left: 0;width: 90%;height: 30px;padding: 5px 5%;background-color: rgba(0, 0, 0, .5);display: none;z-index: -1;}
+#reading-download.active{display: block;z-index: 1}
+#reading-download  img {width:30px;float: left;}
+#reading-download  .detail {float: left;line-height: 15px;margin-left: 15px;color: #fff;font-size: 12px;}
+#reading-download  .down-button {height: 28px;width: 105px;line-height: 28px;text-align: center;color: #fff;font-size: 15px;border-radius: 3px;color: #1fcfd7;border: 1px solid #1fcfd7;float: right;}
