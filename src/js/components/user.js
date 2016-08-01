@@ -43,7 +43,7 @@ var User = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: {
-				portraitUrl: 'src/img/defaultAvatar.png'
+				portraitUrl: 'http://m.imread.com/src/img/defaultAvatar.png'
 			},
 		};
 	},
@@ -165,13 +165,9 @@ var User = React.createClass({
 				href: 'readHistory',
 				requireLogin: this.requireLogin
 			}], [{
-				title: '意见反馈',
-				icon: 'icon-feedback',
-				href: 'feedback'
-			}, {
-				title: '关于艾美阅读',
+				title: '设置',
 				icon: 'icon-about',
-				href: 'about'
+				href: 'setting'
 			}]
 		];
 		var logoutBtn;

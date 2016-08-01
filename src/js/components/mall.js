@@ -1,4 +1,4 @@
-var Header = require('./header');
+var Header = require('./header_f');
 var MallNav = require('./mallNav');
 
 var Mall = React.createClass({
@@ -13,6 +13,9 @@ var Mall = React.createClass({
 				navList:data.pagelist
 			});
 		});
+	},
+	gotoSearch: function(){
+		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 	},
 	getInitialState: function(){
 		return {
@@ -35,9 +38,13 @@ var Mall = React.createClass({
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
 		}
+		var right = <div className="icon-s icon-menu right icon-m-r10" onClick={this.showUser} ></div>,
+			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
+			left = <div className="i-logo"></div>;
+
 		return (
 			<div className="g-mall">
-				<Header title="书城" left={null}  path={this.props.route}/>
+				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
 				{this.props.children}
 			</div>

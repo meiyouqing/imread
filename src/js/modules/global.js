@@ -72,6 +72,7 @@ var GLOBAL = {
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
+		if(isNaN(type)) return '';
 		switch(type){
 			case 1://图书详情
 				return this.setHref('book/introduce.'+bid,route_type);

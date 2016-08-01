@@ -6,6 +6,13 @@ var Book6 = require('./book6');
 var Book7 = require('./book7_mallSubject');
 var Book8 = require('./book8_bookSheet');
 
+var Recommend = React.createClass({
+	render: function(){
+		 return <p className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span>{this.props.block.short_recommend_words}</p>
+	}
+
+});
+
 var Block1 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data || this.props.href !== nextProps.href;
@@ -15,11 +22,10 @@ var Block1 = React.createClass({
 		return (
 			<section className="m-block">
 				<Link className="title" to={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
-					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<span className='f-fr'>查看更多</span>
+					<h2>{this.props.data.name}</h2>
 				</Link>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="subCat-1 f-clearfix">
 					{
 						this.props.data.contentlist.slice(0,(this.props.data.contentlist.length - this.props.data.contentlist.length % 3)).map(function(v,i){
@@ -27,6 +33,7 @@ var Block1 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -40,11 +47,10 @@ var Block2 = React.createClass({
 		return (
 			<section className="m-block">
 				<Link className="title" to={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
-					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<span className='f-fr'>查看更多</span>
+					<h2>{this.props.data.name}</h2>
 				</Link>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="subCat-2 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
@@ -53,6 +59,7 @@ var Block2 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -66,11 +73,11 @@ var Block3 = React.createClass({
 		return (
 			<section className="m-block">
 				<Link className="title" to={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
-					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
+					<span className='f-fr'>查看更多</span>
+					<h2>{this.props.data.name}</h2>
 				</Link>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="subCat-3 f-clearfix">
 						<div className="u-book2-line">
 						{
@@ -91,6 +98,7 @@ var Block3 = React.createClass({
 							}.bind(this))
 						}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -104,11 +112,10 @@ var Block4 = React.createClass({
 		return (
 			<section className="m-block">
 				<Link className="title" to={this.props.href}>
-					<span className="iconfont icon-arrow-right f-fr"></span>
-					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<span className='f-fr'>查看更多</span>
+					<h2>{this.props.data.name}</h2>
 				</Link>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="subCat-4 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
@@ -121,6 +128,7 @@ var Block4 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -141,7 +149,6 @@ var Block6 = React.createClass({
 					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
 				</div>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="subCat-6 f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
@@ -151,6 +158,7 @@ var Block6 = React.createClass({
 					}
 					{emptyBook6}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -185,7 +193,6 @@ var Block7 = React.createClass({
 					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="content">
-					{this.props.recommend}
 					<ul className={"subCat-"+this.props.data.style+" f-clearfix"}>
 					{
 						this.state.contentlist.map(function(v,i){
@@ -199,6 +206,7 @@ var Block7 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -215,7 +223,6 @@ var Block9 = React.createClass({
 					<h2>{this.props.data.name}</h2>
 				</Link>
 				<div className="content">
-					{this.props.recommend}
 					<ul className="f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
@@ -223,6 +230,7 @@ var Block9 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -240,7 +248,6 @@ var Block12 = React.createClass({
 			<section className="m-block">
 				{title}
 				<div className="content">
-					{this.props.recommend}
 					<ul className={"f-clearfix subCat-"+this.props.data.style}>
 					{
 						this.props.data.contentlist.slice(0,this.props.data.contentlist.length-(this.props.data.contentlist.length%2)).map(function(v,i){
@@ -248,6 +255,7 @@ var Block12 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 				</div>
 			</section>
 		);
@@ -302,7 +310,6 @@ var Block14 = React.createClass({
 					<h2 className="f-tc">{this.props.data.name}</h2>
 				</div>
 				<div className="content" ref="container">
-					{this.props.recommend}
 					<ul className="subCat-14">
 					{
 						this.state.contentList.map(function(v,i){
@@ -310,6 +317,7 @@ var Block14 = React.createClass({
 						}.bind(this))
 					}
 					</ul>
+					{this.props.recommend}
 					{more}
 				</div>
 			</section>
@@ -367,7 +375,6 @@ var Block15 = React.createClass({
 						<h2 className="f-tc">{this.props.data.name}</h2>
 					</Link>
 					<div className="content">
-						{this.props.recommend}
 						<ul className="subCat-4 f-clearfix">
 						{
 							this.props.data.contentlist.map(function(v,i){
@@ -375,6 +382,7 @@ var Block15 = React.createClass({
 							}.bind(this))
 						}
 						</ul>
+						{this.props.recommend}
 					</div>
 				</section>
 				);
@@ -396,9 +404,8 @@ var Blocklist = React.createClass({
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
-			var recommend = block.icon_word?
-							<p className="recommend"><span className="iconWord f-br-3">{block.icon_word}</span>{block.short_recommend_words}</p>
-							: null;
+			var recommend = block.icon_word?<Recommend block={block} />:null;
+						
 			var hrefStr = GLOBAL.setHref('more/block.'+block.id);
 			switch (block.style) {
 				case 1 :

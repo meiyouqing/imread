@@ -39,11 +39,12 @@ var BookContent = (function() {
 	function getContent2(options) {
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-		var url = totalUrl.replace(/\?*/, '')
+		//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+		var url = totalUrl.replace('/api/','/api/v1/')
+						 .replace(/\?*/, '')
 					      .replace('$bid', options.bid)
 					      .replace('$cid', options.cid)
 					      .replace('$cm', sourceConfig.cm);
-
 		AJAX.getJSON('GET', url, {}, options.callback, options.onError);
 	}
 

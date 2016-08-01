@@ -27,18 +27,22 @@ var API={
 	log:{method:'POST', base:'/api/v1/upload/log', param:{readLog: {}}},
 	balance:{method:'GET', base:'/api/v1/auth/balance', param:{}},
 	// pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
-	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
-	payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
-	paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
-	payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
-	payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
+	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,mobileNum:0}},
+	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
+	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
+	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
+	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
+	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
+	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
+	// payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
 	crossDomain:{method:'GET',base:'/api/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
 	recentRead:{method: 'GET', base: '/api/v1/me/recentReading', param:{pages: 1, contents: 10}},
 	deleteRecentRead:{method: 'POST', base: '/api/v1/me/recentReading/delete', param:{book_id: ''}},
 	listTag:{method: 'GET', base: '/api/v1/me/label/list', param:{}},
 	addTag:{method: 'POST', base: '/api/v1/me/label/add', param:{id: ''}},
 	deleteTag:{method: 'POST', base: '/api/v1/me/label/delete', param:{id: ''}},
-	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}}
+	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}},
+	pwd: {method: 'POST', base: '/api/v1/auth/update/password', param:{oldPasswd: 0,password: 0}},
 };
 
 //接口缓存机制
@@ -96,8 +100,8 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
-	//var urlBase = 'http://readapi.imread.com';
-	var urlBase = 'http://192.168.0.34:9090';
+	var urlBase = 'http://readapi.imread.com';
+	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;

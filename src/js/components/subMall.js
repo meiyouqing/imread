@@ -74,7 +74,7 @@ var Mall = React.createClass({
 		}else{
 			if(this.state.list.length){
 				list = (
-					<div className="g-main">
+					<div className="g-main g-main-1">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
 							<Blocklist blockList={this.state.list} path={this.props.route}/>
 							{scrollLoading}

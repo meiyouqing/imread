@@ -8,6 +8,7 @@ var Recharge = React.createClass({
 	sum:0,
 	initData:null,
 	loading:false,
+	params: {},
 	handleSubmit: function() {
 		var that = this;
 		// var data = {code:200};
@@ -18,49 +19,41 @@ var Recharge = React.createClass({
 		if (that.loading) {return ;}
 		if (!GLOBAL.assertNotEmpty(phoneNumber, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(phoneNumber, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-		if(!that.initData){
+		if(!that.params.trade_no){
 			POP._alert('请先获取验证码！');
 			return;
 		}
 		if (!GLOBAL.assertNotEmpty(verifyCode, '请输入验证码')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(verifyCode, /^\d{6}$/, '请输入6位数字验证码')) {return ;}
 
-		var postData = {
-			mobileNum: that.params_init.mobileNum,
-			orderNo: that.params_init.orderNo,
-			verifyCode: verifyCode
-		};
+		this.params.verify_code = verifyCode;
 		that.loading = true;
-		AJAX.go('payConfirm', postData, success, null, 'recharge');
-		// function fail(res){
-		// 	that.loading = false;
-		// 	console.log(res.code)
-		// 	if(res.code===159){
-		// 		POP.alert(res.reason, that.refs.key.focus);
-		// 	}else{
-		// 		success(res);
-		// 	}
-		// }
+		AJAX.go('payConfirm', this.params, success, null, 'recharge');
 		function success(data){
+
 			that.loading=false;
-			if(data.code===159){
+			if(data.code === 200){
+				window.localStorage.recharge = JSON.stringify(that.params);
+				browserHistory.push(GLOBAL.setHref('recharge_result'));
+			} else {
 				POP.alert(data.reason, function(){
 					that.refs.key.select();
 				});
 				return;
 			}
-			browserHistory.push(GLOBAL.setHref('recharge_result'));
-			setTimeout(function(){
-				var rechargeRes = <Recharge_result data={data} />
-				if(data.code!==200){
-					that.props.popup(rechargeRes);
-					return;
-				}
-				data.sum = that.sum;
-				data.aidou = that.aidou;
-				data.phone = that.params_init.mobileNum;
-				that.props.popup(rechargeRes);
-			},0)
+
+			
+			// setTimeout(function(){
+			// 	var rechargeRes = <Recharge_result data={data} />
+			// 	if(data.code!==200){
+			// 		that.props.popup(rechargeRes);
+			// 		return;
+			// 	}
+			// 	data.sum = that.sum;
+			// 	data.aidou = that.aidou;
+			// 	data.phone = that.params_init.mobileNum;
+			// 	that.props.popup(rechargeRes);
+			// },0)
 		}
  	},
 	getCode: function(e) {
@@ -69,7 +62,6 @@ var Recharge = React.createClass({
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-		console.log(mobile_num)
 		//this.params_init.mobileNum = mobile_num;
 		var countDown = function(){
 			this.setState({
@@ -105,7 +97,8 @@ var Recharge = React.createClass({
 		// 		AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
 		// 	}
 		// }.bind(this);
-		this.getPay();
+		if(!this.params.trade_no)	this.getPay();
+		else this.rePay();
 		countDown();
 		// if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
 		// 	AJAX.go('paySign', this.params_init, function(data) {
@@ -125,21 +118,29 @@ var Recharge = React.createClass({
 		}
 
 		AJAX.go('pay',postData,function(data){
-			that.setState({
-				aidou: data.success.fee/100,
-				sum: data.success.fee/100
-			});
-			var params = data.success;
-			that.params_init = {
-				fee: params.fee,
-				orderNo: params.orderNo,
-				others: params.others,
-				payType: params.payType,
-				productDesc: params.productDesc,
-				productName: params.productName,
-				reqTime: params.reqTime,
-				spType: params.spType,
-				thirdPartyId: params.thirdPartyId			
+			
+			if(data.code == 200){
+				that.params = {
+					trade_no: data.success.tradeno,
+					trade_day:data.success.trade_day,
+					order_no:data.success.orderno
+				};
+				POP._alert('验证码发送成功');
+			} else {
+				POP._alert('验证码发送失败');
+			}
+		});
+	},
+	rePay: function(){
+		var params = {
+			trade_no: this.params.trade_no,
+			trade_day:this.params.trade_day
+		};
+		AJAX.go('repay',params,function(data){
+			if(data.code == 200){
+				POP._alert('重新发送成功');
+			} else {
+				POP._alert('重新发送失败');
 			}
 		});
 	},
@@ -166,12 +167,12 @@ var Recharge = React.createClass({
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.s != this.state.s 
 			    || nextState.aidou != this.state.aidou
-			    || nextState.sum != this.state.sum;
+			    || nextState.sum != this.state.sum
+			    || this.props.children != nextPros.children;
 	},
 	componentWillMount: function(){
 		//this.getPay();
 		this.getFee();
-		console.log(this.props.params.rechargeId)
 	},
 	componentDidMount: function() {
 		var phoneNumber = GLOBAL.cookie('payUser');

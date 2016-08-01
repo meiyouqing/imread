@@ -125,14 +125,13 @@ var Block5 = React.createClass({
 		}
 		var visibility = this.props.data.contentlist.length > 1 ? 'hidden' : 'visible';
 		return (
-			<section className="m-block-top m-block">
+			<section className="m-block-top m-block n-padding">
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
 						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: this.state.height}}>
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
-
 									var hrefObj = GLOBAL.typeHref(v);
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:'_self'};
 			                		return (

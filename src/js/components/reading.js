@@ -332,6 +332,11 @@ var Reading = React.createClass({
 	},
 	gotContent: function(data,autoPay){
 		//如果是付费章节，跳到确认订单
+		if(data.errorMsg)  {
+			this.goLogin(this.getContent);
+			return;
+		}
+
 		if(!this.isMounted()){return;}
 		var that = this;
 		//设置auto pay cookie
@@ -425,7 +430,10 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			browserHistory.push(GLOBAL.setHref('order/'+encodeURIComponent(data.orderUrl)));
+			var params = {name:that.state.bookName,data: data}
+			window.localStorage.onsale_book = JSON.stringify(params);
+			window.localStorage.payLink = data.orderUrl;
+			browserHistory.push(GLOBAL.setHref('order'));
 			// require.ensure([], function(require) {
 			// 	var Order = require('./order');
 			// 	that.props.popup(<Order 
@@ -542,6 +550,7 @@ var Reading = React.createClass({
 	},
 	componentDidUpdate: function(nextProps, nextState) {
 		// var that = this;
+
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
 		//第一次进入阅读跳到上次阅读的地方
@@ -558,6 +567,7 @@ var Reading = React.createClass({
 			hammerTime.on('tap', this.handleClick);
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
+
 		if(this.props.params !== nextProps.params)
 			this.getContent();
 	},
@@ -622,6 +632,7 @@ var Reading = React.createClass({
 					<div className="g-main g-main-1">
 						<NoData type="UFO" />
 					</div>
+					{this.props.children}
 				</div>
 			);
 		}
@@ -643,6 +654,7 @@ var Reading = React.createClass({
 				<div className="gg-body">
 					{head}
 					<i className="u-loading u-book-loading">努力加载中...</i>
+					{this.props.children}
 				</div>
 			);
 		}

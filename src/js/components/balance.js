@@ -53,7 +53,7 @@ var Balance = React.createClass({
 						(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
 							var active = i == this.state.active;
 							var activeClass = active ? ' active' : '';
-							var activeImg = active ? 'src/img/balance_select.png' : 'src/img/balance.png';
+							var activeImg = active ? 'http://m.imread.com/src/img/balance_select.png' : 'http://m.imread.com/src/img/balance.png';
 							return (
 								<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
 									<img src={activeImg} />

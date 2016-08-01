@@ -1,5 +1,26 @@
 var Blocklist = require('./blocklist');
 var Header = require('./header');
+var BookStore = require('./bookStore');
+import MallNavLink from './mallNavLink'
+
+var MallNav = React.createClass({
+	render: function() {
+		if(!this.props.navList || !this.props.navList.length){return <i></i>}
+		return (
+			<nav className="g-nav g-top">
+				<div className="m-nav f-flexbox" >
+					{
+						this.props.navList.map(function(v,i){
+							return (
+								<MallNavLink to={"/top/"+i} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
+							)
+						}.bind(this))
+					}
+				</div>
+			</nav>
+		);
+	}
+});
 
 var Top = React.createClass({
 	mixins: [Mixins()],
@@ -45,20 +66,25 @@ var Top = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		//console.log(this.props,nextProp)
+		console.log(this.props.params,nextProp.params)
 		return this.state.noMore !== nextState.noMore
 				|| this.state.list !== nextState.list 
-				|| this.props.children !== nextProp.children;
+				|| this.props.children !== nextProp.children
+				|| this.props.params.topId !== nextProp.params.topId;
 	},
 	render:function(){
-		var list;
+
+		console.log(this.props.params.topId)
+
+		var list, arr=[];
 		if(!this.state.list){
 			list = <Loading />
 		}else{
 			if(this.state.list.length){
 				list = (
-					<div className="g-main">
+					<div className="g-main g-main-3">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<Blocklist blockList={this.state.list} />
+							<BookStore data={this.state.list}  order={this.props.params.topId}/>
 						</div>
 					</div>
 					);
@@ -70,9 +96,30 @@ var Top = React.createClass({
 			list = (<div className="g-main"><NoData type="UFO" /></div>);
 		}
 
+		// var list;
+		// if(!this.state.list){
+		// 	list = <Loading />
+		// }else{
+		// 	if(this.state.list.length){
+		// 		list = (
+		// 			<div className="g-main g-main-3">
+		// 				<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
+		// 					<Blocklist blockList={this.state.list} />
+		// 				</div>
+		// 			</div>
+		// 			);
+		// 	}else{
+		// 		list = (<div className="g-main"><NoData /></div>);
+		// 	}
+		// }
+		// if(this.state.onerror){
+		// 	list = (<div className="g-main"><NoData type="UFO" /></div>);
+		// }
+
 		return (
 			<div>
-				<Header title="发现" left={null}  path={this.props.route} />
+				<Header title="发现"  path={this.props.route} />
+				<MallNav navList={this.state.list} />
 				{list}
 				{this.props.children}
 			</div>

@@ -1,4 +1,4 @@
-var Book4 = require('./book4');
+var Book1 = require('./book1');
 var Block7 = React.createClass({
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.props.bookList !== nextProps.bookList;
@@ -9,7 +9,7 @@ var Block7 = React.createClass({
 			{	
 				this.props.bookList.map(function(v,i){
 					return (
-						<Book4 key={i} data={v} />
+						<Book1 key={i} data={v} />
 					)
 				}.bind(this))
 			}
