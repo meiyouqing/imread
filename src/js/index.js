@@ -14,6 +14,13 @@ if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
 	GLOBAL.header.channel = channel;
 }
 
+if(/plg_nld=\d+\&/.test(location.hash)){
+	var hash = location.hash.replace(/plg_nld=\d+\&/, '');
+	hash = hash.replace(/\?[\s\S]+$/,'');
+	window.location.replace(hash);
+	console.log(hash);
+}
+
 require('./modules/readConfig');
 
 GLOBAL.setUser({
