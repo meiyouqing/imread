@@ -1,5 +1,6 @@
 var Header = require('./header_f');
 var MallNav = require('./mallNav');
+var UserList = require('./userList');
 
 var Mall = React.createClass({
 	getNav: function(){
@@ -44,8 +45,10 @@ var Mall = React.createClass({
 
 		return (
 			<div className="g-mall">
+
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
+				<UserList />
 				{this.props.children}
 			</div>
 			)

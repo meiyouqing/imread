@@ -1,5 +1,5 @@
 .m-userblocks{position: absolute;top: 44px;bottom: 0;left: 0;right: 0;background: #f8f9f9;}
-.m-userblock{padding-bottom:20px;box-sizing:border-box;background-color: #F5F5F5;}
+.m-userblock{padding-bottom:20px;box-sizing:border-box;background-color: #F5F5F5;width: 70%;left: inherit;z-index: 100}
 .m-ublock{margin-top: 20px;}
 .m-ublock .title h2{padding: 0 15px;height: 56px;line-height: 56px;font-size: 14px;font-weight: bold;color: #333333;}
 

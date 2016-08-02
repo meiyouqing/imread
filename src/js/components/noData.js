@@ -7,12 +7,12 @@ var NoData = React.createClass({
 		return false;
 	},
 	render: function(){
-		var src = '../../img/pic1@2x.png',
+		var src = 'http://m.imread.com/src/img/pic1@2x.png',
 			text = '抱歉!没有找到相关数据..',
 			btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
 		switch(this.props.type){
 			case 'emptyShelf':
-				src = 'http://m.imread.com/src/img/bookrack.png';
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
 				text = '亲，书架还空空荡荡哦~';
 			break;
 			case 'UFO':
@@ -21,12 +21,12 @@ var NoData = React.createClass({
 				btn = <a className="u-btn" onClick={this.reload}>重新加载</a>;
 			break;
 			case 'recentRead':
-				src = 'http://m.imread.com/src/img/bookrack.png';
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
 				text = '暂无阅读记录';
 				btn = false;
 			break;
 			case 'emptyTag':
-				src = 'pic1@2x.png',
+				src = 'http://m.imread.com/src/img/pic1@2x.png',
 				text = '你还没有设置标签哦';
 				btn = <Link className="u-btn" to="/user/myTags">去设置标签</Link>;
 			break;

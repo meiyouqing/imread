@@ -30,14 +30,12 @@ var mixins = function() {
 			}
 		},
 		scrollHandle: function(e) {
-			console.log(111)
 			var list = e.target;
 			if (!this.isMounted()) {return ;}			
 			clearTimeout(this.timeoutId);
 			this.timeoutId = setTimeout(function() {
 				this.lazyloadImage(list);
 				//console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
-				console.log(this.state.noMore,this.state.scrollUpdate)
 				if (!this.state.noMore && !this.state.scrollUpdate &&  ((list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)) {
 					this.scrollHandleCallback();
 				}
@@ -48,9 +46,13 @@ var mixins = function() {
 			this.setState({
 				scrollUpdate:true
 			})
-			var n = this.props.params[(this.props.route.path.split(':')[1])];
+
+			if(this.props.route)
+				var n = this.props.params[(this.props.route.path.split(':')[1])];
+			else 
+				var n = window.location.pathname.split('/').pop().split('.')[0];
 			n = n.split('.')[0];
-			console.log(AJAX.API,n)
+
 			var p = AJAX.API[n].param['pages']? 'pages':'page';
 			AJAX.API[n].param[p]++;		
 			this.getList();

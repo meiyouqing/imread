@@ -12,7 +12,7 @@ var MallNav = React.createClass({
 					{
 						this.props.navList.map(function(v,i){
 							return (
-								<MallNavLink to={"/top/"+i} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
+								<MallNavLink to={"/top/block."+i} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
 							)
 						}.bind(this))
 					}
@@ -24,9 +24,10 @@ var MallNav = React.createClass({
 
 var Top = React.createClass({
 	mixins: [Mixins()],
+	pid: 0,
 	getInitialState: function(){
 		return{
-			noMore:true,
+			noMore:false,
 			scrollUpdate:false,
 			onerror:false,
 			list:null
@@ -36,10 +37,10 @@ var Top = React.createClass({
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
 			AJAX.init('page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks);
-			this.getList();			
+			this.getLists();			
 		},this.onerror)
 	},
-	getList: function (){
+	getLists: function (){
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
 			if (!data.blocklist.length) {
@@ -56,26 +57,26 @@ var Top = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
+
 		if(GLOBAL.isRouter(this.props))	this.getData();
 		myEvent.setCallback('updateTopList',this.getData);
 	},
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextProp) {
 		if(GLOBAL.isRouter(this.props) &&!this.state.list)	  this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
-		this.lazyloadImage(this.refs.container);
+		//setTimeout(function(){
+			this.lazyloadImage(this.refs.container);
+		//}.bind(this),300);
+		
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-		//console.log(this.props,nextProp)
-		console.log(this.props.params,nextProp.params)
 		return this.state.noMore !== nextState.noMore
 				|| this.state.list !== nextState.list 
 				|| this.props.children !== nextProp.children
 				|| this.props.params.topId !== nextProp.params.topId;
 	},
 	render:function(){
-
-		console.log(this.props.params.topId)
-
+		this.pid = this.props.params.topId.split('.').pop();
 		var list, arr=[];
 		if(!this.state.list){
 			list = <Loading />
@@ -83,8 +84,8 @@ var Top = React.createClass({
 			if(this.state.list.length){
 				list = (
 					<div className="g-main g-main-3">
-						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<BookStore data={this.state.list}  order={this.props.params.topId}/>
+						<div ref="container">
+							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid}/>
 						</div>
 					</div>
 					);
