@@ -382,7 +382,7 @@ var Shelf = React.createClass({
 
 
 		return (
-			<div className="gg-wraper">
+			<div className="gg-wraper gg-body" >
 				{header}
 				{modelList}
 				{content}

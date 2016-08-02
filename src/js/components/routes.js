@@ -69,6 +69,52 @@ module.exports = (
 		<IndexRedirect to="/mall" />
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+				<Route path="top/:topId" component={Top}>
+					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="myTags" component={Tag}/>
+					{loginWrap}
+					{bookWrap}
+					{searchWrap}
+				</Route>
+				<Route path="shelf" component={Shelf}>
+					{bookWrap}
+					{loginWrap}
+					{readWrap}
+				</Route>
+				{loginWrap}
+				<Route path="balance" component={Balance} >
+					<Route path="recharge/:rechargeId" component={Recharge} >
+						<Route path="recharge_result" component={RechargeResult} />
+					</Route>
+				</Route>
+				<Route path="recentRead" onLeave={scrollResetHandle} component={RecentRead}>
+					{readWrap}
+				</Route>
+				<Route path="myTags" component={Tag}/>
+				<Route path="purchased" component={Purchased}>
+					{bookWrap}
+				</Route>
+				<Route path="readHistory" component={ReadHistory}/>
+				<Route path="setting" component={Setting}>
+					<Route path="modifypwd" component={Modifypwd}>
+						{loginWrap}
+					</Route>
+					<Route path="feedback" component={Feedback}/>
+					<Route path="compact" component={Compact} />
+					<Route path="about" component={About} />
+			</Route>
 				<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 					{bookWrap}
 					{searchWrap}

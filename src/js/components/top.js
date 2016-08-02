@@ -11,8 +11,9 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
+							var hrefStr =window.location.pathname.replace(/top\/([^\"]*)/,"") +'top/block.'+i;
 							return (
-								<MallNavLink to={"/top/block."+i} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
+								<MallNavLink to={hrefStr} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
 							)
 						}.bind(this))
 					}
@@ -118,7 +119,7 @@ var Top = React.createClass({
 		// }
 
 		return (
-			<div>
+			<div  className="gg-body">
 				<Header title="发现"  path={this.props.route} />
 				<MallNav navList={this.state.list} />
 				{list}

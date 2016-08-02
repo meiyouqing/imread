@@ -87,7 +87,7 @@ html, body, #app-container{background: #FFFFFF;}
 /* /grid */
 
 /* module */
-.m-nav{position: absolute;z-index:999;width:100%;background-color: #fff;}
+.m-nav{position: absolute;z-index:10;width:100%;background-color: #fff;}
 .m-nav a{display:block;box-sizing:border-box;height: 40px;line-height: 40px;font-size:16px;text-align: center;}
 .m-nav a.z-active{color: #0196aa;border-bottom: 1px solid #0196aa;}
 
@@ -258,7 +258,7 @@ html, body, #app-container{background: #FFFFFF;}
 .u-book-10 a span.book-name{margin-left: 10px;font-size: 15px;}
 
 .u-lines{background: #FFFFFF;border-top: 1px solid #EEE;border-bottom: 1px solid #EEE;}
-.u-lines .u-line{height: 50px;line-height: 50px;margin-left: 15px;border-bottom: 1px solid #EEE;color: #666;font-size: 14px;}
+.u-lines .u-line{height: 50px;line-height: 50px;margin-left: 15px;color: #000;font-size: 15px;}
 .u-lines .u-line:last-child{border-bottom: 0;}
 .u-lines .u-line a{display: block;height: 50px;line-height: 50px;padding-left: 0px;}
 .u-lines .u-line .iconfont{display: inline-block;font-size: 18px;margin-right: 20px;}
@@ -418,6 +418,15 @@ progress::-webkit-progress-value  { background: #17d671; }
 .icon-n.icon-xiazai{background: url(../img/icon_xiazai.png) no-repeat;background-size: cover;}
 .icon-n.icon-shanchu{background: url(../img/icon_shanchu.png) no-repeat;background-size: cover;}
 .icon-n.icon-paixu{background: url(../img/paixu.png) no-repeat;background-size: cover;}
+.icon-shelf{background: url(../img/user/ic_shujia2@2x.png) no-repeat;background-size: cover;}
+.icon-discover{background: url(../img/user/ic_compass@2x.png) no-repeat;background-size: cover;}
+.icon-recent{background: url(../img/user/icon_Last-reading@2x.png) no-repeat;background-size: cover;}
+.icon-bookstore{background: url(../img/user/icon_collection@2x.png) no-repeat;background-size: cover;}
+.icon-aidou{background: url(../img/user/icon_aidou@2x.png) no-repeat;background-size: cover;}
+.icon-tags{background: url(../img/user/icon_tags@2x.png) no-repeat;background-size: cover;}
+.icon-setter{background: url(../img/user/icon_set@2x.png) no-repeat;background-size: cover;}
+.icon-chongzhi{background: url(../img/user/leftbar_chongzhi@2x.png) no-repeat;background-size: cover;}
+.icon-achieve{background: url(../img/user/icon_achievement@2x.png) no-repeat;background-size: cover;}
 
 .icon-s{position: relative;width: 44px;height: 44px;display: inline-block;vertical-align: middle;z-index: 1000;}
 .icon-s.icon-bookstore{background: url(../img/icon_bookstore.png) no-repeat;background-size: cover;}

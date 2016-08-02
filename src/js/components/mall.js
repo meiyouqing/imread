@@ -6,6 +6,7 @@ var Mall = React.createClass({
 	getNav: function(){
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
+			console.log(111)
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
 			if(location.pathname === this.props.route.path){
 				browserHistory.replace('/mall/'+subnav);
@@ -23,6 +24,13 @@ var Mall = React.createClass({
 			navList: null
 		}
 	},
+	hideUser: function(){
+		GLOBAL.removeClass(this.refs.userlist,'show');
+	},
+	showUser: function(){
+		console.log(this.refs)
+		GLOBAL.addClass(this.refs.userlist,'show');
+	},
 	componentDidMount: function(){
 		this.getNav();
 	},
@@ -35,9 +43,10 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
-		var mallNav;
+		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
+			userList = <UserList hide={this.hide} />;
 		}
 		var right = <div className="icon-s icon-menu right icon-m-r10" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
@@ -48,7 +57,10 @@ var Mall = React.createClass({
 
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
-				<UserList />
+				<section className="m-user-list" ref="userlist">
+					<section className="m-wrapper" onClick={this.hideUser}></section>
+					{userList }
+				</section>
 				{this.props.children}
 			</div>
 			)
