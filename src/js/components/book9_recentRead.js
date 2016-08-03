@@ -27,9 +27,16 @@ var Book9 = React.createClass({
 		         + this.props.book.chapter_id + '.'
 		         + this.props.book.content_id + '.'
 		         + this.props.book.source_id;
+		var deleter;
+
+		if(this.props.icon)
+			deleter = <button className="delete" onClick={this.props.deleteWay} data-bid={this.props.book.content_id}>删除</button>;
+		else
+			deleter = null;
+
 		return (
-			<li className="u-book-9" data-bid={this.props.book.content_id} data-href={GLOBAL.setHref(href)}>
-				<a className="f-clearfix">
+			<li className="u-book-9" >
+				<Link to={GLOBAL.setHref(href)} className="f-clearfix">
 					<div className="f-fl">
 						<Img src={this.props.book.big_coverlogo || this.props.book.image_url} />
 					</div>
@@ -39,7 +46,8 @@ var Book9 = React.createClass({
 						<div className="f-ellipsis-2 chapter-name">{this.props.book.chapter_name}</div>
 						<div className="date">{this.prettyDate(this.props.book.mark_time)}</div>
 					</div>
-				</a>
+				</Link>
+				{deleter}
 			</li>
 		);
 	}

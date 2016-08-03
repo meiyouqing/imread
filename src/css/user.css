@@ -9,8 +9,11 @@
 .m-user-list{position: absolute;top:0;left:100%;width: 100%;height:100%;transition: all .3s;}
 .m-user-list.show{left: 0}
 
-.u-userform{margin: 0 16px;padding-top: 25px;}
+.u-userform{margin: 0 16px;padding: 25px 0;}
 .u-inputline{margin-bottom: 16px;}
+.u-inputline-2{padding: 20px 0 10px;border-bottom: 1px solid #cccccc;}
+.u-inputline-2 .u-input-2{color: #000;font-size: 15px;line-height: 24px;width: 100%;}
+.u-ymz{line-height: 24px;display: inline-block;font-size: 13px;color: #0196aa;}
 .u-userform .u-inputc, .u-userform .u-buttonc{width: 50%;box-sizing:border-box;padding-right: 8px;}
 .u-userform .u-buttonc{padding:0 0 0 8px;text-align: center;}
 .u-userform .u-buttonc .tip{font-size: 15px;color: #41c2c2;}
@@ -20,6 +23,10 @@
 .u-otherlogin .title{display: block;text-align:center;color: #666666;font-size: 13px;}
 .u-otherlogin img{width: 56px;}
 .u-userform .feedback-tips{color: #999999;margin-bottom: 10px;}
+.u-registerform.u-userform{margin: 0 40px;}
+.u-p-25{margin-top: 25px;}
+.u-p-25 .u-btn.u-btn-full{border-radius: 2px;}
+.u-btn-disabled.u-n-bg{background: transparent;}
 
 .avatar-block{min-height: 133px;background: #40AFA9;}
 .avatar-block .bg{display:block;width: 100%;}

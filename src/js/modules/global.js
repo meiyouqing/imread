@@ -23,6 +23,7 @@ var GLOBAL = {
 	name:'',
 	route:[],
 	unRendered:[],
+	orderLIst:{},
 	goBack:function(path){
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
@@ -60,7 +61,7 @@ var GLOBAL = {
 		// return window.location.pathname.split('/'+path)[0];
 	},
 	typeHref: function(data,spm, route_type){
-		var bid = data.content_id || data.book_id || 0;
+		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
 		if(/2|3|4/.test(data.intercut_type)){
@@ -174,7 +175,7 @@ var GLOBAL = {
 	assertNotEmpty: function(s, msg) {
 		if (!s) {
 			if (msg) {
-				POP.alert(msg);
+				POP._alert(msg);
 			}
 		}
 		return !!s;
@@ -182,7 +183,7 @@ var GLOBAL = {
 	assertMatchRegExp: function(s, reg, msg) {
 		if (!reg.test(s)) {
 			if (msg) {
-				POP.alert(msg);
+				POP._alert(msg);
 			}
 			return false;
 		}

@@ -62,9 +62,10 @@ var Header_s = React.createClass({
 	render: function(){
 		return (
 			<header className="m-bar m-bar-head">
-				<a className="f-fl icon-back iconfont" onClick={this.backClick} ></a>
+				<a className="f-fl icon-s icon-back" onClick={this.backClick} ></a>
 				<form className="u-search f-cb">
-					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名/作者/关键字" onChange={this.handleChange} />
+					<span className="i-put"></span>
+					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名、作者" onChange={this.handleChange} />
 					<button className="searchBtn f-fr" type="submit" onClick={this.handleClick} >{this.state.btn}</button>
 				</form>
 			</header>

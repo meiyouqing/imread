@@ -189,7 +189,7 @@ var Block7 = React.createClass({
 		return (
 			<section className="m-block m-block-1">
 				<div className="title title-1">
-					<span className="batchChange f-fr" onClick={this.batchChange}><i className="iconfont icon-refresh"></i>&nbsp;换一批</span>
+					<span className="batchChange f-fr" onClick={this.batchChange}>换一批</span>
 					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="content">

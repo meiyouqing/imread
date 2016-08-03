@@ -37,7 +37,7 @@ var Top = React.createClass({
 	getData: function(){
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
-			AJAX.init('page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks);
+			AJAX.init('page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1');
 			this.getLists();			
 		},this.onerror)
 	},

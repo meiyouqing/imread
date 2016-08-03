@@ -10,13 +10,13 @@ var Book5 = React.createClass({
 		var topNum = this.props.data.locate;
 		switch(topNum){
 			case 1:
-				topCls=" NO1";
+				topCls=" NO1 hot";
 				break;
 			case 2:
-				topCls=" NO2";
+				topCls=" NO2 hot";
 				break;
 			case 3:
-				topCls=" NO3";
+				topCls=" NO3 hot";
 				break;	
 			default:
 				topNum='';
@@ -25,8 +25,9 @@ var Book5 = React.createClass({
 		return (
 			<li className="u-book-5">
 				<Link to={hrefStr}>
-					<span className={"topNb"+topCls}>{topNum}</span>
-					<span className="f-ellipsis f-ellipsis-ib">{this.props.data.name}</span>
+					{/*<span className={"topNb"+topCls}>{topNum}</span>*/}
+					<span className="f-ellipsis f-ellipsis-ib f-auto-width">{this.props.data.name}</span>
+					<span className={topCls}>热</span>
 				</Link>
 			</li>
 		);

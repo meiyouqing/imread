@@ -34,9 +34,10 @@ var Recharge = React.createClass({
 			that.loading=false;
 			if(data.code === 200){
 				window.localStorage.recharge = JSON.stringify(that.params);
+				GLOBAL.orderLIst = that.params;
 				browserHistory.push(GLOBAL.setHref('recharge_result'));
 			} else {
-				POP.alert(data.reason, function(){
+				POP._alert(data.reason, function(){
 					that.refs.key.select();
 				});
 				return;
@@ -188,28 +189,26 @@ var Recharge = React.createClass({
 				<Header right={null} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
-						<div className="u-balance f-tl">
+						<div className="u-divider"></div>
+						<div className="u-balance-r f-tl">
 							<h5 className="tipTitle f-mb5">充值订单</h5>
 							<p className="f-fc-777">充值艾豆：{this.state.aidou}艾豆</p>
 							<p className="f-fc-777">支付金额：{this.state.sum}元</p>
 						</div>
-						<div className="u-divider"></div>
+						<div className="u-divider u-p-10"></div>
 						<div className="m-registerblock">
 							<form className="u-registerform u-userform">
-								<p className="formTitle f-fc-777">仅支持中国移动手机用户</p>
-								<div className="u-inputline">
-									<input className="u-input" placeholder="手机号" type="tel" ref="mobile_num" />
-								</div>
-								<div className="u-inputline f-clearfix">
-									<div className="u-inputc f-fl">
-										<input className="u-input" placeholder="验证码" type="tel" ref="key" />
-									</div>
-									<div className="u-buttonc f-fl">
-										<a className={"u-btn u-btn-full"+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
+								<div className="u-inputline-2">
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
+									<div className="f-fr">
+										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 									</div>
 								</div>
-								<div className="u-inputline">
-									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>确认充值</a>
+								<div className="u-inputline-2 f-clearfix">
+										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
+								</div>
+								<div className="u-inputline u-p-25">
+									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
 								</div>
 							</form>
 						</div>

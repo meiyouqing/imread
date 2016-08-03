@@ -89,7 +89,7 @@ var Purchased = React.createClass({
 				<div className="recentRead-block">
 					<Header right={false} title={'已购书籍'} path={this.props.route}/>
 					<div className="g-main g-main-1">
-						<div  className="g-scroll m-block" ref="container" onScroll={this.scrollHandle}>
+						<div  className="g-scroll m-block purchase" ref="container" onScroll={this.scrollHandle}>
 							{content}
 						</div>
 					</div>

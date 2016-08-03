@@ -42,16 +42,22 @@ var mixins = function() {
 			}.bind(this), 100);
 		},
 		scrollHandleCallback: function(){
-
+			var n;
 			this.setState({
 				scrollUpdate:true
 			})
 
-			if(this.props.route)
-				var n = this.props.params[(this.props.route.path.split(':')[1])];
+			console.log(this.props.route)
+			if(this.props.route){
+				n = this.props.params[(this.props.route.path.split(':')[1])];
+				if(!n)
+					n = this.props.route.path;
+			}
 			else 
-				var n = window.location.pathname.split('/').pop().split('.')[0];
+				n = window.location.pathname.split('/').pop().split('.')[0];
+			console.log(n)
 			n = n.split('.')[0];
+			console.log(n)
 
 			var p = AJAX.API[n].param['pages']? 'pages':'page';
 			AJAX.API[n].param[p]++;		

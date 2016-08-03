@@ -28,7 +28,7 @@
 .icon-arrow-right:before {content: "\e606";}
 .icon-star:before {content: "\e612";}
 .icon-search:before {content: "\e600";}
-.icon-back:before {content: "\e605";}
+/*.icon-back:before {content: "\e605";}*/
 .icon-selected:after {content: "\e61f"}
 .icon-delete:before {content: "\e618"}
 .icon-lock:before {content: "\e60f";}

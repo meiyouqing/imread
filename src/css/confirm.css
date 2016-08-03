@@ -1,18 +1,18 @@
 .UI_confirm{position: absolute;z-index:9999;top: 0;bottom: 0;left: 0;right: 0;background: rgba(0, 0, 0, .3);-webkit-touch-callout:none;}
 .UI_confirm .confirm-block{position: absolute;top: 50%;left: 0;right: 0;margin-top: -24px;text-align: center;-webkit-touch-callout:none;}
 .UI_confirm .confirm-block-2{margin-top: -100px;}
-.UI_confirm .confirm-block .content{display: inline-block;width: 160px;height: 48px;line-height: 48px;background: #FFF;border-radius: 4px;font-size: 17px;color: #333;-webkit-touch-callout:none;}
-.UI_confirm .confirm-block-2 .content{width: 75%;height: auto;overflow: hidden;line-height: 1.8;border-radius: 6px;font-size: 14px;}
+.UI_confirm .confirm-block .content{display: inline-block;width: 160px;height: 48px;line-height: 48px;background: #FFF;border-radius: 2px;font-size: 17px;color: #333;-webkit-touch-callout:none;}
+.UI_confirm .confirm-block-2 .content{width: 75%;height: auto;overflow: hidden;line-height: 1.8;border-radius: 2px;font-size: 14px;}
 .UI_confirm .confirm-block-2 .title{height: 40px;line-height: 40px;font-size: 17px;background-color: #41C2C2;color: #FFF;}
 .UI_confirm .confirm-block-2 .text{max-height: 80px;padding: 15px 15px 0 15px;overflow-y: auto;word-wrap: break-word;}
 .UI_confirm .confirm-block-2 .btns{height: 40px;margin: 15px;}
-.UI_confirm .confirm-block-2 .btns button{display: inline-block;width: 80px;height: 40px;line-height: 40px;border-radius: 6px;}
+.UI_confirm .confirm-block-2 .btns button{display: inline-block;width: 80px;height: 40px;line-height: 40px;border-radius: 2px;}
 .UI_confirm .confirm-block-2 .yes{background-color: #41C2C2;color: #FFF;}
 .UI_confirm .confirm-block-2 .no{border:1px solid #EEE;margin-right: 15px;color: #666;}
 
 .UI_confirm_auto{position: absolute;z-index:9999;bottom: 25%;left: 0;right: 0;text-align: center;-webkit-animation:fadeUp .2s ease;animation:fadeUp .2s ease;}
 .UI_confirm_auto.dispear{-webkit-animation:fadeDown .2s ease forwards;animation:fadeDown .2s ease forwards;}
-.UI_confirm_auto .content{display: inline-block;max-width: 80%;min-width: 130px;min-height: 25px;line-height: 25px;padding: 10px 15px;background: rgba(0,0,0,.6);border-radius: 6px;font-size: 15px;color: #FFF;}
+.UI_confirm_auto .content{display: inline-block;max-width: 80%;min-width: 130px;min-height: 24px;line-height: 25px;padding: 10px 15px;background: rgba(0,0,0,.6);border-radius: 2px;font-size: 15px;color: #FFF;}
 @keyframes fadeUp{
 	0%{opacity: 0; bottom: 0;}
 	100%{opacity: 1; bottom: 25%;}

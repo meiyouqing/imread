@@ -25,6 +25,7 @@ import Compact from './compact'
 import Purchased from './purchased'
 import Setting from './setting'
 import Modifypwd from './modifypwd'
+import StoreList from './storeList'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -69,6 +70,15 @@ module.exports = (
 		<IndexRedirect to="/mall" />
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+
+				<Route path="bookstore" component={StoreList} >
+					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+					</Route>
+				</Route>
+
 				<Route path="top/:topId" component={Top}>
 					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 						{bookWrap}
@@ -88,12 +98,15 @@ module.exports = (
 					{bookWrap}
 					{searchWrap}
 				</Route>
+
 				<Route path="shelf" component={Shelf}>
 					{bookWrap}
 					{loginWrap}
 					{readWrap}
 				</Route>
+
 				{loginWrap}
+
 				<Route path="balance" component={Balance} >
 					<Route path="recharge/:rechargeId" component={Recharge} >
 						<Route path="recharge_result" component={RechargeResult} />
@@ -114,17 +127,21 @@ module.exports = (
 					<Route path="feedback" component={Feedback}/>
 					<Route path="compact" component={Compact} />
 					<Route path="about" component={About} />
-			</Route>
+				</Route>
+
 				<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 					{bookWrap}
 					{searchWrap}
 				</Route>
+
 				{bookWrap}
 				{searchWrap}
+
 				<Route path="cat/:listId" component={List}>
 					{bookWrap}
 					{searchWrap}
 				</Route>
+
 			</Route>
 		</Route>
 		<Route path="/top/:topId" component={Top}>

@@ -24,7 +24,7 @@ var Header = React.createClass({
 		// });
 
 		return {
-			right:<a className="f-fr icon-search iconfont" onClick={sHandle}></a>,
+			right:<a className="icon-s icon-searcher f-fr" onClick={sHandle}></a>,
 			title: GLOBAL.title || '艾美阅读'
 		};
 	},
@@ -43,7 +43,7 @@ var Header = React.createClass({
 	render: function(){
 		var from = parseQuery(location.search);
 		var isskip = false;
-		var defaultLeft = this.props.left === undefined?<a className="f-fl icon-back iconfont" onClick={this.goBack} ></a>:this.props.left;
+		var defaultLeft = this.props.left === undefined?<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>:this.props.left;
 
 		if(this.props.skipurl && from.skipurl)
 			isskip = true;

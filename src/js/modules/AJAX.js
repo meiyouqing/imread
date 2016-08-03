@@ -43,6 +43,7 @@ var API={
 	deleteTag:{method: 'POST', base: '/api/v1/me/label/delete', param:{id: ''}},
 	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}},
 	pwd: {method: 'POST', base: '/api/v1/auth/update/password', param:{oldPasswd: 0,password: 0}},
+	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
 };
 
 //接口缓存机制

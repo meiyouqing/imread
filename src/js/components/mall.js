@@ -6,7 +6,6 @@ var Mall = React.createClass({
 	getNav: function(){
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
-			console.log(111)
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
 			if(location.pathname === this.props.route.path){
 				browserHistory.replace('/mall/'+subnav);
@@ -28,7 +27,6 @@ var Mall = React.createClass({
 		GLOBAL.removeClass(this.refs.userlist,'show');
 	},
 	showUser: function(){
-		console.log(this.refs)
 		GLOBAL.addClass(this.refs.userlist,'show');
 	},
 	componentDidMount: function(){
