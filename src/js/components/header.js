@@ -51,7 +51,7 @@ var Header = React.createClass({
 
 		return (
 			<header className="m-bar m-bar-head">
-				{isskip?<a className="f-fl icon-back iconfont" href={from.skipurl}></a>:defaultLeft}
+				{isskip?<a className="f-fl icon-s icon-back" href={from.skipurl}></a>:defaultLeft}
 				{this.props.closeRight?'':this.props.right}
 				<h1 className="title">{this.props.title}</h1>
 			</header>

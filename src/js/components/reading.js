@@ -7,6 +7,7 @@ var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
 var isHidden = require('../modules/isHidden');
+var PayOrder = require('./order');
 require('../../css/reading.css');
 
 var styleMixins = {
@@ -179,7 +180,9 @@ var Reading = React.createClass({
 			intercutList: false, //呼出页广告
 			showIntercut: false, //是否显示呼出页广告
 			intercut: false, //插页广告
-			download: false //界面底部下载浮层
+			download: false, //界面底部下载浮层,
+			orderData: null,
+			introduce: null
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -292,7 +295,8 @@ var Reading = React.createClass({
 		},GLOBAL.noop);			
 		function todo(data){
 			that.setState({
-				bookName : data.book_name
+				bookName : data.book_name,
+				introduce: data
 			});
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
@@ -350,8 +354,10 @@ var Reading = React.createClass({
 				that.autoPay(data);
 				return;
 			}
+
 			that.setState({
-				order: true
+				order: true,
+				orderData: data
 			})
 			that.getIntroduce(that.confirmOrder.bind(that,data));
 			return;
@@ -431,10 +437,12 @@ var Reading = React.createClass({
 			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			var params = {name:that.state.bookName,data: data}
-			window.localStorage.onsale_book = JSON.stringify(params);
-			window.localStorage.payLink = data.orderUrl;
-			browserHistory.push(GLOBAL.setHref('order'));
+			// var params = {name:that.state.bookName,data: data}
+			// window.localStorage.onsale_book = JSON.stringify(params);
+			// window.localStorage.payLink = data.orderUrl;
+			// browserHistory.push(GLOBAL.setHref('order'));
+
+			that.setState({order: true,orderData: data})
 			// require.ensure([], function(require) {
 			// 	var Order = require('./order');
 			// 	that.props.popup(<Order 
@@ -458,7 +466,7 @@ var Reading = React.createClass({
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				if((aidou-orderData.marketPrice)>=0){
-					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
+					AJAX.getJSON('GET',orderData.orderUrl.replace('/api/','/api/v1/'),{},function(data){
 						that.gotContent(data);
 					});
 				}else{
@@ -615,7 +623,7 @@ var Reading = React.createClass({
 	},
 	isdownLoad: function(){
 		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
-		var index = book_isload.indexOf(Router.parts[1])>=0;
+		var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
 		this.showDownload = index;
 		if(index)	
 			setTimeout(function(){
@@ -632,7 +640,8 @@ var Reading = React.createClass({
 				|| this.state.showGuide !== nextState.showGuide
 				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
 				|| this.props.children !== nextProps.children
-				|| this.props.params !== nextProps.params;
+				|| this.props.params !== nextProps.params
+				|| this.state.introduce !== nextState.introduce;
 	},
 	
 	hideGuide:function(e) {
@@ -641,7 +650,13 @@ var Reading = React.createClass({
 			showGuide: false
 		});
 	},
+	goBack: function(){
+		GLOBAL.cookie(this.bid,'autoPay',7)
+		this.getContent();
+		this.setState({order: false});
+	},
 	render:function(){
+
 		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
@@ -659,16 +674,13 @@ var Reading = React.createClass({
 				</div>
 			);
 		}
-		if(this.state.order){
-			return (
-				<div className="gg-body">
-					{head}
-					<div className="g-main">
-						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
-						<p className="u-loading">本节为付费章节</p>
-						<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
-					</div>
-					{this.props.children}
+		if(this.state.order && this.state.introduce){
+			return (<div className="gg-body">
+				<Header path={this.props.route} right={null} title={"确认订购"} />
+				<div className="g-main g-main-1">
+					<PayOrder data={this.state.orderData}  goBack={this.goBack}  route={this.props.route} introduce={this.state.introduce} />
+				</div>
+				{this.props.children}
 				</div>
 				);
 		}

@@ -28,7 +28,7 @@ var NoData = React.createClass({
 			case 'emptyTag':
 				src = 'http://m.imread.com/src/img/pic1@2x.png',
 				text = '你还没有设置标签哦';
-				btn = <Link className="u-btn" to="/user/myTags">去设置标签</Link>;
+				btn = <Link className="u-btn" to="/myTags">去设置标签</Link>;
 			break;
 		}
 		return (

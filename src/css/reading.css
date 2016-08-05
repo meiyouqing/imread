@@ -5,7 +5,7 @@
 .u-action-top, .u-action-bottom{width: 100%;height: 40%;left: 0;top: 0;}
 .u-action-bottom{top: 60%;}
 .u-action-middle{width: 80%;left: 10%;height: 20%;top: 40%;}
-.u-settings{position: absolute;left: 0;right: 0;background: rgba(0, 0, 0, .9);color: #FFFFFF;z-index: 4001;}
+.u-settings{position: absolute;left: 0;right: 0;background: rgba(0, 0, 0, .9);color: #FFFFFF;z-index: 10;}
 .u-settings-top{top: 0;line-height: 60px;text-align: center;font-size: 16px;}
 .u-settings-top .icon-back{position:absolute; left: 15px;padding: 0 10px;line-height: 60px;color: #FFFFFF;cursor: pointer;}
 .u-settings-top .m-block{border-top: 0;border-bottom: 0;}
@@ -30,6 +30,7 @@
 .u-chapterlist .chapterlist .chapter .name{display: block;height: 30px;line-height: 32px;margin-right: 20px;}
 .u-chapter-action{position: absolute;bottom: 0;left: 0; right: 0;height: 55px;line-height: 35px;padding: 10px 0;box-sizing:border-box;border-top: 1px solid #9a9a9a;text-align: center;color: #444444;cursor: pointer;}
 .u-chapter-page:last-child{border-left: 1px solid #9a9a9a;}
+.u-fixTabbar{z-index: 10}
 
 .u-miguLogo {display: block;position: absolute;top: 16px;right: 16px;width: 56px;height: 14px;background-image: url(../img/migu.png);background-size: contain;}
 

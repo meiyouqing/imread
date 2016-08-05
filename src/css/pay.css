@@ -44,12 +44,15 @@
 .m-recharge .result-fail span{display: inline-block;line-height: 45px;font-size: 16px;color:#777;}
 .m-recharge .result-fail .u-btn{padding: 0 10px;letter-spacing: normal;}
 
-.m-order {background: #F9F9F9 !important;font-size: 16px;}
-.m-order .chapter,.m-order .payNote {font-size: 14px;}
+.m-order .m-order-detail{padding:12px 20px;background: #f2f2f2;height: 56px;font-size: 17px}
+.m-order .m-order-detail h5{font-size: 17px;}
 .m-order .payNote{line-height: 28px;}
-.m-order .mt-100{margin-top: 80px;}
-.m-order .block{padding: 15px;background: #FFF;border-top:1px solid #EEE;border-bottom:1px solid #EEE;}
-.m-order .block .lh-40{line-height: 40px;}
+.m-order .mt-45{margin-top: 45px;}
+.m-order .block{padding: 15px;background: #FFF;}
+.m-order .block .lh-30{line-height: 30px;}
+.m-order .m-order-left{font-size: 15px;border-bottom: 1px solid #eee;}
+.m-order .m-order-left .f-fc-777{font-size: 14px;line-height: 30px;margin-right: 7px;}
+.m-order .btn-cz{width: 50px;height: 25px;padding: 0;background: #fff;color: #0196aa;line-height: 25px;border: 1px solid #0196aa;border-radius: 2px;font-size: 14px;}
 
 .i-icon-large{width: 100px;height: 100px;background:url(../img/icons/icon_aidou@2x.png);background-size: cover;margin: auto;margin-top: 25px;}
 

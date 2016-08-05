@@ -41,12 +41,17 @@ var Register = React.createClass({
 			});
 
 			//判断登陆后的跳转
-			var isneed = false;
-			if(that.from && that.from.skipurl){
-				isneed = /\?/.test(that.from.skipurl);
-				window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
-			}else{
-				Router.goBack();
+			if(data.code == 200){
+				POP._alert('修改成功');
+				//判断登陆后的跳转
+				GLOBAL.goBack();
+			} else {
+				if(typeof data.error === 'string')
+					POP._alert(data.error);
+				else 
+					for(var key in data.error[0]){
+						POP._alert(data.error[0][key])
+					}
 			}
 
 		}, function(res) {
@@ -91,9 +96,7 @@ var Register = React.createClass({
 		this.from = parseQuery(location.search);
 	},
 	render: function() {
-
-		return (
-			<div className="gg-body">
+			{/*<div className="gg-body">
 				<Header right={null} path={this.props.route}/>
 				<div className="m-registerblock m-userblocks">
 					<form className="u-registerform u-userform">
@@ -116,6 +119,32 @@ var Register = React.createClass({
 						</div>
 					</form>
 				</div>
+			</div>*/}
+		return (
+
+			<div className="g-ggWraper  gg-body">
+				<Header right={null} title={'修改密码'} path={this.props.route}/>
+				<div className="g-main">
+					<div className="u-userform m-modify m-forget">
+						<div className="u-inputline-2">
+							<input className="u-input-2 phone" type="tel" ref="mobile_num" placeholder="手机号" />
+							<div className="f-fr">
+								<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
+							</div>
+						</div>
+						<div className="u-inputline-2">
+							<input className="u-input-2" type="tel" ref="key" placeholder="验证码" />
+						</div>
+						<div className="u-inputline-2">
+							<input className="u-input-2" type="password" ref="password" placeholder="新密码" />
+						</div>
+
+						<div className="u-inputline m-25">
+									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
+								</div>
+					</div>
+				</div>
+				{this.props.children}
 			</div>
 		);
 	}

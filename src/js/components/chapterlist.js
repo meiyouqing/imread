@@ -40,10 +40,12 @@ var Chapterlist = React.createClass({
 		}.bind(this));
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
+		// console.log(this.props.chapterlist,nextProps.chapterlist )
 		return this.props.chapterlist !== nextProps.chapterlist 
 				|| this.props.loading !== nextProps.loading
 				|| this.props.currentChapterId !== nextProps.currentChapterId
-				|| this.state.needUpdate !== nextState.needUpdate;
+				|| this.state.needUpdate !== nextState.needUpdate
+				|| this.props.order !== nextProps.order;
 	},
 	render: function() {
 		var loading, content;
@@ -59,12 +61,12 @@ var Chapterlist = React.createClass({
 						var lock;
 						var currentChapterId = this.props.currentChapterId || this.state.currentChapterId;
 						if (chapter.feeType != '0') {
-							lock = <i className="f-fr iconfont u-icon icon-lock"></i>;
+							lock = <span className="icon-n icon-lock f-fr"></span>;
 						}
 						return (
 							<li key={i} className={"chapter f-clearfix" + (chapter.cid == currentChapterId ? ' current' : '')} onClick={this.handleClick} data-cid={chapter.cid} data-fee={chapter.feeType}>
 								{lock}
-								<span className="name f-ellipsis">{chapter.chapterName}</span>
+								<span className={"name f-ellipsis" + (lock?' lock':'')}>{chapter.chapterName}</span>
 							</li>
 						);
 					}.bind(this))

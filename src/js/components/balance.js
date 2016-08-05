@@ -36,6 +36,7 @@ var Balance = React.createClass({
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
+		console.log('balance')
 		var content;
 		if (this.state.loading) {
 			content = <Loading />

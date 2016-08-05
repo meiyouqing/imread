@@ -31,7 +31,7 @@
 /*.icon-back:before {content: "\e605";}*/
 .icon-selected:after {content: "\e61f"}
 .icon-delete:before {content: "\e618"}
-.icon-lock:before {content: "\e60f";}
+/*.icon-lock:before {content: "\e60f";}*/
 /*.icon-menu:before {content: "\e613";}*/
 .icon-fsize:before {content: "\e602";}
 .icon-moon:before {content: "\e61d";}

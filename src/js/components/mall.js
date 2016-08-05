@@ -24,9 +24,11 @@ var Mall = React.createClass({
 		}
 	},
 	hideUser: function(){
+		GLOBAL.removeClass(this.refs.blackBlock,'show');
 		GLOBAL.removeClass(this.refs.userlist,'show');
 	},
 	showUser: function(){
+		GLOBAL.addClass(this.refs.blackBlock,'show');
 		GLOBAL.addClass(this.refs.userlist,'show');
 	},
 	componentDidMount: function(){
@@ -55,9 +57,9 @@ var Mall = React.createClass({
 
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
+				<section className="m-wrapper" ref="blackBlock" onClick={this.hideUser}></section>
 				<section className="m-user-list" ref="userlist">
-					<section className="m-wrapper" onClick={this.hideUser}></section>
-					{userList }
+					{userList}
 				</section>
 				{this.props.children}
 			</div>

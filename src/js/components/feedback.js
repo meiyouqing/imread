@@ -2,7 +2,7 @@ var Header = require('./header');
 
 var Feedback = React.createClass({
 	componentDidMount: function() {
-		this.refs.message.focus();
+		this.refs.contact.focus();
 	},
 	handleSubmit: function() {
 		var message = this.refs.message.value.trim();
@@ -21,26 +21,39 @@ var Feedback = React.createClass({
 		});
 		return false;
 	},
+	copy: function(){
+		this.refs.gzh.select();
+		try{
+			var suc = document.execCommand('copy');
+			var msg = suc? 'QQ群号已复制到剪切板' : '复制失败，请手动复制';
+			POP._alert(msg);
+		}catch(e){
+			POP._alert('复制失败，请手动复制');
+		}
+	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
 	},
 	render: function() {
+		var right = <span className="f-fr icon-s icon-right" onClick={this.handleSubmit} ></span>;
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route}/>
+				<Header right={right} path={this.props.route}/>
 				<div className="m-feedbackblock m-userblocks">
-					<form className="u-feedbackform u-userform">
+					<form className="u-feedbackform u-userform">	
 						<div className="u-inputline">
-							<textarea className="u-input u-textarea" placeholder="期待您的反馈" ref="message"></textarea>
+							<input className="u-input" placeholder="请填写你的联系方式，如手机号、QQ号" ref="contact" />
+						</div>
+						<div className="u-inputline">
+							<textarea className="u-input u-textarea" placeholder="期待您的反馈，您的意见是我们进步的最大动力哦" ref="message"></textarea>
 						</div>				
-						<div className="feedback-tips">为了提供更好的服务，请留下您的联系方式</div>		
-						<div className="u-inputline">
-							<input className="u-input" placeholder="QQ\邮箱\手机号" ref="contact" />
-						</div>
-						<div className="u-inputline">
-							<a className="u-btn u-btn-full" onClick={this.handleSubmit}>发送</a>
-						</div>
 					</form>
+
+					<div className="u-feed-footer">
+						<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=9c3536c0e460081dec83bd8b6646c29945063d0f2a3bd17a50326c0b734742a0"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
+						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" value={"艾美阅读"} /></a>
+						<a href="http://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
+					</div>
 				</div>
 			</div>
 		);
