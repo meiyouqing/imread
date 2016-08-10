@@ -27,6 +27,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' }
+      // {test: /\.css$/,  exclude: /node_modules/,loader: "style!css" },
+      // {test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
     ]
   },
 

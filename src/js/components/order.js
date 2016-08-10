@@ -3,9 +3,9 @@ if(typeof window !== 'undefined'){
 }
 var Header = require('./header');
 
-if(typeof window !== 'undefined'){
-	require('../../css/pay.css');
-}
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/pay.css');
+// }
 
 var mod = React.createClass({
 	rechargeHandle: function(e) {

@@ -1,15 +1,15 @@
 exports.ids = [1];
 exports.modules = {
 
-/***/ 40:
+/***/ 36:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(React, GLOBAL) {'use strict';
 
 	var _reactRouter = __webpack_require__(3);
 
-	var Swipe = __webpack_require__(41).swipe;
-	var uploadLog = __webpack_require__(42);
+	var Swipe = __webpack_require__(37).swipe;
+	var uploadLog = __webpack_require__(38);
 
 	var Block5 = React.createClass({
 		displayName: 'Block5',
@@ -147,16 +147,12 @@ exports.modules = {
 								{ className: 'swipe-wrap' },
 								this.props.data.contentlist.map(function (v, i) {
 
-									var urlflag = false;
-									if (v.redirect_url && v.redirect_url.indexOf('lottery') >= 0) urlflag = true;
-
-									var spm = this.props.spm.slice(0);
-									spm.splice(-1, 1, i + 1);
-									var hrefObj = Router.typeHref(v, spm);
+									var hrefObj = GLOBAL.typeHref(v);
+									if (!hrefObj.url) hrefObj = { url: hrefObj, target: null };
 									return React.createElement(
 										_reactRouter.Link,
-										{ style: { backgroundImage: 'url(src/img/defaultBanner.png)', height: this.state.height, backgroundSize: "cover" }, to: urlflag ? v.redirect_url : hrefObj.url, target: hrefObj.target, className: 'swipe-ad f-fl', key: i, onClick: this.handleIntercurClick, 'data-intercut_id': v.content_id },
-										React.createElement('img', { 'data-src': v.intercut_url, className: 'u-adimg', style: { width: '100%' } })
+										{ style: { backgroundImage: 'url(http://m.imread.com/src/img/defaultBanner.png)', height: this.state.height, backgroundSize: "cover" }, to: hrefObj.url, target: hrefObj.target, className: 'swipe-ad f-fl', key: i, onClick: this.handleIntercurClick, 'data-intercut_id': v.content_id },
+										React.createElement('img', { 'data-src': v.intercut_url || v.image_url, className: 'u-adimg', style: { width: '100%' } })
 									);
 								}.bind(this))
 							),
@@ -173,7 +169,7 @@ exports.modules = {
 
 /***/ },
 
-/***/ 41:
+/***/ 37:
 /***/ function(module, exports) {
 
 	'use strict';

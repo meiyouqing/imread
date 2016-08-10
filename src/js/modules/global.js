@@ -29,7 +29,7 @@ var GLOBAL = {
 		// browserHistory.replaceState();
 		// console.log(browserHistory)
 	},
-	setHref:function(str,type){
+	setHref:function(str,context){
 		//TODO
 		return location.pathname+'/'+str
 	},

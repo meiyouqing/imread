@@ -2,9 +2,9 @@ var Header = require('./header');
 var PayTips = require('./payTips');
 var Recharge = require('./recharge');
 
-if(typeof window !== 'undefined'){
-	require('../../css/pay.css')
-}
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/pay.css')
+// }
 
 var Balance = React.createClass({
 	getBalance:function(){

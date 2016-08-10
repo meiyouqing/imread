@@ -3,8 +3,10 @@ var Mixins = require('../modules/mixins');
 var Book9 = require('./book9_recentRead');
 var NoData = require('./noData');
 
-if(typeof window !== 'undefined'){
-	require('../../css/recentRead.css');
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/recentRead.css');
+// }
+if(false&&typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
 }

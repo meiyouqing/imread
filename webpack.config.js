@@ -10,7 +10,7 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, (debug? 'tmp':'p/tmp')),
+        path: path.join(__dirname, (debug? 'public':'p/public')),
         publicPath: '/',
         filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
@@ -27,7 +27,9 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    		new HtmlWebpackPlugin({
 			filename: '../index.html',
 		    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
 		    inject: 'body', // Inject all scripts into the body 

@@ -17,17 +17,28 @@ var Header = React.createClass({
 				|| this.props.left !== nextProps.left 
 				|| this.props.right !== nextProps.right;
 	},
-	render: function(){
+	getInitialState:function(){
+		return {
+			skipurl:''
+		}
+	},
+	componentDidMount:function(){
 		var from = parseQuery(location.search);
-		var isskip = false;
-
-		if(this.props.skipurl && from.skipurl)
-			isskip = true;
-
+		if(this.props.skipurl && from.skipurl){
+			this.setState({
+				skipurl:from.skipurl
+			})
+		}			
+	},
+	render: function(){
 		return (
 			<header className="m-bar m-bar-head">
-				{isskip?<a className="f-fl icon-back iconfont" href={from.skipurl}></a>:this.props.left}
-				{this.props.closeRight?'':this.props.right}
+				{
+					this.state.isskip?
+					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
+					this.props.left
+				}
+				{this.props.right}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);

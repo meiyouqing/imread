@@ -1,9 +1,12 @@
-if(typeof window !== 'undefined'){
+if(false&&typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
 	var isHidden = require('../modules/isHidden');
+}
+if(false&&typeof window !== 'undefined'){
 	require('../../css/reading.css');
 }
+
 var Header = require('./header');
 
 var Chapterlist = require('./chapterlist');

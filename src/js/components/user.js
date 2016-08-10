@@ -1,8 +1,10 @@
 var myEvent = require('../modules/myEvent');
 var Mixins = require('../modules/mixins');
 
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/user.css');
+// }
 if(typeof window !== 'undefined'){
-	require('../../css/user.css');
 	var POP = require('../modules/confirm')
 }
 
@@ -11,7 +13,7 @@ var ULine = React.createClass({
 		
 		return (
 			<li className="u-line">
-				<Link to={GLOBAL.setHref(this.props.line.href)} className="f-cb" data-href={GLOBAL.setHref(this.props.line.href)} onClick={this.props.line.requireLogin}>
+				<Link to={'/user/'+this.props.line.href} className="f-cb" data-href={'/user/'+this.props.line.href} onClick={this.props.line.requireLogin}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
 					<span className={"iconfont" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
@@ -177,7 +179,7 @@ var User = React.createClass({
 		var logoutBtn;
 		var userName = '立即登录';
 
-		if (this.isLogin()) {
+		if (true||this.isLogin()) {
 			userName = this.state.user.phone;
 			logoutBtn = (
 				<section className="m-ublock">

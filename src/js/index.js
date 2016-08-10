@@ -8,14 +8,9 @@ import Token from './modules/token';
 import { render } from 'react-dom';
 require('./modules/readConfig');
 
-if(typeof window === 'undefined'){
-	window.isNode = true;
-}else{
-	global.isNode = false;
-}
 
 
-if(!isNode){
+if(typeof window !== 'undefined'){
 	if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
 		var appid = window.location.search.match(/appid=(\w+)&?/)[1];
 		GLOBAL.header.appid = appid;
@@ -33,6 +28,6 @@ if(!isNode){
 
 render(
 	<Router routes={routes} history={browserHistory}/>, 
-	document.getElementById('app-container')
+	document.getElementById('appContainer')
 );
 

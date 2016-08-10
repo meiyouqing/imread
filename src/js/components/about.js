@@ -1,7 +1,7 @@
 var Header = require('./header');
-if(typeof window !== 'undefined'){
-	require('../../css/about.css')
-}
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/about.css')
+// }
 var About = React.createClass({
 	// shouldComponentUpdate: function(nextProps, nextState) {
 	// 	return false;

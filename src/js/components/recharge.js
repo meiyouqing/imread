@@ -1,8 +1,10 @@
 var Header = require('./header');
 var PayTips = require('./payTips');
 var Recharge_result = require('./recharge_result');
+// if(false&&typeof window !== 'undefined'){
+// 	require('../../css/pay.css');
+// }
 if(typeof window !== 'undefined'){
-	require('../../css/pay.css');
 	var POP = require('../modules/confirm')
 }
 
