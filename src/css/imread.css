@@ -274,7 +274,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-10 a{display: block;width: 100%;}
 .u-book-10 a img{width: 100%;max-height: 176px;}
 .u-book-10 a span{background: transparent;color: #fff;display: inline-block;line-height: 40px;}
-.u-book-10 a span.book-name{margin-left: 10px;font-size: 15px;}
+.u-book-10 a span.book-name{margin-left: 10px;font-size: 15px;max-width: 60%;}
 .u-book-10 .delete{position: absolute;top: 0;right: 0;width:34px;height:40px;background: url(../img/icons/shanchu@2x.png) no-repeat;background-size: cover;text-align: right;padding: 0 3px;line-height: 30px;color: #ce403e;}
 
 .u-lines{background: #FFFFFF;border-top: 1px solid #EEE;border-bottom: 1px solid #EEE;}
@@ -318,6 +318,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-loading{position: absolute;top: 50%;left: 0;margin-top: -15px;width:100%;height:30px;line-height: 30px;text-align: center;letter-spacing: 0.1em;font-size: 12px;}
 .u-loading i.loading{}
 .u-sLoading{position: relative; height: 100px; line-height: 40px;text-align: center;letter-spacing: 2px;font-size: 12px;background: #FFFFFF}
+.u-sLoading.transparent{background: transparent;}
 .m-list .u-sLoading{background: transparent;}
 .u-book-loading:before{display: block;margin: 0 auto; width: 66px;height: 66px;margin-bottom: 10px;background-image: url('../img/book.gif');background-size: 66px 66px;content: "";}
 .u-noData{position: absolute;top: 50%;left: 0;right:0;text-align: center;}
