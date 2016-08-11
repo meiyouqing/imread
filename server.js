@@ -67,19 +67,20 @@ function renderPage(appHtml) {
     <html>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel=stylesheet href="src/css/iconfont1.css">
-    <link rel=stylesheet href="src/css/imread.css">
-    <link rel=stylesheet href="src/css/user.css">
-    <link rel=stylesheet href="src/css/bookSheet.css">
-    <link rel=stylesheet href="src/css/introduce.css">
-    <link rel=stylesheet href="src/css/pay.css">
-    <link rel=stylesheet href="src/css/reading.css">
-    <link rel=stylesheet href="src/css/recentRead.css">
-    <link rel=stylesheet href="src/css/tag.css">
-    <link rel=stylesheet href="src/css/about.css">
-    <link rel=stylesheet href="src/css/compact.css">
+    <link rel=stylesheet href="/src/css/iconfont1.css">
+    <link rel=stylesheet href="/src/css/imread.css">
+    <link rel=stylesheet href="/src/css/user.css">
+    <link rel=stylesheet href="/src/css/bookSheet.css">
+    <link rel=stylesheet href="/src/css/introduce.css">
+    <link rel=stylesheet href="/src/css/pay.css">
+    <link rel=stylesheet href="/src/css/reading.css">
+    <link rel=stylesheet href="/src/css/recentRead.css">
+    <link rel=stylesheet href="/src/css/tag.css">
+    <link rel=stylesheet href="/src/css/about.css">
+    <link rel=stylesheet href="/src/css/compact.css">
+    <link rel=stylesheet href="/src/css/confirm.css">
     <div id=appContainer>${appHtml}</div>
-    <script src="app/app.bundle.js"></script>
+    <script src="/app/app.bundle.js"></script>
    `
 }
 

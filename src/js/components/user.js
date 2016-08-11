@@ -50,6 +50,7 @@ var User = React.createClass({
 			userInfo: {
 				portraitUrl: 'src/img/defaultAvatar.png'
 			},
+			isLogin:false
 		};
 	},
 	logout: function(e) {
@@ -65,7 +66,8 @@ var User = React.createClass({
 
 			//同步state User
 			this.setState({
-				needUpdate: this.state.needUpdate + 1
+				needUpdate: this.state.needUpdate + 1,
+				isLogin: false
 			});
 		}.bind(this));
 	},
@@ -91,7 +93,8 @@ var User = React.createClass({
 				data.portraitUrl = that.state.userInfo.portraitUrl;
 				that.setState({
 					userInfo: data,
-					needUpdate: that.needUpdate + 1
+					needUpdate: that.needUpdate + 1,
+					isLogin:true
 				});
 				GLOBAL.cookie('userId', data.user_id, {
 					expires: 1000
@@ -179,7 +182,7 @@ var User = React.createClass({
 		var logoutBtn;
 		var userName = '立即登录';
 
-		if (true||this.isLogin()) {
+		if (this.state.isLogin) {
 			userName = this.state.user.phone;
 			logoutBtn = (
 				<section className="m-ublock">
