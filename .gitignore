@@ -18,4 +18,5 @@ index.html
 p
 npm-debug.log
 server.bundle.js
+*.server.bundle.js
 
