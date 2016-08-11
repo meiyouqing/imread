@@ -1,3 +1,21 @@
 .bsHead{margin: 0 10px;padding: 10px 0;text-align: center;}
 .bsHead h2{line-height: 1.4;}
 .bsBrief{padding: 10px 10px 0;color: #777;text-indent: 2em;}
+
+.m-block.m-sheet{padding: 0}
+.m-sheet .m-sheet-header{position: relative;width: 100%;height: 185px;overflow: hidden;}
+.m-sheet .m-sheet-header .u-sheet-c{position:absolute;margin-top: -1px;right: 12px;top:0; padding-top:5px;width: 47px;height: 72px;background: url(../img/back/pic_sheet.png) no-repeat;background-size: cover;font-size: 15px;color: #bc6107;}
+.m-sheet .m-sheet-header .u-sheet-c p{text-align: center;padding-left: 2px;line-height: 20px;}
+.m-sheet .m-sheet-header img{width: 100%;}
+.m-sheet .m-sheet-header .m-b-footer{position: absolute;bottom: 0;left: 0;background: rgba(0,0,0,.3);width:100%;height: 40px;}
+
+.m-sheet .i-s-m{margin: 2px 2px 0 12px }
+.m-sheet .u-sc{vertical-align: middle;line-height: 40px; color: #fff;font-size: 13px;margin-right: 20px}
+.m-sheet .u-m-store{width: 60px;height: 60px;background-color: #fff;position: absolute;right: 15px; top: 155px;border-radius: 30px; box-shadow: 1px 5px 10px #777777;-webkit-box-shadow: 1px 5px 10px #777777;}
+.m-sheet .u-sheet-detail{padding: 20px 15px 18px;}
+.m-sheet .u-sheet-detail h2{font-size: 17px;line-height: 17px;margin-bottom: 8px;}
+.m-sheet .u-sheet-detail .brief{font-size: 15px;color: #777777;line-height: 22px;}
+
+.m-sheet.m-block{border-top: 0;margin-bottom: 0}
+.m-device{background: #fafafa;height: 10px;width: 100%;}
+.m-block.m-sheet-s{padding-top: 10px;border-top: 1px solid #eee}

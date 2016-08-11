@@ -4,7 +4,6 @@ var Block8 = React.createClass({
 		return this.props.bookList !== nextProps.data;
 	},
 	render: function(){
-		console.log(this.props)
 		return (
 			<ul className="u-pWrap">
 			{	

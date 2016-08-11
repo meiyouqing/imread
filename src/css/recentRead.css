@@ -1,10 +1,11 @@
 .recentRead-block .g-scroll{background: #F5F5F5;}
 
-.u-book-9{position: relative;-webkit-touch-callout:none;}
-.u-book-9 a{display: block;padding: 10px 0;margin: 0 15px;line-height: 1.4;border-bottom: 1px solid #EEE;pointer-events:none;}
+.u-book-9{position: relative;-webkit-touch-callout:none;border-bottom: 1px solid #cccccc;}
+.u-book-9 a{display: block;padding: 15px 0;margin: 0 15px;line-height: 1.4;/*pointer-events:none;*/}
 .u-book-9 a img{display: block;width: 95px;}
-.u-book-9 .info{margin-left: 110px;padding-top: 8px;}
-.u-book-9 .name{font-size: 16px;color: #333;}
-.u-book-9 .author{margin: 8px 0;font-size: 14px;color: #333;}
-.u-book-9 .chapter-name{font-size: 14px;color: #999;}
-.u-book-9 .date{position: absolute;right: 15px;bottom: 10px;font-size: 13px;color: #999;}
+.u-book-9 .info{margin-left: 110px;}
+.u-book-9 .name{font-size: 15px;color: #000;}
+.u-book-9 .author{margin: 5px 0;font-size: 13px;color: #777777;}
+.u-book-9 .chapter-name{font-size: 13px;color: #777777;}
+.u-book-9 .date{position: absolute;bottom: 15px;font-size: 13px;color: #777777;}
+.u-book-9 .delete{position: absolute;right: 15px;bottom: 15px;width: 50px;height: 25px;border-radius: 2px;border: 1px solid #ce403e;font-size: 14px;color: #ce403e;line-height: 23px;}

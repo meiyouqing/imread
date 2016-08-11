@@ -65,6 +65,9 @@ var List = React.createClass({
 		}
 		this.getList();
 	},
+	gotoSearch: function(){
+		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
+	},
 	getInitialState: function(){
 		return {
 			noMore:false,
@@ -75,7 +78,6 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		console.log(GLOBAL.isRouter(this.props))
 		if(GLOBAL.isRouter(this.props)) this.getList();
 	},
 	update: function(){
@@ -108,11 +110,12 @@ var List = React.createClass({
 	render:function(){
 		var header,noData,content,sLoading,result_count;
 		//定义头部
-		if(this.state.resultCount){
-			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
-		}
+		// if(this.state.resultCount){
+		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
+		// }
 
-		header = <Header title={GLOBAL.title}  right={null} path={this.props.route}  />;				
+		var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
+		header = <Header title={GLOBAL.title}  right={right} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} path={this.props.route}  />;
 		}
@@ -141,7 +144,7 @@ var List = React.createClass({
 		return (
 			<div className="gg-body">
 				{header}
-				<div className="g-main g-main-1">
+				<div className="g-main g-main-1 m-list">
 					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
 						{result_count}
 						{content}

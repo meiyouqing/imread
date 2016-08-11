@@ -1,29 +1,53 @@
 
 var NoData = React.createClass({
+	mixins: [Mixins()],
 	reload:function(){
 		document.location.reload();
+	},
+	setTag: function(){
+		if(this.isLogin())
+			browserHistory.push(GLOBAL.setHref("myTags"));
+		else
+			this.goLogin(function(){
+				browserHistory.push(GLOBAL.setHref("myTags"));
+			});
+			
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;
 	},
 	render: function(){
-		var src = 'src/img/noData.png',
+		var src = 'http://m.imread.com/src/img/pic1@2x.png',
 			text = '抱歉!没有找到相关数据..',
 			btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
 		switch(this.props.type){
 			case 'emptyShelf':
-				src = 'src/img/bookrack.png';
-				text = '亲，书架还空空荡荡哦~';
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
+				text = '亲，书架还空空荡荡哦';
 			break;
 			case 'UFO':
-				src = 'src/img/UFO.png';
-				text = '糟糕，服务器被外星人劫持了..';
+				src = 'http://m.imread.com/src/img/UFO.png';
+				text = '网络遇到问题,请重试';
 				btn = <a className="u-btn" onClick={this.reload}>重新加载</a>;
 			break;
 			case 'recentRead':
-				src = 'src/img/bookrack.png';
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
 				text = '暂无阅读记录';
-				btn = false;
+				btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
+			break;
+			case 'emptyTag':
+				src = 'http://m.imread.com/src/img/pic1@2x.png',
+				text = '你还没有设置标签哦';
+				btn = <a className="u-btn" onClick={this.setTag}>去设置标签</a>;
+			break;
+			case 'emptyPur':
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
+				text = '您还没有购买任何书本哦';
+			break;
+			case 'emptyBookstore':
+				src = 'http://m.imread.com/src/img/pic1@2x.png';
+				text = '您还没有收藏任何书单哦';
+				btn = <Link className="u-btn" to="/top/block.0">去发现书单</Link>;
 			break;
 		}
 		return (

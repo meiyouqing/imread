@@ -2,6 +2,7 @@ var Header = require('./header');
 require('../../css/tag.css');
 
 var tag = React.createClass({
+	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
 			tagList: [],
@@ -21,7 +22,8 @@ var tag = React.createClass({
 		});
 	},
 	componentDidMount: function() {
-		this.getData();
+
+		if(this.checkLogin(this.props.route))  this.getData();
 	},
 	toggleTag:function(index, from, to){
 		to.push(from.splice(index, 1)[0]);
@@ -57,7 +59,7 @@ var tag = React.createClass({
 	render: function() {
 		var tips;
 		if (!this.state.myTagList.length) {
-			tips = <span className="tips">点击下方选择您喜欢的标签~</span>;
+			tips = <span className="tips">选择您喜欢的标签</span>;
 		}
 		return (
 			<div className="gg-body">

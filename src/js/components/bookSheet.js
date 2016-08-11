@@ -102,18 +102,28 @@ var Module = React.createClass({
 				sLoading = this.state.noMore?null:(<Loading cls='u-sLoading' />);
 				content = (
 					<div>
-						<section className="m-block">
+						<section className="m-block m-sheet">
 							<div className="content">
-								<div className="bsHead f-bb-eee">
-									<h2>{this.state.data.sheet_name}</h2>
-									<p className="f-fs-14 f-mb-15">共计{this.state.data.content_cnt}本</p>
-									<p><input className={"u-btn2 f-fs-14 f-mb-30 "+(this.state.collected? "u-btn2-on":"")} type="button" value={this.state.collected? "已收藏":"收藏"} onClick={this.addFavaHandle} /></p>
-									<p className="f-clearfix"><span className="f-fl f-fc-777">已有{this.state.data.collect_uv}人收藏</span><span className="f-fr f-fc-777">更新于{this.state.data.update_time}</span></p>
+								<div className="m-sheet-header">
+									<div className="u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
+									<img src={this.state.data.image_url} />
+									<div className="m-b-footer">
+										<span className="icon-l icon-love i-s-m"></span>
+										<span className="u-sc">{this.state.data.collect_uv || 0}</span>
+										<span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
+									</div>
 								</div>
-								<p className="bsBrief">{this.state.data.sheet_brief}</p>
+								<div className="u-m-store" onClick={this.addFavaHandle}>
+									<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
+								</div>
+								<div className="u-sheet-detail">
+									<h2 className="f-ellipsis">{this.state.data.sheet_name}</h2>
+									<div className="brief">{this.state.data.sheet_brief}</div>
+								</div>
 							</div>
 						</section>
-						<section className="m-block">
+						<div className="m-device"></div>
+						<section className="m-block m-sheet-s">
 							<div className="content">
 								<ul className="bsList">
 									{
@@ -135,7 +145,7 @@ var Module = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header path={this.props.route} />
+				<Header path={this.props.route} title={"书单详情"} />
 				<div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
 						{content}

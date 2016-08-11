@@ -43,7 +43,7 @@ var User = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: {
-				portraitUrl: 'src/img/defaultAvatar.png'
+				portraitUrl: 'http://m.imread.com/src/img/defaultAvatar.png'
 			},
 		};
 	},
@@ -54,11 +54,10 @@ var User = React.createClass({
 				phone: null,
 				token: ''
 			});
-			console.log('remove')
+
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('userId');
-
 			//同步state User
 			this.setState({
 				needUpdate: this.state.needUpdate + 1
@@ -71,9 +70,6 @@ var User = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextProp, nextState) {
-		console.log(this.state.user.phone !== nextState.user.phone 
-		    || this.state.needUpdate !== nextState.needUpdate
-		    || this.props.children !== nextProp.children)
 		return this.state.user.phone !== nextState.user.phone 
 		    || this.state.needUpdate !== nextState.needUpdate
 		    || this.props.children !== nextProp.children;
@@ -82,7 +78,7 @@ var User = React.createClass({
 		if(GLOBAL.isRouter(this.props))	this.getUserInfo();
 	},
 	componentDidUpdate: function(){
-		if(GLOBAL.isRouter(this.props) && !this.state.userInfo)	this.getUserInfo();
+		//if(GLOBAL.isRouter(this.props) && !this.state.userInfo)	this.getUserInfo();
 	},
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;
@@ -169,20 +165,16 @@ var User = React.createClass({
 				href: 'readHistory',
 				requireLogin: this.requireLogin
 			}], [{
-				title: '意见反馈',
-				icon: 'icon-feedback',
-				href: 'feedback'
-			}, {
-				title: '关于艾美阅读',
+				title: '设置',
 				icon: 'icon-about',
-				href: 'about'
+				href: 'setting'
 			}]
 		];
 		var logoutBtn;
 		var userName = '立即登录';
 
 		if (this.isLogin()) {
-			userName = this.state.user.phone;
+			userName = this.state.user.phone || this.state.userInfo.user_name;
 			logoutBtn = (
 				<section className="m-ublock">
 					<ul className="u-lines">
@@ -196,7 +188,7 @@ var User = React.createClass({
 				<div className="g-main g-main-2">
 					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
-							<img src="src/img/bg_me.png" className="bg"/>
+							<img src="http://m.imread.com/src/img/bg_me.png" className="bg"/>
 							<div onClick={this.login}>
 								<div className="avatar-wrap">
 									<img src={this.state.userInfo.portraitUrl} />

@@ -23,13 +23,13 @@ var GLOBAL = {
 	name:'',
 	route:[],
 	unRendered:[],
+	orderLIst:{},
 	goBack:function(path){
-		console.log(path)
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
-		if(path)
+		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
 			browserHistory.goBack();
@@ -54,8 +54,6 @@ var GLOBAL = {
 
 		var route_path = window.location.pathname.split('/');
 
-		console.log(route_path[route_path.length-1] ,route_id)
-
 		if(route_path[route_path.length-1] == route_id)	return true;
 		else return false;
 
@@ -63,7 +61,7 @@ var GLOBAL = {
 		// return window.location.pathname.split('/'+path)[0];
 	},
 	typeHref: function(data,spm, route_type){
-		var bid = data.content_id || data.book_id || 0;
+		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
 		if(/2|3|4/.test(data.intercut_type)){
@@ -75,6 +73,7 @@ var GLOBAL = {
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
+		if(isNaN(type)) return '';
 		switch(type){
 			case 1://图书详情
 				return this.setHref('book/introduce.'+bid,route_type);
@@ -176,7 +175,7 @@ var GLOBAL = {
 	assertNotEmpty: function(s, msg) {
 		if (!s) {
 			if (msg) {
-				POP.alert(msg);
+				POP._alert(msg);
 			}
 		}
 		return !!s;
@@ -184,7 +183,7 @@ var GLOBAL = {
 	assertMatchRegExp: function(s, reg, msg) {
 		if (!reg.test(s)) {
 			if (msg) {
-				POP.alert(msg);
+				POP._alert(msg);
 			}
 			return false;
 		}
@@ -228,8 +227,7 @@ var GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key,path='/') {
-		console.log(GLOBAL.cookie(key))
+	removeCookie: function(key,path) {
 		if (GLOBAL.cookie(key) !== undefined) {
                 GLOBAL.cookie(key, '', {expires: -1,path:path});
                 return true;
@@ -309,7 +307,31 @@ var GLOBAL = {
 			storage.set('InfoUuid', uuid);
 		}
 		return uuid;
-	}
+	},
+	prettyDate: function(date) {
+		var day = date.substr(4,2)+ '-' +date.substr(6,2);
+		date = date.substr(0,4) + '/' +date.substr(4,2)+ '/' +date.substr(6,2)+ ' ' +date.substr(8,2)+ ':' +date.substr(10,2)+ ':' +date.substr(12,2);
+		var d = new Date(date);
+
+		var current = new Date();
+		var deltaSecond = (current.getTime() - d.getTime()) / 1000;
+
+		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
+			return '昨天';
+		}
+
+		if (deltaSecond < 15 * 60) {
+			return '刚刚';
+		}
+		if (deltaSecond < 60 * 60) {
+			return Math.floor(deltaSecond / 60) + '分钟前';
+		}
+		if (deltaSecond < 24 * 60 * 60) {
+			return Math.floor(deltaSecond / 60 / 60) + '小时前';
+		}
+		else
+			return day;
+	},
 }
 
 module.exports = GLOBAL;

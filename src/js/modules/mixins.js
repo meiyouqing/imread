@@ -42,12 +42,20 @@ var mixins = function() {
 			}.bind(this), 100);
 		},
 		scrollHandleCallback: function(){
-
+			var n;
 			this.setState({
 				scrollUpdate:true
 			})
-			var n = this.props.params[(this.props.route.path.split(':')[1])];
+
+			if(this.props.route){
+				n = this.props.params[(this.props.route.path.split(':')[1])];
+				if(!n)
+					n = this.props.route.path;
+			}
+			else 
+				n = window.location.pathname.split('/').pop().split('.')[0];
 			n = n.split('.')[0];
+
 			var p = AJAX.API[n].param['pages']? 'pages':'page';
 			AJAX.API[n].param[p]++;		
 			this.getList();
@@ -67,15 +75,30 @@ var mixins = function() {
 		shelfAdding: function(param,callback){
 			if(!this.isLogin()){
 				this.goLogin(addBookCallback);
+
 				return;
 			}
 			addBookCallback();
+			var that = this;
 			function addBookCallback() {
+
 				AJAX.go('addBook', {param:JSON.stringify(param)},function(data){
-					GLOBAL.onShelf[param[0].bookId]=1;
-					(typeof callback==='function') && callback(data);
+					if(data.code === 200) {
+						GLOBAL.onShelf[param[0].bookId]=1;
+						(typeof callback==='function') && callback(data);
+					} else {
+						that.ajaxError(data);
+					}
 				},GLOBAL.noop);
 			}
+		},
+		ajaxError: function(data){
+			if(typeof data.error === 'string')
+					POP._alert(data.error);
+			else 
+				for(var key in data.error[0]){
+					POP._alert(data.error[0][key])
+				}
 		},
 		isLogin: function() {
 			return !!GLOBAL.cookie('userToken');
@@ -85,6 +108,23 @@ var mixins = function() {
 			browserHistory.push(hash);
 			POP._alert('请先登录');
 			myEvent.setCallback('login', callback);
+		},
+		getBackUrl: function(path){
+			var path = path.path.replace(/:([^\"]*)/,'');
+			path = location.pathname.split('/'+path)[0];
+			return path;
+		},
+		goBackUrl: function(path){
+
+			var url = this.getBackUrl(path);
+			browserHistory.push(url);
+		},
+		checkLogin: function(path){
+			if(!this.isLogin()){
+				this.goBackUrl(path);
+				return false;
+			} 
+			return true;
 		}
 	};
 };
