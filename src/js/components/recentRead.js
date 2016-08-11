@@ -15,8 +15,11 @@ var recentRead = React.createClass({
             noMore: false,
             icon: null,
             right: < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>,
-            left: <a className="f-fl icon-s icon-back" onClick={GLOBAL.goBack} ></a>
+            left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
         }
+    },
+    goBack: function(){
+        this.goBackUrl(this.props.route);
     },
     troggle: function() {
         var right = < button className = "f-fr textBtn" onClick = { this.compClick } > 完成 < /button>;
@@ -31,7 +34,7 @@ var recentRead = React.createClass({
     	this.setState({
             right: right,
             icon: false,
-            left: <a className="f-fl icon-s icon-back" onClick={GLOBAL.goBack} ></a>
+            left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
        });
     },
     componentDidMount: function() {
@@ -39,32 +42,32 @@ var recentRead = React.createClass({
         this.lazyloadImage(this.refs.container);
     },
     getList: function(scrollUpdate) {
-        if (this.isLogin()) {
-            var that = this;
-            that.setState({
-                scrollUpdate: true
-            });
-            AJAX.init(this.props.route.path);
-            if (scrollUpdate) {
-                var n = AJAX.API._param['pages'] ? 'pages' : 'page';
-                AJAX.API._param[n]++;
-            }
+        // if (this.isLogin()) {
+        //     var that = this;
+        //     that.setState({
+        //         scrollUpdate: true
+        //     });
+        //     AJAX.init(this.props.route.path);
+        //     if (scrollUpdate) {
+        //         var n = AJAX.API._param['pages'] ? 'pages' : 'page';
+        //         AJAX.API._param[n]++;
+        //     }
 
-            AJAX.get(function(data) {
-                if (data.content.length < 10) {
-                    that.setState({
-                        noMore: true,
-                        scrollUpdate: false
-                    });
-                }
-                if (that.state.list) {
-                    data.content = that.state.list.concat(data.content);
-                }
-                that.setState({
-                    list: data.content
-                });
-            });
-        } else {
+        //     AJAX.get(function(data) {
+        //         if (data.content.length < 10) {
+        //             that.setState({
+        //                 noMore: true,
+        //                 scrollUpdate: false
+        //             });
+        //         }
+        //         if (that.state.list) {
+        //             data.content = that.state.list.concat(data.content);
+        //         }
+        //         that.setState({
+        //             list: data.content
+        //         });
+        //     });
+        // } else {
             var readLog = storage.get('readLogNew');
             var list = [];
             for (var n in readLog) {
@@ -77,18 +80,20 @@ var recentRead = React.createClass({
                 list: list,
                 noMore: true
             });
-        }
+       // }
     },
     componentDidUpdate: function() {
         this.lazyloadImage(this.refs.container);
     },
     deleteBook: function(e) {
+
         var bid = e.target.getAttribute('data-bid');
         if (!bid) {return; }
         var that =  this;
         var ui_callback = function() {
             for (var i = 0; i < that.state.list.length; i++) {
                 if (that.state.list[i].content_id == bid) {
+
                     that.state.list.splice(i, 1);
                     that.setState({
                         list: that.state.list
@@ -96,13 +101,9 @@ var recentRead = React.createClass({
                     break;
                 }
             }
-        }
-        if (that.isLogin()) {
-            AJAX.go('deleteRecentRead', {
-                book_id: bid
-            }, ui_callback);
-        } else {
-            var readLog = storage.get('readLogNew');
+        };
+
+         var readLog = storage.get('readLogNew');
             for (var content_id in readLog) {
                 if (content_id == bid) {
                     delete readLog[content_id];
@@ -110,7 +111,21 @@ var recentRead = React.createClass({
             }
             storage.set('readLogNew', readLog);
             ui_callback();
-        }
+
+        // if (that.isLogin()) {
+        //     AJAX.go('deleteRecentRead', {
+        //         book_id: bid
+        //     }, ui_callback);
+        // } else {
+        //     var readLog = storage.get('readLogNew');
+        //     for (var content_id in readLog) {
+        //         if (content_id == bid) {
+        //             delete readLog[content_id];
+        //         }
+        //     }
+        //     storage.set('readLogNew', readLog);
+        //     ui_callback();
+        // }
 },
 render: function() {
     var content;

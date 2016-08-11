@@ -84,7 +84,7 @@ var Login = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		AJAX.getJSON('POST', this.props.forget && '/api/auth/reset/password' || '/api/auth/register', postData, function(data) {
+		AJAX.getJSON('POST', '/api/v1/auth/register', postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -129,10 +129,16 @@ var Login = React.createClass({
 
 		AJAX.getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
-			type: this.props.forget && 'reset' || 'register'
+			type: 'register'
 		}, function(data) {
-			if(data.code !== 200)
-				POP._alert(data.error[0].mobile);
+			if(data.code !== 200){
+				if(typeof data.error === 'string')
+					POP._alert(data.error);
+				else 
+					for(var key in data.error[0]){
+						POP._alert(data.error[0][key])
+					}
+			}	
 		}, function(res) {
 			this.setState({
 				s: 0

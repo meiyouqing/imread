@@ -63,10 +63,10 @@ var Top = React.createClass({
 		myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
-		if(GLOBAL.isRouter(this.props) &&!this.state.list)	  this.getData();
+		if((GLOBAL.isRouter(this.props) &&!this.state.list) || (this.props.children !== nextProp.children)) this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
 		//setTimeout(function(){
-			this.lazyloadImage(this.refs.container);
+		this.lazyloadImage(this.refs.container);
 		//}.bind(this),300);
 		
 	},
@@ -78,13 +78,14 @@ var Top = React.createClass({
 	},
 	render:function(){
 		this.pid = this.props.params.topId.split('.').pop();
+
 		var list, arr=[];
 		if(!this.state.list){
 			list = <Loading />
 		}else{
 			if(this.state.list.length){
 				list = (
-					<div className="g-main g-main-3">
+					<div className="g-main g-main-3 m-top">
 						<div ref="container">
 							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid}/>
 						</div>

@@ -31,6 +31,10 @@ var Mall = React.createClass({
 		GLOBAL.addClass(this.refs.blackBlock,'show');
 		GLOBAL.addClass(this.refs.userlist,'show');
 	},
+	getLastparam: function(){
+		var param = location.pathname.split('/').pop();
+		return param.indexOf('page')>=0;
+	},
 	componentDidMount: function(){
 		this.getNav();
 	},
@@ -39,6 +43,7 @@ var Mall = React.createClass({
 			this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
+
 		return this.state.navList !== nextState.navList
 				|| this.props.children !== nextProp.children;
 	},
@@ -46,8 +51,9 @@ var Mall = React.createClass({
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
-			userList = <UserList hide={this.hide} />;
+			userList = <UserList hide={this.hide} route={this.props.route} />;
 		}
+
 		var right = <div className="icon-s icon-menu right icon-m-r10" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo"></div>;

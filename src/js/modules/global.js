@@ -29,7 +29,7 @@ var GLOBAL = {
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
-		if(path)
+		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
 			browserHistory.goBack();

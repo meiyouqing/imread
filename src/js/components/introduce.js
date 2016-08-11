@@ -36,7 +36,7 @@ var Detail = React.createClass({
 		if (readLog[this.props.book.bid]){
 			chapterid = readLog[this.props.book.bid].current_chapterid;
 		}
-		browserHistory.push(location.pathname+['/reading/crossDomain', sourcebid, chapterid, localid, source_id].join('.'));
+		browserHistory.push({pathname:location.pathname+['/reading/crossDomain', sourcebid, chapterid, localid, source_id].join('.'),state:{author: this.props.book.author,book_name: this.props.book.book_name}});
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.book !== nextProps.book || this.props.isOnshelf !== nextProps.isOnshelf;
@@ -208,7 +208,7 @@ var Introduce = React.createClass({
 		}else{
 			header = <Header title={this.state.book.book_name} right={right}  path={this.props.route} />
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={JSON.stringify(this.state.chapterlist)}/>
+			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={JSON.stringify(this.state.chapterlist)}/>
 		}
 		return (
 			<div className="gg-body">
@@ -320,7 +320,7 @@ var IntroduceTabs = React.createClass({
 					<div className="contents" ref="contents">
 						<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
 						<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
-							<Chapterlist hrefBase={location.pathname+'/reading'} source_id={this.props.source_id} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading}/>
+							<Chapterlist hrefBase={location.pathname+'/reading'} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading}/>
 						</div>
 						<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
 							<Readlist readlist={this.props.readlist} />

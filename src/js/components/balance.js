@@ -4,6 +4,7 @@ var Recharge = require('./recharge');
 require('../../css/pay.css')
 
 var Balance = React.createClass({
+	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
 		AJAX.init(this.props.route.path)
@@ -24,7 +25,7 @@ var Balance = React.createClass({
 		};
 	},
 	componentDidMount: function() {
-		this.getBalance();
+		if(this.checkLogin(this.props.route)) this.getBalance();
 	},
 	handleClick: function(e) {
 		this.setState({
@@ -36,7 +37,6 @@ var Balance = React.createClass({
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
-		console.log('balance')
 		var content;
 		if (this.state.loading) {
 			content = <Loading />

@@ -44,6 +44,8 @@ var API={
 	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}},
 	pwd: {method: 'POST', base: '/api/v1/auth/update/password', param:{oldPasswd: 0,password: 0}},
 	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
+	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
+	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 };
 
 //接口缓存机制
@@ -180,9 +182,14 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	
 	if (method === 'POST') {
 		request.open(method, url);
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
-		postdata = transformRequest(postdata);
+		if(postdata.formdata){
+			postdata = postdata.formdata;
+		}else{
+			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			postdata = transformRequest(postdata);
+		}
 		request.send(postdata);
 	} else {
 		var isYulan = false;
@@ -214,7 +221,7 @@ function setRequestHeaders(request) {
 		'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
-		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2)
+		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
 	};
 
 	for (var k in headers) {

@@ -36,10 +36,10 @@ var styleMixins = {
 	},
 	setFontBg: function(e) {
 		e.stopPropagation();
-		var bg = e.target.getAttribute('data-id');
+		var a = e.target.getAttribute('data-id');
 		var style = this.cloneStyle(this.state.style);
-		style.bg = bg;
-		style.night = 0;
+		style.style = Number(a);
+		// style.night = 0;
 		this.setState({
 			style: style
 		});
@@ -55,21 +55,13 @@ var styleMixins = {
 		});
 		readingStyle.set(style);
 	},
-	setFontSize: function(offset) {
+	setFontSize: function(e) {
 		var style = this.cloneStyle(this.state.style);
-		style.fontSize = Math.min(Math.max(style.fontSize + offset, 1), 5);
+		style.fontSize = Number(e.target.getAttribute('data-font'));
 		this.setState({
 			style: style
 		});
 		readingStyle.set(style);
-	},
-	setFontSm: function(e) {
-		e.stopPropagation();
-		this.setFontSize(-1);
-	},
-	setFontLg: function(e) {
-		e.stopPropagation();
-		this.setFontSize(1);
 	},
 	setFontFamily: function(e) {
 		e.stopPropagation();
@@ -98,7 +90,7 @@ var chapterMixins = {
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
-				chapterlist: data.chapterList,
+				chapterlist: this.state.chapterlist.concat(data.chapterList),
 				page: this.state.page + next,
 				getChapterlistLoading: false
 			});
@@ -182,7 +174,8 @@ var Reading = React.createClass({
 			intercut: false, //插页广告
 			download: false, //界面底部下载浮层,
 			orderData: null,
-			introduce: null
+			introduce: null,
+			orderSeq: true 
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -215,6 +208,7 @@ var Reading = React.createClass({
 			content_id: bid,
 			current_chapterid: chapterid,
 			current_time:(new Date()).Format('yyyyMMddhhmmss'),
+			chapter_read_time:(new Date()).Format('yyyyMMddhhmmss'),
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
@@ -540,6 +534,7 @@ var Reading = React.createClass({
 			});
 		}
 
+
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 		this.isdownLoad();
@@ -577,6 +572,17 @@ var Reading = React.createClass({
 			hammerTime.on('tap', this.handleClick);
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
+
+		var container = this.refs.containers;
+		container.onscroll = function(e) {
+			var time;
+			if (container.scrollTop + document.body.scrollHeight + 160 > container.scrollHeight) {
+				clearTimeout(time);
+				time= setTimeout(function() {
+					this.getChapterlist(true);
+				}.bind(this), 100);
+			};
+		}.bind(this)
 
 		if(this.props.params !== nextProps.params)
 			this.getContent();
@@ -621,6 +627,9 @@ var Reading = React.createClass({
 			this.toggleSettings(1);
 		}
 	},
+	changeOrder: function(){
+		this.setState({orderSeq: !this.state.orderSeq});
+	},
 	isdownLoad: function(){
 		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
 		var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
@@ -650,19 +659,27 @@ var Reading = React.createClass({
 			showGuide: false
 		});
 	},
+	downLoad: function(){
+		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
+	},
 	goBack: function(){
 		GLOBAL.cookie(this.bid,'autoPay',7)
 		this.getContent();
 		this.setState({order: false});
 	},
 	render:function(){
-
 		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
 		var className = readingStyle.getClass(this.state.style);
 		var intercut;
+
+		//防止排序时候的绑定
+		var chapterlist = {};
+		chapterlist.list = this.state.chapterlist;
+		var list = JSON.parse(JSON.stringify(chapterlist)).list;
+
 		if(this.state.UFO){
 			return (
 				<div className="gg-body">
@@ -685,10 +702,21 @@ var Reading = React.createClass({
 				);
 		}
 		if(this.state.loading) {
+			var state = this.props.location.state;
+			if(!state) 
+				state = {book_name: '',author:''}
+			
 			return (
 				<div className="gg-body">
-					{head}
-					<i className="u-loading u-book-loading">努力加载中...</i>
+					{/*{head}
+					<i className="u-loading u-book-loading">努力加载中...</i>*/}
+					<div className={"m-reading-fy style-" + (this.state.style.style)}>
+						<div className="fy-detail">
+							<p className="fy-title">{state.book_name || ''}</p>
+							<p className="fy-author">{state.author || ''}</p>
+						</div>
+						<div className="fy-gw">发现阅读之美</div>
+					</div>
 					{this.props.children}
 				</div>
 			);
@@ -705,45 +733,58 @@ var Reading = React.createClass({
 			}
 		}
 		return (
-			<div className="gg-body" ref="container">
+
+			<div className="gg-body m-reading-body" ref="container">
+				<div className={"style" + className}>
+				<i className="u-miguLogo"></i>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
-						<div className="iconfont icon-back" onClick={this.goOut}></div>
-						<span className="title f-ellipsis">{this.state.data.name}</span>
-
-						<div className={this.state.showIntercut ? "" : "f-hide"}>
-							{this.state.intercutList}
-						</div>
+						<span className="back f-fl" onClick={this.goOut}></span>
+						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
+						<span onClick={this.downLoad} className="download f-fr"></span>
 					</div>
 					<div className={"u-settings u-settings-font" + (!this.state.showSettingFont && ' f-hide' || '')}>
-						<div className="setting-fontfamily setting-font-line f-flexbox">
+						{/*<div className="setting-fontfamily setting-font-line f-flexbox">
 							<div className="title">字体</div>
 							{
 								['默认', '宋体', '黑体', '楷体'].map(function(font, i) {
 									return <div className={"item f-flex1" + (this.state.style.fontFamily == (i + 1) ? ' active' : '')} onClick={this.setFontFamily} data-id={i + 1} key={i}>{font}</div>;
 								}.bind(this))
 							}
-						</div>
+						</div>*/}
 						<div className="setting-fontsize setting-font-line f-flexbox">
-							<div className="title">字号</div>
-							<div className={"item f-flex1" + (this.state.style.fontSize == 1 ? ' active': '')} onClick={this.setFontSm}>A-</div>
-							<div className={"item f-flex1" + (this.state.style.fontSize == 5 ? ' active': '')} onClick={this.setFontLg}>A+</div>
+							<span className="icon-font"></span>
+							<div className="font-list">
+								<div className="f-fr">
+									<span className="circle active" data-font={1}></span>
+									{
+
+										[1, 2, 3, 4,5].map(function(dataid, i) {
+											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"display-inline" + (this.state.style.fontSize>=dataid?" active":'')}>
+													<span className="line" data-font={dataid} ></span>
+													<span className="circle" data-font={dataid}></span>
+												</div>)
+										}.bind(this))
+
+									}
+
+								</div>
+							</div>
 						</div>
-						<div className="setting-line-height setting-font-line f-flexbox">
+						{/*<div className="setting-line-height setting-font-line f-flexbox">
 							<div className="title">排版</div>
 							{
 								['icon-lh3', 'icon-lh2', 'icon-lh1'].map(function(icon, i) {
 									return <div className={"item f-flex1" + (this.state.style.lineheight == (i + 1) ? ' active' : '')} onClick={this.setFontHeight} data-id={i + 1} key={i}><span className={"iconfont " + icon}></span></div>
 								}.bind(this))
 							}
-						</div>
+						</div>*/}
 						<div className="setting-bg setting-font-line f-flexbox">
-							<div className="title">背景</div>
 							{
-								[1, 2, 3, 4].map(function(dataid, i) {
+								[0,1, 2, 3, 4].map(function(dataid, i) {
 									return (
-										<div className={"item f-flex1 bg-" + dataid + (this.state.style.bg == dataid ? ' active' : '')} onClick={this.setFontBg} data-id={dataid} key={i}>
-											<div className="active-border"></div>
+										<div className="item f-flex1" key={i}>
+											<div className={"active-border" + (this.state.style.style == dataid ? ' active' : '')} data-id={dataid} onClick={this.setFontBg} ></div>
 										</div>
 									)
 								}.bind(this))
@@ -751,29 +792,33 @@ var Reading = React.createClass({
 						</div>
 					</div>
 					<div className="u-settings u-settings-bottom f-flexbox">
-						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="iconfont u-icon icon-menu"></span></a>
+						<a className="u-settingitem f-flex1" onClick={this.prevChapter}><span className="icon-r prv"></span><span>上一章</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="icon-r menu"></span><span>目录</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="icon-r setting"></span><span>设置</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.nextChapter}><span className="icon-r next"></span><span>下一章</span></a>
+						{/*<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
-						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">
-							{this.state.data.name}
+							<span>目录</span>
+							<div onClick={this.changeOrder} >
+								<span>顺序</span>
+								<span className={"icon-20 icon-w-paixu f-fr" + (this.state.orderSeq?' seq':' rev')}></span>
+							</div>
 						</div>
-						<div className="u-scroll-y"  onClick={this.toggleChapterlist}>
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.chapterlist} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
-						<div className="u-chapter-action f-flexbox">
-							<div className="u-chapter-page f-flex1" onClick={this.prevPage}>上一页</div>
-							<div className="u-chapter-page f-flex1" onClick={this.nextPage}>下一页</div>
-						</div>
+
 					</div>
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
-				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
-					<i className="u-miguLogo"></i>
-					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
+				<div className={"m-reading"} ref="scrollarea">
+					{/*<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>*/}
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
@@ -783,7 +828,7 @@ var Reading = React.createClass({
 						}
 					</section>
 					{intercut}
-					<button className="u-btn-1">点击阅读下一章</button>
+					{/*<button className="u-btn-1">点击阅读下一章</button>*/}
 				</div>
 
 				
@@ -828,6 +873,7 @@ var Reading = React.createClass({
 							<span>页尾到下一页</span>
 						</div>
 					</div>
+				</div>
 				</div>
 				{this.props.children}
 			</div>

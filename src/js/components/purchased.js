@@ -15,8 +15,10 @@ var Purchased = React.createClass({
 		}
 	},
 	componentDidMount: function() {
-		if(GLOBAL.isRouter(this.props)) this.getList();
-		this.lazyloadImage(this.refs.container);
+		if(this.checkLogin(this.props.route)){
+			if(GLOBAL.isRouter(this.props)) this.getList();
+			this.lazyloadImage(this.refs.container);
+		}
 	},
 	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
@@ -82,7 +84,7 @@ var Purchased = React.createClass({
 				</ul>
 			);
 		} else {
-			content = <NoData type="recentRead" />
+			content = <NoData type="emptyPur" />
 		}
 		return (
 			<div className="gg-body">

@@ -10,7 +10,8 @@ var Shelf = React.createClass({
 		var sbid = a.getAttribute('data-sbid');
 		var cid = a.getAttribute('data-cid');
 		var sid = a.getAttribute('data-sid');
-
+		var book_name = a.getAttribute('data-name');
+		var author = a.getAttribute('data-author');
 		if(!this.state.setting){ //开始阅读
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
@@ -19,7 +20,7 @@ var Shelf = React.createClass({
 			}
 			myEvent.setCallback('refreshShelf',this.getList);
 			this.compClick();
-			browserHistory.push(GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
+			browserHistory.push({pathname:GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid),state:{author: author,book_name: book_name}});
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){
@@ -46,8 +47,8 @@ var Shelf = React.createClass({
 
 		switch(index){
 			case 1:
-				var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
-				var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+				var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
+				var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 				setting=true;
 				icon =  <i className="icon-selected-s"></i>;
 				left = this.state.toggle? seNone : seAll;
@@ -74,7 +75,7 @@ var Shelf = React.createClass({
 	compClick: function(){
 		//var icon = <i className="u-recentRead"></i>;	
 		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
-		var back = <a className="f-fl icon-back iconfont" onClick={this.gotoHome}></a>;
+		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		this.setState({
 			setting:false,
 			left:back,
@@ -84,7 +85,7 @@ var Shelf = React.createClass({
 		})
 	},
 	seAllClick :function(){
-		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+		var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
 		}.bind(this))
@@ -94,7 +95,7 @@ var Shelf = React.createClass({
 		})
 	},
 	seNoneClick: function(){
-		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
+		var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
 		this.setState({
 			left:seAll,
 			selected:[]
@@ -208,7 +209,7 @@ var Shelf = React.createClass({
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
 		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
-		var back = <a className="f-fl icon-back iconfont" onClick={this.gotoHome}></a>;
+		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
 		return {
 			setting:false,
@@ -241,13 +242,10 @@ var Shelf = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-		if(!this.isLogin()){
-			this.goLogin(() => {
-				if(GLOBAL.isRouter(this.props))	this.getList();
-			});
-			return;
+
+		if(this.checkLogin(this.props.route)) {
+			this.getList();
 		}
-		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function(nextPros,nextState) {
 
@@ -305,13 +303,13 @@ var Shelf = React.createClass({
 										if(this.state.show_model==0)
 											return(
 												<li key={i} className={"u-book-2 "+curClass}>
-													<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													<a onClick={this.startReading} data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
 														<div className="pro-box">
 														{icon}
 														<Img src={v.image_url} />
 														<progress className="progress" value={v.playorder/v.count} max="1"></progress>
 														</div>
-														<span className="f-ellipsis">{v.name}</span>
+														<span className="f-ellipsis-2">{v.name}</span>
 													</a>
 												</li>
 												);
@@ -328,11 +326,11 @@ var Shelf = React.createClass({
 													notice = per*100 + '%';
 											};
 											return (<li key={i} className={"u-book-2 "+curClass}>
-													<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
-														<div className="pro-box" data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													<a onClick={this.startReading} data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														<div className="pro-box" data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
 														{icon}
 														<Img src={v.image_url} />
-														<div className="intro-box" data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														<div className="intro-box" data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
 															<span className="f-ellipsis title">{v.name}</span>
 															<span className="f-ellipsis chapter">{v.chapter_name}</span>
 															<div className="progress-box">

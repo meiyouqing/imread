@@ -27,6 +27,7 @@ import Setting from './setting'
 import Modifypwd from './modifypwd'
 import StoreList from './storeList'
 import UserInfo from './userInfo'
+import EditUserame from './editUserame'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -82,10 +83,12 @@ module.exports = (
 				</Route>
 
 				<Route path="userInfo" component={UserInfo}>
+					<Route path="editUserame" component={EditUserame} />
 					{loginWrap}
 				</Route>
 
 				<Route path="top/:topId" component={Top}>
+					<Route path="myTags" component={Tag}/>
 					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 						{bookWrap}
 						{searchWrap}
@@ -127,6 +130,7 @@ module.exports = (
 				</Route>
 				<Route path="readHistory" component={ReadHistory}/>
 				<Route path="setting" component={Setting}>
+					{loginWrap}
 					<Route path="modifypwd" component={Modifypwd}>
 						{loginWrap}
 					</Route>
@@ -185,6 +189,7 @@ module.exports = (
 		</Route>
 		<Route path="readHistory" component={ReadHistory}/>
 		<Route path="setting" component={Setting}>
+			{loginWrap}
 			<Route path="modifypwd" component={Modifypwd}>
 				{loginWrap}
 			</Route>

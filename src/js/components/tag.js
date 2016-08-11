@@ -2,6 +2,7 @@ var Header = require('./header');
 require('../../css/tag.css');
 
 var tag = React.createClass({
+	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
 			tagList: [],
@@ -21,7 +22,8 @@ var tag = React.createClass({
 		});
 	},
 	componentDidMount: function() {
-		this.getData();
+
+		if(this.checkLogin(this.props.route))  this.getData();
 	},
 	toggleTag:function(index, from, to){
 		to.push(from.splice(index, 1)[0]);

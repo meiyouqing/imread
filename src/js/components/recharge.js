@@ -173,7 +173,7 @@ var Recharge = React.createClass({
 	},
 	componentWillMount: function(){
 		//this.getPay();
-		this.getFee();
+		 this.getFee();
 	},
 	componentDidMount: function() {
 		var phoneNumber = GLOBAL.cookie('payUser');

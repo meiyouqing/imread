@@ -51,7 +51,7 @@ var Feedback = React.createClass({
 
 					<div className="u-feed-footer">
 						<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=9c3536c0e460081dec83bd8b6646c29945063d0f2a3bd17a50326c0b734742a0"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
-						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" value={"艾美阅读"} /></a>
+						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" /></a>
 						<a href="http://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
 					</div>
 				</div>

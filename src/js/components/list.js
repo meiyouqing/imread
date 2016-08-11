@@ -110,9 +110,9 @@ var List = React.createClass({
 	render:function(){
 		var header,noData,content,sLoading,result_count;
 		//定义头部
-		if(this.state.resultCount){
-			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
-		}
+		// if(this.state.resultCount){
+		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
+		// }
 
 		var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
 		header = <Header title={GLOBAL.title}  right={right} path={this.props.route}  />;				
@@ -144,7 +144,7 @@ var List = React.createClass({
 		return (
 			<div className="gg-body">
 				{header}
-				<div className="g-main g-main-1">
+				<div className="g-main g-main-1 m-list">
 					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
 						{result_count}
 						{content}

@@ -28,7 +28,7 @@ var Register = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		AJAX.getJSON('POST', this.props.forget && '/api/auth/reset/password' || '/api/auth/register', postData, function(data) {
+		AJAX.getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -67,7 +67,7 @@ var Register = React.createClass({
 
 		AJAX.getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
-			type: this.props.forget && 'reset' || 'register'
+			type: 'reset'
 		}, function(data) {
 			//console.log(data);
 		}, function(res) {

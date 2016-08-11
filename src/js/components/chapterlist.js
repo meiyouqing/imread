@@ -21,9 +21,9 @@ var Chapterlist = React.createClass({
 		var targetUrl = this.props.hrefBase + '/crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
 		//if (this.props.fromReading) {
 		if(this.props.fromReading)
-			browserHistory.replace(targetUrl);
+			browserHistory.replace({pathname:targetUrl,state:{author: this.props.book.author,book_name: this.props.book.book_name}});
 		else
-			browserHistory.push(targetUrl);
+			browserHistory.push({pathname:targetUrl,state:{author: this.props.book.author,book_name: this.props.book.book_name}});
 		// } else {
 		// 	window.location.href = targetUrl;
 		// }

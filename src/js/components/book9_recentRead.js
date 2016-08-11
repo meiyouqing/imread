@@ -19,14 +19,20 @@ var Book9 = React.createClass({
 		if (deltaSecond < 24 * 60 * 60) {
 			return Math.floor(deltaSecond / 60 / 60) + '小时前';
 		}
-		return date;
+		return date.substr(5,5);
 	},
-	render: function() {
+	clickHandle: function(){
+		if(this.props.icon)	return;
 		var href = 'reading/crossDomain.'
 		         + this.props.book.source_bid + '.'
 		         + this.props.book.chapter_id + '.'
 		         + this.props.book.content_id + '.'
 		         + this.props.book.source_id;
+		browserHistory.push({pathname:GLOBAL.setHref(href),state:{author: this.props.book.author,book_name: this.props.book.name}});
+
+	},
+	render: function() {
+
 		var deleter;
 
 		if(this.props.icon)
@@ -36,7 +42,7 @@ var Book9 = React.createClass({
 
 		return (
 			<li className="u-book-9" >
-				<Link to={GLOBAL.setHref(href)} className="f-clearfix">
+				<a onClick={this.clickHandle} className="f-clearfix">
 					<div className="f-fl">
 						<Img src={this.props.book.big_coverlogo || this.props.book.image_url} />
 					</div>
@@ -44,9 +50,9 @@ var Book9 = React.createClass({
 						<div className="f-ellipsis-2 name">{this.props.book.name}</div>
 						<div className="author">{this.props.book.author}</div>
 						<div className="f-ellipsis-2 chapter-name">{this.props.book.chapter_name}</div>
-						<div className="date">{this.prettyDate(this.props.book.mark_time)}</div>
+						<div className="date">{this.prettyDate(this.props.book.recent_time)}</div>
 					</div>
-				</Link>
+				</a>
 				{deleter}
 			</li>
 		);

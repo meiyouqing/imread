@@ -27,7 +27,7 @@ var Book5 = React.createClass({
 				<Link to={hrefStr}>
 					{/*<span className={"topNb"+topCls}>{topNum}</span>*/}
 					<span className="f-ellipsis f-ellipsis-ib f-auto-width">{this.props.data.name}</span>
-					<span className={topCls}>热</span>
+					<span className={topCls}>{topCls?'热':''}</span>
 				</Link>
 			</li>
 		);

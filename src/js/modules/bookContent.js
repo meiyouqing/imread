@@ -5,12 +5,12 @@ var BookContent = (function() {
 	//移动咪咕阅读
 	//@source_id 1
 	function getContent1(options) {
+
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
 		var url = totalUrl.replace(/\?.*/, '')
 					      .replace('$bid', options.bid)
 					      .replace('$cid', options.cid);
-
 		var param = totalUrl.replace(/(.*\?)/, '')
 							.replace('$cm', sourceConfig.cm);
 		//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
@@ -54,10 +54,17 @@ var BookContent = (function() {
 		getContent2(options);
 	}
 
+	//咪咕阅读
+	//@source_id 4
+	function getContent4(options) {
+		getContent2(options);
+	}
+
 	var api = {
 		getContent1: getContent1,
 		getContent2: getContent2,
-		getContent3: getContent3
+		getContent3: getContent3,
+		getContent4: getContent4
 	}
 
 	/*
