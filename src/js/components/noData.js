@@ -26,7 +26,7 @@ var NoData = React.createClass({
 				text = '亲，书架还空空荡荡哦';
 			break;
 			case 'UFO':
-				src = 'http://m.imread.com/src/img/UFO.png';
+				src = 'http://m.imread.com/src/img/no@2x.png';
 				text = '网络遇到问题,请重试';
 				btn = <a className="u-btn" onClick={this.reload}>重新加载</a>;
 			break;
