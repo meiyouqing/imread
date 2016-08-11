@@ -1,5 +1,4 @@
 var Header = require('./header');
-var PayTips = require('./payTips');
 var Recharge = require('./recharge');
 
 // if(false&&typeof window !== 'undefined'){
@@ -7,6 +6,7 @@ var Recharge = require('./recharge');
 // }
 
 var Balance = React.createClass({
+	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
 		AJAX.init(this.props.route.path)
@@ -27,18 +27,15 @@ var Balance = React.createClass({
 		};
 	},
 	componentDidMount: function() {
-		this.getBalance();
+		if(this.checkLogin(this.props.route)) this.getBalance();
 	},
 	handleClick: function(e) {
-		console.log((e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index')))
 		this.setState({
 			active: (e.target.getAttribute('data-index') || e.target.parentNode.getAttribute('data-index'))
 		});
 	},
 	orderHandle:function(){
-
 		var ordered = this.state.list[this.state.active];
-		console.log(ordered)
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	render: function () {
@@ -49,8 +46,8 @@ var Balance = React.createClass({
 			content = (
 				<div>
 					<div className="u-balance">
-						<div className="title">余额</div>
-						<div className="count">{(this.state.balance/100).toFixed(2)}<span className="unit">艾豆</span></div>
+						<div className="i-icon-large"></div>
+						<div className="count"><span>{(this.state.balance/100).toFixed(2)}</span></div>
 					</div>
 					<div className="u-divider"></div>
 					<ul className="pay-list f-clearfix">
@@ -58,11 +55,11 @@ var Balance = React.createClass({
 						(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
 							var active = i == this.state.active;
 							var activeClass = active ? ' active' : '';
-							var activeImg = active ? 'src/img/balance_select.png' : 'src/img/balance.png';
+							//var activeImg = active ? 'http://m.imread.com/src/img/balance_select.png' : 'http://m.imread.com/src/img/balance.png';
 							return (
 								<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
-									<img src={activeImg} />
-									<span className="count">{item.productPrice / 100}</span>
+									<span className={"icon-n icon-black-aidou " + activeClass}></span>
+									<span className="count">{item.productPrice / 100}艾豆</span>
 								</li>
 							);
 						}.bind(this))
@@ -71,14 +68,13 @@ var Balance = React.createClass({
 					<div className="u-userform">
 						<a className="u-btn u-btn-full" onClick={this.orderHandle} >话费充值</a>
 					</div>
-					<PayTips />
 				</div>
 			);
 			
 		}
 		return (
 			<div className="gg-body">
-				<Header right={false} title={'艾豆充值'}/>
+				<Header right={false} title={'艾豆充值'} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

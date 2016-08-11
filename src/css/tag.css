@@ -1,7 +1,7 @@
 .tags-block .g-scroll{background: #F5F5F5;}
 
-.tag-block .title{height: 30px;line-height: 36px;padding: 0 15px;font-size: 13px;color: #777777;}
-.tag-block .content{position: relative;min-height: 100px;padding: 20px 15px;box-sizing: border-box;background: #FFFFFF;}
-.tag-block .tips{position: absolute;left: 0;right: 0;top: 50%;line-height:24px;margin-top: -12px;color:#777777;font-size:15px;text-align: center;}
-.tag-block .tag{display: block;height: 32px;line-height: 30px;padding: 0 17px;margin: 5px 10px 5px 0;color: #333333;font-size: 15px;border: 1px solid #999999;border-radius: 15px;box-sizing: border-box;}
-.tag-block .tag.selected{color: #41c2c2;border-color: #41c2c2;}
+.tag-block .title{height: 30px;line-height: 30px;padding: 0 15px;font-size: 13px;color: #777777;}
+.tag-block .content{position: relative;min-height: 105px;padding: 10px 15px;box-sizing: border-box;background: #FFFFFF;}
+.tag-block .tips{position: absolute;left: 0;right: 0;top: 50%;line-height:24px;margin-top: -12px;color:#000;font-size:17px;text-align: center;}
+.tag-block .tag{display: block;height: 32px;line-height: 30px;padding: 0 17px;margin: 5px 10px 5px 0;color: #000;font-size: 17px;border: 1px solid #999999;border-radius: 15px;box-sizing: border-box;}
+.tag-block .tag.selected{color: #0196aa;border-color: #0196aa;}

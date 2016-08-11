@@ -12,7 +12,7 @@ export default React.createClass({
 		return (
 			<div className="g-wraper">
 				{this.props.children}
-				<Nav />
+				
 			</div>
 		);				
 	}

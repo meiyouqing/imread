@@ -11,7 +11,6 @@ var confirm = function() {
 	var template_confirm = '\
 		<div class="confirm-block confirm-block-2">\
 			<div class="content">\
-				<div class="title"><h3>提示</h3></div>\
 				<div class="text">$content</div>\
 				<div class="btns">\
 					<button class="no cancelBtn" />取消</button>\
@@ -77,6 +76,7 @@ var confirm = function() {
 	};
 	this.onCancelBtn = function(cancelBtn,callback){
 		cancelBtn.onclick = function(e) {
+			
 			if(typeof callback==='function'){callback()}
 			//callback();
 			e.stopPropagation && (e.stopPropagation)();

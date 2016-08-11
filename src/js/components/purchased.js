@@ -16,8 +16,10 @@ var Purchased = React.createClass({
 		}
 	},
 	componentDidMount: function() {
-		this.getList();
-		this.lazyloadImage(this.refs.container);
+		if(this.checkLogin(this.props.route)){
+			if(GLOBAL.isRouter(this.props)) this.getList();
+			this.lazyloadImage(this.refs.container);
+		}
 	},
 	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
@@ -61,7 +63,12 @@ var Purchased = React.createClass({
 		}
 	},
 	componentDidUpdate: function() {
+		if(GLOBAL.isRouter(this.props) && !this.state.list) {this.getList();}
 		this.lazyloadImage(this.refs.container);
+	},
+	shouldComponentUpdate: function(nextProp, nextState) {
+		return this.state.list !== nextState.list
+				|| this.props.children !== nextProp.children;
 	},
 	render: function() {
 		var content;
@@ -69,23 +76,23 @@ var Purchased = React.createClass({
 			content = <Loading />
 		} else if (this.state.list.length){
 			content = (
-				<ul>
+				<ul className="content">
 				{
 					this.state.list.map(function(book, i) {
-						return <Book1 book={book} key={i} />
+						return <Book1 data={book} key={i} />
 					})
 				}
 				</ul>
 			);
 		} else {
-			content = <NoData type="recentRead" />
+			content = <NoData type="emptyPur" />
 		}
 		return (
 			<div className="gg-body">
 				<div className="recentRead-block">
-					<Header right={false} title={'已购书籍'}/>
+					<Header right={false} title={'已购书籍'} path={this.props.route}/>
 					<div className="g-main g-main-1">
-						<div  className="g-scroll" ref="container" onScroll={this.scrollHandle}>
+						<div  className="g-scroll m-block purchase" ref="container" onScroll={this.scrollHandle}>
 							{content}
 						</div>
 					</div>

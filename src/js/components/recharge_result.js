@@ -4,6 +4,11 @@ var Header = require('./header');
 // }
 
 var RechageRes = React.createClass({
+	getInitialState: function() {
+		return {
+			success: null
+		};
+	},
 	completed: function(){
 		console.log(myEvent.callback)
 		if(myEvent.callback.recharge){
@@ -12,47 +17,76 @@ var RechageRes = React.createClass({
 			myEvent.execCallback('rechargeDef');		
 		}
 	},
+	success: function(){
+		console.log('成功');
+		this.setState({success: true,status: '充值成功'});
+	},
+	failed: function(){
+		console.log('失败');
+		this.setState({success: false,status: '充值失败'});
+	},
+	checkCharge: function(){
+		console.log(localStorage.recharge)
+		var params = localStorage.recharge?JSON.parse(localStorage.recharge):GLOBAL.orderLIst;
+		AJAX.go('payCheck',params,function(data){
+			if(data.code === 200)
+				switch(data.status){
+					case 1: 
+						this.checkCharge();
+						break;
+					case 2: 
+						this.success();
+						break;
+					default:
+						this.failed();
+				}
+		}.bind(this));
+	},
+	componentDidMount: function(){
+		this.checkCharge();
+	},
 	render: function() {
-		var data = this.props.data;
-		data.time = new Date().Format('yyyy-MM-dd hh:mm:ss');
-		var title,note,content;
-		if(data.code===200){
-			title = '充值成功';
-			note = '若您收到来自运营商的扣费短信，即为本商品支付成功通知。如有疑问，请致电客服：4009679897';
-			content = (		
-					<table className="result-suc f-fc-777" border="0" cellSpacing="0" cellPadding="0" width="100%"><tbody>
-						<tr><td width="100">充值艾豆</td><td className="f-tr" >{data.aidou}艾豆</td></tr>
-						<tr><td width="100">充值金额</td><td className="f-tr" >{data.sum}元</td></tr>
-						<tr><td width="100">充值时间</td><td className="f-tr" >{data.time}</td></tr>
-						<tr><td width="100">支付号码</td><td className="f-tr" >{data.phone}</td></tr>
-					</tbody></table>
-					);
-		}else{
-			title = '充值失败';
-			note = '未能成功支付，建议您重新购买。如有疑问，请记录返回码后，请致电客服：4009679897';
-			content = (		
-					<div className="f-clearfix result-fail">
-						<span className="f-fl f-mr-10">返回码</span><span className="f-fl">{data.code}</span><button className="f-fr u-btn" onClick={GLOBAL.goBack()}>更换号码充值</button>
-					</div>
-					);
-		}
+		 var right = < button className = "f-fr textBtn" onClick = { GLOBAL.goBack } > 完成 < /button>;
+		 var list;
+		 console.log(this.state.success)
+
+		 if(this.state.success == null)
+		 	list = <Loading />;
+		 else if(this.state.success === true) {
+		 	list = (
+		 			<div className="m-recharge-result">
+		 				<div className="m-result-status">
+		 					<span className="m-result-icon-s"></span>
+		 					<span className="m-result-icon">{this.state.status}</span>
+		 				</div>
+		 				<div className="m-result-detail">
+			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
+			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
+			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
+			 			</div>
+		 			</div>
+		 		)
+		 } else {
+		 	list = (
+		 			<div className="m-recharge-result">
+		 				<div className="m-result-status">
+		 					<span className="m-result-icon-f"></span>
+		 					<span className="m-result-icon">{this.state.status}</span>
+		 				</div>
+		 				<div className="m-result-detail-f">
+			 				如遇支付问题请联系<a href="tel:4009679897">400-967-9897</a>
+			 			</div>
+		 			</div>
+		 		)
+		 }
 		return (
 			<div>
-				<Header right={null} />
-				<div className="g-main g-main-1">
-					<div className="g-scroll m-recharge">
-						<div className="f-p-15 f-bg-fff">
-							<h2 className="title">{title}</h2>
-							{content}
-						</div>
-						<div className="f-p-15">
-							<p className="result-note f-fc-777">{note}</p>
-							<button className="u-btn u-btn-full" onClick={this.completed}>完成</button>
-						</div>
-					</div>
+				<Header right={right} left={null} title={'充值结果'} path={this.props.route}/>
+				<div className="g-main g-main-1 g-f">
+					{list}
 				</div>
 			</div>
-		);
+				)
 	}
 });
 

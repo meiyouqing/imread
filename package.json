@@ -4,11 +4,18 @@
   "description": "imread for html5",
   "main": "index.js",
   "dependencies": {
+<<<<<<< HEAD
     "if-env": "^1.0.0",
     "express": "^4.14.0",
     "compression": "^1.6.2",
     "css-loader": "^0.23.0",
     "file-loader": "^0.8.5",
+=======
+    "babel-core": "^5.8.32",
+    "babel-loader": "^6.2.4",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.9.0",
+>>>>>>> react-router
     "jsx-loader": "^0.13.2",
     "md5": "^2.0.0",
     "path": "^0.12.7",

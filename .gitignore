@@ -9,9 +9,11 @@ Desktop.ini
 .idea
 public
 tmp
+public
 node_modules
 webpack.config.js
 route.js
+server.bundle.js
 webpack-dev-server.js
 indexTemplate.html
 index.html

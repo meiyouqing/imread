@@ -12,7 +12,8 @@ var List = React.createClass({
 		AJAX.init(hash);
 		AJAX.get(data => {
 			this.isLoading = false;
-			if(/^searchList/.test(this.props.route.path)){
+			var pathname = location.pathname.split('/');
+			if(/^search./.test(pathname[pathname.length-1])){
 				if (!data.contentlist.length) {
 					this.setState({
 						noMore:true
@@ -64,6 +65,9 @@ var List = React.createClass({
 		}
 		this.getList();
 	},
+	gotoSearch: function(){
+		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
+	},
 	getInitialState: function(){
 		return {
 			noMore:false,
@@ -74,7 +78,7 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.getList();
+		if(GLOBAL.isRouter(this.props)) this.getList();
 	},
 	update: function(){
 
@@ -83,7 +87,7 @@ var List = React.createClass({
 	// 	this.getData();
 	// },
 	componentDidUpdate: function(nextProps,nextState) {
-
+		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
 		this.lazyloadImage(this.refs.container);
 	},
@@ -106,12 +110,14 @@ var List = React.createClass({
 	render:function(){
 		var header,noData,content,sLoading,result_count;
 		//定义头部
-		if(this.state.resultCount){
-			result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
-		}
-		header = <Header title={GLOBAL.title} />;				
+		// if(this.state.resultCount){
+		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
+		// }
+
+		var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
+		header = <Header title={GLOBAL.title}  right={right} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
-			header = <Header_s goSearch={this.goSearch} />;
+			header = <Header_s goSearch={this.goSearch} path={this.props.route}  />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
@@ -138,7 +144,7 @@ var List = React.createClass({
 		return (
 			<div className="gg-body">
 				{header}
-				<div className="g-main g-main-1">
+				<div className="g-main g-main-1 m-list">
 					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
 						{result_count}
 						{content}

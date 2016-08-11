@@ -1,17 +1,20 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
-var Header = require('./header');
+var Header = require('./header_f');
 var Img = require('./img');
 
 var Shelf = React.createClass({
 	mixins:[Mixins()],
 	startReading: function(e){
+		
 		var a = e.target.parentNode.parentNode;
 		var bid = parseInt(a.getAttribute('data-bid'));
 		var sbid = a.getAttribute('data-sbid');
 		var cid = a.getAttribute('data-cid');
 		var sid = a.getAttribute('data-sid');
+		var book_name = a.getAttribute('data-name');
+		var author = a.getAttribute('data-author');
 		if(!this.state.setting){ //开始阅读
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
@@ -19,7 +22,8 @@ var Shelf = React.createClass({
 				cid = readLog.current_chapterid;
 			}
 			myEvent.setCallback('refreshShelf',this.getList);
-			browserHistory.push(GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid));
+			this.compClick();
+			browserHistory.push({pathname:GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid),state:{author: author,book_name: book_name}});
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){
@@ -35,30 +39,56 @@ var Shelf = React.createClass({
 			}
 		}
 	},
-	settingClick: function(){
+	showModels: function(){
+		this.setState({showModelList: !this.state.showModelList});
+	},
+	settingClick: function(e){
+		var index = Number(e.target.getAttribute('data-index'));
+		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
-		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
-		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+		var setting = false,selected=[],icon=null,left=null;
+
+		switch(index){
+			case 1:
+				var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
+				var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
+				setting=true;
+				icon =  <i className="icon-selected-s"></i>;
+				left = this.state.toggle? seNone : seAll;
+				break;
+			case 2:
+				break;
+			case 3: 
+				break;
+		}
+
 		this.setState({
-			setting:true,
-			selected:[],
-			icon : <i className="iconfont icon-selected"></i>,
-			left:this.state.toggle? seNone : seAll,
-			right:completion
-		})
+			setting:setting,
+			selected:selected,
+			icon : icon,
+			left:left,
+			right:completion,
+			model: index
+		});
+
+	},
+	gotoHome: function(){
+		browserHistory.push('/mall');
 	},
 	compClick: function(){
-		var icon = <i className="u-recentRead"></i>;	
-		var setting = <button className="f-fr iconfont icon-setting" onClick={this.settingClick} ></button>;
+		//var icon = <i className="u-recentRead"></i>;	
+		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		this.setState({
 			setting:false,
-			left:null,
+			left:back,
 			right:setting,
-			icon:icon
+			//icon:icon,
+			model: 0
 		})
 	},
 	seAllClick :function(){
-		var seNone = <button className="f-fl textBtn" onClick={this.seNoneClick} >取消全选</button>;
+		var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
 		}.bind(this))
@@ -68,18 +98,34 @@ var Shelf = React.createClass({
 		})
 	},
 	seNoneClick: function(){
-		var seAll = <button className="f-fl textBtn" onClick={this.seAllClick} >全选</button>;
+		var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
 		this.setState({
 			left:seAll,
 			selected:[]
 		})
 	},
-	delBtnClick: function(){
+	gotoReading: function(){//详情页面
+		if(this.state.selected.length !== 1) return;
+		else{
+			this.state.shelfList.forEach(function(v,i){
+				if(v.content_id === this.state.selected[0]){
+					//this.startReading(null,v);
+					this.compClick();
+					browserHistory.push(GLOBAL.typeHref(v));
+				}
+			}.bind(this));
+		}
+	},
+	gotoDownload: function(){//下载
+		this.compClick();
+		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
+	},
+	delBtnClick: function(){//删除书架书籍
 		if(!this.state.selected.length) {
 			//POP._alert('别闹~至少选择一本书先！')
 			return;
 		};
-		var param = []
+		var param = [];
 		this.state.selected.forEach(function(v){
 			var o = {type:3,bookId:v}
 			param.push(o);
@@ -90,112 +136,258 @@ var Shelf = React.createClass({
 			this.compClick();
 		}.bind(this))
 	},
+	changeOrder: function(e){//排序模式选择
+		var a = e.target.tagName == 'A'?e.target:e.target.parentNode;
+		var i = a.getAttribute('data-info');
+		this.sortBook(i,this.state.shelfList);
+	},	
+	sortBook: function(i,arr,bool){
+		var isReverse = true;
+		if(this.models.order_model !== i)  isReverse = false;
+		if(bool) isReverse = false;
+
+		switch(i){
+			case '1':
+				if(isReverse){
+					arr.reverse();
+					this.isReverse_s('reading_order');
+				} else {
+					arr = arr.sort(function(a,b){
+						var x = a.playorder/a.count,y=b.playorder/b.count;
+						return y-x;});
+					if(this.models.reading_order == 1)
+						arr.reverse();
+				}
+				break;
+			case '2':
+				if(isReverse){
+					arr.reverse();
+					this.isReverse_s('book_order');
+				} else {
+					arr = arr.sort((a, b) => a.name.localeCompare(b.name));
+
+					if(this.models.book_order == 1)
+						arr.reverse();
+				}
+				break;
+			default:
+				if(isReverse){
+					arr.reverse();
+					this.isReverse_s('recent_order');
+				} else {
+					arr.sort(function(a,b){
+						var x=Number(a.mark_time), y = Number(b.mark_time);
+						return x-y; });
+					if(this.models.recent_order == 1)
+						arr.reverse();
+				}
+		};
+		this.models.order_model = i;
+		this.setState({order_model: i,recent_order:this.models.recent_order,reading_order:this.models.reading_order,book_order:this.models.book_order,shelfList:arr});
+		try{
+			localStorage.setItem('models',JSON.stringify(this.models));
+		} catch(e) {}
+
+		//localStorage.models = JSON.stringify(this.models);
+		return arr;
+	},
+	isExist: function(n){
+		return n?n:'0';
+	},
+	isReverse_s: function(key){
+		var bool = Number(this.models[key]);
+		if(bool)
+			 this.models[key] = '0';
+		else
+			 this.models[key] = '1';
+	},
+	changeShow: function(e){
+		var a = e.target.tagName == 'A'?e.target:e.target.parentNode;
+		var i = a.getAttribute('data-cls');
+
+		this.models.show_model = i;
+		this.setState({show_model: i});
+		localStorage.models = JSON.stringify(this.models);
+	},
 	getInitialState: function(){
-		var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="f-fr iconfont icon-setting" onClick={this.settingClick} ></div>;
+		//var icon = <i className="u-recentRead"></i>;	
+		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
+		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
 		return {
 			setting:false,
 			toggle:false,
-			left:null,
+			left:back,
 			right:setting,
-			icon:icon,
+			icon:null,
 			selected:[],
 			noMore:true,
-			shelfList:null
+			shelfList:null,
+			showModelList:false,
+			model: 0,//默认为无
+			show_model: this.models.show_model?this.models.show_model:'0',
+			order_model: this.models.order_model?this.models.order_model:'0',
+			recent_order: this.models.recent_order?this.models.recent_order:'0',
+			reading_order: this.models.reading_order?this.models.reading_order:'0',
+			book_order: this.models.book_order?this.models.book_order:'0',
 		}
 	},
 	getList: function (){
+		AJAX.init('block.156.100.1');
+		var order_model = this.models.order_model?this.models.order_model:0;
 		AJAX.get((data)=>{
 			this.setState({
-				shelfList: data.content
+				
+				shelfList: this.sortBook(order_model,data.content,true)
 			});
 			//设置GLOBAL.booklist/book
 			GLOBAL.setBlocklist(data);
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-		if(!this.isLogin()){
-			this.goLogin(() => {
-				AJAX.init('block.156.100.1');
-				this.getList();
-			});
-			return;
+
+		if(this.checkLogin(this.props.route)) {
+			this.getList();
 		}
-		AJAX.init('block.156.100.1');
-		this.getList();
 	},
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextPros,nextState) {
+
+		if(GLOBAL.isRouter(this.props) && !this.state.shelfList && !!nextState.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right} />;
-		//console.log(this.state.shelfList);
+		var header = <Header title="书架" left={this.state.left} right={this.state.right}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
-		var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
-		var addBook = this.state.setting? null:add;
+		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		// var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
-		var recent = 0;
+		//var recent = 0;
 		var maxCurrentTime = 0;
 		var readLogs = storage.get('readLogNew');
+		var nav = null;
+
+		var modelList = <ul className={'u-model-list '+(this.state.showModelList?'active':'')}><li onClick={this.settingClick} data-index={1}>管理书本</li><li onClick={this.settingClick} data-index={2}>排列方式</li><li onClick={this.settingClick} data-index={3}>封面/列表</li></ul>;
+
 		if(!this.state.shelfList){
 			content = <Loading />;
 		}else if(!this.state.shelfList.length){
 			content = <NoData type="emptyShelf" />;
 		}else{
-			for (var n in readLogs) {
-				if (readLogs[n].current_time > maxCurrentTime) {
-					maxCurrentTime = readLogs[n].current_time;
-					recent = readLogs[n].content_id;
-				}
-			}
-			var recentIndex = -1;
-			this.state.shelfList.forEach(function(v, i) {
-				if (v.content_id == recent) {
-					recentIndex = i;
-					return false;
-				}
-			});
+			// for (var n in readLogs) {
+			// 	if (readLogs[n].current_time > maxCurrentTime) {
+			// 		maxCurrentTime = readLogs[n].current_time;
+			// 		recent = readLogs[n].content_id;
+			// 	}
+			// }
+			// var recentIndex = -1;
+			// this.state.shelfList.forEach(function(v, i) {
+			// 	if (v.content_id == recent) {
+			// 		recentIndex = i;
+			// 		return false;
+			// 	}
+			// });
 
-			if (recentIndex > 0) {
-				this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
-			}
+			// if (recentIndex > 0) {
+			// 	this.state.shelfList.unshift(this.state.shelfList.splice(recentIndex, 1)[0]);
+			// }
 			content = (
-					<div className="g-main">
-						<div className="g-scroll g-scroll-noBG" ref="container" onScroll={this.scrollHandle}>
+					<div className="g-main shelf">
+						<div className={"g-scroll g-scroll-noBG "+(this.state.show_model==0?'':'active')} ref="container" onScroll={this.scrollHandle}>
 							<ul className="shelfWrap f-clearfix active">
 								{
 									this.state.shelfList.map(function(v,i){
 										if(this.state.setting){
 											curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
 										}
-										icon = this.state.setting? this.state.icon:(recent == v.content_id? this.state.icon:null);
-										return(
-											<li key={i} className={"u-book-2 "+curClass}>
-												<a onClick={this.startReading} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
-													<div style={{position:'relative'}}>
-													{icon}
-													<Img src={v.image_url} />
-													<progress style={{position:'absolute',bottom:'2px',left:'0',width:'100%',height:'5px',backgroundColor: '#fff',color:'#0064B4'}} value={v.playorder/v.count} max="1"></progress>
-													</div>
-													<span className="f-ellipsis">{v.name}</span>
-												</a>
-											</li>
-											);
+										icon = this.state.setting? this.state.icon:null;//(recent == v.content_id? this.state.icon:null);
+
+										if(this.state.show_model==0)
+											return(
+												<li key={i} className={"u-book-2 "+curClass}>
+													<a onClick={this.startReading} data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														<div className="pro-box">
+														{icon}
+														<Img src={v.image_url} />
+														<progress className="progress" value={v.playorder/v.count} max="1"></progress>
+														</div>
+														<span className="f-ellipsis-2">{v.name}</span>
+													</a>
+												</li>
+												);
+										else{
+											var per = Number((v.playorder/v.count).toFixed(2)),notice='';
+											switch(per){
+												case 1:
+													notice = '已读完';
+													break;
+												case 0:
+													notice = '未读';
+													break;
+												default:
+													notice = per*100 + '%';
+											};
+											return (<li key={i} className={"u-book-2 "+curClass}>
+													<a onClick={this.startReading} data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														<div className="pro-box" data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														{icon}
+														<Img src={v.image_url} />
+														<div className="intro-box" data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+															<span className="f-ellipsis title">{v.name}</span>
+															<span className="f-ellipsis chapter">{v.chapter_name}</span>
+															<div className="progress-box">
+																<span>{notice}</span>
+																<progress className="progress" value={v.playorder/v.count} max="1"></progress>
+															</div>
+														</div>
+														</div>
+													</a>
+												</li>)
+										}
 									}.bind(this))
 								}
-								{addBook}
 							</ul>
 						</div>
-						<button className={"u-btn-1"+(!this.state.setting? ' f-hide':'')+(this.state.selected.length? '':' u-btn-1-disabled')} onClick={this.delBtnClick} ><i className="iconfont icon-delete"></i>删除</button>
 					</div>
 				)
 		}
+
+
+		var len = this.state.selected.length;
+
+		switch(this.state.model){
+			case 1: 
+				nav = (<div className="s-b s-b-sec">
+							<a className={len===1?'active':''} onClick={this.gotoReading}><span className="icon-n icon-jingyong"></span><span>详情</span></a>
+							<a className={len?'active':''} onClick={this.gotoDownload}><span className="icon-n icon-xiazai"></span><span>下载</span></a>
+							<a className={len?'active':''} onClick={this.delBtnClick}><span className="icon-n icon-shanchu"></span><span>删除</span></a>
+						</div>);
+				break;
+			case 2:
+				nav = (<div className="s-b s-b-thi">
+							<a className={this.state.order_model==0?'active':''} onClick={this.changeOrder} data-info={0}><span className={"icon-n icon-paixu "+(this.state.recent_order==0?'seq':'rev')}></span><span>最近</span></a>
+							<a className={this.state.order_model==1?'active':''} onClick={this.changeOrder} data-info={1}><span className={"icon-n icon-paixu "+(this.state.reading_order==0?'seq':'rev')}></span><span>进度</span></a>
+							<a className={this.state.order_model==2?'active':''} onClick={this.changeOrder} data-info={2}><span className={"icon-n icon-paixu "+(this.state.book_order==0?'seq':'rev')}></span><span>书名</span></a>
+						</div>);
+				break;
+			case 3:
+				nav = (<div className="s-b s-b-fir">
+							<a className={this.state.show_model==0?'active':''} onClick={this.changeShow} data-cls={0}><span className="icon-n icon-fengmian"></span><span>封面模式</span></a>
+							<a className={this.state.show_model==1?'active':''} onClick={this.changeShow} data-cls={1}><span className="icon-n icon-liebiao"></span><span>列表模式</span></a>
+						</div>);
+				break;
+			default: 
+				nav = null;
+		}
+
+
 		return (
-			<div className="gg-wraper">
+			<div className="gg-wraper gg-body" >
 				{header}
+				{modelList}
 				{content}
+				{nav}
 				{this.props.children}
 			</div>
 		);

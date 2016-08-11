@@ -26,18 +26,26 @@ var API={
 	deleteBook:{method:'POST', base:'/api/v1/shelf/delete', param:{param:''}},
 	log:{method:'POST', base:'/api/v1/upload/log', param:{readLog: {}}},
 	balance:{method:'GET', base:'/api/v1/auth/balance', param:{}},
-	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
-	payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
-	paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
-	payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
-	payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
+	// pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
+	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,mobileNum:0}},
+	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
+	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
+	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
+	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
+	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
+	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
+	// payConfirm:{method:'POST', base:Config.payURLBase+'/order/web_confirm', param:{}},
 	crossDomain:{method:'GET',base:'/api/crossDomain',param:{url:'',type: 'post',param: 'page=1&vt=9&cm=' + Config.cm}},
 	recentRead:{method: 'GET', base: '/api/v1/me/recentReading', param:{pages: 1, contents: 10}},
 	deleteRecentRead:{method: 'POST', base: '/api/v1/me/recentReading/delete', param:{book_id: ''}},
 	listTag:{method: 'GET', base: '/api/v1/me/label/list', param:{}},
 	addTag:{method: 'POST', base: '/api/v1/me/label/add', param:{id: ''}},
 	deleteTag:{method: 'POST', base: '/api/v1/me/label/delete', param:{id: ''}},
-	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}}
+	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}},
+	pwd: {method: 'POST', base: '/api/v1/auth/update/password', param:{oldPasswd: 0,password: 0}},
+	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
+	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
+	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 };
 
 //接口缓存机制
@@ -174,9 +182,14 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	
 	if (method === 'POST') {
 		request.open(method, url);
-		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
-		postdata = transformRequest(postdata);
+		if(postdata.formdata){
+			postdata = postdata.formdata;
+		}else{
+			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			postdata = transformRequest(postdata);
+		}
 		request.send(postdata);
 	} else {
 		var isYulan = false;
@@ -208,7 +221,7 @@ function setRequestHeaders(request) {
 		'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
-		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2)
+		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
 	};
 
 	for (var k in headers) {
@@ -219,7 +232,6 @@ function setRequestHeaders(request) {
 var AJAX = {
 	API: API,
 	init: function(now){
-		//console.log(now)
 		if(!now) return;
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];

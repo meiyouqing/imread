@@ -6,12 +6,12 @@ var BookContent = (function() {
 	//移动咪咕阅读
 	//@source_id 1
 	function getContent1(options) {
+
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
 		var url = totalUrl.replace(/\?.*/, '')
 					      .replace('$bid', options.bid)
 					      .replace('$cid', options.cid);
-
 		var param = totalUrl.replace(/(.*\?)/, '')
 							.replace('$cm', sourceConfig.cm);
 		//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
@@ -40,11 +40,12 @@ var BookContent = (function() {
 	function getContent2(options) {
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-		var url = totalUrl.replace(/\?*/, '')
+		//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+		var url = totalUrl.replace('/api/','/api/v1/')
+						 .replace(/\?*/, '')
 					      .replace('$bid', options.bid)
 					      .replace('$cid', options.cid)
 					      .replace('$cm', sourceConfig.cm);
-
 		AJAX.getJSON('GET', url, {}, options.callback, options.onError);
 	}
 
@@ -54,10 +55,17 @@ var BookContent = (function() {
 		getContent2(options);
 	}
 
+	//咪咕阅读
+	//@source_id 4
+	function getContent4(options) {
+		getContent2(options);
+	}
+
 	var api = {
 		getContent1: getContent1,
 		getContent2: getContent2,
-		getContent3: getContent3
+		getContent3: getContent3,
+		getContent4: getContent4
 	}
 
 	/*

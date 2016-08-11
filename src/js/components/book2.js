@@ -6,12 +6,12 @@ var Book2 = React.createClass({
 	},
 	render: function() {
 		var hrefStr = GLOBAL.typeHref(this.props.data);
-
 		return (
 			<li className="u-book-2">
 				<Link to={hrefStr}>
 					<Img src={this.props.data.image_url} />
-					<span className="f-ellipsis">{this.props.data.name}</span>
+					<span className="f-ellipsis-2">{this.props.data.name}</span>
+					<span className="f-ellipsis author">{this.props.data.author}</span>
 				</Link>
 			</li>
 		);
