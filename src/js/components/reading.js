@@ -823,8 +823,9 @@ var Reading = React.createClass({
 					</div>
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
-				<div className={"m-reading"} ref="scrollarea">
-					{/*<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>*/}
+				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
+					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
+					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
