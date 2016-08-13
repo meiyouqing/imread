@@ -6,7 +6,7 @@
 .UI_confirm .confirm-block-2 .title{height: 40px;line-height: 40px;font-size: 17px;background-color: #41C2C2;color: #FFF;}
 .UI_confirm .confirm-block-2 .text{max-height: 80px;padding: 25px 15px 25px 15px;overflow-y: auto;word-wrap: break-word;font-size: 19px;color: #000;border-bottom: 1px solid #eee;}
 .UI_confirm .confirm-block-2 .btns{height: 40px;font-size: 15px;}
-.UI_confirm .confirm-block-2 .btns button{display: inline-block;width: 50%;height: 40px;line-height: 40px;border-radius: 2px;float: left; font-size: 15px;}
+.UI_confirm .confirm-block-2 .btns button{height: 40px;line-height: 40px;border-radius: 2px;font-size: 15px;}
 .UI_confirm .confirm-block-2 .yes{color: #0196aa;}
 .UI_confirm .confirm-block-2 .no{color: #000;;border-right: 1px solid #eee;}
 

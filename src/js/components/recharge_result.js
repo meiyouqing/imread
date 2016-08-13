@@ -13,7 +13,6 @@ var RechageRes = React.createClass({
 		};
 	},
 	completed: function(){
-		console.log(myEvent.callback)
 		if(myEvent.callback.recharge){
 			myEvent.execCallback('recharge');		
 		}else{
@@ -23,6 +22,7 @@ var RechageRes = React.createClass({
 	success: function(){
 		console.log('成功');
 		this.setState({success: true,status: '充值成功'});
+		document.dispatchEvent(new Event('rechargeSuccess'));
 	},
 	failed: function(){
 		console.log('失败');

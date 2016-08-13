@@ -14,6 +14,7 @@ var tag = React.createClass({
 		var that = this;
 		AJAX.init('listTag');
 		AJAX.get(function(data) {
+			alert(data.selected[0])
 			that.setState({
 				tagList: data.noChoice,
 				myTagList: data.selected,
@@ -47,6 +48,7 @@ var tag = React.createClass({
 		AJAX.go('deleteTag', {
 			id: this.state.myTagList[index].category_id
 		}, function() {
+			alert('success')
 			this.toggleTag(index, this.state.myTagList, this.state.tagList);
 		}.bind(this));
 	},

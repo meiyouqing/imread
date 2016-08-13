@@ -37,7 +37,7 @@ var BookContent = (function() {
 	//原文阅读
 	//@source_id 2
 	function getContent2(options) {
-		console.log(options)
+
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
 		//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
