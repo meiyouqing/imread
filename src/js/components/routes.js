@@ -54,6 +54,11 @@ var readWrap = (
 	)
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
+		<Route path="shelf" component={Shelf}>
+			{bookWrap}
+			{loginWrap}
+			{readWrap}
+		</Route>
 		{readWrap}
 		{loginWrap}
 	</Route>
@@ -66,28 +71,9 @@ var searchWrap = (
 		{bookWrap}
 	</Route>
 	)
-module.exports = (
-	<Route path="/" component={App}>
-		<IndexRedirect to="/mall" />
-		{loginWrap}
-		<Route path="/mall" component={Mall}>
-			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
 
-				<Route path="bookstore" component={StoreList} >
-					{loginWrap}
-					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
-						{loginWrap}
-						{bookWrap}
-						{searchWrap}
-					</Route>
-				</Route>
-
-				<Route path="userInfo" component={UserInfo}>
-					<Route path="editUserame" component={EditUserame} />
-					{loginWrap}
-				</Route>
-
-				<Route path="top/:topId" component={Top}>
+var topWrap = (
+		<Route path="top/:topId" component={Top}>
 					<Route path="myTags" component={Tag}/>
 					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
 						{bookWrap}
@@ -106,7 +92,32 @@ module.exports = (
 					{loginWrap}
 					{bookWrap}
 					{searchWrap}
+		</Route>
+	)
+
+module.exports = (
+	<Route path="/" component={App}>
+		<IndexRedirect to="/mall" />
+		{loginWrap}
+		<Route path="/mall" component={Mall}>
+			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+
+				<Route path="bookstore" component={StoreList} >
+					{loginWrap}
+					{topWrap}
+					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+					</Route>
 				</Route>
+
+				<Route path="userInfo" component={UserInfo}>
+					<Route path="editUserame" component={EditUserame} />
+					{loginWrap}
+				</Route>
+
+				{topWrap}
 
 				<Route path="shelf" component={Shelf}>
 					{bookWrap}
@@ -155,25 +166,7 @@ module.exports = (
 			</Route>
 		</Route>
 		
-		<Route path="/top/:topId" component={Top}>
-			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
-				{bookWrap}
-				{searchWrap}
-			</Route>
-			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
-				{bookWrap}
-				{searchWrap}
-			</Route>
-			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
-				{loginWrap}
-				{bookWrap}
-				{searchWrap}
-			</Route>
-			<Route path="myTags" component={Tag}/>
-			{loginWrap}
-			{bookWrap}
-			{searchWrap}
-		</Route>
+		{topWrap}
 
 		<Route path="balance" component={Balance} >
 			<Route path="recharge/:rechargeId" component={Recharge} >

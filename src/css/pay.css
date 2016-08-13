@@ -60,7 +60,7 @@
 .g-f{background: #fafafa;}
 .m-recharge-result{margin-top: 15px;background: #ffffff;padding: 0 15px;}
 .m-recharge-result .m-result-status{padding: 20px 0;font-size: 22px;color: #000;text-align: center;border-bottom: 1px solid #eee;}
-.m-recharge-result .m-result-detail,.m-recharge-result .m-result-detail-f{padding: 15px 0;color: #777777;font-size: 15px;}
+.m-recharge-result .m-result-detail,.m-recharge-result .m-result-detail-f{padding: 15px 0;color: #777777;font-size: 15px;line-height: 27px;}
 .m-recharge-result .m-result-detail-f{padding: 14px 0;text-align: center;}
 .m-recharge-result .m-result-detail .m-s{font-size: 14px;float: right;}
 .m-recharge-result .m-result-icon-s{display: block;margin: auto;width:45px;height:45px;background: url(../img/icons/icon_success@2x.png);background-size: cover;}

@@ -43,7 +43,7 @@ var Shelf = React.createClass({
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
-		var setting = false,selected=[],icon=null,left=null;
+		var setting = true,selected=[],icon=null,left=null;
 
 		switch(index){
 			case 1:
@@ -70,7 +70,7 @@ var Shelf = React.createClass({
 
 	},
 	gotoHome: function(){
-		browserHistory.push('/mall');
+		this.goBackUrl(this.props.route);
 	},
 	compClick: function(){
 		//var icon = <i className="u-recentRead"></i>;	
@@ -105,8 +105,9 @@ var Shelf = React.createClass({
 		if(this.state.selected.length !== 1) return;
 		else{
 			this.state.shelfList.forEach(function(v,i){
-				if(v.content_id === this.state.selected[0]){
+				if(v.content_id == this.state.selected[0]){
 					//this.startReading(null,v);
+
 					this.compClick();
 					browserHistory.push(GLOBAL.typeHref(v));
 				}
@@ -295,8 +296,9 @@ var Shelf = React.createClass({
 							<ul className="shelfWrap f-clearfix active">
 								{
 									this.state.shelfList.map(function(v,i){
+					
 										if(this.state.setting){
-											curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
+											curClass = this.state.selected.indexOf(Number(v.content_id))==-1?'':'z-active';
 										}
 										icon = this.state.setting? this.state.icon:null;//(recent == v.content_id? this.state.icon:null);
 

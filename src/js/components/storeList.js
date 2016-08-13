@@ -4,6 +4,7 @@ var Header = require('./header');
 
 var StoreList = React.createClass({
 	mixins: [Mixins()],
+	pageSize: 100,
 	getInitialState: function(){
 		return{
 			noMore:false,
@@ -16,10 +17,10 @@ var StoreList = React.createClass({
 		}
 	},
 	getList: function(bool){
-		if(this.state.noMore == true) return;
+		if(this.state.noMore === true && !bool) return;
 		AJAX.get((data)=>{
 			var list;
-			if(!data || !data.success.length) {
+			if(!data || (data.success.length<this.pageSize)) {
 				this.setState({
 					noMore: true
 				});
@@ -68,6 +69,9 @@ var StoreList = React.createClass({
 	                    break;
 	                }
 	            }
+	            if(that.state.list.length == 0){
+	            	that.initData(true);
+	            }
 	      }
 	      AJAX.go('collectionDelete', {
 	           sheet_id: bid
@@ -77,22 +81,25 @@ var StoreList = React.createClass({
 		AJAX.init('bookstore');
 		this.scrollHandle(e);
 	},
+	initData: function(bool){
+		AJAX.init('bookstore.1.'+this.pageSize);
+		this.getList(bool);
+	},
 	componentDidMount: function(){
 		if(this.checkLogin(this.props.route)){
-			AJAX.init('bookstore.1.6');
+			AJAX.init('bookstore.1.'+this.pageSize);
 			if(GLOBAL.isRouter(this.props))	this.getList();
 			myEvent.setCallback('updateTopList',this.getList);
 		}
 	},
 	componentDidUpdate: function(nextProp) {
 		if(GLOBAL.isRouter(this.props) &&!this.state.list)	{ 
-			AJAX.init('bookstore.1.6');
-			this.getList();
+			this.initData(false);
 		};
 
-		if(this.props.children !== nextProp.children){
-			// AJAX.init('bookstore.1.6');
-			// this.getList(true);
+		if(GLOBAL.isRouter(this.props) && this.props.children !== nextProp.children){
+			this.initData(true);
+			this.setState({noMore: false});
 			this.compClick();
 		}
 		if(this.refs.container)

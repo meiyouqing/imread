@@ -70,7 +70,8 @@ var Mall = React.createClass({
 			scrollLoading = null;
 		}
 		if(!this.state.list){
-			list = <Loading />
+			if(GLOBAL.isRouter(this.props))
+				list = <Loading />
 		}else{
 			if(this.state.list.length){
 				list = (

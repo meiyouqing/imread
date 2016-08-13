@@ -14,6 +14,7 @@ var ULine = React.createClass({
 					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
 					<span className={"icon-n" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
+					<span className='s-title'>{this.props.line.s_title}</span>
 				</Link>
 			</li>
 		);
@@ -45,7 +46,8 @@ var User = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: {
-				portraitUrl: 'http://m.imread.com/src/img/user/avatar@2x.png'
+				portraitUrl: 'http://m.imread.com/src/img/user/avatar@2x.png',
+				balance: 0
 			},
 		};
 	},
@@ -63,8 +65,12 @@ var User = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
+
+		document.addEventListener('updateUser',function(){//触发登录时更新个人信息
+			this.getUserInfo();
+		}.bind(this));
 	},
-	componentDidUpdate: function(){
+	componentDidUpdate: function(nextProp){
 	},
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;
@@ -139,6 +145,7 @@ var User = React.createClass({
 			}, {
 				title: '发现',
 				icon: 'icon-discover',
+				s_title: '书单·排行',
 				href: 'top/block.1'
 			}], [{
 				title: '最近阅读',
@@ -179,7 +186,7 @@ var User = React.createClass({
 		var userName = '',aidou=0;
 
 		 if (this.isLogin()) {
-			userName = this.state.user.phone || this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
+			userName = this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
 			logoutBtn = (<div>
 				<div className="avatar-wrap">
 					<img src={this.state.userInfo.portraitUrl} />
