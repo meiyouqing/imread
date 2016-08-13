@@ -1,7 +1,8 @@
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
-require('../../css/login.css');
-
+if(true||typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 var Login = React.createClass({
 	getInitialState: function() {
 		return {

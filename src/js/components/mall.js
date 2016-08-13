@@ -5,14 +5,15 @@ var UserList = require('./userList');
 var Mall = React.createClass({
 	getNav: function(){
 		AJAX.init('group.1');
-		AJAX.get((data)=>{
-			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-			if(location.pathname === this.props.route.path){
-				browserHistory.replace('/mall/'+subnav);
-			}
-			this.setState({
-				navList:data.pagelist
-			});
+		AJAX.get(this.handleGetNav);
+	},
+	handleGetNav:function(data){
+		var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+		// if(location.pathname === this.props.route.path){
+			// browserHistory.replace('/mall/'+subnav);
+		// }
+		this.setState({
+			navList:data.pagelist
 		});
 	},
 	gotoSearch: function(){
@@ -35,15 +36,29 @@ var Mall = React.createClass({
 		var param = location.pathname.split('/').pop();
 		return param.indexOf('page')>=0;
 	},
+	componentWillMount:function(){
+		if(typeof window === 'undefined'){
+			var fs = require('fs');
+			global.imreadData.group = fs.readFileSync('./serverside/data/group.json','utf8');
+			this.handleGetNav(JSON.parse(global.imreadData.group));
+		}else{
+			if(window.imreadData){
+				console.log(imreadData);
+				return;
+				this.handleGetNav(imreadData);
+			}			
+		}
+	},
 	componentDidMount: function(){
-		this.getNav();
+		if(!window.imreadData){
+			this.getNav();
+		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
 		if(!this.props.params.subnav)
 			this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-
 		return this.state.navList !== nextState.navList
 				|| this.props.children !== nextProp.children;
 	},
@@ -51,7 +66,7 @@ var Mall = React.createClass({
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
-			userList = <UserList hide={this.hide} route={this.props.route} />;
+			// userList = <UserList hide={this.hide} route={this.props.route} />;
 		}
 
 		var right = <div className="icon-s icon-menu right icon-m-r10" onClick={this.showUser} ></div>,

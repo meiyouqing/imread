@@ -1,7 +1,7 @@
 var Header = require('./header');
-// if(false&&typeof window !== 'undefined'){
-// 	require('../../css/tag.css');
-// }
+if(true||typeof window !== 'undefined'){
+	require('../../css/tag.css');
+}
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }

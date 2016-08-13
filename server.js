@@ -32,6 +32,7 @@ import { match, RouterContext } from 'react-router'
 import routes from './src/js/components/routes'
 
 var app = express()
+global.imreadData = {};
 
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname,'public')))
@@ -53,7 +54,8 @@ app.get('*', (req, res) => {
       console.log('>>>>>>>>>>>>>>>>>>>>'+props[1])
       // if we got props then we matched a route and can render
       const appHtml = renderToString(<RouterContext {...props}/>)
-      res.send(renderPage(appHtml))
+      // console.log('data====================='+global.imreadData);
+      res.send(renderPage(appHtml,global.imreadData.group))
     } else {
       // no errors, no redirect, we just didn't match anything
       res.status(404).send('Not Found')
@@ -61,24 +63,14 @@ app.get('*', (req, res) => {
   })
 })
 
-function renderPage(appHtml) {
+function renderPage(appHtml,data) {
   return `
     <!doctype html public="storage">
     <html>
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <link rel=stylesheet href="/src/css/iconfont1.css">
-    <link rel=stylesheet href="/src/css/imread.css">
-    <link rel=stylesheet href="/src/css/user.css">
-    <link rel=stylesheet href="/src/css/bookSheet.css">
-    <link rel=stylesheet href="/src/css/introduce.css">
-    <link rel=stylesheet href="/src/css/pay.css">
-    <link rel=stylesheet href="/src/css/reading.css">
-    <link rel=stylesheet href="/src/css/recentRead.css">
-    <link rel=stylesheet href="/src/css/tag.css">
-    <link rel=stylesheet href="/src/css/about.css">
-    <link rel=stylesheet href="/src/css/compact.css">
-    <link rel=stylesheet href="/src/css/confirm.css">
+    <link rel="stylesheet" href="/src/css/style.css"/>
+    <script>window.imreadData = ${data}</script>
     <div id=appContainer>${appHtml}</div>
     <script src="/app/app.bundle.js"></script>
    `

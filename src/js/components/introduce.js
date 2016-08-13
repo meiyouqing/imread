@@ -2,9 +2,9 @@ var Header = require('./header');
 var Book1 = require('./book1');
 var Chapterlist = require('./chapterlist');
 var parseQuery = require('../modules/parseQuery');
-// if(false&&typeof window !== 'undefined'){
-// 	require('../../css/introduce.css')
-// }
+if(true||typeof window !== 'undefined'){
+	require('../../css/introduce.css')
+}
 
 var Detail = React.createClass({
 	mixins:[Mixins()],

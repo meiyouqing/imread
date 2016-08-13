@@ -1,6 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
 	webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;
 	//console.log(process.argv)
@@ -20,14 +21,16 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
-			{test: /\.css$/, loader: "style!css" },
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
+			// {test: /\.js[x]?$/,  exclude: /node_modules/,loader: 'babel-loader'},
+			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
+			{ test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+			{test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
 		]
 	},
 	plugins: [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
+		new ExtractTextPlugin("src/css/style.css"),
+	    new webpack.optimize.DedupePlugin(),
+	    new webpack.optimize.OccurrenceOrderPlugin(),
     		new HtmlWebpackPlugin({
 			filename: '../index.html',
 		    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 

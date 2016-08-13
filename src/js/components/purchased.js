@@ -2,7 +2,7 @@ var Header = require('./header');
 var Mixins = require('../modules/mixins');
 var Book1 = require('./book1');
 var NoData = require('./noData');
-if(false&&typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	var Hammer = require('../modules/hammer');
 }
 

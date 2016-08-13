@@ -1,7 +1,8 @@
 var Header = require('./header');
 var Mixins = require('../modules/mixins');
-require('../../css/userinfo.css');
-
+if(typeof window !== 'undefined'){
+	require('../../css/userinfo.css');
+}
 var tag = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {

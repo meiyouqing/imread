@@ -1,12 +1,16 @@
 var fs = require('fs')
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 module.exports = {
 
   entry: path.resolve(__dirname, 'server.js'),
 
   output: {
-    filename: 'server.bundle.js'
+    path: path.join(__dirname,'serverside'),
+    publicPath: '/',
+    filename: 'app/[name].bundle.js',
+    chunkFilename: 'modules/[name].bundle.js'
   },
 
   target: 'node',
@@ -26,13 +30,14 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' }
-      // {test: /\.css$/,  exclude: /node_modules/,loader: "style!css" },
-      // {test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+      {test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
     ]
   },
 
   plugins: [
+    new ExtractTextPlugin("src/css/style.css"),
     new webpack.ProvidePlugin({
       React: 'react',
       GLOBAL: '../modules/global',

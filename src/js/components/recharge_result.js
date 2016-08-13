@@ -1,7 +1,7 @@
 var Header = require('./header');
-// if(false&&typeof window !== 'undefined'){
-// 	require('../../css/pay.css');
-// }
+if(true||typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var RechageRes = React.createClass({
 	getInitialState: function() {

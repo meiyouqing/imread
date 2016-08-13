@@ -2,9 +2,9 @@ var Header = require('./header');
 //var Block7 = require('./block7');
 var Book1 = require('./book1');
 var Mixins = require('../modules/mixins');
-// if(false&&typeof window !== 'undefined'){
-// 	require('../../css/bookSheet.css');
-// }
+if(true||typeof window !== 'undefined'){
+	require('../../css/bookSheet.css');
+}
 
 var Module = React.createClass({
 	 mixins: [Mixins()],

@@ -209,11 +209,11 @@ var Shelf = React.createClass({
 		this.setState({show_model: i});
 		localStorage.models = JSON.stringify(this.models);
 	},
+	models:{},
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
 		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
-		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
 		return {
 			setting:false,
 			toggle:false,
@@ -245,7 +245,7 @@ var Shelf = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-
+		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
 		if(this.checkLogin(this.props.route)) {
 			this.getList();
 		}

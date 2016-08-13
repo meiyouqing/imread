@@ -10,6 +10,7 @@ Desktop.ini
 public
 tmp
 public
+serverside
 node_modules
 webpack.config.js
 route.js

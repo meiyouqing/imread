@@ -1,9 +1,9 @@
 var Header = require('./header');
 var Recharge = require('./recharge');
 
-// if(false&&typeof window !== 'undefined'){
-// 	require('../../css/pay.css')
-// }
+if(true||typeof window !== 'undefined'){
+	require('../../css/pay.css')
+}
 
 var Balance = React.createClass({
 	mixins: [Mixins()],

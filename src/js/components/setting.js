@@ -1,6 +1,7 @@
 var Header = require('./header');
-require('../../css/setting.css');
-
+if(true||typeof window !== 'undefined'){
+	require('../../css/setting.css');
+}
 var ULine = React.createClass({
 	render: function() {
 		var src_href = !this.props.line.target?GLOBAL.setHref(this.props.line.href):this.props.line.href,
