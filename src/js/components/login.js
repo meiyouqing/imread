@@ -3,6 +3,7 @@ var myEvent = require('../modules/myEvent');
 require('../../css/login.css');
 
 var Login = React.createClass({
+	mixins:[Mixins()],
 	getInitialState: function() {
 		return {
 			status: true,
@@ -37,7 +38,9 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-			//判断登陆后的跳转
+				
+				document.dispatchEvent(new Event('updateUser'));
+				//判断登陆后的跳转
 				var isneed = false;
 				if(that.from && that.from.skipurl){
 					isneed = /\?/.test(that.from.skipurl);
@@ -120,6 +123,9 @@ var Login = React.createClass({
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
 		});
+	},
+	goBack: function(){
+		this.goBackUrl(this.props.route);
 	},
 	getCode: function() {
 		if (this.state.s) {return ;}
@@ -229,7 +235,7 @@ var Login = React.createClass({
 			<div className="gg-body">
 				<div className="m-loginblock">
 					<div className="m-login-header">
-						<a className="f-fl icon-s icon-back" onClick={GLOBAL.goBack} ></a>
+						<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
 						<div className="m-login-register">
 							<a className={this.state.status?'':"active"} onClick={this.setRegister}>注册</a>
 							<a className={"second "+(this.state.status?"active":'')} onClick={this.setLogin}>登录</a>

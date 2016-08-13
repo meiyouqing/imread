@@ -14,7 +14,7 @@ var mod = React.createClass({
 	payHandle: function(e) {
 		var that = this;
 		if((this.state.aidou-this.props.data.marketPrice)>=0){
-			AJAX.getJSON('GET',this.props.data.orderUrl.replace('/api/','/api/v1/'),{},function(data){
+			AJAX.getJSON('GET',this.props.data.orderUrl,{},function(data){
 				if(data.code == 403)
 					POP._alert('支付失败');
 				else 

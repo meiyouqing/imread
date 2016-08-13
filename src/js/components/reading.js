@@ -92,12 +92,13 @@ var chapterMixins = {
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
 				chapterlist: this.state.chapterlist.concat(data.chapterList),
 				page: this.state.page + next,
-				getChapterlistLoading: false
+				getChapterlistLoading: false,
+				chapterlistNoMore: (data.chapterList.length < this.state.page_size)
 			});
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
-					var intercut = data.chapterList[i].intercut;				
+					var intercut = data.chapterList[i].intercut;			
 					GLOBAL.loadImage(intercut.intercut_url, function() {
 						this.setState({
 							intercut: intercut
@@ -127,9 +128,9 @@ var chapterMixins = {
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		browserHistory.replace(location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+		browserHistory.replace({pathname:location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
-		}.bind(this)));
+		}.bind(this)),state:this.props.location.state});
 
 
 		if(this.refs.scrollarea)
@@ -175,7 +176,8 @@ var Reading = React.createClass({
 			download: false, //界面底部下载浮层,
 			orderData: null,
 			introduce: null,
-			orderSeq: true 
+			orderSeq: true,
+			chapterlistMore: true
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -212,7 +214,7 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
-			chapter_read_time: Date.now()-this.time,
+			//chapter_read_time: Date.now()-this.time,
 			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
@@ -254,6 +256,7 @@ var Reading = React.createClass({
 		}
 	},
 	getFormatContent: function(content) {
+
 		var passages = content
 							.replace(/&amp;/g, '&')
 							.replace(/(&\#160;){2,4}|\s{2,4}/g, '<br/>')
@@ -306,9 +309,8 @@ var Reading = React.createClass({
 				var Block5 = require('./block5');
 				var randIndex = Math.floor(Math.random() * data.intercutList.length) % data.intercutList.length;
 				that.intercut_id = data.intercutList[randIndex].content_id;
-				
 				//广告图片加载好之后再显示广告
-				GLOBAL.loadImage(data.intercutList[randIndex].intercut_url, callback);
+				GLOBAL.loadImage(data.intercutList[randIndex].image_url, callback);
 				
 				function callback() {
 					var intercutList = (
@@ -319,6 +321,7 @@ var Reading = React.createClass({
 							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
 						</div>
 					);
+
 					that.intercutList = data.intercutList[randIndex];
 					if(!that.isMounted()){return;}
 					that.setState({
@@ -330,8 +333,11 @@ var Reading = React.createClass({
 		}
 	},
 	gotContent: function(data,autoPay){
+
+		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
+			if(location.pathname.slice(-5) == 'login')	return;
 			this.goLogin(this.getContent);
 			return;
 		}
@@ -393,6 +399,7 @@ var Reading = React.createClass({
 			bid: this.bid,
 			cid: this.chapterid,
 			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -414,6 +421,7 @@ var Reading = React.createClass({
 			bid: that.bid,
 			cid: data.nextChapterId,
 			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: function(data){
 				storage.set('nextChapter',data);
 			}.bind(this),
@@ -460,7 +468,7 @@ var Reading = React.createClass({
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				if((aidou-orderData.marketPrice)>=0){
-					AJAX.getJSON('GET',orderData.orderUrl.replace('/api/','/api/v1/'),{},function(data){
+					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
 						that.gotContent(data);
 					});
 				}else{
@@ -556,6 +564,9 @@ var Reading = React.createClass({
 	componentDidUpdate: function(nextProps, nextState) {
 		// var that = this;
 
+		if((this.props.params !== nextProps.params) || (this.props.children !== nextProps.children))
+			this.getContent();
+
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
 		//第一次进入阅读跳到上次阅读的地方
@@ -566,6 +577,7 @@ var Reading = React.createClass({
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
 		this.bookmarkFlag = false;
+		//scrollarea.addEventListener('touchstart',this.handleClick);
 		if (scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');
 			var hammerTime = new Hammer(scrollarea);
@@ -575,6 +587,7 @@ var Reading = React.createClass({
 
 		var container = this.refs.containers;
 		container.onscroll = function(e) {
+			e.stopPropagation();
 			var time;
 			if (container.scrollTop + document.body.scrollHeight + 160 > container.scrollHeight) {
 				clearTimeout(time);
@@ -583,9 +596,6 @@ var Reading = React.createClass({
 				}.bind(this), 100);
 			};
 		}.bind(this)
-
-		if(this.props.params !== nextProps.params)
-			this.getContent();
 	},
 	toggleChapterlist: function() {
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
@@ -672,13 +682,18 @@ var Reading = React.createClass({
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
-		var className = readingStyle.getClass(this.state.style);
+		var classNames = readingStyle.getClass(this.state.style);
 		var intercut;
 
 		//防止排序时候的绑定
 		var chapterlist = {};
 		chapterlist.list = this.state.chapterlist;
 		var list = JSON.parse(JSON.stringify(chapterlist)).list;
+
+		//扉页信息
+		var state = this.props.location.state;
+		if(!state) 
+			state = {book_name: '',author:''}
 
 		if(this.state.UFO){
 			return (
@@ -702,9 +717,6 @@ var Reading = React.createClass({
 				);
 		}
 		if(this.state.loading) {
-			var state = this.props.location.state;
-			if(!state) 
-				state = {book_name: '',author:''}
 			
 			return (
 				<div className="gg-body">
@@ -733,16 +745,21 @@ var Reading = React.createClass({
 			}
 		}
 		return (
-
 			<div className="gg-body m-reading-body" ref="container">
-				<div className={"style" + className}>
+
+				<div className={"style " + classNames}>
 				<i className="u-miguLogo"></i>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
 						<span onClick={this.downLoad} className="download f-fr"></span>
+
+						<div className={this.state.showIntercut ? "" : "f-hide"}>
+							{this.state.intercutList}
+						</div>
 					</div>
+			
 					<div className={"u-settings u-settings-font" + (!this.state.showSettingFont && ' f-hide' || '')}>
 						{/*<div className="setting-fontfamily setting-font-line f-flexbox">
 							<div className="title">字体</div>
@@ -811,14 +828,14 @@ var Reading = React.createClass({
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={state} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 
 					</div>
 					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading"} ref="scrollarea">
-					{/*<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>*/}
+					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
@@ -828,7 +845,7 @@ var Reading = React.createClass({
 						}
 					</section>
 					{intercut}
-					{/*<button className="u-btn-1">点击阅读下一章</button>*/}
+					<button className="u-btn-1">点击阅读下一章</button>
 				</div>
 
 				
@@ -856,7 +873,7 @@ var Reading = React.createClass({
 					</div>
 					<div className="reading-guide-item guide-middle f-clearfix">
 						<div className="guide-icon f-fl">
-							<img src="src/img/reading-guide.png" />
+							<img src="http://m.imread.com/src/img/reading-guide.png" />
 						</div>
 						<div className="guide-content f-fl">
 							<div className="guide-tip">

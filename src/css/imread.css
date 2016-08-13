@@ -58,7 +58,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .f-fc-000{color: #000 !important;}.
 .f-fc-666{color: #666 !important;}.f-fc-777{color: #777 !important;}.f-fc-EF5{color: #ce403e !important;}
 .f-bg-fff{background-color: #FFF;}
-.f-br-6{-moz-border-radius: 6px;border-radius: 6px;}.f-br-3{-moz-border-radius: 3px;border-radius: 3px;}
+.f-br-6{-moz-border-radius: 6px;border-radius: 6px;}.f-br-3{-moz-border-radius: 1px;border-radius: 1px;}
 .f-bb-eee{border-bottom: 1px solid #EEE;}.f-bt-eee{border-top: 1px solid #EEE;}
 .f-flex1.f-t{opacity: 0.6;}
 .f-flex1.f-t.z-active{color:#fff;opacity: 1;border-bottom: 1px solid #fff;}
@@ -76,6 +76,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .g-wraper{position: absolute;left:0;width: 100%;height: 100%;overflow: hidden;background: #FFFFFF;}
 .g-body, .gg-body{position: absolute;left:0;top: 0;width: 100%;height: 100%;overflow: hidden;background: #FFFFFF;}
 .gg-body{z-index: 3000;}
+.gg-body.m-reading-body{z-index: 5000;}
 .gg-body > div > .m-bar-nav{z-index: 12}
 .gg-body > div > .m-bar-nav + .g-main-list{top: 44px;}
 
@@ -90,7 +91,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .g-main-3{bottom: 0;top: 88px;background: #eeeeee;}
 .g-main-4{bottom: 0;top: 0;}
 .g-main-noNav{top:44px;}
-.g-scroll{position: absolute;top: 0;bottom: 0;left:0;right:0;overflow-x: hidden;overflow-y: auto; background: #F0F0F0; -webkit-overflow-scrolling: touch;padding-top:1px;margin-top:-1px;}
+.g-scroll{position: absolute;top: 0;bottom: 0;left:0;right:0;overflow-x: hidden;overflow-y: auto; background: #F0F0F0; -webkit-overflow-scrolling: touch;}
 .g-scroll-noBG{background: none;}
 .m-bar-nav + .g-scroll{top: 44px;}
 /* /grid */
@@ -101,7 +102,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-nav a.z-active{color: #0196aa;border-bottom: 1px solid #0196aa;}
 
 
-.m-bar {position: absolute; z-index: 10; box-sizing:border-box; width: 100%; height: 44px; background-color: #f7f7f7;}
+.m-bar {position: absolute; box-sizing:border-box; width: 100%; height: 44px; background-color: #f7f7f7;}
 .m-bar .iconfont {position: relative; z-index: 20; padding-top: 5px; padding-bottom: 5px;font-size: 27px;line-height: 34px;}
 .m-bar-head {top: 0;padding: 0 6px 0 1px;background-color: #20ced7;}
 .m-bar-head.m-p{padding: 0 10px 0 1px;}
@@ -123,8 +124,9 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-block:last-of-type{margin-bottom: 0}
 .m-block .content{overflow: hidden;width: 100%;}
 .m-block .content .u-book-2:nth-child(3n+1){clear: left;}
-.m-block .content .recommend{padding: 4px 10px;color: #777;border-top: 1px solid #eeeeee;}
-.m-block .content .recommend .iconWord,.hot{display: inline-block;padding: 0 3px;margin-right:7px;background-color: #FD9B00;color: #FFF;line-height: 17px;}
+.m-block .content .recommend,.m-list .recommend{padding: 4px 10px;color: #777;border-top: 1px solid #eeeeee;}
+.m-list .recommend{border-bottom: 1px solid #cccccc;}
+.m-block .content .recommend .iconWord,.hot,.m-list .recommend .iconWord{font-size: 10px;display: inline-block;padding: 1px 3px;margin:-2px 7px 0 0;background-color: #FD9B00;color: #FFF;line-height: 14px;vertical-align: middle;}
 .m-block.m-block-top .content{padding: 0;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
 .m-block > .title h2{font-size: 17px;color: #000;}
@@ -267,8 +269,8 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-5 .topNb{display: inline-block;width: 16px;height: 16px;margin-right: 10px;text-align: center;color: #fff;background-color: #CBC8C4;-moz-border-radius: 50%;border-radius: 50%;}
 .u-book-5 .topNb.NO1,.u-book-5 .topNb.NO2,.u-book-5 .topNb.NO3{background-color: #41C2C2;font-size: 13px;}
 .u-book-5 > a{display: inline-block;width: 100%;height: 100%;}
-.u-book-5 a span{vertical-align: middle;}
-.u-book-5 a span.hot{font-size: 11px;height: 16px;width: 16px;padding: 0;line-height: 15px;text-align: center;margin-left: 5px;background: #fd6775;}
+.u-book-5 a span{vertical-align: middle;line-height: 50px;}
+.u-book-5 a span.hot{font-size: 10px;height: 16px;width: 16px;padding: 0;line-height: 17px;text-align: center;margin:0 0 0 5px;background: #fd6775;border-radius: 1px }
 
 .u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;height: 176px;}
 .u-book-10 a{display: block;width: 100%;}
@@ -311,15 +313,15 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;}
 .u-moving-ball ~ i{display: none;}
 .u-moving-ball i{position: absolute;top:0;display: block;width: 100%;height: 100%;background-repeat: no-repeat;background-position: center center;background-size: contain;}
-.u-moving-ball i.ball-1{left: 0;background-image: url(../img/defaultAvatar.png);background-size: 80%;}
-.u-moving-ball i.ball-2{right: 0; background-image: url(../img/icon_tuoyuan.png);-webkit-transform-origin: 50%;transform-origin: 50%;-webkit-animation:round2 1s linear 0s infinite;animation:round2 1s linear 0s infinite;}
+.u-moving-ball i.ball-1{left: 0;background-image: url(../img/icons/m.png);background-size: 100%;}
+.u-moving-ball i.ball-2{right: 0; background-image: url(../img/icons/Loading.png);-webkit-transform-origin: 50%;transform-origin: 50%;-webkit-animation:round2 1s linear 0s infinite;animation:round2 1s linear 0s infinite;}
 @-webkit-keyframes round2{0%{-webkit-transform:rotate(0deg);} 100%{-webkit-transform:rotate(360deg);} }
 @keyframes round2{0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 .u-loading{position: absolute;top: 50%;left: 0;margin-top: -15px;width:100%;height:30px;line-height: 30px;text-align: center;letter-spacing: 0.1em;font-size: 12px;}
 .u-loading i.loading{}
 .u-sLoading{position: relative; height: 100px; line-height: 40px;text-align: center;letter-spacing: 2px;font-size: 12px;background: #FFFFFF}
 .u-sLoading.transparent{background: transparent;}
-.m-list .u-sLoading{background: transparent;}
+.m-list .u-sLoading{background: #eeeeee;}
 .u-book-loading:before{display: block;margin: 0 auto; width: 66px;height: 66px;margin-bottom: 10px;background-image: url('../img/book.gif');background-size: 66px 66px;content: "";}
 .u-noData{position: absolute;top: 50%;left: 0;right:0;text-align: center;}
 
@@ -373,9 +375,9 @@ progress::-webkit-progress-value  { background: #17d671; }
 .shelfWrap .z-active .icon-selected-s:after{background: url(../img/gouxuan.png) no-repeat;background-size: cover;}
 
 /*下拉列表*/
-.u-model-list{position: absolute;top: 44px;right: 5px;width: 100px;height: 0;text-align: center;line-height: 44px;z-index: 1;background: url(../img/select-down.png) no-repeat;background-size: cover;overflow: hidden; }
+.u-model-list{position: absolute;top: 44px;right: 5px;width: 100px;height: 131px;display:none;text-align: center;line-height: 44px;z-index: 1;background: url(../img/select-down.png) no-repeat;background-size: cover;overflow: hidden; }
 .u-model-list > li{font-size: 15px;color: #000;}
-.u-model-list.active{height: 131px;padding-top: 7px;}
+.u-model-list.active{display:block;padding-top: 7px;}
 
 
 .s-b-fir,.s-b-sec,.s-b-thi{position: absolute;bottom: 0;left: 0;width: 100%;height: 60px;font-size: 15px;background-color: #ff4081;z-index: 100;}
@@ -477,7 +479,7 @@ progress::-webkit-progress-value  { background: #17d671; }
 
 .icon-w-paixu,.icon-y-paixu,.icon-w-paixu.seq,.icon-y-paixu.seq,.icon-y-paixu.rev,.icon-w-paixu.rev,.icon-return-black,.icon-deletes,.icon-edit,.icon-shelf-s,.icon-lock,.icon-love-store,.icon-b-paixu,.icon-love-store.active,.icon-n.icon-fengmian,.icon-n.icon-liebiao,.icon-n.icon-jingyong,.icon-n.icon-xiazai,.icon-n.icon-shanchu,.icon-paixu,.icon-shelf,.icon-discover,.icon-recent,.icon-bookstored,.icon-aidou,.icon-tags,.icon-setter,.icon-chongzhi,.icon-achieve,.icon-recent-set,.icon-white-aidou,.icon-black-aidou,.icon-black-aidou,.icon-black-aidou.active,.icon-QQ,.icon-WX,.icon-WB{background-size: cover;}
 
-.icon-s{position: relative;width: 44px;height: 44px;display: inline-block;vertical-align: middle;z-index: 1000;}
+.icon-s{position: relative;width: 44px;height: 44px;display: inline-block;vertical-align: middle;z-index: 1;}
 .icon-s.icon-bookstore{background: url(../img/icon_bookstore.png) no-repeat;background-size: cover;}
 .icon-s.icon-editor{background: url(../img/icon_editor.png) no-repeat;background-size: cover;}
 .icon-s.right{float: right;}

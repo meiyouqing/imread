@@ -35,6 +35,7 @@
 .introduce-container .icon-lock{margin-top: 12px; }
 .u-bookIntroduce{margin-top: 15px;}
 .u-bookIntroduce.u-tabs{margin: 15px 0 0 0;}
+.introduce-container .u-sLoading{background: #fafafa;height: 50px;line-height: 50px;}
 
 
 

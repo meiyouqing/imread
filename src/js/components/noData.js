@@ -6,11 +6,15 @@ var NoData = React.createClass({
 	},
 	setTag: function(){
 		if(this.isLogin())
-			browserHistory.push(GLOBAL.setHref("myTags"));
+			gotoTag();
 		else
 			this.goLogin(function(){
-				browserHistory.push(GLOBAL.setHref("myTags"));
+				gotoTag();
 			});
+
+		var gotoTag =  function(){
+			browserHistory.push(GLOBAL.setHref("myTags"));
+		};
 			
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -47,7 +51,7 @@ var NoData = React.createClass({
 			case 'emptyBookstore':
 				src = 'http://m.imread.com/src/img/pic1@2x.png';
 				text = '您还没有收藏任何书单哦';
-				btn = <Link className="u-btn" to="/top/block.0">去发现书单</Link>;
+				btn = <Link className="u-btn" to={GLOBAL.setHref("top/block.0")}>去发现书单</Link>;
 			break;
 		}
 		return (

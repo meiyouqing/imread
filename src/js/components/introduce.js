@@ -70,7 +70,7 @@ var Introduce = React.createClass({
 		return {
 			isOnshelf: false,
 			bid: this.APIParts('introduceId')[1],
-			chapterlist: {},
+			chapterlist: null,
 			page: 1,
 			page_size: 20,
 			vt: 9,
@@ -140,7 +140,7 @@ var Introduce = React.createClass({
 		AJAX.get(function(data) {
 			this.setState({
 				noMoreChapterlist: Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + (next ? 1 : 0)),
-				chapterlist:{list: (this.state.chapterlist.list || []).concat(data.chapterList)},
+				chapterlist:(this.state.chapterlist || []).concat(data.chapterList),
 				page: this.state.page + (next ? 1 : 0),
 				getChapterlistLoading: false
 			});
@@ -153,7 +153,13 @@ var Introduce = React.createClass({
 		})
 	},
 	gotoShelf: function(){
-		browserHistory.push('/shelf');
+		if(this.isLogin())
+			browserHistory.push(GLOBAL.setHref('shelf'));
+		else{
+			this.goLogin(function(){
+				browserHistory.push(GLOBAL.setHref('shelf'));
+			}.bind(this));
+		}
 	},
 	componentWillReceiveProps: function(){
 		this.setState({
@@ -175,8 +181,8 @@ var Introduce = React.createClass({
 	componentDidUpdate: function(){
 		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
-	componentWillReceiveProps: function(nextProps, nextState) {
-		if(this.props.params.introduceId !== nextProps.params.introduceId){
+	componentWillUpdate: function(nextProps) {
+		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
 		}
@@ -208,7 +214,7 @@ var Introduce = React.createClass({
 		}else{
 			header = <Header title={this.state.book.book_name} right={right}  path={this.props.route} />
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={JSON.stringify(this.state.chapterlist)}/>
+			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
 			<div className="gg-body">
@@ -252,7 +258,7 @@ var IntroduceTabs = React.createClass({
 			current: index
 		});
 
-		if (index == 1 && !JSON.parse(this.props.chapterlist).list) {
+		if (index == 1 && !this.props.chapterlist) {
 			this.props.getChapterlist();
 		}
 	},
@@ -261,7 +267,7 @@ var IntroduceTabs = React.createClass({
 		this.setState({
 			current: 1,
 		});
-		if(JSON.parse(this.props.chapterlist).list)
+		if(this.props.chapterlist)
 			this.setState({
 				orderSeq: !this.state.orderSeq,
 			});
@@ -305,7 +311,9 @@ var IntroduceTabs = React.createClass({
 	render: function() {
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
 
-		var list = JSON.parse(this.props.chapterlist).list || [];
+		// var list = JSON.parse(this.props.chapterlist).list || [];
+		// list= this.state.orderSeq?list:list.reverse();
+		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 
 		return (

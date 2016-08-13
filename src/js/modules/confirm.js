@@ -7,13 +7,13 @@ var confirm = function() {
 		<div class="confirm-block confirm-block-2">\
 			<div class="content">\
 				<div class="text">$content</div>\
-				<div class="btns">\
-					<button class="no cancelBtn" />取消</button>\
-					<button class="yes confirmBtn" />确定</button>\
+				<div class="btns f-flexbox">\
+					<button class="no cancelBtn f-flex1" />取消</button>\
+					<button class="yes confirmBtn f-flex1" />确定</button>\
 				</div>\
 			</div>\
 		</div>';
-	var template_alert = template_confirm.replace('<button class="no cancelBtn" />取消</button>','')
+	var template_alert = template_confirm.replace('<button class="no cancelBtn f-flex1" />取消</button>','')
 	var template__alert = '<div class="content">$content</div>';
 	var template__confirm = '\
 		<div class="confirm-block">\
