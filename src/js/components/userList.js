@@ -69,6 +69,10 @@ var User = React.createClass({
 		document.addEventListener('updateUser',function(){//触发登录时更新个人信息
 			this.getUserInfo();
 		}.bind(this));
+
+		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
+			this.getUserInfo();
+		}.bind(this));
 	},
 	componentDidUpdate: function(nextProp){
 	},

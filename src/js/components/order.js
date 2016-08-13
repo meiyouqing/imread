@@ -45,7 +45,9 @@ var mod = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getBalance();
-		
+		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
+			this.getBalance();
+		}.bind(this));
 	},
 	render: function() {
 

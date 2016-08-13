@@ -57,7 +57,7 @@ var Balance = React.createClass({
 							return (
 								<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
 									<span className={"icon-n icon-black-aidou " + activeClass}></span>
-									<span className="count">{item.productPrice / 100}艾豆</span>
+									<span className="count">{item.productPrice / 100+'艾豆'}</span>
 								</li>
 							);
 						}.bind(this))

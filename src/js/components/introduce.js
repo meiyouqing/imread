@@ -218,8 +218,8 @@ var Introduce = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<div className="g-scroll">
-					<p>{this.state.book?this.state.book.book_name:''} </p>
+				<div>
+					{/*<p>{this.state.book?this.state.book.book_name:''} </p>*/}
 					{header}
 					<div className="introduce-container" >
 						{detail}
