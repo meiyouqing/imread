@@ -1,4 +1,4 @@
-var Header = require('./header_f');
+var Header = require('./header');
 var Img = require('./img');
 
 var Shelf = React.createClass({
@@ -43,7 +43,7 @@ var Shelf = React.createClass({
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
-		var setting = true,selected=[],icon=null,left=null;
+		var setting = true,selected=[],icon=null,left=null,middle=null;
 
 		switch(index){
 			case 1:
@@ -64,6 +64,7 @@ var Shelf = React.createClass({
 			selected:selected,
 			icon : icon,
 			left:left,
+			middle: middle,
 			right:completion,
 			model: index
 		});
@@ -74,20 +75,22 @@ var Shelf = React.createClass({
 	},
 	compClick: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
+		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
 		this.setState({
 			setting:false,
 			left:back,
 			right:setting,
 			//icon:icon,
-			model: 0
+			model: 0,
+			middle: middle
 		})
 	},
 	seAllClick :function(){
 		var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 		this.state.shelfList.forEach(function(v){
-			this.state.selected.push(v.content_id);
+			this.state.selected.push(Number(v.content_id));
 		}.bind(this))
 		this.setState({
 			left:seNone,
@@ -100,6 +103,9 @@ var Shelf = React.createClass({
 			left:seAll,
 			selected:[]
 		})
+	},
+	gotoZy: function(){
+		browserHistory.push('/mall');
 	},
 	gotoReading: function(){//详情页面
 		if(this.state.selected.length !== 1) return;
@@ -209,14 +215,16 @@ var Shelf = React.createClass({
 	},
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
+		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
 		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
 		return {
 			setting:false,
 			toggle:false,
 			left:back,
 			right:setting,
+			middle: middle,
 			icon:null,
 			selected:[],
 			noMore:true,
@@ -254,7 +262,7 @@ var Shelf = React.createClass({
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right}  path={this.props.route}  />;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
 		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
