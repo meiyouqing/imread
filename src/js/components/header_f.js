@@ -40,7 +40,7 @@ var Header = React.createClass({
 		return (
 			<header className="m-bar m-bar-head m-p">
 				{defaultLeft}
-				{this.props.closeRight?'':this.props.right}
+				{this.props.right}
 				{this.props.middle}
 				<h1 className="title">{this.props.title}</h1>
 			</header>

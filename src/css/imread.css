@@ -108,7 +108,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-bar-head.m-p{padding: 0 10px 0 1px;}
 .m-no-padding{padding: 0}
 .m-bar-head .iconfont {width: 48px;box-sizing:border-box;margin-right: -10px; margin-left: -10px; font-size: 18px;color: #fff;font-weight: normal;text-align: center;}
-.m-bar-head .textBtn {margin-right: -10px; margin-left: -10px; padding-right: 15px; padding-left: 15px;font-size: 14px;line-height: 44px;color: #fff;font-weight: normal;}
+.m-bar-head .textBtn {z-index: 1;position: relative;margin-right: -10px; margin-left: -10px; padding-right: 15px; padding-left: 15px;font-size: 14px;line-height: 44px;color: #fff;font-weight: normal;}
 .m-bar-head .textBtn.no-ml{margin-left: 0}
 .m-bar-head .title {display: inline-block; position: absolute; right: 45px; left: 45px; width: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #fff; letter-spacing: 0.2em; font-size: 18px; line-height: 44px; text-align: center; }
 .m-bar-tab {bottom: 0; height: 50px; padding: 5px 0; border-top: 1px solid #DBDBDB; border-bottom: 0; -webkit-touch-callout: none; }
@@ -494,6 +494,6 @@ progress::-webkit-progress-value  { background: #17d671; }
 .icon-love{background: url(../img/pic_xihuan.png) no-repeat!important;background-size: cover!important;}
 .icon-book{background: url(../img/pic_shuben.png) no-repeat!important;background-size: cover!important;}
 
-.icon-m-r10{margin-right: -10px;}
+.icon-m-r10{margin-right: -10px;}.icon-m-r6{margin-right: -6px;}
 .i-logo{width: 120px;height: 100%;background: url(../img/icon_logo.png) no-repeat;background-size: cover;float: left;}
 .i-put{position: absolute;top: 7px;left:5px;width:30px;height: 30px;background: url(../img/input_search.png) no-repeat;background-size: cover;}

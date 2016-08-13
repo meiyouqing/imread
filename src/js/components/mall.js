@@ -1,4 +1,4 @@
-var Header = require('./header_f');
+var Header = require('./header');
 var MallNav = require('./mallNav');
 var UserList = require('./userList');
 
@@ -54,7 +54,7 @@ var Mall = React.createClass({
 			userList = <UserList hide={this.hide} route={this.props.route} />;
 		}
 
-		var right = <div className="icon-s icon-menu right icon-m-r10" onClick={this.showUser} ></div>,
+		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo"></div>;
 

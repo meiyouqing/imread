@@ -6,6 +6,7 @@ var Header = React.createClass({
 			browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 		};
 
+
 		// browserHistory.listen(function(nextHistory){
 		// 	var arr = nextHistory.pathname.split('/');
 		// 	var path = arr.pop();
@@ -52,7 +53,8 @@ var Header = React.createClass({
 		return (
 			<header className="m-bar m-bar-head">
 				{isskip?<a className="f-fl icon-s icon-back" href={from.skipurl}></a>:defaultLeft}
-				{this.props.closeRight?'':this.props.right}
+				{this.props.right}
+				{this.props.middle}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);
