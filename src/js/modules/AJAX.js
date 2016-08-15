@@ -182,6 +182,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	
 	if (method === 'POST') {
 		request.open(method, url);
+		//request.withCredentials = true;
 		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
 		if(postdata.formdata){
@@ -193,12 +194,12 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		request.send(postdata);
 	} else {
 		var isYulan = false;
-		var yulanUrls = ['/api/group/page', '/api/page/content'];
+		var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
 		for (var i = 0; i < yulanUrls.length; i++) {
 			isYulan |= new RegExp(yulanUrls[i]).test(url);
 		}
 		isYulan = isYulan && /yulan=1/.test(window.location.search);
-		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1" : ""));
+		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
 		setRequestHeaders(request);
 		request.send(null);
 	}
