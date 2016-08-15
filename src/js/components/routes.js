@@ -55,7 +55,9 @@ var readWrap = (
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
 		<Route path="shelf" component={Shelf}>
-			{bookWrap}
+			<Route path="book/:introduceId" component={Introduce}>
+				{readWrap}
+			</Route>
 			{loginWrap}
 			{readWrap}
 		</Route>
