@@ -47,7 +47,9 @@ var Detail = React.createClass({
 		return (
 			<div className="u-bookIntroduce">
 				<div className="f-clearfix">
-					<img src={this.props.book.big_coverlogo} className="f-fl introduce-cover"/>
+					<div className="f-fl imgWrap-133">
+						<img src={this.props.book.big_coverlogo} className="introduce-cover"/>
+					</div>	
 					<div className="bookinfo">
 						<div className="title">{this.props.book.book_name}</div>
 						<div className="author">{this.props.book.author}</div>
