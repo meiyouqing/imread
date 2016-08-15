@@ -64,7 +64,8 @@ var Top = React.createClass({
 		myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
-		if((GLOBAL.isRouter(this.props) &&!this.state.list)) this.getData();
+
+		if((GLOBAL.isRouter(this.props) &&!this.state.list) || (this.props.params.topId=='block.2'&&this.props.children !== nextProp.children )) this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
 		//setTimeout(function(){
 		this.lazyloadImage(this.refs.container);

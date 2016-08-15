@@ -150,7 +150,7 @@ var User = React.createClass({
 				title: '发现',
 				icon: 'icon-discover',
 				s_title: '书单·排行',
-				href: 'top/block.1'
+				href: 'top/block.0'
 			}], [{
 				title: '最近阅读',
 				icon: 'icon-recent',

@@ -5,6 +5,7 @@ var NoData = React.createClass({
 		document.location.reload();
 	},
 	setTag: function(){
+
 		if(this.isLogin())
 			this.gotoTag();
 		else
