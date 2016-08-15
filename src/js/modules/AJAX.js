@@ -104,7 +104,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
 	var urlBase = 'http://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -179,7 +179,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 			// }
 		}
 	};
-	
+
 	if (method === 'POST') {
 		request.open(method, url);
 		//request.withCredentials = true;
@@ -200,6 +200,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		}
 		isYulan = isYulan && /yulan=1/.test(window.location.search);
 		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
+		//request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);
 	}

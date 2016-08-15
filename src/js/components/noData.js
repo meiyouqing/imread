@@ -5,15 +5,16 @@ var NoData = React.createClass({
 		document.location.reload();
 	},
 	setTag: function(){
-		if(this.isLogin())
+		var gotoTag =  function(){
+			browserHistory.push(GLOBAL.setHref("myTags"));
+		};
+		
+		if(this.isLogin()) {
 			gotoTag();
-		else
+		} else {
 			this.goLogin(function(){
 				gotoTag();
 			});
-
-		var gotoTag =  function(){
-			browserHistory.push(GLOBAL.setHref("myTags"));
 		};
 			
 	},

@@ -30,11 +30,13 @@ var tag = React.createClass({
 	changeEdit: function(){
 		var right = <span onClick={this.finishEdit} className="icon-s icon-right f-fr"></span>;
 		var access = <span className="icon-h icon-return-black show"></span>;
+		GLOBAL.addClass(this.refs.date,'show');//兼容部分安卓机不能触发click()
 		this.setState({right: right,isEdit: true,finishButton: false,access: access});
 	},
 	finishEdit: function(){
 		var right = <span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>;
 		var access = <span className="icon-h icon-return-black"></span>
+		GLOBAL.removeClass(this.refs.date,'show');
 		var pramas = {
 			user_gender: this.state.sexId,
 			user_birthday:this.refs.date.value.replace(/-/g,"")
@@ -78,11 +80,12 @@ var tag = React.createClass({
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
 
+		// GLOBAL.addClass(this.refs.date,'show');
 		this.refs.date.click();
 		this.refs.date.focus();
 
 		this.refs.date.onchange = function(e){
-				this.setState({user_birthday: this.refs.date.value})
+			this.setState({user_birthday: this.refs.date.value})
 		}.bind(this)
 	},
 	selectSex: function(){
@@ -135,6 +138,7 @@ var tag = React.createClass({
 	componentDidUpdate:function(nextProps){
 		if(this.props.children !== nextProps.children)
 			this.getData();
+
 	},
 	render: function() {
 		var list;
@@ -154,9 +158,8 @@ var tag = React.createClass({
 						<ul>
 							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user.user_name}</span></li>
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
-							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
+							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span><input  type="date" ref="date" id="dater" className='dateInput'/></li>
 						</ul>
-						<input  type="date" ref="date" className='dateInput'/>
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
