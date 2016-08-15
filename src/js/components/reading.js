@@ -467,6 +467,7 @@ var Reading = React.createClass({
 		function pay(){	
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
+				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
 						that.gotContent(data);
