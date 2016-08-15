@@ -37,11 +37,12 @@ var Top = React.createClass({
 	getData: function(){
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
-			AJAX.init('page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1');
+			this.params = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1'
 			this.getLists();			
 		},this.onerror)
 	},
 	getLists: function (){
+		AJAX.init(this.params);
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
 			if (!data.blocklist.length) {
@@ -87,7 +88,7 @@ var Top = React.createClass({
 				list = (
 					<div className="g-main g-main-3 m-top">
 						<div ref="container">
-							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid}/>
+							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} updateGuess={this.getLists}/>
 						</div>
 					</div>
 					);

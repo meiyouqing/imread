@@ -6,16 +6,15 @@ var NoData = React.createClass({
 	},
 	setTag: function(){
 		if(this.isLogin())
-			gotoTag();
+			this.gotoTag();
 		else
 			this.goLogin(function(){
-				gotoTag();
-			});
-
-		var gotoTag =  function(){
-			browserHistory.push(GLOBAL.setHref("myTags"));
-		};
-			
+				this.gotoTag();
+			});		
+	},
+	gotoTag:function(){
+		myEvent.setCallback('updateGuess',this.props.updateGuess);
+		browserHistory.push(GLOBAL.setHref("myTags"));
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return false;

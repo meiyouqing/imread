@@ -31,6 +31,9 @@ var Header = React.createClass({
 	},
 	goBack: function(){
 		GLOBAL.goBack(this.path);
+		if(this.props.page==='tag'){
+			myEvent.execCallback('updateGuess');
+		}
 	},
 	componentDidMount: function(){
 		this.path = this.props.path.path.replace(/:([^\"]*)/,'');

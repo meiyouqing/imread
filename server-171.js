@@ -3,7 +3,7 @@ var path = require('path')
 //var compression = require('compression')
 
 var app = express()
-
+app.disable('x-powered-by');
 //app.use(compression())
 
 // serve our static stuff like index.css
@@ -14,7 +14,7 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-var PORT = process.env.PORT || 22
+var PORT = process.env.PORT || 9099
 app.listen(PORT, function() {
-  console.log('Production Express server running at localhost:' + PORT)
+  console.log('Production Express server running at http://m.imread.com:' + PORT)
 })

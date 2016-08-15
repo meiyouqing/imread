@@ -68,7 +68,7 @@ var Guess = React.createClass({
 	render: function(){
 		var list;
 		if(!this.props.data.contentlist.length){
-			list = <NoData type="emptyTag" />
+			list = <NoData type="emptyTag" updateGuess={this.props.updateGuess} />
 		} else {
 			list  = <Block7 bookList={this.props.data.contentlist} />;
 		}
@@ -110,7 +110,7 @@ var BookStore = React.createClass({
 		var list;
 
 		var sLoading = <Loading cls='u-sLoading' />;
-		this.props.data.map(function(v,i){
+		this.props.data.map((v,i)=>{
 			if(v.display){
 				switch(v.style){
 					case 14:
@@ -120,7 +120,7 @@ var BookStore = React.createClass({
 						list = <Paihang data={v} />
 						break;
 					case 15: 
-						list = <Guess data={v} />
+						list = <Guess data={v} updateGuess={this.props.updateGuess} />
 						break;
 					case 3: 
 						list = <Guess data={v} />
