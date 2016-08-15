@@ -124,7 +124,7 @@ var chapterMixins = {
 		if (!this.state.data.nextChapterId) {
 			return this.alert('已经是最后一章了', 1);
 		}
-		this.goToChapter(this.state.data.nextChapterId);
+		this.goToChapter(this.state.data.nextChapterId);	
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
@@ -132,9 +132,7 @@ var chapterMixins = {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)),state:this.props.location.state});
 
-
-		if(this.refs.scrollarea)
-			this.refs.scrollarea.scrollTop = 0;
+		if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -333,6 +331,9 @@ var Reading = React.createClass({
 		}
 	},
 	gotContent: function(data,autoPay){
+		this.setState({
+			showSetting:false
+		})		
 
 		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
@@ -749,7 +750,12 @@ var Reading = React.createClass({
 			<div className="gg-body m-reading-body" ref="container">
 
 				<div className={"style " + classNames}>
-				<i className="u-miguLogo"></i>
+				{
+
+					this.source_id == '1'?
+						(<i className="u-miguLogo"></i>):
+						null
+				}
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>

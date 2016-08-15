@@ -253,9 +253,13 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-0:nth-child(1), .u-book-0:nth-child(2), .u-book-0:nth-child(3){margin-top: 0;}
 .u-book-2 .u-recentRead{position: absolute;top: -3px;right: -4px;bottom: 0;left: 50%;background-image: url('../img/recentRead.png');background-repeat: no-repeat;background-size: contain;background-position: center top;}
 .u-book-2 a {display: block;margin-right: 20px;position: relative;}
+.u-book-2 .img-wrap{}
 .u-book-2 a img{width: 100%;height: auto;}
 .u-book-2 a span{display: block;text-align: left;font-size: 15px;max-height: 40px;line-height: 20px;color: #000;margin: 4px 0px 0px 0px;}
 .u-book-2 .author{font-size: 13px;color: #777777;margin: 0 0 8px;}
+
+.u-imgWrap-133{position: relative;overflow: hidden;padding-top: 133.3333%;}
+.u-imgWrap-133 img{position: absolute;top:0;left:0;}
 
 .subCat-1 .u-book-3 {padding-right: 20px;box-sizing: border-box;}
 .u-book-3{float: left;width: 100%;padding: 16px 10px;border-top: 1px solid #EEEEEE;box-sizing: border-box;}

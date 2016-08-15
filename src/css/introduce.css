@@ -16,6 +16,7 @@
 .u-bookIntroduce .chapter .name{display: block;line-height: 50px}
 .u-bookIntroduce .chapter .name.lock{color: #777777;}
 .u-bookIntroduce .chapter.current .name.lock{color: #0096aa}
+.u-bookIntroduce .imgWrap-133{width: 100px; height: 133.3333px;overflow: hidden;}
 
 .u-tabs{margin-top: 25px;}
 .g-body-3 .u-fixTabbar{left: 100%;}
