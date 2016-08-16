@@ -4,7 +4,7 @@
   "description": "imread for html5",
   "main": "index.js",
   "dependencies": {
-    "babel-core": "^5.8.32",
+    "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",
     "css-loader": "^0.23.1",
     "file-loader": "^0.9.0",
@@ -13,7 +13,8 @@
     "object-assign": "^4.0.1",
     "open-browser-webpack-plugin": "0.0.2",
     "path": "^0.12.7",
-    "react-dom": "^15.2.1",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
     "react-router": "^2.5.2",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
