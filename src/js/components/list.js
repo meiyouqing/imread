@@ -7,7 +7,7 @@ var List = React.createClass({
 	mixins: [Mixins()],
 	isLoading: false,
 	getList: function(param){
-
+		if(!this.isMounted()) return;
 		var hash = param?param:this.props.params.listId;
 		AJAX.init(hash);
 		AJAX.get(data => {

@@ -6,12 +6,13 @@ var NoData = React.createClass({
 	},
 	setTag: function(){
 
-		if(this.isLogin())
+		if(this.isLogin()){
 			this.gotoTag();
-		else
+		}else{
 			this.goLogin(function(){
 				this.gotoTag();
-			});		
+			}.bind(this));	
+		}	
 	},
 	gotoTag:function(){
 		myEvent.setCallback('updateGuess',this.props.updateGuess);

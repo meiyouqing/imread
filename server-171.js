@@ -1,10 +1,10 @@
 var express = require('express')
 var path = require('path')
-//var compression = require('compression')
+var compression = require('compression')
 
 var app = express()
 app.disable('x-powered-by');
-//app.use(compression())
+app.use(compression())
 
 // serve our static stuff like index.css
 app.use(express.static(path.join(__dirname, 'tmp')));
