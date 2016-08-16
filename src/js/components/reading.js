@@ -182,17 +182,18 @@ var Reading = React.createClass({
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return}
 		var bookIntroduce = {};
-		var readLogs = storage.get('readLogNew');
-		var books = storage.get('bookIntroduce', 'array');
-		for (var i = 0; i < books.length; i++) {
-			if (books[i].bid == readLog.content_id) {
-				bookIntroduce = books[i];
-				break;
-			}
-		}
-		readLog.name = bookIntroduce.book_name;
-		readLog.author = bookIntroduce.author;
-		readLog.big_coverlogo = bookIntroduce.big_coverlogo;
+		// var readLogs = storage.get('readLogNew');
+		// var books = storage.get('bookIntroduce', 'array');
+		// for (var i = 0; i < books.length; i++) {
+		// 	if (books[i].bid == readLog.content_id) {
+		// 		bookIntroduce = books[i];
+		// 		break;
+		// 	}
+		// }
+
+		readLog.name = bookIntroduce.book_name || this.state.introduce.book_name;
+		readLog.author = bookIntroduce.author || this.state.introduce.author;
+		readLog.big_coverlogo = bookIntroduce.big_coverlogo || this.state.introduce.big_coverlogo;
 		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
@@ -219,7 +220,6 @@ var Reading = React.createClass({
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
 			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
-
 		this.cacheReadLog(readLog[0]);
 		this.time = Date.now();
 		myEvent.execCallback('reading' + bid, true);
@@ -471,6 +471,7 @@ var Reading = React.createClass({
 				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
+						document.dispatchEvent(new Event('updateUser'));
 						that.gotContent(data);
 					});
 				}else{

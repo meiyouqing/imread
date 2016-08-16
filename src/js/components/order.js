@@ -17,8 +17,10 @@ var mod = React.createClass({
 			AJAX.getJSON('GET',this.props.data.orderUrl,{},function(data){
 				if(data.code == 403)
 					POP._alert('支付失败');
-				else 
+				else {
+					document.dispatchEvent(new Event('updateUser'));
 					that.props.goBack();
+				}
 				// var autoPay = that.props.chargeMode==2? true:false;
 				// that.props.paySuccess(data, autoPay);
 			});
