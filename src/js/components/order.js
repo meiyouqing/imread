@@ -13,7 +13,8 @@ var mod = React.createClass({
  	},
 	payHandle: function(e) {
 		var that = this;
-		if((this.state.aidou-this.props.price)>=0){
+		//console.log(this.state.aidou,this.props.data.marketPrice);
+		if((this.state.aidou-this.props.data.marketPrice)>=0){
 			getJSON('GET',this.props.data.orderUrl,{},function(data){
 				Router.goBack();
 				var autoPay = that.props.chargeMode==2? true:false;
