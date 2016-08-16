@@ -17,9 +17,10 @@ var tag = React.createClass({
 		}
 
 		AJAX.go('edituser',pramas,function(res){
-			if(res.code === 200)
+			if(res.code === 200){
 				GLOBAL.goBack();
-			else {
+				document.dispatchEvent(new Event('updateUser'));
+			} else {
 				if(typeof res.error === 'string')
 					POP._alert(res.error);
 				else 
