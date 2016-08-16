@@ -13,7 +13,7 @@ var Book10 = React.createClass({
 		return (
 			<li  className="u-book-10">
 				<a onClick={this.clickHandle}>
-					<Img src={this.props.data.image_url} />
+					<Img newType={true} src={this.props.data.image_url} />
 					<div className="f-b-block">
 						<span className="book-name">{this.props.data.name || this.props.data.sheet_name}</span>
 						<div className="f-fr last">

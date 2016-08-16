@@ -23,7 +23,6 @@ var RechageRes = React.createClass({
 		console.log('成功');
 		this.setState({success: true,status: '充值成功'});
 		document.dispatchEvent(new Event('rechargeSuccess'));
-		document.dispatchEvent(new Event('updateUser'));
 	},
 	failed: function(){
 		console.log('失败');

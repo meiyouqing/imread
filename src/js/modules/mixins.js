@@ -24,7 +24,8 @@ var mixins = function() {
 							//img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
 						}
 						img.setAttribute('data-lazyload-src', "loading");
-						GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'http://m.imread.com/src/img/defaultCover.png'));
+						//GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'http://m.imread.com/src/img/defaultCover.png'));
+						GLOBAL.loadImage(src, callback.bind(null, src));
 					}
 				})(i);
 			}
