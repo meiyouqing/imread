@@ -8,8 +8,10 @@ var Book1 = React.createClass({
 	render: function() {
 		//console.log(this.props.fromIntroduce)	
 
-		if(this.props.fromIntroduce)
-			var hrefStr = location.pathname.replace(/introduce.\d+/,'') + 'introduce.'+this.props.data.content_id;
+		if(this.props.fromIntroduce){
+			var lastPart = location.pathname.split('/').pop();
+			var hrefStr = location.pathname.replace(lastPart,'') + 'introduce.'+this.props.data.content_id;
+		}
 		else
 			var hrefStr = GLOBAL.typeHref(this.props.data,this.props.fromIntroduce ? "now" : '');
 		return (

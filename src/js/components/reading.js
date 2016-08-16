@@ -182,7 +182,7 @@ var Reading = React.createClass({
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return}
 		var bookIntroduce = {};
-		// var readLogs = storage.get('readLogNew');
+		var readLogs = storage.get('readLogNew');
 		// var books = storage.get('bookIntroduce', 'array');
 		// for (var i = 0; i < books.length; i++) {
 		// 	if (books[i].bid == readLog.content_id) {

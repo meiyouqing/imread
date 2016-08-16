@@ -41,9 +41,10 @@ var Mall = React.createClass({
 				})
 			}
 			this.setState({
-				list: this.state.scrollUpdate? this.state.list.concat(data.blocklist):data.blocklist,
+				list: (this.state.scrollUpdate && !this.navChanged)? this.state.list.concat(data.blocklist):data.blocklist,
 				scrollUpdate: false
 			});
+			this.navChanged = false;
 			//设置GLOBAL.booklist/book
 			GLOBAL.setBlocklist(data.blocklist);
 		},this.onerror);
@@ -52,7 +53,8 @@ var Mall = React.createClass({
 		this.APIparam = this.props.params.subnav;
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
-	componentDidUpdate: function() {
+	componentDidUpdate: function(nextProp) {
+		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
 		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList();
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);

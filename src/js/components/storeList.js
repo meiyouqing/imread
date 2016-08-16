@@ -103,7 +103,7 @@ var StoreList = React.createClass({
 			this.compClick();
 		}
 		if(this.refs.container)
-			this.lazyloadImage(this.refs.container);
+			this.lazyloadImage(this.refs.container,true);
 		
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {

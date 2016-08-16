@@ -37,7 +37,7 @@ var List = React.createClass({
 		AJAX.init('block.'+pid+'.6.1');
 	},
 	componentDidUpdate: function(nextProp) {
-		this.lazyloadImage(this.refs.contain);
+		this.lazyloadImage(this.refs.contain,true);
 	},
 	render: function(){
 		var sLoading = <Loading cls='u-sLoading transparent' />,list=null;

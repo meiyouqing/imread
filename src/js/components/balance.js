@@ -26,6 +26,9 @@ var Balance = React.createClass({
 	},
 	componentDidMount: function() {
 		if(this.checkLogin(this.props.route)) this.getBalance();
+		document.addEventListener('rechargeSuccess',function(){//触发登录时更新个人信息
+			this.getBalance();
+		}.bind(this));
 	},
 	handleClick: function(e) {
 		this.setState({
