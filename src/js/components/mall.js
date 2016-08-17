@@ -7,7 +7,7 @@ var Mall = React.createClass({
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-			if(location.pathname === this.props.route.path){
+			if((location.pathname === this.props.route.path) || !this.props.params.subnav){
 				browserHistory.replace('/mall/'+subnav);
 			}
 			this.setState({
@@ -37,13 +37,12 @@ var Mall = React.createClass({
 	},
 	componentDidMount: function(){
 		this.getNav();
-		if(!this.props.params.subnav) browserHistory.replace('/mall');
+		//if(!this.props.params.subnav) browserHistory.replace('/mall');
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-			
+		if(!this.props.params.subnav) this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-		
 		return this.state.navList !== nextState.navList
 				|| this.props.children !== nextProp.children
 				|| this.props.params.subnav !== nextProp.params.subnav;
