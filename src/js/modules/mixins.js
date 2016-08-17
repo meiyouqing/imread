@@ -102,7 +102,7 @@ var mixins = function() {
 				}
 		},
 		isLogin: function() {
-			return !!GLOBAL.cookie('userToken');
+			return !!GLOBAL.cookie('token');
 		},
 		goLogin: function(callback){
 			var hash = location.pathname+'/login';

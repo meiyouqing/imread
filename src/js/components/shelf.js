@@ -343,7 +343,10 @@ var Shelf = React.createClass({
 															<span className="f-ellipsis chapter">{v.chapter_name}</span>
 															<div className="progress-box">
 																<span>{notice}</span>
-																<progress className="progress" value={v.playorder/v.count} max="1"></progress>
+																<div className="progress p-div">
+																	<div style={{width: v.playorder/v.count*100+'%'}}>
+																	</div>
+																</div>
 															</div>
 														</div>
 														</div>

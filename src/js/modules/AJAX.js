@@ -220,7 +220,7 @@ function setRequestHeaders(request) {
 		'Info-Vcode': '101',
 		'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.getUuid(),
-		'Info-Token': GLOBAL.cookie('userToken') || '',
+		'Info-Token': GLOBAL.cookie('token') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
