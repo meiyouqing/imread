@@ -545,7 +545,7 @@ var Reading = React.createClass({
 			});
 		}
 
-
+		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 		this.isdownLoad();
@@ -679,6 +679,12 @@ var Reading = React.createClass({
 		GLOBAL.cookie(this.bid,'autoPay',7)
 		this.getContent();
 		this.setState({order: false});
+	},
+	timeOut: function(){
+		setTimeout(function(){
+			if(this.state.loading)
+				GLOBAL.goBack();
+		}.bind(this), 10000)
 	},
 	render:function(){
 		var currentRoute = location.pathname.split('/');
