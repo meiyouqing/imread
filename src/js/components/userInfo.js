@@ -75,19 +75,17 @@ var tag = React.createClass({
 				this.getData();
 			}.bind(this));
 			
-			
 		}.bind(this);
 	},
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
-
 		// GLOBAL.addClass(this.refs.date,'show');
 		this.refs.date.click();
 		this.refs.date.focus();
 
 		this.refs.date.onchange = function(e){
 			this.setState({user_birthday: this.refs.date.value})
-		}.bind(this)
+		}.bind(this);
 	},
 	selectSex: function(){
 		if(!this.state.isEdit)  return;

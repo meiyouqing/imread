@@ -73,7 +73,7 @@ var Guess = React.createClass({
 			list  = <Block7 bookList={this.props.data.contentlist} />;
 		}
 		return (
-			<div className="g-scroll">
+			<div className="g-scroll bg-1">
 				{list}
 			</div>
 		)

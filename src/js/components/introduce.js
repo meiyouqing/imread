@@ -155,7 +155,7 @@ var Introduce = React.createClass({
 		})
 	},
 	gotoShelf: function(){
-		var href = location.pathname.replace(/\/shelf([^\"]*)/,'/')+'shelf';
+		var href = location.pathname.replace(/\/shelf([^\"]*)/,'')+'/shelf';
 		if(this.isLogin())
 			browserHistory.push(href);
 		else{

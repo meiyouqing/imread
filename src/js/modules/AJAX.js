@@ -182,7 +182,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 
 	if (method === 'POST') {
 		request.open(method, url);
-		//request.withCredentials = true;
+		request.withCredentials = true;
 		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
 		if(postdata.formdata){
@@ -200,7 +200,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		}
 		isYulan = isYulan && /yulan=1/.test(window.location.search);
 		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
-		//request.withCredentials = true;
+		request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);
 	}
