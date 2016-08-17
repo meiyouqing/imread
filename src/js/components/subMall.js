@@ -54,6 +54,7 @@ var Mall = React.createClass({
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function(nextProp) {
+	
 		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
 		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList();
 		if(!this.state.list || !this.state.list.length){return;}

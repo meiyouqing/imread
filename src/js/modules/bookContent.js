@@ -27,7 +27,7 @@ var BookContent = (function() {
 				meta.name = "referrer";
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
-				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 			// } else {
 			// 	GLOBAL.goBack();
 			// }

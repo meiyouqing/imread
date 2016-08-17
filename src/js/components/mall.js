@@ -37,18 +37,19 @@ var Mall = React.createClass({
 	},
 	componentDidMount: function(){
 		this.getNav();
+		if(!this.props.params.subnav) browserHistory.replace('/mall');
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		if(!this.props.params.subnav)
-			this.getNav();
+			
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-
+		
 		return this.state.navList !== nextState.navList
-				|| this.props.children !== nextProp.children;
+				|| this.props.children !== nextProp.children
+				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
 	render:function(){
-		console.log(myEvent.callback)
+
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
