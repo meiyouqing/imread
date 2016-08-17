@@ -19,10 +19,6 @@ var Selfbuild = React.createClass({
 	},
 	componentDidMount: function(){
 		this.getList();
-		// Router.get(function(res){
-		// 	that.setState({data: res.blocklist})
-		// });
-		//this.lazyloadImage(this.refs.container);
 
 		//判断来源from
 		this.from = parseQuery(location.search);
@@ -51,7 +47,7 @@ var Selfbuild = React.createClass({
 				</div>
 		return (
 			<div className="gg-body">
-				<Header title={'自搭页面'} skipurl={true} right={null} path={this.props.route}/>
+				<Header title={'艾豆随便花专区'} skipurl={true} right={null} path={this.props.route}/>
 				{content}
 				{loading}
 				{this.props.children}

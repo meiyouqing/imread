@@ -38,6 +38,9 @@ var Header = React.createClass({
 	componentDidMount: function(){
 		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
+
+		if(this.props.path.path.split('/')[1] == 'self')
+			this.path = '/mall';
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.title !== nextProps.title 
