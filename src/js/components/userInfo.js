@@ -19,7 +19,9 @@ var tag = React.createClass({
 	logout: function(e) {
 		e.preventDefault && (e.preventDefault());
 		POP.confirm('确定退出登录?',function() {
-
+			AJAX.init('loginout');
+			AJAX.get(function(res){
+			}.bind(this));
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('userId');

@@ -136,7 +136,7 @@ var Introduce = React.createClass({
 		this.setState({
 			getChapterlistLoading: true
 		});
-		console.log('ajax')
+
 		AJAX.init('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+(this.state.page+(next?1:0)));
 
 		AJAX.get(function(data) {

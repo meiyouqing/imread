@@ -29,8 +29,8 @@ var Recharge = React.createClass({
 		this.params.verify_code = verifyCode;
 		that.loading = true;
 
-		that.params = {trade_no:"d1258ca57d9f42ec-123",trade_day:20160811,order_no:1788352850130944,verify_code:691554}
-		browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
+		//that.params = {trade_no:"d1258ca57d9f42ec-123",trade_day:20160811,order_no:1788352850130944,verify_code:691554}
+		//browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 
 
 		AJAX.go('payConfirm', this.params, success, null, 'recharge');

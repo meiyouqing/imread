@@ -41,10 +41,8 @@ var Login = React.createClass({
 				
 				document.dispatchEvent(new Event('updateUser'));
 				//判断登陆后的跳转
-				var isneed = false;
 				if(that.from && that.from.skipurl){
-					isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					GLOBAL.goBack();
 					myEvent.execCallback('login');
@@ -102,10 +100,10 @@ var Login = React.createClass({
 			if(data.code == 200){
 				POP._alert('注册成功');
 				//判断登陆后的跳转
-				var isneed = false;
+				//var isneed = false;
 				if(that.from && that.from.skipurl){
-					isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+					//isneed = /\?/.test(that.from.skipurl);
+					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					that.setState({status: true});
 				}

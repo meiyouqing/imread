@@ -16,6 +16,7 @@ var API={
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
 	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
 	login:{method:'POST', base:'/api/v1/auth/login/custom', param:{phone:'',password:''}},
+	loginout:{method:'POST', base:'/api/v1/migu/logout',param:{}},
 	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
 	key:{method:'GET', base:'/api/v1/auth/key', param:{phone:'',type:''}},
 	password:{method:'POST', base:'/api/v1/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
