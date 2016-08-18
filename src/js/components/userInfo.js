@@ -21,7 +21,7 @@ var tag = React.createClass({
 		POP.confirm('确定退出登录?',function() {
 
 			GLOBAL.removeCookie('userPhone');
-			GLOBAL.removeCookie('token');
+			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('userId');
 
 			GLOBAL.goBack();

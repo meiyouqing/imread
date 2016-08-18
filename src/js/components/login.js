@@ -29,8 +29,8 @@ var Login = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			GLOBAL.cookie('userPhone', postData.phone, options);
-			GLOBAL.cookie('token', data.token, options);
+			//GLOBAL.cookie('userPhone', postData.phone, options);
+			GLOBAL.cookie('userToken', data.token, options);
 			GLOBAL.cookie('userId', data.user_id, options);
 			GLOBAL.setUser({
 				phone: postData.phone,

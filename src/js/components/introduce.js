@@ -136,7 +136,7 @@ var Introduce = React.createClass({
 		this.setState({
 			getChapterlistLoading: true
 		});
-
+		console.log('ajax')
 		AJAX.init('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+(this.state.page+(next?1:0)));
 
 		AJAX.get(function(data) {
@@ -164,7 +164,7 @@ var Introduce = React.createClass({
 			}.bind(this));
 		}
 	},
-	componentWillReceiveProps: function(){
+	componentWillReceiveProps: function(nextProps){
 		this.setState({
 			chapterlist: null
 		})
@@ -188,6 +188,9 @@ var Introduce = React.createClass({
 		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
+			this.setState({
+				noMoreChapterlist: false
+			})
 		}
 			
 	},
@@ -314,8 +317,6 @@ var IntroduceTabs = React.createClass({
 	render: function() {
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
 
-		// var list = JSON.parse(this.props.chapterlist).list || [];
-		// list= this.state.orderSeq?list:list.reverse();
 		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 
