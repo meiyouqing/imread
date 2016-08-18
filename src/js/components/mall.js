@@ -47,6 +47,9 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children
 				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
+	reload: function(){
+		window.location.reload();
+	},
 	render:function(){
 
 		var mallNav,userList;
@@ -57,7 +60,7 @@ var Mall = React.createClass({
 
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
-			left = <div className="i-logo"></div>;
+			left = <div className="i-logo" onClick={this.reload}></div>;
 
 		return (
 			<div className="g-mall">

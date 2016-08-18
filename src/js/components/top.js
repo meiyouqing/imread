@@ -7,13 +7,13 @@ var MallNav = React.createClass({
 	render: function() {
 		if(!this.props.navList || !this.props.navList.length){return <i></i>}
 		return (
-			<nav className="g-nav g-top">
+			<nav className="g-nav">
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
 							var hrefStr =window.location.pathname.replace(/top\/([^\"]*)/,"") +'top/block.'+i;
 							return (
-								<MallNavLink to={hrefStr} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
+								<MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
 						}.bind(this))
 					}
@@ -118,7 +118,6 @@ var Top = React.createClass({
 		// if(this.state.onerror){
 		// 	list = (<div className="g-main"><NoData type="UFO" /></div>);
 		// }
-
 		return (
 			<div  className="gg-body">
 				<Header title="发现"  path={this.props.route} />
