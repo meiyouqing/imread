@@ -7,6 +7,7 @@ var Mall = React.createClass({
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+			this.upApp(subnav);
 			if((location.pathname === this.props.route.path) || !this.props.params.subnav){
 				browserHistory.replace('/mall/'+subnav);
 			}
@@ -39,7 +40,19 @@ var Mall = React.createClass({
 		this.getNav();
 		//if(!this.props.params.subnav) browserHistory.replace('/mall');
 	},
+	upApp: function(page){
+		var obj = parseQuery(location.search);
+		if(obj.action && obj.action==='openapp'){
+
+			if(obj.book_id)
+				browserHistory.push(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
+			else if(obj.sheet_id){
+				browserHistory.push(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+			}
+		}
+	},
 	componentDidUpdate: function(nextProp,nextState){	
+
 		if(!this.props.params.subnav) this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){

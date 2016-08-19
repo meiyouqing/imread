@@ -832,6 +832,7 @@ var Reading = React.createClass({
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
+				<div className={"u-hideChapterlist" + (this.state.showChapterlist && ' active' || '')} onClick={this.toggleChapterlist}></div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">
@@ -846,7 +847,6 @@ var Reading = React.createClass({
 						</div>
 
 					</div>
-					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading"} ref="scrollarea">
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
