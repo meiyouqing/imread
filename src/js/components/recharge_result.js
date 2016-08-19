@@ -34,7 +34,9 @@ var RechageRes = React.createClass({
 			if(data.code === 200)
 				switch(data.status){
 					case 1: 
-						this.checkCharge();
+						setTimeout(function(){
+							this.checkCharge();
+						}.bind(this),5000);
 						break;
 					case 2: 
 						this.success();

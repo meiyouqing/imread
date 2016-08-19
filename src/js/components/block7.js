@@ -2,7 +2,7 @@ var Book1 = require('./book1');
 
 var Recommend = React.createClass({
 	render: function(){
-		 return <p className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span><span>{this.props.block.short_recommend_words}</span> </p>
+		 return <p className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span><span>{this.props.block.short_recommend_words || this.props.block.long_recommend_words}</span> </p>
 	}
 
 });

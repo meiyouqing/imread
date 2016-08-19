@@ -117,11 +117,10 @@ var List = React.createClass({
 		// if(this.state.resultCount){
 		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		// }
-
 		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
 		header = <Header title={GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
-			header = <Header_s goSearch={this.goSearch} path={this.props.route}  />;
+			header = <Header_s goSearch={this.goSearch} path={this.props.route} keyValue={this.props.location.state} />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){

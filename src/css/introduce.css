@@ -11,7 +11,7 @@
 .u-bookIntroduce .button{width:48.5%;height: 30px;line-height: 28px;box-sizing:border-box;text-align: center;border: 1px solid #0196aa;border-radius: 3px;cursor: pointer;color: #0196aa;}
 .u-bookIntroduce .button.disabled{border:none;background:#ddd;color: #fff;}
 .u-bookIntroduce .readButton{background: #0196aa;color: #FFFFFF;border: 1px solid #0196aa;}
-.u-bookIntroduce .chapter{line-height: 50px;color: #000;cursor: pointer;font-size: 15px;padding: 0 15px;border-bottom: 1px solid #eeeeee;background: #fafafa;}
+.u-bookIntroduce .chapter{line-height: 50px;color: #000;cursor: pointer;font-size: 15px;padding: 0 15px;border-bottom: 1px solid #eeeeee;}
 .u-bookIntroduce .chapter.current{color: #0096aa}
 .u-bookIntroduce .chapter .name{display: block;line-height: 50px}
 .u-bookIntroduce .chapter .name.lock{color: #777777;}
@@ -36,7 +36,7 @@
 .introduce-container .icon-lock{margin-top: 12px; }
 .u-bookIntroduce{margin-top: 15px;}
 .u-bookIntroduce.u-tabs{margin: 15px 0 0 0;}
-.introduce-container .u-sLoading{background: #fafafa;height: 50px;line-height: 50px;}
+.introduce-container .u-sLoading{height: 50px;line-height: 50px;}
 
 
 

@@ -17,10 +17,11 @@
 .u-settingitem{line-height: 20px;box-sizing: border-box;font-size: 11px;text-align: center; padding: 10px;}
 .u-settingitem .iconfont{font-size: 24px;}
 .u-settingitem:last-child{border-right: none;}
-.u-chapterlistc{position: absolute;left: -100%;width: 100%;top: 0;bottom: 0;transition: left 0.3s;z-index: 9999;overflow: hidden;}
+.u-chapterlistc{position: absolute;left: -100%;width: 80%;top: 0;bottom: 0;transition: left 0.3s;z-index: 9999;overflow: hidden;}
 .u-chapterlistc.active{left: 0;}
-.u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;width: 20%;background: rgba(0, 0, 0, .3);cursor: pointer;}
-.u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 80%;background: #fff;}
+.u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;left: 0;width: 100%;background: rgba(0, 0, 0, .3);cursor: pointer;display: none;z-index: 1;}
+.u-hideChapterlist.active{display: block;}
+.u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 100%;background: #fff;}
 .u-chapterlist .u-bookname{padding-left: 20px;height: 60px;line-height: 60px;box-sizing: border-box;border-bottom: 1px solid #eeeeee; font-weight: bold;font-size: 18px;}
 .u-chapterlist .u-bookname > div{float: right;font-size: 15px;color: #777777;}
 .u-chapterlist .u-scroll-y{position: absolute;top: 60px;bottom: 0;width: 100%;-webkit-overflow-scrolling:touch;}

@@ -19,7 +19,9 @@ var tag = React.createClass({
 	logout: function(e) {
 		e.preventDefault && (e.preventDefault());
 		POP.confirm('确定退出登录?',function() {
-
+			AJAX.init('loginout');
+			AJAX.get(function(res){
+			}.bind(this));
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('userId');
@@ -75,19 +77,17 @@ var tag = React.createClass({
 				this.getData();
 			}.bind(this));
 			
-			
 		}.bind(this);
 	},
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
-
 		// GLOBAL.addClass(this.refs.date,'show');
 		this.refs.date.click();
 		this.refs.date.focus();
 
 		this.refs.date.onchange = function(e){
 			this.setState({user_birthday: this.refs.date.value})
-		}.bind(this)
+		}.bind(this);
 	},
 	selectSex: function(){
 		if(!this.state.isEdit)  return;

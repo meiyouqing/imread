@@ -28,6 +28,7 @@ import Modifypwd from './modifypwd'
 import StoreList from './storeList'
 import UserInfo from './userInfo'
 import EditUserame from './editUserame'
+import SelfBuild from './selfbuild'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -101,6 +102,13 @@ module.exports = (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
 		{loginWrap}
+		<Route path="/self/:selfId" component={SelfBuild}>
+			{bookWrap}
+			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+		</Route>
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
 

@@ -7,7 +7,8 @@ var Mall = React.createClass({
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
 			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-			if(location.pathname === this.props.route.path){
+			this.upApp(subnav);
+			if((location.pathname === this.props.route.path) || !this.props.params.subnav){
 				browserHistory.replace('/mall/'+subnav);
 			}
 			this.setState({
@@ -37,18 +38,33 @@ var Mall = React.createClass({
 	},
 	componentDidMount: function(){
 		this.getNav();
+		//if(!this.props.params.subnav) browserHistory.replace('/mall');
+	},
+	upApp: function(page){
+		var obj = parseQuery(location.search);
+		if(obj.action && obj.action==='openapp'){
+
+			if(obj.book_id)
+				browserHistory.push(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
+			else if(obj.sheet_id){
+				browserHistory.push(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+			}
+		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		if(!this.props.params.subnav)
-			this.getNav();
+
+		if(!this.props.params.subnav) this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
-
 		return this.state.navList !== nextState.navList
-				|| this.props.children !== nextProp.children;
+				|| this.props.children !== nextProp.children
+				|| this.props.params.subnav !== nextProp.params.subnav;
+	},
+	reload: function(){
+		window.location.reload();
 	},
 	render:function(){
-		console.log(myEvent.callback)
+
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
@@ -57,7 +73,7 @@ var Mall = React.createClass({
 
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
-			left = <div className="i-logo"></div>;
+			left = <div className="i-logo" onClick={this.reload}></div>;
 
 		return (
 			<div className="g-mall">

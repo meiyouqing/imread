@@ -27,7 +27,7 @@ var BookContent = (function() {
 				meta.name = "referrer";
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
-				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 			// } else {
 			// 	GLOBAL.goBack();
 			// }
@@ -41,7 +41,7 @@ var BookContent = (function() {
 		var sourceConfig = ReadConfig['config-' + options.source_id];
 		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
 		//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
-		var url = totalUrl.replace('/api/','/api/v1/')
+		var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 						 .replace(/\?*/, '')
 					      .replace('$bid', options.book_id)
 					      .replace('$cid', options.cid)

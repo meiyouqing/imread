@@ -106,7 +106,7 @@ var Introduce = React.createClass({
 		var hash = param?param:this.props.params.introduceId;
 		AJAX.init(hash);
 		AJAX.get(function(data){
-			if(data.status_code==='500'){
+			if(data.code===403){
 				this.setState({
 					noData:true
 				});
@@ -155,15 +155,16 @@ var Introduce = React.createClass({
 		})
 	},
 	gotoShelf: function(){
+		var href = location.pathname.replace(/\/shelf([^\"]*)/,'')+'/shelf';
 		if(this.isLogin())
-			browserHistory.push(GLOBAL.setHref('shelf'));
+			browserHistory.push(href);
 		else{
 			this.goLogin(function(){
-				browserHistory.push(GLOBAL.setHref('shelf'));
+				browserHistory.push(href);
 			}.bind(this));
 		}
 	},
-	componentWillReceiveProps: function(){
+	componentWillReceiveProps: function(nextProps){
 		if(!this.isMounted()){return;}
 		this.setState({
 			chapterlist: null
@@ -188,6 +189,9 @@ var Introduce = React.createClass({
 		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
+			this.setState({
+				noMoreChapterlist: false
+			})
 		}
 			
 	},
@@ -314,8 +318,6 @@ var IntroduceTabs = React.createClass({
 	render: function() {
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
 
-		// var list = JSON.parse(this.props.chapterlist).list || [];
-		// list= this.state.orderSeq?list:list.reverse();
 		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 

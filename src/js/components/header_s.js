@@ -32,7 +32,7 @@ var Header_s = React.createClass({
 				if(tester.test(location.pathname))
 					browserHistory.replace(location.pathname.replace(tester,'')+'searchList/search.'+key);
 				else
-					browserHistory.push(GLOBAL.setHref('searchList/search.'+key));
+					browserHistory.push({pathname:GLOBAL.setHref('searchList/search.'+key),state:this.state.key});
 
 			}			
 			this.setState({
@@ -49,10 +49,13 @@ var Header_s = React.createClass({
 		GLOBAL.goBack(this.path);
 	},
 	componentDidMount: function(){
-		if(!this.state.key.length){
-			this.refs.searchInput.focus();
-		}
 
+		if(!this.props.keyValue){
+			this.refs.searchInput.focus();
+		} else {
+			if(typeof this.props.keyValue === 'string')
+				this.setState({key: this.props.keyValue})
+		}
 		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 	},
@@ -65,7 +68,7 @@ var Header_s = React.createClass({
 				<a className="f-fl icon-s icon-back" onClick={this.backClick} ></a>
 				<form className="u-search f-cb">
 					<span className="i-put"></span>
-					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名、作者" onChange={this.handleChange} />
+					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名/作者" onChange={this.handleChange} />
 					<button className="searchBtn f-fr" type="submit" onClick={this.handleClick} >{this.state.btn}</button>
 				</form>
 			</header>
