@@ -331,6 +331,7 @@ var Reading = React.createClass({
 		}
 	},
 	gotContent: function(data,autoPay){
+		if(!this.isMounted()){return;}
 		this.setState({
 			showSetting:false
 		})		
@@ -343,7 +344,6 @@ var Reading = React.createClass({
 			return;
 		}
 
-		if(!this.isMounted()){return;}
 		var that = this;
 		//设置auto pay cookie
 		if(autoPay){
@@ -365,6 +365,7 @@ var Reading = React.createClass({
 		}
 		that.getIntroduce();
 		//that.getChapterlist();
+		if(!data.content) return;
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
@@ -544,8 +545,6 @@ var Reading = React.createClass({
 				expires: 1000
 			});
 		}
-
-
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 		this.isdownLoad();
@@ -601,6 +600,7 @@ var Reading = React.createClass({
 		}.bind(this)
 	},
 	toggleChapterlist: function() {
+		if(!this.isMounted()){return;}
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
 			this.getChapterlist();
 		}
@@ -623,8 +623,7 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	handleScroll: function(e) {
-		
+	handleScroll: function(e) {		
 		if(this.showDownload) {
 			var scroller = this.refs.scrollarea,
 				reader = this.refs.reading;

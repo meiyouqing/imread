@@ -102,7 +102,7 @@ var Introduce = React.createClass({
 		storage.set('bookIntroduce', bookIntroduce);
 	},
 	getBook: function(param){
-
+		if(!this.isMounted()){return;}
 		var hash = param?param:this.props.params.introduceId;
 		AJAX.init(hash);
 		AJAX.get(function(data){
@@ -164,6 +164,7 @@ var Introduce = React.createClass({
 		}
 	},
 	componentWillReceiveProps: function(){
+		if(!this.isMounted()){return;}
 		this.setState({
 			chapterlist: null
 		})
