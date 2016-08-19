@@ -8,6 +8,7 @@ var API={
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
+	blocks:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,page_id:0,contents:15,pages:1}},
 	category:{method:'GET', base:'/api/v1/category/content', param:{category_id:1, contents:15, pages:1}},
 	bookSheet:{method:'GET', base:'/api/v1/bookSheet/list', param:{sheet_id:1, contents:15, pages:1}},
 	collectionAdd:{method:'POST', base:'/api/v1/bookSheet/collection/add', param:{sheet_id:1}},

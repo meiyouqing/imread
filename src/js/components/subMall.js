@@ -51,10 +51,11 @@ var Mall = React.createClass({
 	},			
 	componentDidMount: function(){
 		this.APIparam = this.props.params.subnav;
+		this.page_id = this.props.params.subnav.split('.')[1];
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function(nextProp) {
-	
+		this.page_id = this.props.params.subnav.split('.')[1];
 		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
 		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList();
 		if(!this.state.list || !this.state.list.length){return;}
@@ -67,6 +68,7 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
+
 		var list;
 		var scrollLoading = <Loading cls="u-sLoading" />;
 		if(this.state.noMore){
@@ -80,7 +82,7 @@ var Mall = React.createClass({
 				list = (
 					<div className="g-main g-main-1">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<Blocklist blockList={this.state.list} path={this.props.route}/>
+							<Blocklist blockList={this.state.list} path={this.props.route} pageId={this.page_id}/>
 							{scrollLoading}
 						</div>
 					</div>

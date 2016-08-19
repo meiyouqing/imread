@@ -545,6 +545,9 @@ var Reading = React.createClass({
 			});
 		}
 
+		//扉页信息
+		this.states = this.props.location.state;
+
 		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
@@ -699,10 +702,8 @@ var Reading = React.createClass({
 		chapterlist.list = this.state.chapterlist;
 		var list = JSON.parse(JSON.stringify(chapterlist)).list;
 
-		//扉页信息
-		var state = this.props.location.state;
-		if(!state) 
-			state = {book_name: '',author:''}
+		if(!this.states) 
+			this.states = {book_name: '',author:''}
 
 		if(this.state.UFO){
 			return (
@@ -733,8 +734,8 @@ var Reading = React.createClass({
 					<i className="u-loading u-book-loading">努力加载中...</i>*/}
 					<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<div className="fy-detail">
-							<p className="fy-title">{state.book_name || ''}</p>
-							<p className="fy-author">{state.author || ''}</p>
+							<p className="fy-title">{this.states.book_name || ''}</p>
+							<p className="fy-author">{this.states.author || ''}</p>
 						</div>
 						<div className="fy-gw">发现阅读之美</div>
 					</div>
@@ -843,7 +844,7 @@ var Reading = React.createClass({
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={state} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 
 					</div>

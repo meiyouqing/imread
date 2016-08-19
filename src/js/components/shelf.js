@@ -323,6 +323,7 @@ var Shelf = React.createClass({
 										}
 										else{
 											var per = Number((v.playorder/v.count).toFixed(2)),notice='';
+											per = per > 1?1:per;
 											switch(per){
 												case 1:
 													notice = '已读完';
@@ -340,7 +341,7 @@ var Shelf = React.createClass({
 														<Img src={v.image_url} />
 														<div className="intro-box">
 															<span className="f-ellipsis title">{v.name}</span>
-															<span className="f-ellipsis chapter">{v.chapter_name}</span>
+															<span className="f-ellipsis chapter">{v.chapter_name || v.author}</span>
 															<div className="progress-box">
 																<span>{notice}</span>
 																<div className="progress p-div">

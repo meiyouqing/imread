@@ -126,7 +126,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-block .content{overflow: hidden;width: 100%;}
 .m-block .content .u-book-2:nth-child(3n+1){clear: left;}
 .m-block .content .recommend,.m-list .recommend{padding: 4px 10px;color: #777;border-top: 1px solid #eeeeee;}
-.m-list .recommend{border-bottom: 1px solid #cccccc;}
+.m-list .recommend{border-bottom: 1px solid #cccccc;text-align: justify;}
 .m-block .content .recommend .iconWord,.hot,.m-list .recommend .iconWord{font-size: 10px;display: inline-block;padding: 1px 3px;margin:-2px 7px 0 0;background-color: #FD9B00;color: #FFF;line-height: 14px;vertical-align: middle;}
 .m-block.m-block-top .content{padding: 0;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}

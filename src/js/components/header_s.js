@@ -53,7 +53,8 @@ var Header_s = React.createClass({
 		if(!this.props.keyValue){
 			this.refs.searchInput.focus();
 		} else {
-			this.setState({key: this.props.keyValue})
+			if(typeof this.props.keyValue === 'string')
+				this.setState({key: this.props.keyValue})
 		}
 		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
