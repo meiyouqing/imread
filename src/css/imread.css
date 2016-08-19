@@ -24,6 +24,7 @@ body,textarea,input,button,select,keygen,legend{font:12px/1.8 verdana,\5FAE\8F6F
 body{position: absolute;width: 100%;height: 100%;}
 a:focus, a:link, a:visited{color: inherit;}
 body{-webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; outline: none !important;}
+a,img,div,button{-webkit-tap-highlight-color: rgba(0,0,0,0);-webkit-tap-highlight-color: transparent;}
 html, body, #app-container{background: #FFFFFF;}
 textarea::-moz-placeholder ,input::-moz-placeholder { color: #777777;}
 textarea::-webkit-input-placeholder,input::-webkit-input-placeholder { color:#777777; }
@@ -326,13 +327,13 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-search .searchInput:-ms-input-placeholder { color:#777777; }
 .u-search .searchBtn{width: 44px;height: 44px;line-height: 44px;margin-right: -49px;font-size: 15px;text-algin: center;color: #fff;}
 
-.u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;}
+.u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;z-index: 0}
 .u-moving-ball ~ i{display: none;}
 .u-moving-ball i{position: absolute;top:0;display: block;width: 100%;height: 100%;background-repeat: no-repeat;background-position: center center;background-size: contain;}
 .u-moving-ball i.ball-1{left: 0;background-image: url(../img/icons/m.png);background-size: 100%;}
-.u-moving-ball i.ball-2{right: 0; background-image: url(../img/icons/Loading.png);-webkit-transform-origin: 50%;transform-origin: 50%;-webkit-animation:round2 1s linear 0s infinite;animation:round2 1s linear 0s infinite;}
-@-webkit-keyframes round2{0%{-webkit-transform:rotate(0deg);} 100%{-webkit-transform:rotate(360deg);} }
-@keyframes round2{0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+.u-moving-ball i.ball-2{right: 0; background-image: url(../img/icons/Loading.png);-webkit-transform-origin: 50%;transform-origin: 50%;-webkit-animation:rounds 1s linear 0s infinite;animation:rounds 1s linear 0s infinite;}
+@-webkit-keyframes rounds{0%{-webkit-transform:rotate(0deg);} 100%{-webkit-transform:rotate(360deg);} }
+@keyframes rounds{0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
 .u-loading{position: absolute;top: 50%;left: 0;margin-top: -15px;width:100%;height:30px;line-height: 30px;text-align: center;letter-spacing: 0.1em;font-size: 12px;}
 .u-loading i.loading{}
 .u-sLoading{position: relative; height: 100px; line-height: 40px;text-align: center;letter-spacing: 2px;font-size: 12px;background: #FFFFFF}

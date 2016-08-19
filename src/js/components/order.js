@@ -3,6 +3,7 @@ var Header = require('./header');
 require('../../css/pay.css');
 
 var mod = React.createClass({
+	mixins: [Mixins()],
 	rechargeHandle: function(e) {
 		var hash = location.pathname;
 		browserHistory.push(GLOBAL.setHref('balance'));
@@ -18,7 +19,7 @@ var mod = React.createClass({
 				if(data.code == 403)
 					POP._alert('支付失败');
 				else {
-					document.dispatchEvent(new Event('updateUser'));
+					that.disPatch('updateUser');
 					that.props.goBack();
 				}
 				// var autoPay = that.props.chargeMode==2? true:false;

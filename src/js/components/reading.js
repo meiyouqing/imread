@@ -471,7 +471,7 @@ var Reading = React.createClass({
 				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
-						document.dispatchEvent(new Event('updateUser'));
+						that.disPatch('updateUser');
 						that.gotContent(data);
 					});
 				}else{
@@ -684,10 +684,7 @@ var Reading = React.createClass({
 		this.setState({order: false});
 	},
 	timeOut: function(){
-		setTimeout(function(){
-			if(this.state.loading)
-				GLOBAL.goBack();
-		}.bind(this), 10000)
+
 	},
 	render:function(){
 		var currentRoute = location.pathname.split('/');

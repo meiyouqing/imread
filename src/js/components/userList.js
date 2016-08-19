@@ -61,7 +61,8 @@ var User = React.createClass({
 	shouldComponentUpdate: function(nextProp, nextState) {
 		return this.state.user.phone !== nextState.user.phone 
 		    || this.state.needUpdate !== nextState.needUpdate
-		    || this.props.children !== nextProp.children;
+		    || this.props.children !== nextProp.children
+		    || this.state.userInfo !== nextState.userInfo;
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
@@ -73,6 +74,7 @@ var User = React.createClass({
 		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
 			this.getUserInfo();
 		}.bind(this));
+
 	},
 	componentDidUpdate: function(nextProp){
 	},
@@ -193,7 +195,7 @@ var User = React.createClass({
 			userName = this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
 			logoutBtn = (<div>
 				<div className="avatar-wrap">
-					<img src={this.state.userInfo.portraitUrl} />
+					<img src={this.state.userInfo.portraitUrl || 'http://m.imread.com/src/img/user/avatar@2x.png'} />
 				</div>
 				<div className="username"><p className="f-ellipsis">{userName}</p><p>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>

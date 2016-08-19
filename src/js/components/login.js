@@ -38,8 +38,7 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-				
-				document.dispatchEvent(new Event('updateUser'));
+				that.disPatch('updateUser');
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
@@ -47,6 +46,7 @@ var Login = React.createClass({
 					GLOBAL.goBack();
 					myEvent.execCallback('login');
 				}
+
 			} else {
 				if(typeof data.error === 'string')
 					POP._alert(data.error);

@@ -47,7 +47,7 @@ var tag = React.createClass({
 		AJAX.go('edituser',pramas,function(res){
 			if(res.code === 200){
 				//this.getData();
-				document.dispatchEvent(new Event('updateUser'));
+				this.disPatch('updateUser');
 				POP._alert("修改成功");
 			} else {
 				if(typeof res.error === 'string')

@@ -116,8 +116,10 @@ var StoreList = React.createClass({
 		if(this.state.noMore)
 			sLoading = null;
 
-		if(!this.state.list)
-			list = <Loading />
+		if(!this.state.list){
+			if(GLOBAL.isRouter(this.props))
+				list = <Loading />
+		}
 		else{
 			if(this.state.list.length)
 				list = (<div className="g-main g-main-1">

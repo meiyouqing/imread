@@ -37,8 +37,10 @@ var Selfbuild = React.createClass({
 		if(this.from && this.from.skipurl)
 			skipurl = this.from.skipurl;
 
-		if(!this.state.data)
-			loading = <Loading />
+		if(!this.state.data){
+			if(GLOBAL.isRouter(this.props))
+				loading = <Loading />
+		}
 		else
 			content = <div className="g-main g-main-1">
 					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>

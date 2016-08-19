@@ -124,7 +124,8 @@ var List = React.createClass({
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
-			content = <Loading />;
+			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
 				noData = (<div className="g-main g-main-1"><NoData /></div>);
