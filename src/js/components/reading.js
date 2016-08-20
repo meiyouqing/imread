@@ -86,7 +86,7 @@ var chapterMixins = {
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
+		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(1+next));
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
