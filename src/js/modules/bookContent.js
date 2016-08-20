@@ -21,7 +21,6 @@ var BookContent = (function() {
 		}, options.callback, function() {
 			// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
 				if(options.noCross){return} //不要跳转
-				GLOBAL.goBack();
 				//去掉referrer
 				var meta = document.createElement('meta');
 				meta.name = "referrer";
