@@ -39,7 +39,14 @@ var Balance = React.createClass({
 		var ordered = this.state.list[this.state.active];
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
+	shouldComponentUpdate: function(nextPros, nextState) {
+		return nextState.balance != this.state.balance
+			    || nextState.list != this.state.list
+			    || nextState.active != this.state.active
+			    || this.props.children != nextPros.children;
+	},
 	render: function () {
+		
 		var content;
 		if (this.state.loading) {
 			content = <Loading />
