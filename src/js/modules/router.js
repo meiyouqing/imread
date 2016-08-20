@@ -157,6 +157,8 @@ Router.prototype.typeHref = function(data,spm, route_type){
     			case 3://外部网页
     			case 4://apk下载
     				return {url:data.redirect_url || "javascript:void(0)",target:target};
+    			case 7://go to booksheet
+    				return {url:this.setHref('bookSheet.'+data.source_contentid),target:target};
     			case 8: //活动
     				var prams = '';
     				if(GLOBAL.cookie('userToken'))
