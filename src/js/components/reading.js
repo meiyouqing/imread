@@ -86,7 +86,7 @@ var chapterMixins = {
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(1+next));
+		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
@@ -371,7 +371,7 @@ var Reading = React.createClass({
 		that.setState({
 			data: data,
 			loading: false,
-			page: currentPage,
+			//page: currentPage,
 			pages: currentPage,
 			order: false
 		}, that.getChapterlist);
