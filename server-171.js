@@ -14,7 +14,7 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-var PORT = process.env.PORT || 8000
+var PORT = process.argv[2] || process.env.PORT || 8000
 app.listen(PORT, function() {
-  console.log('Production Express server running at http://m.imread.com:' + PORT)
+  console.log('Production Express server running at localhost' + PORT)
 })
