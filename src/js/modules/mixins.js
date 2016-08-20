@@ -7,6 +7,7 @@ var mixins = function() {
         },
         lazyloadImage: function(container) {
             var imgs = container.querySelectorAll('.u-lazyload-img');
+            var that = this;
             for (var i = 0; i < imgs.length; i++) {
                 (function(i) {
                     var img = imgs[i];
@@ -19,8 +20,8 @@ var mixins = function() {
                                 img.src = _src;
                             }
                             img.setAttribute('data-lazyload-src', "loaded");
-
-                            container.dispatchEvent(new Event('scroll'));
+                            that.disPatch('scroll',container);
+                            //container.dispatchEvent(new Event('scroll'));//该句存在兼容问题，低版本报错
                             //img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
                         }
                         img.setAttribute('data-lazyload-src', "loading");
@@ -128,13 +129,14 @@ var mixins = function() {
             }
             return true;
         },
-        disPatch: function(event) {
+        disPatch: function(event,dom) {
+            dom = dom?dom:document;
             try {
                 // document.dispatchEvent(new Event('updateUser'));
                 var events = document.createEvent('HTMLEvents');
                 events.initEvent(event, true, true);
                 events.eventType = 'message';
-                document.dispatchEvent(events);
+                dom.dispatchEvent(events);
             } catch (e) {}
         }
     };

@@ -322,9 +322,9 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 
 .u-search{ position: absolute; right: 50px; left: 45px;}
 .u-search .searchInput{ box-sizing: border-box;width: 100%;height: 30px;line-height: 30px;overflow: hidden;margin-top: 7px;padding: 0 10px 0 35px;font-size: 15px;background-color: #fff;color: #000;-moz-border-radius: 15px;border-radius: 15px;}
-.u-search .searchInput::-moz-placeholder { color: #777777;}
-.u-search .searchInput::-webkit-input-placeholder { color:#777777; }
-.u-search .searchInput:-ms-input-placeholder { color:#777777; }
+.u-search .searchInput::-moz-placeholder { color: #777777;line-height: 30px;}
+.u-search .searchInput::-webkit-input-placeholder { color:#777777;line-height: 30px; }
+.u-search .searchInput:-ms-input-placeholder { color:#777777;line-height: 30px; }
 .u-search .searchBtn{width: 44px;height: 44px;line-height: 44px;margin-right: -49px;font-size: 15px;text-algin: center;color: #fff;}
 
 .u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;z-index: 0}

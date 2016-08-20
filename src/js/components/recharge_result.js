@@ -3,6 +3,7 @@ require('../../css/pay.css');
 
 var RechageRes = React.createClass({
 	times: 0,
+	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
 			success: null,
@@ -36,13 +37,13 @@ var RechageRes = React.createClass({
 				switch(data.status){
 					case 1: 
 						this.times++;
-						if(this.times >=5){
+						if(this.times >=10){
 							this.failed();
 							break;
 						}; 
 						setTimeout(function(){
 							this.checkCharge();
-						}.bind(this),2000);
+						}.bind(this),3000);
 						break;
 					case 2: 
 						this.success();
