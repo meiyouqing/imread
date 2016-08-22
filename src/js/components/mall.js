@@ -5,7 +5,6 @@ var UserList = require('./userList');
 var Mall = React.createClass({
 	getNav: function(){
 		AJAX.init('group.1');
-<<<<<<< HEAD
 		AJAX.get(this.handleGetNav);
 	},
 	handleGetNav:function(data){
@@ -15,17 +14,6 @@ var Mall = React.createClass({
 		// }
 		this.setState({
 			navList:data.pagelist
-=======
-		AJAX.get((data)=>{
-			var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-			this.upApp(subnav);
-			if((location.pathname === this.props.route.path) || !this.props.params.subnav){
-				browserHistory.replace('/mall/'+subnav);
-			}
-			this.setState({
-				navList:data.pagelist
-			});
->>>>>>> react-router
 		});
 	},
 	gotoSearch: function(){

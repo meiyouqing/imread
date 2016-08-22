@@ -216,11 +216,8 @@ var Shelf = React.createClass({
 		//var icon = <i className="u-recentRead"></i>;	
 		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
-<<<<<<< HEAD
-=======
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
 		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
->>>>>>> react-router
 		return {
 			setting:false,
 			toggle:false,
@@ -253,10 +250,7 @@ var Shelf = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-<<<<<<< HEAD
 		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
-=======
->>>>>>> react-router
 		if(this.checkLogin(this.props.route)) {
 			this.getList()
 		}
