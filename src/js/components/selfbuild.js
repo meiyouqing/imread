@@ -11,12 +11,14 @@ var Selfbuild = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.data !== nextState.data;
 	},
+	getList: function(){
+		AJAX.init(this.props.params.selfId);
+		AJAX.get(function(res) {
+			this.setState({data: res.blocklist})
+		}.bind(this));
+	},
 	componentDidMount: function(){
-		var that = this;
-		Router.get(function(res){
-			that.setState({data: res.blocklist})
-		});
-		//this.lazyloadImage(this.refs.container);
+		this.getList();
 
 		//判断来源from
 		this.from = parseQuery(location.search);
@@ -24,7 +26,10 @@ var Selfbuild = React.createClass({
 	componentDidUpdate: function(){
 		this.lazyloadImage(this.refs.container);
 	},
-
+	shouldComponentUpdate: function(nextProp,nextState){
+		return this.state.data !== nextState.data
+				|| this.props.children !== nextProp.children;
+	},
 	render: function() {
 		//console.log(this.props.data)
 		//var hrefStr = Router.setAPI(this.props.data,this.props.spm);
@@ -41,10 +46,11 @@ var Selfbuild = React.createClass({
 					</div>
 				</div>
 		return (
-			<div>
-				<Header title={Router.title} right={null} skipurl={true} />
+			<div className="gg-body">
+				<Header title={'艾豆随便花专区'} skipurl={true} right={null} path={this.props.route}/>
 				{content}
 				{loading}
+				{this.props.children}
 			</div>
 		)
 	}

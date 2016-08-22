@@ -20,10 +20,12 @@ var Chapterlist = React.createClass({
 		// var feeType = e.target.getAttribute('data-fee') || e.target.parentNode.getAttribute('data-fee');		
 		var targetUrl = this.props.hrefBase + '/crossDomain.' + [this.props.source_bid, cid, this.props.bid, this.props.source_id].join('.');
 		//if (this.props.fromReading) {
+		var book = this.props.book?this.props.book : {};
+		var route = {pathname:targetUrl,state:{author: book.author,book_name: book.book_name}};
 		if(this.props.fromReading)
-			browserHistory.replace({pathname:targetUrl,state:{author: this.props.book.author,book_name: this.props.book.book_name}});
+			browserHistory.replace(route);
 		else
-			browserHistory.push({pathname:targetUrl,state:{author: this.props.book.author,book_name: this.props.book.book_name}});
+			browserHistory.push(route);
 		// } else {
 		// 	window.location.href = targetUrl;
 		// }
@@ -53,7 +55,7 @@ var Chapterlist = React.createClass({
 		if (!this.props.chapterlist) {
 			loading = <i className="u-sLoading">目录努力加载中...</i>
 		} else {
-			var sloading = this.props.loading ? "" : " f-hide";
+			var sloading = this.props.loading ? " f-hide":"";
 			content = (
 				<ul className="chapterlist">
 				{
@@ -71,7 +73,8 @@ var Chapterlist = React.createClass({
 						);
 					}.bind(this))
 				}
-					<li className={"u-sLoading" + sloading}>努力加载中...</li>
+					{/*<li className={"u-sLoading" + sloading }>努力加载中...</li>*/}
+					 <Loading cls={"u-sLoading" + sloading } />
 				</ul>
 			);
 		}

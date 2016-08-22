@@ -6,6 +6,7 @@ import routes from './components/routes'
 import GLOBAL from './modules/global';
 import Token from './modules/token';
 import { render } from 'react-dom';
+
 require('./modules/readConfig');
 
 

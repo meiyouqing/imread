@@ -6,11 +6,15 @@ if(true||typeof window !== 'undefined'){
 var RechageRes = React.createClass({
 	getInitialState: function() {
 		return {
-			success: null
+			success: null,
+			data: {
+				discount_price:'',
+				product_price:'',
+				date:''
+			}
 		};
 	},
 	completed: function(){
-		console.log(myEvent.callback)
 		if(myEvent.callback.recharge){
 			myEvent.execCallback('recharge');		
 		}else{
@@ -20,22 +24,25 @@ var RechageRes = React.createClass({
 	success: function(){
 		console.log('成功');
 		this.setState({success: true,status: '充值成功'});
+		document.dispatchEvent(new Event('rechargeSuccess'));
 	},
 	failed: function(){
 		console.log('失败');
 		this.setState({success: false,status: '充值失败'});
 	},
 	checkCharge: function(){
-		console.log(localStorage.recharge)
-		var params = localStorage.recharge?JSON.parse(localStorage.recharge):GLOBAL.orderLIst;
+		var params = this.props.location.state || {};
 		AJAX.go('payCheck',params,function(data){
 			if(data.code === 200)
 				switch(data.status){
 					case 1: 
-						this.checkCharge();
+						setTimeout(function(){
+							this.checkCharge();
+						}.bind(this),5000);
 						break;
 					case 2: 
 						this.success();
+						this.setState({data: data})
 						break;
 					default:
 						this.failed();
@@ -48,7 +55,6 @@ var RechageRes = React.createClass({
 	render: function() {
 		 var right = < button className = "f-fr textBtn" onClick = { GLOBAL.goBack } > 完成 < /button>;
 		 var list;
-		 console.log(this.state.success)
 
 		 if(this.state.success == null)
 		 	list = <Loading />;
@@ -60,9 +66,9 @@ var RechageRes = React.createClass({
 		 					<span className="m-result-icon">{this.state.status}</span>
 		 				</div>
 		 				<div className="m-result-detail">
-			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
-			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
-			 				<p><span>充值数目</span><span className="m-s">2艾豆</span></p>
+			 				<p><span>充值数目</span><span className="m-s">{this.state.data.discount_price/100}艾豆</span></p>
+			 				<p><span>支付金额</span><span className="m-s">{this.state.data.discount_price/100}元</span></p>
+			 				<p><span>交易时间</span><span className="m-s">{this.state.data.date}</span></p>
 			 			</div>
 		 			</div>
 		 		)

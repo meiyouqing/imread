@@ -398,15 +398,19 @@ var Blocklist = React.createClass({
 		}
 	},
 	getUpdate: function(blockList){
-		var that = this;
+	
+		var that = this,hrefStr;
 		var comps = blockList.map(function(block, i) {
 			//console.log('风格' + block.style)
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
 			var recommend = block.icon_word?<Recommend block={block} />:null;
-						
-			var hrefStr = GLOBAL.setHref('more/block.'+block.id);
+			hrefStr = GLOBAL.setHref('more/blocks.'+block.id);
+
+			if(that.props.pageId)
+				hrefStr = GLOBAL.setHref('more/blocks.'+block.id+'.'+that.props.pageId);
+
 			switch (block.style) {
 				case 1 :
 					return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;

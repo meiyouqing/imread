@@ -7,7 +7,7 @@ var List = React.createClass({
 	mixins: [Mixins()],
 	isLoading: false,
 	getList: function(param){
-
+		if(!this.isMounted()) return;
 		var hash = param?param:this.props.params.listId;
 		AJAX.init(hash);
 		AJAX.get(data => {
@@ -20,6 +20,7 @@ var List = React.createClass({
 					})
 				}
 				this.setState({
+					recommend: data,
 					resultCount: data.result_count,
 					bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
 					scrollUpdate: false
@@ -34,6 +35,7 @@ var List = React.createClass({
 				}
 
 				this.setState({
+					recommend: data,
 					bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
 					scrollUpdate: false
 				});				
@@ -72,6 +74,7 @@ var List = React.createClass({
 		return {
 			noMore:false,
 			resultCount: null,
+			recommend: {},
 			bookList: null,
 			scrollUpdate: false,
 			UFO:false
@@ -108,16 +111,16 @@ var List = React.createClass({
 				|| this.props.params.listId !== nextProps.params.listId;
 	},
 	render:function(){
+
 		var header,noData,content,sLoading,result_count;
 		//定义头部
 		// if(this.state.resultCount){
 		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		// }
-
-		var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
-		header = <Header title={GLOBAL.title}  right={right} path={this.props.route}  />;				
+		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
+		header = <Header title={GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
-			header = <Header_s goSearch={this.goSearch} path={this.props.route}  />;
+			header = <Header_s goSearch={this.goSearch} path={this.props.route} keyValue={this.props.location.state} />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
@@ -128,7 +131,7 @@ var List = React.createClass({
 				content = null;
 				result_count = null;
 			}else{
-				content = <Block7 bookList={this.state.bookList}/>;
+				content = <Block7 recommend={this.state.recommend} bookList={this.state.bookList}/>;
 				sLoading = <Loading cls='u-sLoading' />;
 			}							
 		}

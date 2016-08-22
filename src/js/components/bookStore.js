@@ -37,7 +37,7 @@ var List = React.createClass({
 		AJAX.init('block.'+pid+'.6.1');
 	},
 	componentDidUpdate: function(nextProp) {
-		this.lazyloadImage(this.refs.contain);
+		this.lazyloadImage(this.refs.contain,true);
 	},
 	render: function(){
 		var sLoading = <Loading cls='u-sLoading transparent' />,list=null;
@@ -68,12 +68,12 @@ var Guess = React.createClass({
 	render: function(){
 		var list;
 		if(!this.props.data.contentlist.length){
-			list = <NoData type="emptyTag" />
+			list = <NoData type="emptyTag" updateGuess={this.props.updateGuess} />
 		} else {
 			list  = <Block7 bookList={this.props.data.contentlist} />;
 		}
 		return (
-			<div className="g-scroll">
+			<div className="g-scroll bg-1">
 				{list}
 			</div>
 		)
@@ -110,7 +110,7 @@ var BookStore = React.createClass({
 		var list;
 
 		var sLoading = <Loading cls='u-sLoading' />;
-		this.props.data.map(function(v,i){
+		this.props.data.map((v,i)=>{
 			if(v.display){
 				switch(v.style){
 					case 14:
@@ -120,7 +120,7 @@ var BookStore = React.createClass({
 						list = <Paihang data={v} />
 						break;
 					case 15: 
-						list = <Guess data={v} />
+						list = <Guess data={v} updateGuess={this.props.updateGuess} />
 						break;
 					case 3: 
 						list = <Guess data={v} />

@@ -98,12 +98,13 @@ var chapterMixins = {
 				pages: Math.ceil(+data.totalSize / this.state.page_size),
 				chapterlist: this.state.chapterlist.concat(data.chapterList),
 				page: this.state.page + next,
-				getChapterlistLoading: false
+				getChapterlistLoading: false,
+				chapterlistNoMore: (data.chapterList.length < this.state.page_size)
 			});
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
-					var intercut = data.chapterList[i].intercut;				
+					var intercut = data.chapterList[i].intercut;			
 					GLOBAL.loadImage(intercut.intercut_url, function() {
 						this.setState({
 							intercut: intercut
@@ -129,17 +130,15 @@ var chapterMixins = {
 		if (!this.state.data.nextChapterId) {
 			return this.alert('已经是最后一章了', 1);
 		}
-		this.goToChapter(this.state.data.nextChapterId);
+		this.goToChapter(this.state.data.nextChapterId);	
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		browserHistory.replace(location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+		browserHistory.replace({pathname:location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
-		}.bind(this)));
+		}.bind(this)),state:this.props.location.state});
 
-
-		if(this.refs.scrollarea)
-			this.refs.scrollarea.scrollTop = 0;
+		if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -181,7 +180,8 @@ var Reading = React.createClass({
 			download: false, //界面底部下载浮层,
 			orderData: null,
 			introduce: null,
-			orderSeq: true 
+			orderSeq: true,
+			chapterlistMore: true
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -189,16 +189,17 @@ var Reading = React.createClass({
 		if(!scrollarea){return}
 		var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
-		var books = storage.get('bookIntroduce', 'array');
-		for (var i = 0; i < books.length; i++) {
-			if (books[i].bid == readLog.content_id) {
-				bookIntroduce = books[i];
-				break;
-			}
-		}
-		readLog.name = bookIntroduce.book_name;
-		readLog.author = bookIntroduce.author;
-		readLog.big_coverlogo = bookIntroduce.big_coverlogo;
+		// var books = storage.get('bookIntroduce', 'array');
+		// for (var i = 0; i < books.length; i++) {
+		// 	if (books[i].bid == readLog.content_id) {
+		// 		bookIntroduce = books[i];
+		// 		break;
+		// 	}
+		// }
+
+		readLog.name = bookIntroduce.book_name || this.state.introduce.book_name;
+		readLog.author = bookIntroduce.author || this.state.introduce.author;
+		readLog.big_coverlogo = bookIntroduce.big_coverlogo || this.state.introduce.big_coverlogo;
 		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
@@ -218,14 +219,13 @@ var Reading = React.createClass({
 			chapter_offset:0,
 			read_time: (new Date()).Format('yyyyMMddhhmmss'),
 			chapter_name: this.state.data.name,
-			chapter_read_time: Date.now()-this.time,
+			//chapter_read_time: Date.now()-this.time,
 			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
 			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
-
 		this.cacheReadLog(readLog[0]);
 		this.time = Date.now();
 		myEvent.execCallback('reading' + bid, true);
@@ -260,6 +260,7 @@ var Reading = React.createClass({
 		}
 	},
 	getFormatContent: function(content) {
+
 		var passages = content
 							.replace(/&amp;/g, '&')
 							.replace(/(&\#160;){2,4}|\s{2,4}/g, '<br/>')
@@ -312,9 +313,8 @@ var Reading = React.createClass({
 				var Block5 = require('./block5');
 				var randIndex = Math.floor(Math.random() * data.intercutList.length) % data.intercutList.length;
 				that.intercut_id = data.intercutList[randIndex].content_id;
-				
 				//广告图片加载好之后再显示广告
-				GLOBAL.loadImage(data.intercutList[randIndex].intercut_url, callback);
+				GLOBAL.loadImage(data.intercutList[randIndex].image_url, callback);
 				
 				function callback() {
 					var intercutList = (
@@ -325,6 +325,7 @@ var Reading = React.createClass({
 							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
 						</div>
 					);
+
 					that.intercutList = data.intercutList[randIndex];
 					if(!that.isMounted()){return;}
 					that.setState({
@@ -336,13 +337,19 @@ var Reading = React.createClass({
 		}
 	},
 	gotContent: function(data,autoPay){
+		if(!this.isMounted()){return;}
+		this.setState({
+			showSetting:false
+		})		
+
+		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
+			if(location.pathname.slice(-5) == 'login')	return;
 			this.goLogin(this.getContent);
 			return;
 		}
 
-		if(!this.isMounted()){return;}
 		var that = this;
 		//设置auto pay cookie
 		if(autoPay){
@@ -364,6 +371,7 @@ var Reading = React.createClass({
 		}
 		that.getIntroduce();
 		//that.getChapterlist();
+		if(!data.content) return;
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
@@ -399,6 +407,7 @@ var Reading = React.createClass({
 			bid: this.bid,
 			cid: this.chapterid,
 			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -420,6 +429,7 @@ var Reading = React.createClass({
 			bid: that.bid,
 			cid: data.nextChapterId,
 			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: function(data){
 				storage.set('nextChapter',data);
 			}.bind(this),
@@ -465,8 +475,10 @@ var Reading = React.createClass({
 		function pay(){	
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
+				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
-					AJAX.getJSON('GET',orderData.orderUrl.replace('/api/','/api/v1/'),{},function(data){
+					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
+						document.dispatchEvent(new Event('updateUser'));
 						that.gotContent(data);
 					});
 				}else{
@@ -539,8 +551,10 @@ var Reading = React.createClass({
 				expires: 1000
 			});
 		}
+		//扉页信息
+		this.states = this.props.location.state;
 
-
+		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 		this.isdownLoad();
@@ -562,6 +576,9 @@ var Reading = React.createClass({
 	componentDidUpdate: function(nextProps, nextState) {
 		// var that = this;
 
+		if((this.props.params !== nextProps.params) || (this.props.children !== nextProps.children))
+			this.getContent();
+
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
 		//第一次进入阅读跳到上次阅读的地方
@@ -572,6 +589,7 @@ var Reading = React.createClass({
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
 		this.bookmarkFlag = false;
+		//scrollarea.addEventListener('touchstart',this.handleClick);
 		if (scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');
 			var hammerTime = new Hammer(scrollarea);
@@ -581,6 +599,7 @@ var Reading = React.createClass({
 
 		var container = this.refs.containers;
 		container.onscroll = function(e) {
+			e.stopPropagation();
 			var time;
 			if (container.scrollTop + document.body.scrollHeight + 160 > container.scrollHeight) {
 				clearTimeout(time);
@@ -589,11 +608,9 @@ var Reading = React.createClass({
 				}.bind(this), 100);
 			};
 		}.bind(this)
-
-		if(this.props.params !== nextProps.params)
-			this.getContent();
 	},
 	toggleChapterlist: function() {
+		if(!this.isMounted()){return;}
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
 			this.getChapterlist();
 		}
@@ -616,8 +633,7 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	handleScroll: function(e) {
-		
+	handleScroll: function(e) {		
 		if(this.showDownload) {
 			var scroller = this.refs.scrollarea,
 				reader = this.refs.reading;
@@ -673,18 +689,27 @@ var Reading = React.createClass({
 		this.getContent();
 		this.setState({order: false});
 	},
+	timeOut: function(){
+		setTimeout(function(){
+			if(this.state.loading)
+				GLOBAL.goBack();
+		}.bind(this), 10000)
+	},
 	render:function(){
 		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
-		var className = readingStyle.getClass(this.state.style);
+		var classNames = readingStyle.getClass(this.state.style);
 		var intercut;
 
 		//防止排序时候的绑定
 		var chapterlist = {};
 		chapterlist.list = this.state.chapterlist;
 		var list = JSON.parse(JSON.stringify(chapterlist)).list;
+
+		if(!this.states) 
+			this.states = {book_name: '',author:''}
 
 		if(this.state.UFO){
 			return (
@@ -708,9 +733,6 @@ var Reading = React.createClass({
 				);
 		}
 		if(this.state.loading) {
-			var state = this.props.location.state;
-			if(!state) 
-				state = {book_name: '',author:''}
 			
 			return (
 				<div className="gg-body">
@@ -718,8 +740,8 @@ var Reading = React.createClass({
 					<i className="u-loading u-book-loading">努力加载中...</i>*/}
 					<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<div className="fy-detail">
-							<p className="fy-title">{state.book_name || ''}</p>
-							<p className="fy-author">{state.author || ''}</p>
+							<p className="fy-title">{this.states.book_name || ''}</p>
+							<p className="fy-author">{this.states.author || ''}</p>
 						</div>
 						<div className="fy-gw">发现阅读之美</div>
 					</div>
@@ -739,16 +761,26 @@ var Reading = React.createClass({
 			}
 		}
 		return (
-
 			<div className="gg-body m-reading-body" ref="container">
-				<div className={"style" + className}>
-				<i className="u-miguLogo"></i>
+
+				<div className={"style " + classNames}>
+				{
+
+					this.source_id == '1'?
+						(<i className="u-miguLogo"></i>):
+						null
+				}
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
 						<span onClick={this.downLoad} className="download f-fr"></span>
+
+						<div className={this.state.showIntercut ? "" : "f-hide"}>
+							{this.state.intercutList}
+						</div>
 					</div>
+			
 					<div className={"u-settings u-settings-font" + (!this.state.showSettingFont && ' f-hide' || '')}>
 						{/*<div className="setting-fontfamily setting-font-line f-flexbox">
 							<div className="title">字体</div>
@@ -807,6 +839,7 @@ var Reading = React.createClass({
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
+				<div className={"u-hideChapterlist" + (this.state.showChapterlist && ' active' || '')} onClick={this.toggleChapterlist}></div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">
@@ -817,11 +850,10 @@ var Reading = React.createClass({
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 
 					</div>
-					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
 				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
 					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
@@ -835,7 +867,7 @@ var Reading = React.createClass({
 						}
 					</section>
 					{intercut}
-					{/*<button className="u-btn-1">点击阅读下一章</button>*/}
+					<button className="u-btn-1">点击阅读下一章</button>
 				</div>
 
 				
@@ -863,7 +895,7 @@ var Reading = React.createClass({
 					</div>
 					<div className="reading-guide-item guide-middle f-clearfix">
 						<div className="guide-icon f-fl">
-							<img src="src/img/reading-guide.png" />
+							<img src="http://m.imread.com/src/img/reading-guide.png" />
 						</div>
 						<div className="guide-content f-fl">
 							<div className="guide-tip">

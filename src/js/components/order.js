@@ -19,11 +19,13 @@ var mod = React.createClass({
 	payHandle: function(e) {
 		var that = this;
 		if((this.state.aidou-this.props.data.marketPrice)>=0){
-			AJAX.getJSON('GET',this.props.data.orderUrl.replace('/api/','/api/v1/'),{},function(data){
+			AJAX.getJSON('GET',this.props.data.orderUrl,{},function(data){
 				if(data.code == 403)
 					POP._alert('支付失败');
-				else 
+				else {
+					document.dispatchEvent(new Event('updateUser'));
 					that.props.goBack();
+				}
 				// var autoPay = that.props.chargeMode==2? true:false;
 				// that.props.paySuccess(data, autoPay);
 			});
@@ -50,7 +52,9 @@ var mod = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getBalance();
-		
+		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
+			this.getBalance();
+		}.bind(this));
 	},
 	render: function() {
 

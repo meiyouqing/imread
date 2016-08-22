@@ -49,7 +49,9 @@ var Detail = React.createClass({
 		return (
 			<div className="u-bookIntroduce">
 				<div className="f-clearfix">
-					<img src={this.props.book.big_coverlogo} className="f-fl introduce-cover"/>
+					<div className="f-fl imgWrap-133">
+						<img src={this.props.book.big_coverlogo} className="introduce-cover"/>
+					</div>	
 					<div className="bookinfo">
 						<div className="title">{this.props.book.book_name}</div>
 						<div className="author">{this.props.book.author}</div>
@@ -72,7 +74,7 @@ var Introduce = React.createClass({
 		return {
 			isOnshelf: false,
 			bid: this.APIParts('introduceId')[1],
-			chapterlist: {},
+			chapterlist: null,
 			page: 1,
 			page_size: 20,
 			vt: 9,
@@ -102,11 +104,11 @@ var Introduce = React.createClass({
 		storage.set('bookIntroduce', bookIntroduce);
 	},
 	getBook: function(param){
-
+		if(!this.isMounted()){return;}
 		var hash = param?param:this.props.params.introduceId;
 		AJAX.init(hash);
 		AJAX.get(function(data){
-			if(data.status_code==='500'){
+			if(data.code===403){
 				this.setState({
 					noData:true
 				});
@@ -142,7 +144,7 @@ var Introduce = React.createClass({
 		AJAX.get(function(data) {
 			this.setState({
 				noMoreChapterlist: Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + (next ? 1 : 0)),
-				chapterlist:{list: (this.state.chapterlist.list || []).concat(data.chapterList)},
+				chapterlist:(this.state.chapterlist || []).concat(data.chapterList),
 				page: this.state.page + (next ? 1 : 0),
 				getChapterlistLoading: false
 			});
@@ -155,9 +157,17 @@ var Introduce = React.createClass({
 		})
 	},
 	gotoShelf: function(){
-		browserHistory.push('/shelf');
+		var href = location.pathname.replace(/\/shelf([^\"]*)/,'')+'/shelf';
+		if(this.isLogin())
+			browserHistory.push(href);
+		else{
+			this.goLogin(function(){
+				browserHistory.push(href);
+			}.bind(this));
+		}
 	},
-	componentWillReceiveProps: function(){
+	componentWillReceiveProps: function(nextProps){
+		if(!this.isMounted()){return;}
 		this.setState({
 			chapterlist: null
 		})
@@ -177,10 +187,13 @@ var Introduce = React.createClass({
 	componentDidUpdate: function(){
 		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
-	componentWillReceiveProps: function(nextProps, nextState) {
-		if(this.props.params.introduceId !== nextProps.params.introduceId){
+	componentWillUpdate: function(nextProps) {
+		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
+			this.setState({
+				noMoreChapterlist: false
+			})
 		}
 			
 	},
@@ -210,12 +223,12 @@ var Introduce = React.createClass({
 		}else{
 			header = <Header title={this.state.book.book_name} right={right}  path={this.props.route} />
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.getChapterlistLoading} book_brief={this.state.book.book_brief} chapterlist={JSON.stringify(this.state.chapterlist)}/>
+			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
 			<div className="gg-body">
-				<div className="g-scroll">
-					<p>{this.state.book?this.state.book.book_name:''} </p>
+				<div>
+					{/*<p>{this.state.book?this.state.book.book_name:''} </p>*/}
 					{header}
 					<div className="introduce-container" >
 						{detail}
@@ -254,7 +267,7 @@ var IntroduceTabs = React.createClass({
 			current: index
 		});
 
-		if (index == 1 && !JSON.parse(this.props.chapterlist).list) {
+		if (index == 1 && !this.props.chapterlist) {
 			this.props.getChapterlist();
 		}
 	},
@@ -263,7 +276,7 @@ var IntroduceTabs = React.createClass({
 		this.setState({
 			current: 1,
 		});
-		if(JSON.parse(this.props.chapterlist).list)
+		if(this.props.chapterlist)
 			this.setState({
 				orderSeq: !this.state.orderSeq,
 			});
@@ -307,7 +320,7 @@ var IntroduceTabs = React.createClass({
 	render: function() {
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
 
-		var list = JSON.parse(this.props.chapterlist).list || [];
+		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 
 		return (

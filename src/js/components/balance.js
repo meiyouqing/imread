@@ -28,6 +28,9 @@ var Balance = React.createClass({
 	},
 	componentDidMount: function() {
 		if(this.checkLogin(this.props.route)) this.getBalance();
+		document.addEventListener('rechargeSuccess',function(){//触发登录时更新个人信息
+			this.getBalance();
+		}.bind(this));
 	},
 	handleClick: function(e) {
 		this.setState({
@@ -59,7 +62,7 @@ var Balance = React.createClass({
 							return (
 								<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
 									<span className={"icon-n icon-black-aidou " + activeClass}></span>
-									<span className="count">{item.productPrice / 100}艾豆</span>
+									<span className="count">{item.productPrice / 100+'艾豆'}</span>
 								</li>
 							);
 						}.bind(this))

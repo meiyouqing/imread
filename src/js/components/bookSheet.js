@@ -75,6 +75,11 @@ var Module = React.createClass({
 		}
 	},
 	componentDidMount: function(){
+		var obj = parseQuery(location.search);
+	      if(obj.action && obj.action=='openapp'){
+	      	var p = "detail/" + encodeURI('[{"detail":[{"sheetid":"'+ obj.sheet_id +'","type":"10"}],"pushcmd":"10"}]');
+			window.location.href = 'imread://'+p;
+	      }
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {

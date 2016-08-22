@@ -6,15 +6,9 @@ var Img = require('./img');
 
 var Shelf = React.createClass({
 	mixins:[Mixins()],
-	startReading: function(e){
-		
-		var a = e.target.parentNode.parentNode;
-		var bid = parseInt(a.getAttribute('data-bid'));
-		var sbid = a.getAttribute('data-sbid');
-		var cid = a.getAttribute('data-cid');
-		var sid = a.getAttribute('data-sid');
-		var book_name = a.getAttribute('data-name');
-		var author = a.getAttribute('data-author');
+	startReading: function(v){
+		var bid = v.content_id;
+		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
@@ -23,7 +17,7 @@ var Shelf = React.createClass({
 			}
 			myEvent.setCallback('refreshShelf',this.getList);
 			this.compClick();
-			browserHistory.push({pathname:GLOBAL.setHref('reading/crossDomain.'+sbid+'.'+cid+'.'+bid+'.'+sid),state:{author: author,book_name: book_name}});
+			browserHistory.push({pathname:GLOBAL.setHref('reading/crossDomain.'+v.source_bid+'.'+cid+'.'+bid+'.'+v.source_id),state:{author: v.author,book_name: v.name}});
 		}else{  //选择操作
 			var index = this.state.selected.indexOf(bid);
 			if(index == -1){
@@ -46,7 +40,7 @@ var Shelf = React.createClass({
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
-		var setting = false,selected=[],icon=null,left=null;
+		var setting = false,selected=[],icon=null,left=null,middle=null;
 
 		switch(index){
 			case 1:
@@ -65,26 +59,30 @@ var Shelf = React.createClass({
 		this.setState({
 			setting:setting,
 			selected:selected,
-			icon : icon,
+			icon: icon,
 			left:left,
+			middle: middle,
 			right:completion,
 			model: index
 		});
 
+
 	},
 	gotoHome: function(){
-		browserHistory.push('/mall');
+		this.goBackUrl(this.props.route);
 	},
 	compClick: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
+		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
 		this.setState({
 			setting:false,
 			left:back,
 			right:setting,
-			//icon:icon,
-			model: 0
+			icon:null,
+			model: 0,
+			middle: middle
 		})
 	},
 	seAllClick :function(){
@@ -104,12 +102,16 @@ var Shelf = React.createClass({
 			selected:[]
 		})
 	},
+	gotoZy: function(){
+		browserHistory.push('/mall');
+	},
 	gotoReading: function(){//详情页面
 		if(this.state.selected.length !== 1) return;
 		else{
 			this.state.shelfList.forEach(function(v,i){
-				if(v.content_id === this.state.selected[0]){
+				if(v.content_id == this.state.selected[0]){
 					//this.startReading(null,v);
+
 					this.compClick();
 					browserHistory.push(GLOBAL.typeHref(v));
 				}
@@ -212,13 +214,19 @@ var Shelf = React.createClass({
 	models:{},
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r10" onClick={this.showModels} ></div>;
+		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
+<<<<<<< HEAD
+=======
+		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
+		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
+>>>>>>> react-router
 		return {
 			setting:false,
 			toggle:false,
 			left:back,
 			right:setting,
+			middle: middle,
 			icon:null,
 			selected:[],
 			noMore:true,
@@ -245,9 +253,12 @@ var Shelf = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
+<<<<<<< HEAD
 		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
+=======
+>>>>>>> react-router
 		if(this.checkLogin(this.props.route)) {
-			this.getList();
+			this.getList()
 		}
 	},
 	componentDidUpdate: function(nextPros,nextState) {
@@ -256,7 +267,7 @@ var Shelf = React.createClass({
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right}  path={this.props.route}  />;
+		var header = <Header title="书架" left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
 		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
@@ -294,30 +305,36 @@ var Shelf = React.createClass({
 			// }
 			content = (
 					<div className="g-main shelf">
-						<div className={"g-scroll g-scroll-noBG "+(this.state.show_model==0?'':'active')} ref="container" onScroll={this.scrollHandle}>
+						<div className={"g-scroll g-scroll-noBG"+((this.state.show_model==0)?' aaa':' active')} ref="container" onScroll={this.scrollHandle}>
 							<ul className="shelfWrap f-clearfix active">
 								{
+
 									this.state.shelfList.map(function(v,i){
 										if(this.state.setting){
 											curClass = this.state.selected.indexOf(v.content_id)==-1?'':'z-active';
 										}
-										icon = this.state.setting? this.state.icon:null;//(recent == v.content_id? this.state.icon:null);
 
-										if(this.state.show_model==0)
+										icon = this.state.setting? this.state.icon:null;//(recent == v.content_id? this.state.icon:null);
+										if(this.state.show_model == 0){
 											return(
 												<li key={i} className={"u-book-2 "+curClass}>
-													<a onClick={this.startReading} data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													<a onClick={this.startReading.bind(this,v)}>
 														<div className="pro-box">
-														{icon}
-														<Img src={v.image_url} />
-														<progress className="progress" value={v.playorder/v.count} max="1"></progress>
+															{icon}
+															<Img src={v.image_url} />
+															<div className="progress p-div">
+																<div style={{width: v.playorder/v.count*100+'%'}}>
+																</div>
+															</div>
 														</div>
 														<span className="f-ellipsis-2">{v.name}</span>
 													</a>
 												</li>
 												);
+										}
 										else{
 											var per = Number((v.playorder/v.count).toFixed(2)),notice='';
+											per = per > 1?1:per;
 											switch(per){
 												case 1:
 													notice = '已读完';
@@ -329,16 +346,19 @@ var Shelf = React.createClass({
 													notice = per*100 + '%';
 											};
 											return (<li key={i} className={"u-book-2 "+curClass}>
-													<a onClick={this.startReading} data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
-														<div className="pro-box" data-name={v.name}  data-author={v.author}  data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+													<a onClick={this.startReading.bind(this,v)}>
+														<div className="pro-box">
 														{icon}
 														<Img src={v.image_url} />
-														<div className="intro-box" data-name={v.name}  data-author={v.author} data-bid={v.content_id} data-cid={v.chapter_id} data-sbid={v.source_bid} data-sid={v.source_id}>
+														<div className="intro-box">
 															<span className="f-ellipsis title">{v.name}</span>
-															<span className="f-ellipsis chapter">{v.chapter_name}</span>
+															<span className="f-ellipsis chapter">{v.chapter_name || v.author}</span>
 															<div className="progress-box">
 																<span>{notice}</span>
-																<progress className="progress" value={v.playorder/v.count} max="1"></progress>
+																<div className="progress p-div">
+																	<div style={{width: v.playorder/v.count*100+'%'}}>
+																	</div>
+																</div>
 															</div>
 														</div>
 														</div>

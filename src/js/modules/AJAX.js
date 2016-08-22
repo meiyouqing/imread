@@ -8,6 +8,7 @@ var API={
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
+	blocks:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,page_id:0,contents:15,pages:1}},
 	category:{method:'GET', base:'/api/v1/category/content', param:{category_id:1, contents:15, pages:1}},
 	bookSheet:{method:'GET', base:'/api/v1/bookSheet/list', param:{sheet_id:1, contents:15, pages:1}},
 	collectionAdd:{method:'POST', base:'/api/v1/bookSheet/collection/add', param:{sheet_id:1}},
@@ -16,6 +17,7 @@ var API={
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
 	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
 	login:{method:'POST', base:'/api/v1/auth/login/custom', param:{phone:'',password:''}},
+	loginout:{method:'POST', base:'/api/v1/migu/logout',param:{}},
 	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
 	key:{method:'GET', base:'/api/v1/auth/key', param:{phone:'',type:''}},
 	password:{method:'POST', base:'/api/v1/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
@@ -104,7 +106,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
 	var urlBase = 'http://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -179,9 +181,10 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 			// }
 		}
 	};
-	
+
 	if (method === 'POST') {
 		request.open(method, url);
+		request.withCredentials = true;
 		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
 		if(postdata.formdata){
@@ -193,12 +196,13 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		request.send(postdata);
 	} else {
 		var isYulan = false;
-		var yulanUrls = ['/api/group/page', '/api/page/content'];
+		var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
 		for (var i = 0; i < yulanUrls.length; i++) {
 			isYulan |= new RegExp(yulanUrls[i]).test(url);
 		}
 		isYulan = isYulan && /yulan=1/.test(window.location.search);
-		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1" : ""));
+		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
+		request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);
 	}
@@ -218,7 +222,7 @@ function setRequestHeaders(request) {
 		'Info-Vcode': '101',
 		'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.getUuid(),
-		'Info-Token': GLOBAL.cookie('userToken') || '',
+		//'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),

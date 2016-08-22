@@ -6,6 +6,7 @@ var Header = React.createClass({
 			browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 		};
 
+
 		// browserHistory.listen(function(nextHistory){
 		// 	var arr = nextHistory.pathname.split('/');
 		// 	var path = arr.pop();
@@ -30,10 +31,16 @@ var Header = React.createClass({
 	},
 	goBack: function(){
 		GLOBAL.goBack(this.path);
+		if(this.props.page==='tag'){
+			myEvent.execCallback('updateGuess');
+		}
 	},
 	componentDidMount: function(){
 		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
+
+		if(this.props.path.path.split('/')[1] == 'self')
+			this.path = '/mall';
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.title !== nextProps.title 

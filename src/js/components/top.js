@@ -7,13 +7,13 @@ var MallNav = React.createClass({
 	render: function() {
 		if(!this.props.navList || !this.props.navList.length){return <i></i>}
 		return (
-			<nav className="g-nav g-top">
+			<nav className="g-nav">
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
 							var hrefStr =window.location.pathname.replace(/top\/([^\"]*)/,"") +'top/block.'+i;
 							return (
-								<MallNavLink to={hrefStr} key={i} className="f-flex1 f-t">{v.name}</MallNavLink>
+								<MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
 						}.bind(this))
 					}
@@ -37,11 +37,12 @@ var Top = React.createClass({
 	getData: function(){
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
-			AJAX.init('page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1');
+			this.params = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1'
 			this.getLists();			
 		},this.onerror)
 	},
 	getLists: function (){
+		AJAX.init(this.params);
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
 			if (!data.blocklist.length) {
@@ -58,12 +59,11 @@ var Top = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-
 		if(GLOBAL.isRouter(this.props))	this.getData();
-		myEvent.setCallback('updateTopList',this.getData);
+		// myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
-		if((GLOBAL.isRouter(this.props) &&!this.state.list) || (this.props.children !== nextProp.children)) this.getData();
+		if(GLOBAL.isRouter(this.props) &&!this.state.list) this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
 		//setTimeout(function(){
 		this.lazyloadImage(this.refs.container);
@@ -87,7 +87,7 @@ var Top = React.createClass({
 				list = (
 					<div className="g-main g-main-3 m-top">
 						<div ref="container">
-							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid}/>
+							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} updateGuess={this.getLists}/>
 						</div>
 					</div>
 					);
@@ -118,7 +118,6 @@ var Top = React.createClass({
 		// if(this.state.onerror){
 		// 	list = (<div className="g-main"><NoData type="UFO" /></div>);
 		// }
-
 		return (
 			<div  className="gg-body">
 				<Header title="发现"  path={this.props.route} />

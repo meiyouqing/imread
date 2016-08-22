@@ -17,15 +17,16 @@
 .u-settingitem{line-height: 20px;box-sizing: border-box;font-size: 11px;text-align: center; padding: 10px;}
 .u-settingitem .iconfont{font-size: 24px;}
 .u-settingitem:last-child{border-right: none;}
-.u-chapterlistc{position: absolute;left: -100%;width: 100%;top: 0;bottom: 0;transition: left 0.3s;z-index: 4002;overflow: hidden;}
+.u-chapterlistc{position: absolute;left: -100%;width: 80%;top: 0;bottom: 0;transition: left 0.3s;z-index: 9999;overflow: hidden;}
 .u-chapterlistc.active{left: 0;}
-.u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;width: 20%;background: rgba(0, 0, 0, .3);cursor: pointer;}
-.u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 80%;background: #fff;}
+.u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;left: 0;width: 100%;background: rgba(0, 0, 0, .3);cursor: pointer;display: none;z-index: 1;}
+.u-hideChapterlist.active{display: block;}
+.u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 100%;background: #fff;}
 .u-chapterlist .u-bookname{padding-left: 20px;height: 60px;line-height: 60px;box-sizing: border-box;border-bottom: 1px solid #eeeeee; font-weight: bold;font-size: 18px;}
 .u-chapterlist .u-bookname > div{float: right;font-size: 15px;color: #777777;}
-.u-chapterlist .u-scroll-y{position: absolute;top: 60px;bottom: 0;width: 100%;}
+.u-chapterlist .u-scroll-y{position: absolute;top: 60px;bottom: 0;width: 100%;-webkit-overflow-scrolling:touch;}
 .u-chapterlist .chapterlist{padding: 0 15px;}
-.u-chapterlist .chapterlist .chapter{border-top: 1px solid #eeeeee;font-size: 15px;cursor: pointer;}
+.u-chapterlist .chapterlist .chapter{border-bottom: 1px solid #eeeeee;font-size: 15px;cursor: pointer;}
 .u-chapterlist .chapterlist .chapter.current{color: #0196aa;}
 .u-chapterlist .chapterlist .chapter:first-child{border-top: none;}
 .u-chapterlist .chapterlist .icon-lock{margin-top: 13px}
@@ -73,6 +74,8 @@
 .setting-fontfamily .item.active, .setting-line-height .item.active, .setting-fontsize .item.active{background: #444444;}
 .setting-fontsize{margin: 0 5% 5px;}
 .setting-fontsize span{display: inline-block;vertical-align: middle;}
+.setting-bg{width: 100%;}
+.setting-bg .item{width: 18%;height: 50px;}
 .setting-bg .item .active-border{position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px;content: "";background: url(../img/reading/pic_white-unselect.png) no-repeat; margin: auto;max-width: 36px;}
 .setting-bg .item:nth-child(2) .active-border{background: url(../img/reading/pic_blue-unselect.png) no-repeat;}
 .setting-bg .item:nth-child(3) .active-border{background: url(../img/reading/pic_yellow-unselect.png) no-repeat;}
@@ -88,6 +91,7 @@
 
 .setting-fontfamily {display: none;}
 .display-inline{display: inline-block;}
+.style .u-sLoading{background: transparent;height: 50px;line-height: 50px;}
 
 .reading-guide{ position: absolute;left: 0;right: 0;top: 0;bottom: 0;background: rgba(0, 0, 0, .5);color: #FFFFFF;text-align: center;line-height: 20px;font-size: 16px;cursor: pointer;z-index: 4002;}
 .reading-guide-item{position: absolute;left: 0;width: 100%;height: 40%;}
@@ -123,8 +127,8 @@
 #reading-download  .detail {float: left;line-height: 15px;margin-left: 15px;color: #fff;font-size: 12px;}
 #reading-download  .down-button {height: 28px;width: 105px;line-height: 28px;text-align: center;color: #fff;font-size: 15px;border-radius: 3px;color: #1fcfd7;border: 1px solid #1fcfd7;float: right;}
 
-.m-reading-body .icon-font{width: 24px;height: 18px;margin-top: 15px}
-.m-reading-body .font-list{width: 100%;padding-left: 20px;}
+.m-reading-body .icon-font{width: 24px;height: 50px;}
+.m-reading-body .font-list{width: 90%;padding-left: 20px;}
 .m-reading-body .font-list .circle{ width: 6px;height: 6px;background: #fff;border-radius: 4px;border: 1px solid #20ced7;opacity: 0.6}
 .m-reading-body .font-list .line{width: 40px; height: 2px;background: #20ced7;opacity: 0.6}
 .m-reading-body .font-list .circle:first-child{background: #0096aa;border: 1px solid #0096aa;opacity: 1}
@@ -143,7 +147,7 @@
 .m-reading-body .style-0 .icon-r.next{background: url(../img/reading/white/next.png) no-repeat;}
 .m-reading-body .style-0 .icon-r.menu{background: url(../img/reading/white/mulu.png) no-repeat;}
 .m-reading-body .style-0 .icon-r.setting{background: url(../img/reading/white/setting.png) no-repeat;}
-.m-reading-body .style{position:absolute;top:0;bottom:0;right:0;left:0;}
+.m-reading-body .style{position:absolute;top:0;left:0;width:100%;height:100%;z-index: 999;}
 .m-reading-body .style.style-0,.m-reading-fy.style-0{background: url(../img/reading/white/back.png);}
 .m-reading-body .style-0 .icon-font{background: url(../img/reading/white/font.png) no-repeat;}
 
@@ -151,10 +155,14 @@
 .m-reading-body .style-0 .icon-r.next,
 .m-reading-body .style-0 .icon-r.menu,
 .m-reading-body .style-0 .icon-r.setting,
-.m-reading-body .style-0 .icon-font,
 .m-reading-body .style-0 .back,
 .m-reading-body .style-0 .download
 {background-size: 100% 100%}
+
+.m-reading-body .style-0 .icon-font{
+	background-size: 24px 18px;
+	background-position: 50%;
+}
 
 /*深蓝主题*/
 .m-reading-body .style.style-1,.m-reading-fy.style-1{color: #226489;background: url(../img/reading/blue/back.png);}
@@ -179,7 +187,6 @@
 .m-reading-body .style-1 .icon-r.next,
 .m-reading-body .style-1 .icon-r.menu,
 .m-reading-body .style-1 .icon-r.setting,
-.m-reading-body .style-1 .icon-font,
 .m-reading-body .style-1 .back,
 .m-reading-body .style-1 .download,
 .m-reading-body .style-1 .icon-lock,
@@ -187,6 +194,11 @@
 .m-reading-body .style-1 .icon-w-paixu.seq,
 .m-reading-body .style-1 .icon-w-paixu
 {background-size: 100% 100%}
+
+.m-reading-body .style-1 .icon-font{
+	background-size: 24px 18px;
+	background-position: 50%;
+}
 
 /*深棕主题*/
 .m-reading-body .style.style-2,.m-reading-fy.style-2{color: #58341c;background: url(../img/reading/yellow/back.png);}
@@ -211,7 +223,6 @@
 .m-reading-body .style-2 .icon-r.next,
 .m-reading-body .style-2 .icon-r.menu,
 .m-reading-body .style-2 .icon-r.setting,
-.m-reading-body .style-2 .icon-font,
 .m-reading-body .style-2 .back,
 .m-reading-body .style-2 .download,
 .m-reading-body .style-2 .icon-lock,
@@ -219,6 +230,11 @@
 .m-reading-body .style-2 .icon-w-paixu.seq,
 .m-reading-body .style-2 .icon-w-paixu
 {background-size: 100% 100%}
+
+.m-reading-body .style-2 .icon-font{
+	background-size: 24px 18px;
+	background-position: 50%;
+}
 
 /*深紫主题*/
 .m-reading-body .style.style-3,.m-reading-fy.style-3{color: #745681;background: url(../img/reading/pink/back.png);}
@@ -243,7 +259,6 @@
 .m-reading-body .style-3 .icon-r.next,
 .m-reading-body .style-3 .icon-r.menu,
 .m-reading-body .style-3 .icon-r.setting,
-.m-reading-body .style-3 .icon-font,
 .m-reading-body .style-3 .back,
 .m-reading-body .style-3 .download,
 .m-reading-body .style-3 .icon-lock,
@@ -252,9 +267,14 @@
 .m-reading-body .style-3 .icon-w-paixu
 {background-size: 100% 100%}
 
+.m-reading-body .style-3 .icon-font{
+	background-size: 24px 18px;
+	background-position: 50%;
+}
+
 
 /*夜间模式*/
-.m-reading-body .style.style-4,.m-reading-fy.style-4{color: #b9bbc8;background: #1e1e2a;}
+.m-reading-body .style.style-4,.m-reading-fy.style-4,.m-reading-body .style.style-4 .m-block-top.m-block{color: #b9bbc8;background: #1e1e2a;}
 .m-reading-body .style-4 .back{width: 24px;height: 48px;display: inline-block;background: url(../img/reading/ye/back-icon.png) no-repeat;margin: 6px 0 0 10px;}
 .m-reading-body .style-4 .download{width: 48px;height: 48px;display: inline-block;background: url(../img/reading/ye/icon_xiazai.png) no-repeat; margin: 6px 5px 0 0;}
 .m-reading-body .style-4 .icon-r{width: 20px;height: 20px;display: block;margin: auto;margin-bottom: 3px}
@@ -283,13 +303,17 @@
 .m-reading-body .style-4 .icon-r.menu,
 .m-reading-body .style-4 .icon-r.setting,
 .m-reading-body .style-4 .download,
-.m-reading-body .style-4 .icon-font,
 .m-reading-body .style-4 .back,
 .m-reading-body .style-4 .icon-lock,
 .m-reading-body .style-4 .icon-w-paixu.rev,
 .m-reading-body .style-4 .icon-w-paixu.seq,
 .m-reading-body .style-4 .icon-w-paixu
 {background-size: 100% 100%}
+
+.m-reading-body .style-4 .icon-font{
+	background-size: 24px 18px;
+	background-position: 50%;
+}
 
 
 

@@ -4,6 +4,7 @@ if(true||typeof window !== 'undefined'){
 	require('../../css/login.css');
 }
 var Login = React.createClass({
+	mixins:[Mixins()],
 	getInitialState: function() {
 		return {
 			status: true,
@@ -29,7 +30,7 @@ var Login = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			GLOBAL.cookie('userPhone', postData.phone, options);
+			//GLOBAL.cookie('userPhone', postData.phone, options);
 			GLOBAL.cookie('userToken', data.token, options);
 			GLOBAL.cookie('userId', data.user_id, options);
 			GLOBAL.setUser({
@@ -38,11 +39,11 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-			//判断登陆后的跳转
-				var isneed = false;
+				
+				document.dispatchEvent(new Event('updateUser'));
+				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
-					isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					GLOBAL.goBack();
 					myEvent.execCallback('login');
@@ -100,10 +101,10 @@ var Login = React.createClass({
 			if(data.code == 200){
 				POP._alert('注册成功');
 				//判断登陆后的跳转
-				var isneed = false;
+				//var isneed = false;
 				if(that.from && that.from.skipurl){
-					isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+(isneed?'':'?')+'token='+data.token+'&devicetoken='+GLOBAL.getUuid();
+					//isneed = /\?/.test(that.from.skipurl);
+					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					that.setState({status: true});
 				}
@@ -121,6 +122,9 @@ var Login = React.createClass({
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
 		});
+	},
+	goBack: function(){
+		this.goBackUrl(this.props.route);
 	},
 	getCode: function() {
 		if (this.state.s) {return ;}
@@ -230,7 +234,7 @@ var Login = React.createClass({
 			<div className="gg-body">
 				<div className="m-loginblock">
 					<div className="m-login-header">
-						<a className="f-fl icon-s icon-back" onClick={GLOBAL.goBack} ></a>
+						<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
 						<div className="m-login-register">
 							<a className={this.state.status?'':"active"} onClick={this.setRegister}>注册</a>
 							<a className={"second "+(this.state.status?"active":'')} onClick={this.setLogin}>登录</a>
