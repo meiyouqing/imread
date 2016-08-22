@@ -2,7 +2,7 @@
 
 .u-bookIntroduce{margin: 60px 15px 0 15px;}
 .u-bookIntroduce .bookinfo{margin-left: 115px;position: relative;}
-.u-bookIntroduce .title{color: #000;font-weight: bold;font-size: 15px;margin-bottom: 5px;}
+.u-bookIntroduce .title{color: #000;font-size: 15px;margin-bottom: 5px;}
 .u-bookIntroduce .author, .u-bookIntroduce .wordCount, .u-bookIntroduce .bookSource{font-size: 13px;color: #777777;line-height: 20px;}
 .u-bookIntroduce .bookSource span, .u-bookIntroduce .bookSource b{display: inline-block;vertical-align: middle;}
 .u-bookIntroduce .sourceIcon{width: 16px;height: 16px;margin-right: 8px;}

@@ -127,7 +127,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-block .content{overflow: hidden;width: 100%;}
 .m-block .content .u-book-2:nth-child(3n+1){clear: left;}
 .m-block .content .recommend,.m-list .recommend{padding: 4px 10px;color: #777;border-top: 1px solid #eeeeee;}
-.m-list .recommend{border-bottom: 1px solid #cccccc;text-align: justify;}
+.m-list .recommend{border-bottom: 1px solid #eeeeee;text-align: justify;}
 .m-block .content .recommend .iconWord,.hot,.m-list .recommend .iconWord{font-size: 10px;display: inline-block;padding: 1px 3px;margin:-2px 7px 0 0;background-color: #FD9B00;color: #FFF;line-height: 14px;vertical-align: middle;}
 .m-block.m-block-top .content{padding: 0;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
@@ -237,7 +237,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-0 .add .icon-add{left: 0;right: 0;top: 0;bottom: 0;background: #FFFFFF;}
 .u-book-0 .add .icon-add:before{position: absolute;left: 0;right: 0;text-align: center;top: 50%;height: 44px;line-height: 44px;font-size: 44px;margin-top: -22px;color: #DDDDDD;}
 
-.u-book-1{padding:10px 10px 4px;border-top: 1px solid #cccccc;}
+.u-book-1{padding:10px 10px 4px;border-top: 1px solid #eeeeee;}
 .u-book-1:first-of-type{border-top: none;padding-top: 0px;}
 /*.u-book-1:last-of-type{padding-bottom: 0px;}*/
 .u-pWrap > .u-book-1:first-of-type{padding-top: 10px;}
@@ -245,7 +245,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-1 a img{float: left;width: 95px;height: 125px;}
 .u-book-1 a .info{position:absolute;left: 107px;right:0;height: 100%;width: calc(100% - (107px));overflow: hidden;}
 .u-book-1 a .info>span{display: block;}
-.u-book-1 .title{margin-top: 2px;max-height: 40px;font-size: 15px;color: #000000;font-weight: bold;line-height: 20px;}
+.u-book-1 .title{margin-top: 2px;max-height: 40px;font-size: 15px;color: #000000;line-height: 20px;}
 .u-book-1 .author{margin-top: 2px;font-size: 13px;color: #777777;}
 .u-book-1 .summary{margin-top: 8px;color: #777777;line-height: 18px;font-size:13px;max-height: 54px;position: absolute;bottom: 0;left: 0;width: 100%;}
 .u-book-1 .bookStar + .summary{margin-top: 2px;}
@@ -321,10 +321,10 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-noteText{height: 40px;line-height: 40px;padding-left: 10px;border-bottom: 1px solid #EEEEEE;color: #999;background: #FFFFFF;}
 
 .u-search{ position: absolute; right: 50px; left: 45px;}
-.u-search .searchInput{ box-sizing: border-box;width: 100%;height: 30px;line-height: 30px;overflow: hidden;margin-top: 7px;padding: 0 10px 0 35px;font-size: 15px;background-color: #fff;color: #000;-moz-border-radius: 15px;border-radius: 15px;}
-.u-search .searchInput::-moz-placeholder { color: #777777;line-height: 30px;}
-.u-search .searchInput::-webkit-input-placeholder { color:#777777;line-height: 30px; }
-.u-search .searchInput:-ms-input-placeholder { color:#777777;line-height: 30px; }
+.u-search .searchInput{ box-sizing: border-box;width: 100%;height: 30px;line-height: 20px;overflow: hidden;margin-top: 7px;padding: 0 10px 0 35px;font-size: 15px;background-color: #fff;color: #000;-moz-border-radius: 15px;border-radius: 15px;}
+.u-search .searchInput::-moz-placeholder { color: #777777;line-height: 20px;}
+.u-search .searchInput::-webkit-input-placeholder { color:#777777;line-height: 20px; }
+.u-search .searchInput:-ms-input-placeholder { color:#777777;line-height: 20px; }
 .u-search .searchBtn{width: 44px;height: 44px;line-height: 44px;margin-right: -49px;font-size: 15px;text-algin: center;color: #fff;}
 
 .u-moving-ball{position: absolute;top: 50%;left: 50%;width:50px;height: 50px;margin-left: -25px;margin-top: -25px;z-index: 0}

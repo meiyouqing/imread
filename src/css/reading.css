@@ -1,7 +1,7 @@
 .m-reading{position: absolute;left: 0;right: 0;top: 56px;bottom: 40px;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;overflow-y: auto;-webkit-overflow-scrolling: touch;}
 .u-readingContent{padding: 0 30px;font-size: 19px;line-height: 1.5;text-indent: 2em;}
 .u-readingContent p{margin-bottom: 20px;text-align:justify;}
-.u-chapterName{margin: 15px 30px 60px 30px;font-size: 21px;font-weight: bold;}
+.u-chapterName{margin: 15px 30px 60px 30px;font-size: 21px;}
 .u-action-top, .u-action-middle, .u-action-bottom{position: absolute;z-index: 4000;cursor: pointer;}
 .u-action-top, .u-action-bottom{width: 100%;height: 40%;left: 0;top: 0;}
 .u-action-bottom{top: 60%;}
@@ -22,7 +22,7 @@
 .u-hideChapterlist{position: absolute;top: 0;bottom: 0;right: 0;left: 0;width: 100%;background: rgba(0, 0, 0, .3);cursor: pointer;display: none;z-index: 1;}
 .u-hideChapterlist.active{display: block;}
 .u-chapterlist{position: absolute;top: 0;bottom: 0;left: 0;width: 100%;background: #fff;}
-.u-chapterlist .u-bookname{padding-left: 20px;height: 60px;line-height: 60px;box-sizing: border-box;border-bottom: 1px solid #eeeeee; font-weight: bold;font-size: 18px;}
+.u-chapterlist .u-bookname{padding-left: 20px;height: 60px;line-height: 60px;box-sizing: border-box;border-bottom: 1px solid #eeeeee; font-size: 18px;}
 .u-chapterlist .u-bookname > div{float: right;font-size: 15px;color: #777777;}
 .u-chapterlist .u-scroll-y{position: absolute;top: 60px;bottom: 0;width: 100%;-webkit-overflow-scrolling:touch;}
 .u-chapterlist .chapterlist{padding: 0 15px;}
@@ -274,7 +274,8 @@
 
 
 /*夜间模式*/
-.m-reading-body .style.style-4,.m-reading-fy.style-4,.m-reading-body .style.style-4 .m-block-top.m-block{color: #b9bbc8;background: #1e1e2a;}
+.style-4,.m-reading-body .style.style-4 .m-block-top.m-block,.m-reading-body .style.style-4 .title,.m-reading-body .style.style-4 .u-settingitem,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter{color: #b9bbc8;}
+.m-reading-body .style.style-4{background: #1e1e2a;}
 .m-reading-body .style-4 .back{width: 24px;height: 48px;display: inline-block;background: url(../img/reading/ye/back-icon.png) no-repeat;margin: 6px 0 0 10px;}
 .m-reading-body .style-4 .download{width: 48px;height: 48px;display: inline-block;background: url(../img/reading/ye/icon_xiazai.png) no-repeat; margin: 6px 5px 0 0;}
 .m-reading-body .style-4 .icon-r{width: 20px;height: 20px;display: block;margin: auto;margin-bottom: 3px}
@@ -292,9 +293,10 @@
 .m-reading-body .style-4 .font-list .circle:first-child,.m-reading-body .style-4 .font-list .active .circle,.m-reading-body .style-4 .font-list .active .line,.m-reading-body .style-4 .font-list .line{background: #0096aa}
 .m-reading-body .style-4 .u-chapterlist .chapterlist .chapter.current{color: #0096aa;}
 .m-reading-body .style-4 .font-list .active .circle,.m-reading-body .style-4 .font-list .circle:first-child,.m-reading-body .style-4 .font-list .circle{border: 1px solid #0096aa}
-.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter .name.lock,.m-reading-body .style-4 .u-chapterlist .u-bookname > div{color: #696b7a}
-.m-reading-body .style-4 .u-chapterlist,.m-reading-body .style-4 .u-settings,.m-reading-body .style-4 .font-list .circle{background: #1e1e2a}
-.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid #6a6b7a}
+.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter .name.lock,.m-reading-body .style-4 .u-chapterlist .u-bookname > div,.m-reading-body .style-4,.m-reading-fy{color: #696b7a}
+.m-reading-body .style-4 .font-list .circle{background: #1e1e2a}
+.m-reading-body .style-4 .u-chapterlist,.m-reading-body .style-4 .u-settings{background: #2b2d3c;}
+.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid #414351}
 
 .m-reading-body .style-4 .u-settings-font,.m-reading-body .style-4 .u-settings-bottom{border-top: 1px solid #6a6b7a}
 

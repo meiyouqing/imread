@@ -36,7 +36,7 @@ var Shelf = React.createClass({
 	settingClick: function(e){
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
-		var completion = <button className="f-fr textBtn" onClick={this.compClick} >完成</button>;
+		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
 		var setting = false,selected=[],icon=null,left=null,middle=null;
 
 		switch(index){
@@ -60,7 +60,8 @@ var Shelf = React.createClass({
 			left:left,
 			middle: middle,
 			right:completion,
-			model: index
+			model: index,
+			title: ''
 		});
 
 
@@ -79,7 +80,8 @@ var Shelf = React.createClass({
 			right:setting,
 			icon:null,
 			model: 0,
-			middle: middle
+			middle: middle,
+			title: '书架'
 		})
 	},
 	seAllClick :function(){
@@ -215,6 +217,7 @@ var Shelf = React.createClass({
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
 		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
 		return {
+			title: '书架',
 			setting:false,
 			toggle:false,
 			left:back,
@@ -256,7 +259,7 @@ var Shelf = React.createClass({
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
-		var header = <Header title="书架" left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
+		var header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
 		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
@@ -382,8 +385,8 @@ var Shelf = React.createClass({
 				break;
 			case 3:
 				nav = (<div className="s-b s-b-fir">
-							<a className={this.state.show_model==0?'active':''} onClick={this.changeShow} data-cls={0}><span className="icon-n icon-fengmian"></span><span>封面模式</span></a>
-							<a className={this.state.show_model==1?'active':''} onClick={this.changeShow} data-cls={1}><span className="icon-n icon-liebiao"></span><span>列表模式</span></a>
+							<a className={this.state.show_model!=0?'active':''} onClick={this.changeShow} data-cls={0}><span className="icon-n icon-fengmian"></span><span>封面模式</span></a>
+							<a className={this.state.show_model!=1?'active':''} onClick={this.changeShow} data-cls={1}><span className="icon-n icon-liebiao"></span><span>列表模式</span></a>
 						</div>);
 				break;
 			default: 

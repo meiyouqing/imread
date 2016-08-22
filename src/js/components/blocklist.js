@@ -46,7 +46,7 @@ var Block2 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={this.props.href}>
+				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
 				</Link>
@@ -72,7 +72,7 @@ var Block3 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={this.props.href}>
+				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
 					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
@@ -111,7 +111,7 @@ var Block4 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={this.props.href}>
+				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
 				</Link>
@@ -226,7 +226,7 @@ var Block9 = React.createClass({
 					<ul className="f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							return <Book5 key={i} data={v} />
+							return <Book5 key={i} data={v} num={i}/>
 						}.bind(this))
 					}
 					</ul>
