@@ -9,6 +9,7 @@ Desktop.ini
 .idea
 tmp
 public
+serverside
 node_modules
 webpack.config.js
 route.js
