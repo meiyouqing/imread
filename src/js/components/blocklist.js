@@ -46,7 +46,7 @@ var Block2 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
+				<Link className="title" to={this.props.href}>
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
 				</Link>
@@ -72,7 +72,7 @@ var Block3 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
+				<Link className="title" to={this.props.href}>
 					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
@@ -111,7 +111,7 @@ var Block4 = React.createClass({
 	render:function(){
 		return (
 			<section className="m-block">
-				<Link className="title" to={{pathname:this.props.href,state:{title: this.props.data.name}}}>
+				<Link className="title" to={this.props.href}>
 					<span className='f-fr'>查看更多</span>
 					<h2>{this.props.data.name}</h2>
 				</Link>

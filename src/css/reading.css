@@ -275,7 +275,7 @@
 
 /*夜间模式*/
 .style-4,.m-reading-body .style.style-4 .m-block-top.m-block,.m-reading-body .style.style-4 .title,.m-reading-body .style.style-4 .u-settingitem,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter{color: #b9bbc8;}
-.m-reading-body .style.style-4{background: #1e1e2a;}
+.m-reading-body .style.style-4,.m-reading-fy.style-4{background: #1e1e2a;}
 .m-reading-body .style-4 .back{width: 24px;height: 48px;display: inline-block;background: url(../img/reading/ye/back-icon.png) no-repeat;margin: 6px 0 0 10px;}
 .m-reading-body .style-4 .download{width: 48px;height: 48px;display: inline-block;background: url(../img/reading/ye/icon_xiazai.png) no-repeat; margin: 6px 5px 0 0;}
 .m-reading-body .style-4 .icon-r{width: 20px;height: 20px;display: block;margin: auto;margin-bottom: 3px}
