@@ -29,23 +29,21 @@ var Login = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			that.loading = false;
 			//GLOBAL.cookie('userPhone', postData.phone, options);
 			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
+			GLOBAL.cookie('userId', data.user_id, options);
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
 			});
 
 			if(data.code == 200){
-				that.disPatch('updateUser');
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					GLOBAL.goBack();
-					myEvent.execCallback('login');
+					myEvent.execCallback('m_login');
 				}
 
 			} else {
@@ -242,44 +240,6 @@ var Login = React.createClass({
 					</div>
 					{list}
 				</div>
-				{/*<div className="m-loginblock m-userblocks">
-					<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
-						<div className="u-inputline">
-							<input className="u-input" placeholder="手机号" type="tel" ref="mobile_num" />
-						</div>
-						<div className="u-inputline">
-							<input className="u-input" placeholder="密码" type="password" ref="password" />
-						</div>
-						<div className="u-inputline">
-							<button type="submit" className="u-btn u-btn-full">登录</button>
-						</div>
-
-						<div className="u-inputline f-clearfix">
-							<div className="u-buttonc f-fl">
-
-								<Link className="tip" to={GLOBAL.setHref('register')}>注册新账号</Link>
-							</div>
-							<div className="u-buttonc f-fl">
-								<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
-							</div>
-						</div>
-						<div className="u-otherlogins-tip f-hide">其他方式登录</div>
-						<div className="u-inputline f-clearfix f-hide">
-							<div className="u-buttonc f-fl">
-								<a className="u-otherlogin">
-									<img src="src/img/qq.png" />
-									<span className="title">QQ</span>
-								</a>
-							</div>
-							<div className="u-buttonc f-fl">
-								<a className="u-otherlogin">
-									<img src="src/img/wechat.png" />
-									<span className="title">微信</span>
-								</a>
-							</div>
-						</div>
-					</form>
-				</div>*/}
 				{this.props.children}
 			</div>
 		);

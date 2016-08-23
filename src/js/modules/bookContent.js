@@ -1,53 +1,126 @@
 var ReadConfig = require('../modules/readConfig');
 
+var goto_mlogin = function(callback){
+	var hash = location.pathname + '/m_login';
+      browserHistory.push(hash);
+      POP._alert('请先登录');
+      myEvent.setCallback('m_login', callback);
+  };
 
 var BookContent = (function() {
 	//移动咪咕阅读
 	//@source_id 1
 	function getContent1(options) {
 
-		var sourceConfig = ReadConfig['config-' + options.source_id];
-		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-		var url = totalUrl.replace(/\?.*/, '')
-					      .replace('$bid', options.bid)
-					      .replace('$cid', options.cid);
-		var param = totalUrl.replace(/(.*\?)/, '')
-							.replace('$cm', sourceConfig.cm);
-		//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
-		AJAX.getJSON('GET', '/api/crossDomain', {
-			url : url,
-			type: 'post',
-			param: param
-		}, options.callback, function() {
-			// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
+		
+
+		var getContent = function(sourceConfig){
+			var sourceConfig = sourceConfig['config-' + options.source_id];
+			var url = 'http://readapi.imread.com/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cmcc_h5_charging;
+			AJAX.getJSON('GET', url, {}, function(res){
+				if(res.success){
+					if(res.success.loginSubmitUrl){
+						gotoMigu(sourceConfig);
+						// if(location.pathname.slice(-5) == 'login')	return;
+						// goto_mlogin(options.callback.bind(this,res));
+					}else
+						options.callback(res);
+				}
+				else
+					gotoMigu(sourceConfig);
+			}, function() {
 				if(options.noCross){return} //不要跳转
-				//GLOBAL.goBack();
-				//去掉referrer
-				var meta = document.createElement('meta');
+				gotoMigu(sourceConfig);
+			});
+		};
+
+		if(JSON.stringify(storage.get('readConfig')).length == 2) {
+			ReadConfig(getContent)
+		} else {
+			getContent(ReadConfig());
+		}
+
+		var gotoMigu = function(sourceConfig){
+			//去掉referrer
+			var meta = document.createElement('meta');
 				meta.name = "referrer";
 				meta.content = "no-referrer";
 				document.getElementsByTagName('head')[0].appendChild(meta);
-				window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
-			// } else {
-			// 	GLOBAL.goBack();
-			// }
-		});
+			window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+		};
 	}
+
+	// function getContent1(options) {
+
+	// 	var sourceConfig = ReadConfig['config-' + options.source_id];
+	// 	var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+	// 	var url = totalUrl.replace(/\?.*/, '')
+	// 				      .replace('$bid', options.bid)
+	// 				      .replace('$cid', options.cid);
+	// 	var param = totalUrl.replace(/(.*\?)/, '')
+	// 						.replace('$cm', sourceConfig.cm);
+	// 	//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
+	// 	AJAX.getJSON('GET', '/api/crossDomain', {
+	// 		url : url,
+	// 		type: 'post',
+	// 		param: param
+	// 	}, options.callback, function() {
+	// 		// if (true || confirm('该章节为移动付费章节，将跳转到移动咪咕阅读')) {
+	// 			if(options.noCross){return} //不要跳转
+	// 			//GLOBAL.goBack();
+	// 			//去掉referrer
+	// 			var meta = document.createElement('meta');
+	// 			meta.name = "referrer";
+	// 			meta.content = "no-referrer";
+	// 			document.getElementsByTagName('head')[0].appendChild(meta);
+	// 			window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+	// 		// } else {
+	// 		// 	GLOBAL.goBack();
+	// 		// }
+	// 	});
+	// }
+
+
 
 	//原文阅读
 	//@source_id 2
 	function getContent2(options) {
 
-		var sourceConfig = ReadConfig['config-' + options.source_id];
-		var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-		//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
-		var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
-						 .replace(/\?*/, '')
-					      .replace('$bid', options.book_id)
-					      .replace('$cid', options.cid)
-					      .replace('$cm', sourceConfig.cm);
-		AJAX.getJSON('GET', url, {}, options.callback, options.onError);
+		var getContent =  function(sourceConfig){
+			var sourceConfig = sourceConfig['config-' + options.source_id];
+			var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+			//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
+							 .replace(/\?*/, '')
+						      .replace('$bid', options.book_id)
+						      .replace('$cid', options.cid)
+						      .replace('$cm', sourceConfig.cm);
+			AJAX.getJSON('GET', url, {}, options.callback, options.onError);
+		};
+
+		if(JSON.stringify(storage.get('readConfig')).length == 2) {
+			ReadConfig(getContent)
+		} else {
+			getContent(ReadConfig());
+		}
+
+		//var sourceConfig = ReadConfig()['config-' + options.source_id];
 	}
+
+	// 	//原文阅读
+	// //@source_id 2
+	// function getContent2(options) {
+
+	// 	var sourceConfig = ReadConfig['config-' + options.source_id];
+	// 	var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+	// 	//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+	// 	var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
+	// 					 .replace(/\?*/, '')
+	// 				      .replace('$bid', options.book_id)
+	// 				      .replace('$cid', options.cid)
+	// 				      .replace('$cm', sourceConfig.cm);
+	// 	AJAX.getJSON('GET', url, {}, options.callback, options.onError);
+	// }
 
 	//千马阅读
 	//@source_id 3

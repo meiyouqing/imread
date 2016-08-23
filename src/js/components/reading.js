@@ -2,6 +2,7 @@ var Header = require('./header');
 
 var Chapterlist = require('./chapterlist');
 var readingStyle = require('../modules/readingStyle');
+var storage = require('../modules/storage');
 var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
@@ -375,6 +376,7 @@ var Reading = React.createClass({
 			pages: currentPage,
 			order: false
 		}, that.getChapterlist);
+
 		that.getNextContent(data);
 	},
 	getContent: function() {
@@ -386,7 +388,6 @@ var Reading = React.createClass({
 
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
-		//console.log(nextChapter.nextChapterId,this.state.chapterid)
 		if((nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
@@ -415,6 +416,7 @@ var Reading = React.createClass({
 		});
 	},
 	getNextContent: function(data) {
+
 		if(!this.isMounted()){return;}
 		var that = this;
 		bookContent.get({
@@ -424,7 +426,7 @@ var Reading = React.createClass({
 			source_id : this.source_id,
 			book_id: this.book_id,
 			callback: function(data){
-				storage.set('nextChapter',data);
+				storage.set('nextChapter',data.success);
 			}.bind(this),
 			onError: GLOBAL.noop
 		});

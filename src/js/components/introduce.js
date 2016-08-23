@@ -166,7 +166,8 @@ var Introduce = React.createClass({
 	},
 	componentWillReceiveProps: function(nextProps){
 		this.setState({
-			chapterlist: null
+			chapterlist: null,
+			page:1
 		})
 	},
 	componentDidMount: function() {
@@ -185,7 +186,9 @@ var Introduce = React.createClass({
 		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillUpdate: function(nextProps) {
-		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
+		//if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
+	
+		if(this.props.params.introduceId !== nextProps.params.introduceId || (!nextProps.children && this.props.children) ){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
 			this.setState({
