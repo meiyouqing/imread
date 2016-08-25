@@ -59,10 +59,6 @@ var Mall = React.createClass({
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(GLOBAL.isRouter(this.props))	this.getList(true);
-
-		document.addEventListener('updateMall',function(){//触发登录时更新
-			this.getList(true);
-		}.bind(this));
 	},
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];

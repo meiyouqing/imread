@@ -7,7 +7,8 @@ var Block5 = React.createClass({
 		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
 			width: w,
-			height: w / 3.0
+			height: w / 3.0,
+			update: 0
 		};
 	},
 	getInitialState: function() {
@@ -75,6 +76,10 @@ var Block5 = React.createClass({
 		this.initSwipe();
 		//横竖屏切换 重新计算高度
 		window.addEventListener('resize', this.handleResize, false);
+
+		document.addEventListener('updateMall',function(){//触发登录时更新
+			this.setState({update: this.state.update+1});
+		}.bind(this));
 	},
 	componentDidUpdate: function() {
 		//alert('update')
@@ -100,7 +105,8 @@ var Block5 = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data.contentlist !== nextProps.data.contentlist
-				|| this.state.height !== nextState.height;
+				|| this.state.height !== nextState.height
+				|| this.state.update !== nextState.update;
 	},
 	componentWillReceiveProps: function(nextProps) {
 		//alert('rece')

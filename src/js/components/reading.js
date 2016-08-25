@@ -377,7 +377,8 @@ var Reading = React.createClass({
 			order: false
 		}, that.getChapterlist);
 
-		that.getNextContent(data);
+		if(that.isLogin())
+			that.getNextContent(data);
 	},
 	getContent: function() {
 		var book_info = this.APIParts('readingId');
@@ -396,7 +397,6 @@ var Reading = React.createClass({
 			loading: true
 		});
 		var that = this;
-
 		bookContent.get({
 			bid: this.bid,
 			cid: this.chapterid,
@@ -569,10 +569,10 @@ var Reading = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProps, nextState) {
-		// var that = this;
-
-		if((this.props.params !== nextProps.params) || (this.props.children !== nextProps.children))
+		// var that = this; || (this.props.children !== nextProps.children)
+		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
+		}
 
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
