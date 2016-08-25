@@ -31,15 +31,17 @@ var Login = React.createClass({
 			};
 			that.loading = false;
 			//GLOBAL.cookie('userPhone', postData.phone, options);
-			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
+			
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
 			});
 
 			if(data.code == 200){
+				GLOBAL.cookie('userToken', data.token, options);
+				GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
+				that.disPatch('updateMall');
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
@@ -91,15 +93,18 @@ var Login = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			GLOBAL.cookie('userPhone', postData.mobile_num,options);
-			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
+			
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
 				token: postData.token
 			});
 
 			if(data.code == 200){
+				GLOBAL.cookie('userPhone', postData.mobile_num,options);
+				GLOBAL.cookie('userToken', data.token, options);
+				GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
+				that.disPatch('updateUser');
+				that.disPatch('updateMall');
 				POP._alert('注册成功');
 				//判断登陆后的跳转
 				//var isneed = false;
@@ -107,7 +112,8 @@ var Login = React.createClass({
 					//isneed = /\?/.test(that.from.skipurl);
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+GLOBAL.getUuid();
 				}else{
-					that.setState({status: true});
+					// that.setState({status: true});
+					GLOBAL.goBack();
 				}
 			}
 			else {
