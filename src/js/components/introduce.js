@@ -121,7 +121,7 @@ var Introduce = React.createClass({
 				book: data,
 				isOnshelf: !!data.is_self
 			});
-			this.cacheBook(data);
+			//this.cacheBook(data);
 		}.bind(this), function(error){
 			this.setState({
 				UFO:true
@@ -211,7 +211,7 @@ var Introduce = React.createClass({
 		var header, loading, introduceTabs, detail;
 		var right = <span onClick={this.gotoShelf} className="icon-s icon-shelf-s f-fr"></span>
 		if (!this.state.book || !this.isUpdate) {
-			header = <Header title={GLOBAL.book[this.state.bid]} right={right}  path={this.props.route} />
+			header = <Header title={null} right={right}  path={this.props.route} />
 			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
 				loading = <Loading />
 			if(this.state.noData){

@@ -549,7 +549,6 @@ var Reading = React.createClass({
 
 		//扉页信息
 		this.states = this.props.location.state;
-
 		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
@@ -726,14 +725,13 @@ var Reading = React.createClass({
 				);
 		}
 		if(this.state.loading) {
-			
 			return (
 				<div className="gg-body">
 					{/*{head}
 					<i className="u-loading u-book-loading">努力加载中...</i>*/}
 					<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<div className="fy-detail">
-							<p className="fy-title">{this.states.book_name || ''}</p>
+							<p className="fy-title">{this.states.book_name || '艾美阅读'}</p>
 							<p className="fy-author">{this.states.author || ''}</p>
 						</div>
 						<div className="fy-gw">发现阅读之美</div>
