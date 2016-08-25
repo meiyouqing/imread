@@ -14,7 +14,7 @@ var About = React.createClass({
             	<p className="conpact"><a href="#user/about/compact">用户协议</a></p>
 				<h2 className="desc">发现阅读之美</h2>
             	<footer className="footer">
-					<a className="home" href="http://imread.com" target="_blank">
+					<a className="home" href="//imread.com" target="_blank">
 						<span className="iconfont icon-arrow-right f-fr"></span>
 						<span>官方网站</span>
 					</a>

@@ -261,7 +261,7 @@ var Reading = React.createClass({
 							.replace(/&nbsp;/g, '')
 							.replace(/&middot;/g, '·')
 							.replace(/\<img[^\>]+src='([^\>]+)'[^\>]*\/\>/g, function($1, $2) {
-								//return "<img src='" + 'http://wap.cmread.com' + $2 + "' />";
+								//return "<img src='" + '//wap.cmread.com' + $2 + "' />";
 								return '';
 							}).split(/\<br\s*\/\>/);
 
@@ -744,8 +744,8 @@ var Reading = React.createClass({
 
 				
 			        <div id="reading-download" className={this.state.download?'active':''}>
-			        	<a href="http://readapi.imread.com/api/upgrade/download?channel=aidouhd">
-			            <img src="http://www.imread.com/img/mobile-logo.png?2" />
+			        	<a href="//readapi.imread.com/api/upgrade/download?channel=aidouhd">
+			            <img src="//www.imread.com/img/mobile-logo.png?2" />
 			            <div className="detail">
 			                <p>你想看的好书</p>
 			                <p>艾美阅读都有</p>
