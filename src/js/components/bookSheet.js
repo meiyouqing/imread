@@ -86,6 +86,14 @@ var Module = React.createClass({
 		}
 	},
 	componentDidMount: function(){
+		var obj = parseQuery(location.search);
+	      if(obj.action && obj.action=='openapp'){
+	      	//console.log('imread://detail/[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]')
+	      	//var p = "imread://detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]');
+	      	var p = "detail/" + encodeURI('[{"detail":[{"sheetid":"'+ obj.sheet_id +'","type":"10"}],"pushcmd":"10"}]');
+			window.location.href = 'imread://'+p;
+	      	//window.location.href = p;
+	      }
 		this.getData();
 	},
 	componentDidUpdate: function() {

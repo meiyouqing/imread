@@ -395,6 +395,10 @@ var Frame = React.createClass({
 			var bookId = window.location.search.match(/book_id=(\d+)/)[1];
 			//console.log(bookId)
 			window.location.hash = '#mall/introduce.'+bookId;
+		} else if(/sheet_id=\d+/.test(window.location.search) && !window.location.hash) {
+			var bookId = window.location.search.match(/sheet_id=(\d+)/)[1];
+			//console.log(bookId)
+			window.location.hash = '#top/bookSheet.'+bookId+'.1.0';
 		}
 		//var str = window.location.hash.replace(/\#?\&?plg_[^\&]+=[^\&]+/g, '');
 		if(window.location.hash.length){
