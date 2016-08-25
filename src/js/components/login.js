@@ -42,7 +42,7 @@ var Login = React.createClass({
 				that.disPatch('updateUser');
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
-					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
+					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
 				}else{
 					GLOBAL.goBack();
 					myEvent.execCallback('login');
@@ -93,6 +93,7 @@ var Login = React.createClass({
 			};
 			GLOBAL.cookie('userPhone', postData.mobile_num,options);
 			GLOBAL.cookie('userToken', data.token, options);
+			GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
 				token: postData.token
@@ -104,7 +105,7 @@ var Login = React.createClass({
 				//var isneed = false;
 				if(that.from && that.from.skipurl){
 					//isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
+					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					that.setState({status: true});
 				}
@@ -124,6 +125,10 @@ var Login = React.createClass({
 		});
 	},
 	goBack: function(){
+		if(this.from && this.from.skipurl){
+			window.location.href = this.from.skipurl;
+			return;
+		}
 		this.goBackUrl(this.props.route);
 	},
 	getCode: function() {
@@ -171,9 +176,7 @@ var Login = React.createClass({
 		this.from = parseQuery(location.search);
 	},
 	render: function() {
-		var skipurl = '',list;
-		if(this.from && this.from.skipurl)
-			skipurl = '?skipurl='+this.from.skipurl;
+		var list;
 
 		if(this.state.status)
 			list = (<div className="m-login">

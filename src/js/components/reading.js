@@ -182,7 +182,7 @@ var Reading = React.createClass({
 	cacheReadLog: function(readLog) {
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return}
-		var bookIntroduce = {};
+		// var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
 		// var books = storage.get('bookIntroduce', 'array');
 		// for (var i = 0; i < books.length; i++) {
@@ -192,9 +192,9 @@ var Reading = React.createClass({
 		// 	}
 		// }
 
-		readLog.name = bookIntroduce.book_name || this.state.introduce.book_name;
-		readLog.author = bookIntroduce.author || this.state.introduce.author;
-		readLog.big_coverlogo = bookIntroduce.big_coverlogo || this.state.introduce.big_coverlogo;
+		readLog.name = this.state.introduce.book_name;
+		readLog.author = this.state.introduce.author;
+		readLog.big_coverlogo = this.state.introduce.big_coverlogo;
 		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
