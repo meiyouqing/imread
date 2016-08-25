@@ -24,7 +24,7 @@ var tag = React.createClass({
 			}.bind(this));
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
-			GLOBAL.removeCookie('userId');
+			GLOBAL.removeCookie('uuid');
 
 			GLOBAL.goBack();
 		}.bind(this));
