@@ -33,9 +33,8 @@ var Order = {
             else
                 arr_t[i] = [this.getSpell(arr[i]), arr[i]];
         }
-        console.log()
+
         arr_t = arr_t.sort();
-        console.log(arr_t)
         for (i = 0; i < arr.length; i++) {
             arr[i] = arr_t[i][1];
         }

@@ -332,10 +332,10 @@ var Reading = React.createClass({
 		}
 	},
 	gotContent: function(data,autoPay){
+		if(data.code === 403) return;
 		this.setState({
 			showSetting:false
 		})		
-
 		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
@@ -350,6 +350,7 @@ var Reading = React.createClass({
 		if(autoPay){
 			GLOBAL.cookie(that.bid,'autoPay',7)
 		}
+
 		if(data.pageType==='order'){
 
 			if(GLOBAL.cookie(that.bid)==='autoPay'){
