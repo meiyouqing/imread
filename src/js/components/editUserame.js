@@ -16,19 +16,21 @@ var tag = React.createClass({
 			user_name:this.refs.username.value
 		}
 
-		AJAX.go('edituser',pramas,function(res){
-			if(res.code === 200){
-				GLOBAL.goBack();
-				this.disPatch('updateUser');
-			} else {
-				if(typeof res.error === 'string')
-					POP._alert(res.error);
-				else 
-					for(var key in res.error[0]){
-						POP._alert(res.error[0][key])
-					}
-			}
-		}.bind(this));
+		// AJAX.go('edituser',pramas,function(res){
+		// 	if(res.code === 200){
+		// 		GLOBAL.goBack();
+		// 		this.disPatch('updateUser');
+		// 	} else {
+		// 		if(typeof res.error === 'string')
+		// 			POP._alert(res.error);
+		// 		else 
+		// 			for(var key in res.error[0]){
+		// 				POP._alert(res.error[0][key])
+		// 			}
+		// 	}
+		// }.bind(this));
+		var backUrl = location.pathname.replace('/'+this.props.route.path,'');
+		browserHistory.push({pathname: backUrl,state: pramas});
 	},
 	clearValue: function(){
 		this.refs.username.value = '';

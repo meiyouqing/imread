@@ -11,7 +11,7 @@
 .u-settings-top .icon-back{position:absolute; left: 15px;padding: 0 10px;line-height: 60px;color: #FFFFFF;cursor: pointer;}
 .u-settings-top .m-block{border-top: 0;border-bottom: 0;}
 .u-settings-top .icon-close{position: absolute;display:block;bottom: 10px;width: 24px;height: 24px;line-height: 24px;border-radius: 50%;right: 16px;color: #FFF;font-size: 12px;background: rgba(0, 0, 0, .7);}
-.u-settings-top span.title{height: 60px;display: block;padding: 0 15px;font-size: 18px;}
+.u-settings-top span.title{max-width:60%;height: 60px;display: block;padding: 0 15px;font-size: 18px;}
 
 .u-settings-bottom{bottom: 0;height: 60px;border-top: 1px solid #eeeeee;}
 .u-settingitem{line-height: 20px;box-sizing: border-box;font-size: 11px;text-align: center; padding: 10px;}

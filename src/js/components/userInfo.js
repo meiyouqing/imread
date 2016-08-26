@@ -32,16 +32,17 @@ var tag = React.createClass({
 	changeEdit: function(){
 		var right = <span onClick={this.finishEdit} className="icon-s icon-right f-fr"></span>;
 		var access = <span className="icon-h icon-return-black show"></span>;
-		GLOBAL.addClass(this.refs.date,'show');//兼容部分安卓机不能触发click()
+		GLOBAL.addClass(this.refs.header,'show');//兼容部分安卓机不能触发click()
 		this.setState({right: right,isEdit: true,finishButton: false,access: access});
 	},
 	finishEdit: function(){
 		var right = <span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>;
 		var access = <span className="icon-h icon-return-black"></span>
-		GLOBAL.removeClass(this.refs.date,'show');
+		GLOBAL.removeClass(this.refs.header,'show');
 		var pramas = {
 			user_gender: this.state.sexId,
-			user_birthday:this.refs.date.value.replace(/-/g,"")
+			user_birthday:this.refs.date.value.replace(/-/g,""),
+			user_name:this.state.user_name
 		}
 
 		AJAX.go('edituser',pramas,function(res){
@@ -62,10 +63,9 @@ var tag = React.createClass({
 		this.setState({right: right,isEdit: false,finishButton: true,access: access});
 	},
 	selectHeader: function(){
-
+		
 		if(!this.state.isEdit)  return;
-
-		this.refs.header.click();
+		// this.refs.header.click();
 		this.refs.header.onchange = function(e){
 			var file = this.refs.header.files[0];
 
@@ -84,10 +84,12 @@ var tag = React.createClass({
 		// GLOBAL.addClass(this.refs.date,'show');
 		this.refs.date.click();
 		this.refs.date.focus();
-
-		this.refs.date.onchange = function(e){
+		this.refs.date.oninput = function(){
 			this.setState({user_birthday: this.refs.date.value})
 		}.bind(this);
+		// this.refs.date.onchange = function(e){
+		// 	this.setState({user_birthday: this.refs.date.value})
+		// }.bind(this);
 	},
 	selectSex: function(){
 		if(!this.state.isEdit)  return;
@@ -113,7 +115,8 @@ var tag = React.createClass({
 
 			this.setState({
 				user:data,
-				user_birthday: data.user_birthday
+				user_birthday: data.user_birthday,
+				user_name: data.user_name
 			});
 		}.bind(this));
 	},
@@ -133,34 +136,38 @@ var tag = React.createClass({
 			user_gender: user_gender
 		});
 	},
+	componentWillReceiveProps: function(nextProps){
+		if(nextProps.location.state)
+			this.setState({user_name: nextProps.location.state.user_name});
+	},
 	componentDidMount: function() {
 		if(this.checkLogin(this.props.route)) this.getData();
 	},
-	componentDidUpdate:function(nextProps){
-		if(this.props.children !== nextProps.children)
-			this.getData();
+	// componentDidUpdate:function(nextProps){
+	// 	// if(this.props.children !== nextProps.children)
+	// 	// 	this.getData();
 
-	},
+	// },
 	render: function() {
 		var list;
-
 		if(!this.state.user)
 			list = <Loading />
 		else
 			list = (<div className="g-main g-main-1 m-userinfo">
-					<section className="m-user-header" onClick={this.selectHeader}>
+					<section className="m-user-header" onClick={this.selectHeader} >
 
-						<input type="file" style={{display: 'none'}} ref="header" accept="image/*;capture=camera" />
+						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}
 						<img src={this.state.user.portraitUrl || "http://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
 					</section>
 					<section className="m-user-detail">
 						<ul>
-							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user.user_name}</span></li>
+							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user_name}</span></li>
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
-							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span><input  type="date" ref="date" id="dater" className='dateInput'/></li>
+							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
 						</ul>
+						<input  type="date" ref="date" id="dater" className='dateInput'/>
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
