@@ -165,7 +165,11 @@ var Shelf = React.createClass({
 					arr.reverse();
 					this.isReverse_s('book_order');
 				} else {
-					arr = arr.sort((a, b) => a.name.localeCompare(b.name));
+					arr = Order.queue(arr,'name');
+					// arr = arr.sort(function(a,b){  
+					// 	var x = a.name,y=b.name;
+					// 	return x.localeCompare(y);
+					// });
 
 					if(this.models.book_order == 1)
 						arr.reverse();
