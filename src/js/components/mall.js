@@ -52,7 +52,9 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-
+		document.ontouchmove = function(e){
+			e.stopPropagation();
+		};
 		if(!this.props.params.subnav) this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){

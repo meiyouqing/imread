@@ -185,9 +185,9 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	if (method === 'POST') {
 		request.open(method, url);
 		request.withCredentials = true;
-		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
 		if(postdata.formdata){
+			//request.setRequestHeader("Content-Type", "multipart/form-data");
 			postdata = postdata.formdata;
 		}else{
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

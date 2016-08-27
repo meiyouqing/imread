@@ -13,7 +13,9 @@ var tag = React.createClass({
 			finishButton: true,
 			access: <span className="icon-h icon-return-black"></span>,
 			sex: false,
-			sexId: 0
+			sexId: 0,
+			portraitUrl: null,
+			formdata: null
 		};
 	},
 	logout: function(e) {
@@ -59,8 +61,19 @@ var tag = React.createClass({
 					}
 			}
 		}.bind(this));
-
 		this.setState({right: right,isEdit: false,finishButton: true,access: access});
+
+		// if(!this.state.formdata) 	{return;}
+		// AJAX.go('upload',{formdata: this.state.formdata},function(res){
+		// 			//this.getData();
+		// 			if(res.code !== 200)
+		// 				POP._alert('头像上传失败');
+		// 			else{
+		// 				this.setState({formdata: null})
+		// 				POP._alert('头像上传成功');
+		// 			}
+		// }.bind(this));
+		
 	},
 	selectHeader: function(){
 		
@@ -69,15 +82,98 @@ var tag = React.createClass({
 		this.refs.header.onchange = function(e){
 			var file = this.refs.header.files[0];
 
-			var formdata = new FormData();
+			try{
+				this.setState({portraitUrl: window.URL.createObjectURL(file)});
+			}catch(e){
+				this.setState({portraitUrl: window.webkitURL.createObjectURL(file)});
+			}
 
+			var formdata = new FormData();
 			formdata.append('file',file);
+			this.setState({formdata: formdata});
+
+			// this.GETJSONWITHAJAX('POST', 'http://192.168.0.249:3001/uploads', {
+		 //            formdata: formdata
+		 //        }, function(res) {
+		 //        	console.log(res)
+		 //            POP._alert('200')
+		 //        })
 
 			AJAX.go('upload',{formdata: formdata},function(res){
-				this.getData();
+				if(res.code !== 200)
+					POP._alert(JSON.stringify(res));
+				else
+					POP._alert('头像上传成功');
 			}.bind(this));
+
+			 // var reader = new FileReader();  
+			 // //将文件以Data URL形式读入页面  
+			 // reader.readAsDataURL(file);  
+			 // reader.onload=function(e){  
+			 // 	console.log(this.result)
+			 // 	AJAX.go('upload',{formdata: this.result},function(res){
+				// //this.getData();
+				// 	if(res.code !== 200)
+				// 		POP._alert('头像上传失败');
+				// 	else
+				// 		POP._alert('头像上传成功');
+				// }.bind(this));
+			 // } 
 			
 		}.bind(this);
+	},
+	GETJSONWITHAJAX: function(method, url, postdata, callback, onError, cacheResponse) {
+        method = method || 'POST';
+        var time = 15000;
+        var request = null;
+        try {
+            if (window.XMLHttpRequest) {
+                request = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                request = new ActiveXObject("Msxml2.Xmlhttp");
+            }
+        } catch (err) {
+            request = new ActiveXObject("Microsoft.Xmlhttp");
+        }
+        if (!request) {
+            return;
+        }
+        var timeout = false;
+        var timer = setTimeout(function() {
+            timeout = true;
+            request.abort();
+        }, time);
+        onError = onError || null;
+        request.onreadystatechange = function() {
+            if (request.readyState !== 4)
+                return;
+            if (timeout) {
+                onError('连接超时！');
+                return;
+            }
+            clearTimeout(timer);
+            if (request.status === 200) {
+                var res = false;
+                try {
+                    res = JSON.parse(request.responseText);
+                } catch (e) {
+                    //res = '连接超时！';
+                    onError(res);
+                }
+                 if (!cacheResponse) {
+                    callback(res);
+                }
+            }
+        };
+
+        request.open(method, url + '?date=' + Date.now());
+        if (postdata.formdata) {
+            postdata = postdata.formdata;
+        } else {
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            postdata = transformRequest(postdata);
+        }
+        request.send(postdata);
 	},
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
@@ -116,7 +212,8 @@ var tag = React.createClass({
 			this.setState({
 				user:data,
 				user_birthday: data.user_birthday,
-				user_name: data.user_name
+				user_name: data.user_name,
+				portraitUrl: data.portraitUrl
 			});
 		}.bind(this));
 	},
@@ -141,13 +238,9 @@ var tag = React.createClass({
 			this.setState({user_name: nextProps.location.state.user_name});
 	},
 	componentDidMount: function() {
+
 		if(this.checkLogin(this.props.route)) this.getData();
 	},
-	// componentDidUpdate:function(nextProps){
-	// 	// if(this.props.children !== nextProps.children)
-	// 	// 	this.getData();
-
-	// },
 	render: function() {
 		var list;
 		if(!this.state.user)
@@ -159,7 +252,7 @@ var tag = React.createClass({
 						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}
-						<img src={this.state.user.portraitUrl || "http://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
+						<img src={this.state.portraitUrl || "http://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
 					</section>
 					<section className="m-user-detail">
 						<ul>
