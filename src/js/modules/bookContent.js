@@ -16,7 +16,7 @@ var BookContent = (function() {
 
 		var getContent = function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
-			var url = 'http://readapi.imread.com/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cmcc_h5_charging;
+			var url = 'https://readapi.imread.com/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cmcc_h5_charging;
 			AJAX.getJSON('GET', url, {}, function(res){
 				if(res.success){
 					if(res.success.loginSubmitUrl){

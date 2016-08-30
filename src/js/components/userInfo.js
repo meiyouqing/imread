@@ -35,12 +35,14 @@ var tag = React.createClass({
 		var right = <span onClick={this.finishEdit} className="icon-s icon-right f-fr"></span>;
 		var access = <span className="icon-h icon-return-black show"></span>;
 		GLOBAL.addClass(this.refs.header,'show');//兼容部分安卓机不能触发click()
+		GLOBAL.addClass(this.refs.date,'show');
 		this.setState({right: right,isEdit: true,finishButton: false,access: access});
 	},
 	finishEdit: function(){
 		var right = <span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>;
 		var access = <span className="icon-h icon-return-black"></span>
 		GLOBAL.removeClass(this.refs.header,'show');
+		GLOBAL.removeClass(this.refs.date,'show');
 		var pramas = {
 			user_gender: this.state.sexId,
 			user_birthday:this.refs.date.value.replace(/-/g,""),
@@ -177,15 +179,26 @@ var tag = React.createClass({
 	},
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
-		// GLOBAL.addClass(this.refs.date,'show');
 		this.refs.date.click();
 		this.refs.date.focus();
-		this.refs.date.oninput = function(){
-			this.setState({user_birthday: this.refs.date.value})
-		}.bind(this);
-		// this.refs.date.onchange = function(e){
-		// 	this.setState({user_birthday: this.refs.date.value})
-		// }.bind(this);
+	},
+	forAndroid: function(){
+
+		if(!GLOBAL.isAndroid()) return;
+		var time;
+		clearInterval(time);
+		time =  setInterval(function(){
+			if(!this.refs.date) {
+				clearInterval(time);
+				return;
+			}
+			if(this.state.user_birthday != this.refs.date.value && this.refs.date.value){
+				this.setState({user_birthday: this.refs.date.value});
+				clearInterval(time);
+			} else if(this.state.user_birthday == this.refs.date.value){
+				return;
+			}
+		}.bind(this),500); 
 	},
 	selectSex: function(){
 		if(!this.state.isEdit)  return;
@@ -241,6 +254,12 @@ var tag = React.createClass({
 
 		if(this.checkLogin(this.props.route)) this.getData();
 	},
+	componentDidUpdate:function(){
+		if(this.refs.date)
+			this.refs.date.oninput = function(){
+				this.setState({user_birthday: this.refs.date.value})
+			}.bind(this);
+	},
 	render: function() {
 		var list;
 		if(!this.state.user)
@@ -260,7 +279,7 @@ var tag = React.createClass({
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
 							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
 						</ul>
-						<input  type="date" ref="date" id="dater" className='dateInput'/>
+						<input onClick={this.forAndroid}  type="date" ref="date" id="dater" className={'dateInput' + (GLOBAL.isAndroid()?' position':'')}/>
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>

@@ -124,6 +124,12 @@ module.exports = (
 					</Route>
 				</Route>
 
+				<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+				</Route>
+
 				<Route path="userInfo" component={UserInfo}>
 					<Route path="editUserame" component={EditUserame} />
 					{loginWrap}
