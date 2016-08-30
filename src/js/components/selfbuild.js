@@ -5,7 +5,8 @@ var Selfbuild = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function(){
 		return {
-			data: null
+			data: null,
+			title: null
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -14,7 +15,7 @@ var Selfbuild = React.createClass({
 	getList: function(){
 		AJAX.init(this.props.params.selfId);
 		AJAX.get(function(res) {
-			this.setState({data: res.blocklist})
+			this.setState({data: res.blocklist,title:res.name})
 		}.bind(this));
 	},
 	componentDidMount: function(){
@@ -49,7 +50,7 @@ var Selfbuild = React.createClass({
 				</div>
 		return (
 			<div className="gg-body">
-				<Header title={'艾豆随便花专区'} skipurl={true} right={null} path={this.props.route}/>
+				<Header title={this.state.title} skipurl={true} right={null} path={this.props.route}/>
 				{content}
 				{loading}
 				{this.props.children}
