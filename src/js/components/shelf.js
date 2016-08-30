@@ -7,6 +7,7 @@ var Shelf = React.createClass({
 		var bid = v.content_id;
 		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
+			if(!this.state.reading) return;
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
 				//console.log(readLog)
@@ -37,7 +38,7 @@ var Shelf = React.createClass({
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
-		var setting = false,selected=[],icon=null,left=null,middle=null;
+		var setting = false,selected=[],icon=null,left=null,middle=null,reading=false;
 
 		switch(index){
 			case 1:
@@ -61,7 +62,8 @@ var Shelf = React.createClass({
 			middle: middle,
 			right:completion,
 			model: index,
-			title: ''
+			title: '',
+			reading: reading
 		});
 
 
@@ -81,7 +83,8 @@ var Shelf = React.createClass({
 			icon:null,
 			model: 0,
 			middle: middle,
-			title: '书架'
+			title: '书架',
+			reading: true
 		})
 	},
 	seAllClick :function(){
@@ -233,6 +236,7 @@ var Shelf = React.createClass({
 			shelfList:null,
 			showModelList:false,
 			model: 0,//默认为无
+			reading: true,
 			show_model: this.models.show_model?this.models.show_model:'0',
 			order_model: this.models.order_model?this.models.order_model:'0',
 			recent_order: this.models.recent_order?this.models.recent_order:'0',
