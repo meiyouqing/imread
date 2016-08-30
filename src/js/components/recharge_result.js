@@ -2,6 +2,8 @@ var Header = require('./header');
 require('../../css/pay.css');
 
 var RechageRes = React.createClass({
+	times: 0,
+	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
 			success: null,
@@ -22,7 +24,7 @@ var RechageRes = React.createClass({
 	success: function(){
 		console.log('成功');
 		this.setState({success: true,status: '充值成功'});
-		document.dispatchEvent(new Event('rechargeSuccess'));
+		this.disPatch('rechargeSuccess');
 	},
 	failed: function(){
 		console.log('失败');
@@ -34,9 +36,14 @@ var RechageRes = React.createClass({
 			if(data.code === 200)
 				switch(data.status){
 					case 1: 
+						this.times++;
+						if(this.times >=10){
+							this.failed();
+							break;
+						}; 
 						setTimeout(function(){
 							this.checkCharge();
-						}.bind(this),5000);
+						}.bind(this),3000);
 						break;
 					case 2: 
 						this.success();

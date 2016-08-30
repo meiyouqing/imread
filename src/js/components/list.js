@@ -77,7 +77,8 @@ var List = React.createClass({
 			recommend: {},
 			bookList: null,
 			scrollUpdate: false,
-			UFO:false
+			UFO:false,
+			title: '艾美阅读'
 		}
 	},
 	componentDidMount: function(){
@@ -118,13 +119,14 @@ var List = React.createClass({
 		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
 		// }
 		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
-		header = <Header title={GLOBAL.title}  right={null} path={this.props.route}  />;				
+		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} path={this.props.route} keyValue={this.props.location.state} />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
-			content = <Loading />;
+			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
 				noData = (<div className="g-main g-main-1"><NoData /></div>);

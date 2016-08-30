@@ -105,7 +105,7 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
-	var urlBase = 'http://readapi.imread.com';
+	var urlBase = 'https://readapi.imread.com';
 	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
@@ -185,9 +185,9 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	if (method === 'POST') {
 		request.open(method, url);
 		request.withCredentials = true;
-		//request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		setRequestHeaders(request);
 		if(postdata.formdata){
+			//request.setRequestHeader("Content-Type", "multipart/form-data");
 			postdata = postdata.formdata;
 		}else{
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -221,7 +221,7 @@ function setRequestHeaders(request) {
 		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
 		'Info-Vcode': '101',
 		'Info-Userid': GLOBAL.cookie('userId') || '',
-		'Info-Uuid': GLOBAL.getUuid(),
+		'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
 		//'Info-Token': GLOBAL.cookie('userToken') || '',
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),

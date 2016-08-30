@@ -121,7 +121,7 @@ var Introduce = React.createClass({
 				book: data,
 				isOnshelf: !!data.is_self
 			});
-			this.cacheBook(data);
+			//this.cacheBook(data);
 		}.bind(this), function(error){
 			this.setState({
 				UFO:true
@@ -167,7 +167,8 @@ var Introduce = React.createClass({
 	componentWillReceiveProps: function(nextProps){
 		if(!this.isMounted()){return;}
 		this.setState({
-			chapterlist: null
+			chapterlist: null,
+			page:1
 		})
 	},
 	componentDidMount: function() {
@@ -186,7 +187,9 @@ var Introduce = React.createClass({
 		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillUpdate: function(nextProps) {
-		if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
+		//if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
+	
+		if(this.props.params.introduceId !== nextProps.params.introduceId || (!nextProps.children && this.props.children) ){
 			this.getBook(nextProps.params.introduceId);
 			this.isUpdate = false;
 			this.setState({
@@ -206,12 +209,12 @@ var Introduce = React.createClass({
 				|| this.props.params.introduceId !== nextProps.params.introduceId;
 	},
 	render: function() {
-
 		var header, loading, introduceTabs, detail;
 		var right = <span onClick={this.gotoShelf} className="icon-s icon-shelf-s f-fr"></span>
 		if (!this.state.book || !this.isUpdate) {
-			header = <Header title={GLOBAL.book[this.state.bid]} right={right}  path={this.props.route} />
-			loading = <Loading />
+			header = <Header title={null} right={right}  path={this.props.route} />
+			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+				loading = <Loading />
 			if(this.state.noData){
 				loading = <NoData />
 			}

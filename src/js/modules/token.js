@@ -16,11 +16,13 @@ var Token = {
 					//GLOBAL.removeCookie('userPhone');
 					GLOBAL.removeCookie('userToken');
 					GLOBAL.removeCookie('userId');
+					GLOBAL.removeCookie('uuid');
 				}
 			}, function(res) {
 				//GLOBAL.removeCookie('userPhone');
 				GLOBAL.removeCookie('userToken');
 				GLOBAL.removeCookie('userId');
+				GLOBAL.removeCookie('uuid');
 			});
 		}
 	}

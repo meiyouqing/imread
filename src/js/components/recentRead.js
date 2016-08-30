@@ -131,7 +131,8 @@ render: function() {
     var content;
 
     if (!this.state.list) {
-        content = < Loading / >
+        if(GLOBAL.isRouter(this.props))
+            content = < Loading / >
     } else if (this.state.list.length) {
         content = ( < ul > {
             this.state.list.map(function(book, i) {

@@ -2,8 +2,9 @@
 .m-userblock{padding-bottom:20px;box-sizing:border-box;background-color: #fff;width: 75%;left: inherit;z-index: 100}
 .m-userblock .m-ublock .u-lines{padding-bottom:10px;background: #FFFFFF;border:0;}
 .m-userblock .m-ublock .u-lines.active0{border-bottom: 1px solid #EEE;}
+.m-userblock .u-lines .u-line{margin-left: 5px;}
 .m-ublock{margin-top: 10px;}
-.m-ublock .title{margin-left: 15px;}
+.m-ublock .title{margin-left: 8px;}
 .m-ublock .title h2{padding: 0 15px;height: 56px;line-height: 56px;font-size: 14px;font-weight: bold;color: #333333;}
 .m-wrapper{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.3);z-index:11;display: none;}
 .m-wrapper.show{display: block;}
@@ -33,7 +34,7 @@
 .avatar-block{min-height: 133px; height: 133px;background: #40AFA9;}
 .avatar-block .bg{display:block;width: 100%;height: 100%;}
 .avatar-wrap{position: absolute;top: 50%;left: 20px;width: 60px;height: 60px;overflow: hidden;box-sizing:border-box;margin-top: -30px;border-radius: 50%;}
-.avatar-wrap img{display: block;position: absolute;left: 0;top:0;width: 60px;height: 60px;}
+.avatar-wrap img{display: block;position: absolute;left: 0;top:0;width: 60px;height: 60px;border-radius: 50%;}
 .username{position: absolute;top: 50%;left: 100px;right: 0;text-align: left;margin-top: -27px;font-size: 17px;color: #FFFFFF;line-height: 30px;}
 .username > p:nth-child(2) {font-size: 12px;}
 
@@ -42,3 +43,4 @@
 .u-lines .u-line.logout-btn {margin-left: 0;text-align: center;color: #F16663;font-size: 14px;}
 .u-lines .u-line a span{pointer-events:none;    vertical-align: middle;}
 .u-lines .u-line .s-title{display: inline-block;color: #777777;font-size: 12px;margin-left: 15px;}
+

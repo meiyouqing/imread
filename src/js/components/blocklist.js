@@ -226,7 +226,7 @@ var Block9 = React.createClass({
 					<ul className="f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							return <Book5 key={i} data={v} />
+							return <Book5 key={i} data={v} num={i}/>
 						}.bind(this))
 					}
 					</ul>

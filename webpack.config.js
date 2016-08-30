@@ -46,6 +46,7 @@ module.exports = {
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
 			POP: '../modules/confirm',
+			Order: '../modules/order',
 			parseQuery: '../modules/parseQuery'
 		}),
 		new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),

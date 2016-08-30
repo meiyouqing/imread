@@ -27,11 +27,15 @@ var Mall = React.createClass({
 		}
 	},
 
-	getList: function (scrollUpdate){
+	getList: function (Update){
 		AJAX.init(this.APIparam);
-		if(scrollUpdate){
+		// if(scrollUpdate){
+		// 	var n = AJAX.API._param['pages']? 'pages':'page';
+		// 	AJAX.API._param[n]++;			
+		// }
+		if(Update){
 			var n = AJAX.API._param['pages']? 'pages':'page';
-			AJAX.API._param[n]++;			
+			AJAX.API._param[n] =1;			
 		}
 		AJAX.get((data)=>{
 			if(!data.blocklist){return}
@@ -50,16 +54,20 @@ var Mall = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
+
 		this.APIparam = this.props.params.subnav;
+		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
-		if(GLOBAL.isRouter(this.props))	this.getList();
+		if(GLOBAL.isRouter(this.props))	this.getList(true);
 	},
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
-		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList();
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList(true);
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);
+
+
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		//console.log(this.props,nextProp)

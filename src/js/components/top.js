@@ -81,7 +81,8 @@ var Top = React.createClass({
 
 		var list, arr=[];
 		if(!this.state.list){
-			list = <Loading />
+			if(GLOBAL.isRouter(this.props))
+				list = <Loading />
 		}else{
 			if(this.state.list.length){
 				list = (

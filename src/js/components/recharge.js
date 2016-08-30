@@ -9,6 +9,7 @@ var Recharge = React.createClass({
 	initData:null,
 	loading:false,
 	params: {},
+	mixins: [Mixins()],
 	handleSubmit: function() {
 		var that = this;
 		// var data = {code:200};
@@ -29,8 +30,8 @@ var Recharge = React.createClass({
 		this.params.verify_code = verifyCode;
 		that.loading = true;
 
-		//that.params = {trade_no:"d1258ca57d9f42ec-123",trade_day:20160811,order_no:1788352850130944,verify_code:691554}
-		//browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
+		// that.params = {trade_no:"d1258ca57d9f42ec-123",trade_day:20160811,order_no:1788352850130944,verify_code:691554}
+		// browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 
 
 		AJAX.go('payConfirm', this.params, success, null, 'recharge');
@@ -90,6 +91,8 @@ var Recharge = React.createClass({
 			});
 			POP.alert((res.reason+', 错误码：'+res.code));
 		}.bind(this);
+
+
 		// var gotInit = function(data,again){
 		// 	this.initData = data;
 		// 	this.refs.key.focus();
@@ -103,8 +106,10 @@ var Recharge = React.createClass({
 		// 		AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
 		// 	}
 		// }.bind(this);
-		if(!this.params.trade_no)	this.getPay();
+		if(!this.params.trade_no || (this.prv_num != mobile_num))	this.getPay();
 		else this.rePay();
+
+		this.prv_num = mobile_num;
 		countDown();
 		// if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
 		// 	AJAX.go('paySign', this.params_init, function(data) {
@@ -191,7 +196,7 @@ var Recharge = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route}/>
+				<Header right={null} path={this.props.route} title="艾豆充值"/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						<div className="u-divider"></div>
