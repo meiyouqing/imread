@@ -1,6 +1,6 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin'),
-	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
-	webpackDevMiddleware = require("webpack-dev-middleware"),
+	// OpenBrowserPlugin = require('open-browser-webpack-plugin'),
+	//webpackDevMiddleware = require("webpack-dev-middleware"),
     webpack = require('webpack'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;
@@ -49,6 +49,5 @@ module.exports = {
 			Order: '../modules/order',
 			parseQuery: '../modules/parseQuery'
 		}),
-		new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
 	] 
 };

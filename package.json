@@ -26,10 +26,11 @@
     "html-webpack-plugin": "^1.7.0",
     "open-browser-webpack-plugin": "0.0.2",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-dev-server": "^1.13.1"
+    "webpack-hot-middleware": "^2.12.2"
   },
   "scripts": {
-    "start": "webpack && node server.js",
+    "start": "node server.js",
+    "start-dev": "node server-dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Min & Ljy",

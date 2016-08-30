@@ -515,7 +515,7 @@ var Reading = React.createClass({
 		}
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
-	toggleSettings: function(closeChapterlist) {
+	toggleSettings: function() {
 		if(!this.isMounted()){return;}
 		if (!this.state.showSetting && this.state.showIntercut) {
 			uploadLog.send('intercut', {
@@ -525,8 +525,7 @@ var Reading = React.createClass({
 			});
 		}
 		this.setState({
-			showSetting: !this.state.showSetting,
-			showChapterlist: closeChapterlist && false || this.state.showChapterlist
+			showSetting: !this.state.showSetting
 		});
 	},
 	onVisibilitychange: function(){
@@ -629,22 +628,22 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	handleScroll: function(e) {		
-		if(this.showDownload) {
-			var scroller = this.refs.scrollarea,
-				reader = this.refs.reading;
+	// handleScroll: function(e) {		
+	// 	if(this.showDownload) {
+	// 		var scroller = this.refs.scrollarea,
+	// 			reader = this.refs.reading;
 
-			if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
-				if(this.state.download)	  this.setState({download: false});
-			} else {
-				if(!this.state.download)	  this.setState({download: true});
-			}
-		}	//下载客户端提示
-
-		if (this.state.showSetting) {
-			this.toggleSettings(1);
-		}
-	},
+	// 		if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
+	// 			if(this.state.download)	  this.setState({download: false});
+	// 		} else {
+	// 			if(!this.state.download)	  this.setState({download: true});
+	// 		}
+	// 	}	//下载客户端提示
+	// 	console.log(111)
+	// 	if (this.state.showSetting) {
+	// 		this.toggleSettings();
+	// 	}
+	// },
 	changeOrder: function(){
 		this.setState({orderSeq: !this.state.orderSeq});
 	},
