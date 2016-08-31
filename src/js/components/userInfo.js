@@ -94,13 +94,6 @@ var tag = React.createClass({
 			formdata.append('file',file);
 			this.setState({formdata: formdata});
 
-			// this.GETJSONWITHAJAX('POST', 'http://192.168.0.249:3001/uploads', {
-		 //            formdata: formdata
-		 //        }, function(res) {
-		 //        	console.log(res)
-		 //            POP._alert('200')
-		 //        })
-
 			AJAX.go('upload',{formdata: formdata},function(res){
 				if(res.code !== 200)
 					POP._alert(JSON.stringify(res));
@@ -123,59 +116,6 @@ var tag = React.createClass({
 			 // } 
 			
 		}.bind(this);
-	},
-	GETJSONWITHAJAX: function(method, url, postdata, callback, onError, cacheResponse) {
-        method = method || 'POST';
-        var time = 15000;
-        var request = null;
-        try {
-            if (window.XMLHttpRequest) {
-                request = new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                request = new ActiveXObject("Msxml2.Xmlhttp");
-            }
-        } catch (err) {
-            request = new ActiveXObject("Microsoft.Xmlhttp");
-        }
-        if (!request) {
-            return;
-        }
-        var timeout = false;
-        var timer = setTimeout(function() {
-            timeout = true;
-            request.abort();
-        }, time);
-        onError = onError || null;
-        request.onreadystatechange = function() {
-            if (request.readyState !== 4)
-                return;
-            if (timeout) {
-                onError('连接超时！');
-                return;
-            }
-            clearTimeout(timer);
-            if (request.status === 200) {
-                var res = false;
-                try {
-                    res = JSON.parse(request.responseText);
-                } catch (e) {
-                    //res = '连接超时！';
-                    onError(res);
-                }
-                 if (!cacheResponse) {
-                    callback(res);
-                }
-            }
-        };
-
-        request.open(method, url + '?date=' + Date.now());
-        if (postdata.formdata) {
-            postdata = postdata.formdata;
-        } else {
-            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            postdata = transformRequest(postdata);
-        }
-        request.send(postdata);
 	},
 	selectDate: function(){
 		if(!this.state.isEdit)  return;
