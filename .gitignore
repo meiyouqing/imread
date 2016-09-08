@@ -10,7 +10,6 @@ Desktop.ini
 public
 tmp
 public
-server
 node_modules
 webpack.config.js
 route.js
@@ -20,6 +19,4 @@ indexTemplate.html
 index.html
 p
 npm-debug.log
-server.bundle.js
-*.server.bundle.js
 
