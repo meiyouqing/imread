@@ -29,7 +29,7 @@
     "webpack-hot-middleware": "^2.12.2"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-p.js",
     "start-dev": "node server-dev.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
