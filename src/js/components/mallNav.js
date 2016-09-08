@@ -1,3 +1,4 @@
+import React from 'react'
 import MallNavLink from './mallNavLink'
 
 var MallNav = React.createClass({

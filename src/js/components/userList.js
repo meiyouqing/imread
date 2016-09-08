@@ -1,6 +1,10 @@
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var myEvent = require('../modules/myEvent');
-var Mixins = require('../modules/mixins');
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/user.css');
 }
 var ULine = React.createClass({
@@ -12,7 +16,7 @@ var ULine = React.createClass({
 			<li className="u-line">
 				<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
 					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
-					<span className={"icon-n" + ' ' + this.props.line.icon}></span>
+					<span className={"icon-u" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
 					<span className='s-title'>{this.props.line.s_title}</span>
 				</Link>
@@ -61,7 +65,8 @@ var User = React.createClass({
 	shouldComponentUpdate: function(nextProp, nextState) {
 		return this.state.user.phone !== nextState.user.phone 
 		    || this.state.needUpdate !== nextState.needUpdate
-		    || this.props.children !== nextProp.children;
+		    || this.props.children !== nextProp.children
+		    || this.state.userInfo !== nextState.userInfo;
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
@@ -73,6 +78,7 @@ var User = React.createClass({
 		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
 			this.getUserInfo();
 		}.bind(this));
+
 	},
 	componentDidUpdate: function(nextProp){
 	},
@@ -193,7 +199,7 @@ var User = React.createClass({
 			userName = this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
 			logoutBtn = (<div>
 				<div className="avatar-wrap">
-					<img src={this.state.userInfo.portraitUrl} />
+					<img src={this.state.userInfo.portraitUrl || 'http://m.imread.com/src/img/user/avatar@2x.png'} />
 				</div>
 				<div className="username"><p className="f-ellipsis">{userName}</p><p>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>

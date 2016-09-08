@@ -1,3 +1,5 @@
+import GLOBAL from '../modules/global'
+import React from 'react'
 import { Link } from 'react-router';
 var Img = require('./img');
 

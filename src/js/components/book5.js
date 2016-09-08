@@ -1,3 +1,5 @@
+import GLOBAL from '../modules/global'
+import React from 'react'
 import { Link } from 'react-router';
 
 var Book5 = React.createClass({
@@ -7,7 +9,7 @@ var Book5 = React.createClass({
 	render: function() {
 		var hrefStr = GLOBAL.typeHref(this.props.data);
 		var topCls = '';
-		var topNum = this.props.data.locate;
+		var topNum = this.props.num+1;
 		switch(topNum){
 			case 1:
 				topCls=" NO1 hot";

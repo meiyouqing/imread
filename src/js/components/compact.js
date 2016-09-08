@@ -1,3 +1,4 @@
+import React from 'react'
 var Header = require('./header');
 var Conpact = React.createClass({
 	render: function() {

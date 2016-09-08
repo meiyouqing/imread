@@ -1,5 +1,9 @@
+import myEvent from '../modules/myEvent'
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/tag.css');
 }
 if(typeof window !== 'undefined'){

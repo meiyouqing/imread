@@ -1,7 +1,13 @@
+import { browserHistory } from 'react-router'
+import React from 'react'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
 var Header = require('./header');
 var Recharge = require('./recharge');
 
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/pay.css')
 }
 
@@ -41,7 +47,14 @@ var Balance = React.createClass({
 		var ordered = this.state.list[this.state.active];
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
+	shouldComponentUpdate: function(nextPros, nextState) {
+		return nextState.balance != this.state.balance
+			    || nextState.list != this.state.list
+			    || nextState.active != this.state.active
+			    || this.props.children != nextPros.children;
+	},
 	render: function () {
+		
 		var content;
 		if (this.state.loading) {
 			content = <Loading />

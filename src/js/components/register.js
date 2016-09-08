@@ -1,3 +1,9 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import parseQuery from '../modules/parseQuery'
+import GLOBAL from '../modules/global'
+import React from 'react'
 var Header = require('./header');
 
 

@@ -1,3 +1,4 @@
+import React from 'react'
 var Book1 = require('./book1');
 var Block8 = React.createClass({
 	shouldComponentUpdate: function(nextProps,nextState){

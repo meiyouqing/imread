@@ -1,6 +1,13 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/userinfo.css');
 }
 var tag = React.createClass({
@@ -17,19 +24,21 @@ var tag = React.createClass({
 			user_name:this.refs.username.value
 		}
 
-		AJAX.go('edituser',pramas,function(res){
-			if(res.code === 200){
-				GLOBAL.goBack();
-				document.dispatchEvent(new Event('updateUser'));
-			} else {
-				if(typeof res.error === 'string')
-					POP._alert(res.error);
-				else 
-					for(var key in res.error[0]){
-						POP._alert(res.error[0][key])
-					}
-			}
-		}.bind(this));
+		// AJAX.go('edituser',pramas,function(res){
+		// 	if(res.code === 200){
+		// 		GLOBAL.goBack();
+		// 		this.disPatch('updateUser');
+		// 	} else {
+		// 		if(typeof res.error === 'string')
+		// 			POP._alert(res.error);
+		// 		else 
+		// 			for(var key in res.error[0]){
+		// 				POP._alert(res.error[0][key])
+		// 			}
+		// 	}
+		// }.bind(this));
+		var backUrl = location.pathname.replace('/'+this.props.route.path,'');
+		browserHistory.push({pathname: backUrl,state: pramas});
 	},
 	clearValue: function(){
 		this.refs.username.value = '';

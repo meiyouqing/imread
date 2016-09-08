@@ -1,3 +1,6 @@
+import { Link } from 'react-router';
+import GLOBAL from '../modules/global'
+import React from 'react'
 //var Img = require('./img');
 
 var Subject = React.createClass({

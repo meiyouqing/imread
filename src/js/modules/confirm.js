@@ -1,5 +1,5 @@
 
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/confirm.css');
 }
 

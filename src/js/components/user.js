@@ -1,7 +1,11 @@
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var myEvent = require('../modules/myEvent');
-var Mixins = require('../modules/mixins');
 
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/user.css');
 }
 if(typeof window !== 'undefined'){

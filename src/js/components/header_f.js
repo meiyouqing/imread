@@ -1,3 +1,6 @@
+import { browserHistory } from 'react-router'
+import GLOBAL from '../modules/global'
+import React from 'react'
 import parseQuery from '../modules/parseQuery';
 
 var Header = React.createClass({

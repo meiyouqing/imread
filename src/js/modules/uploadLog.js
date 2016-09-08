@@ -1,3 +1,5 @@
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
 	var isHidden = require('./isHidden');
 }

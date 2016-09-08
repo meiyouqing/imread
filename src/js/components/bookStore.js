@@ -1,3 +1,7 @@
+import NoData from './noData'
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
+import React from 'react'
 import { Link } from 'react-router';
 var Img = require('./img');
 var Book10 = require('./book10');
@@ -65,16 +69,59 @@ var List = React.createClass({
 });
 
 var Guess = React.createClass({
+	mixins: [Mixins()],
+	getInitialState: function(){
+		return{
+			noMore:false,
+			scrollUpdate:false,
+			onerror:false,
+			list:[]
+		}
+	},
+	componentDidMount: function(){
+		if(this.props.data.contentlist.length){
+			AJAX.init('block.'+this.props.data.id+'.10.1');
+			this.getList();
+		}
+	},
+	componentDidUpdate: function(nextProp) {
+		this.lazyloadImage(this.refs.contain,true);
+		if(this.props.data.contentlist.length !== nextProp.data.contentlist.length){
+			AJAX.init('block.'+this.props.data.id+'.10.1');
+			this.getList();
+		}
+	},
+	getList: function(){
+		
+		AJAX.get((data)=>{
+			if(data.content.length<1)	{
+				this.setState({noMore: true});
+				return;
+			}
+			this.setState({
+				list: this.state.scrollUpdate? this.state.list.concat(data.content):data.content,
+				scrollUpdate: false
+			});
+		},this.onerror);
+	},
 	render: function(){
-		var list;
+		var sLoading = null,list=null;
+		
 		if(!this.props.data.contentlist.length){
 			list = <NoData type="emptyTag" updateGuess={this.props.updateGuess} />
 		} else {
-			list  = <Block7 bookList={this.props.data.contentlist} />;
+			list  = <Block7 bookList={this.state.list} />;
+			if(this.state.list.length)
+				sLoading = <Loading cls='u-sLoading transparent' />
 		}
+
+		if(this.state.noMore)
+			sLoading = null;
+
 		return (
-			<div className="g-scroll bg-1">
+			<div className="g-scroll bg-1" ref="contain" onScroll={this.scrollHandle}>
 				{list}
+				{sLoading}
 			</div>
 		)
 	}

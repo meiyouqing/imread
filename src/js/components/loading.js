@@ -1,3 +1,4 @@
+import React from 'react'
 var Loading = React.createClass({
 	getDefaultProps: function(){
 		return {
@@ -24,7 +25,7 @@ var Loading = React.createClass({
 	render: function(){
 		return (
 			<div className={this.props.cls}>
-				<div className={cls1}><i className="ball-2"></i></div>
+				<div className={this.state.cls}><i className="ball-2"></i></div>
 				<i>{this.props.text}</i>
 			</div>
 			);

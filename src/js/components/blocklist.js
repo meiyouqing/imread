@@ -1,3 +1,9 @@
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import myEvent from '../modules/myEvent'
+import React from 'react'
 var Book1 = require('./book1');
 var Book2 = require('./book2');
 var Book3 = require('./book3');
@@ -226,7 +232,7 @@ var Block9 = React.createClass({
 					<ul className="f-clearfix">
 					{
 						this.props.data.contentlist.map(function(v,i){
-							return <Book5 key={i} data={v} />
+							return <Book5 key={i} data={v} num={i}/>
 						}.bind(this))
 					}
 					</ul>

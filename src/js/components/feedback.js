@@ -1,3 +1,6 @@
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }

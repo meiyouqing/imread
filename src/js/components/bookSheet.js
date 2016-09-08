@@ -1,8 +1,14 @@
+import parseQuery from '../modules/parseQuery'
+import Loading from './loading'
+import NoData from './noData'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
 //var Block7 = require('./block7');
 var Book1 = require('./book1');
-var Mixins = require('../modules/mixins');
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/bookSheet.css');
 }
 
@@ -99,7 +105,8 @@ var Module = React.createClass({
 	//定义content
 	//console.log(this.state.noMore,this.state.scrollUpdate)
 		if(!this.state.data){
-			content = <Loading />;
+			if(GLOBAL.isRouter(this.props))
+				content = <Loading />;
 		}else{
 			//var m_time = this.state.data.modify_time.substr(0,4)+'.'+this.state.data.modify_time.substr(4,2)+'.'+this.state.data.modify_time.substr(6,2);
 			if(!this.state.data.content.length){

@@ -1,3 +1,10 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Img = require('./img');
 var Book10 = require('./book10');
 var Header = require('./header');
@@ -116,8 +123,10 @@ var StoreList = React.createClass({
 		if(this.state.noMore)
 			sLoading = null;
 
-		if(!this.state.list)
-			list = <Loading />
+		if(!this.state.list){
+			if(GLOBAL.isRouter(this.props))
+				list = <Loading />
+		}
 		else{
 			if(this.state.list.length)
 				list = (<div className="g-main g-main-1">

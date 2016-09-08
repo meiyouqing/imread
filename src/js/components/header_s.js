@@ -1,3 +1,7 @@
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
 
 var Header_s = React.createClass({
 	getInitialState: function(){

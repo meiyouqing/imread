@@ -1,3 +1,4 @@
+import storage from '../modules/storage'
 var ReadingStyle = {
 	defaultStyle: {
 		style: 0,

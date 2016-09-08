@@ -1,3 +1,8 @@
+import parseQuery from '../modules/parseQuery'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
 var Header = require('./header');
 var MallNav = require('./mallNav');
 var UserList = require('./userList');
@@ -9,12 +14,10 @@ var Mall = React.createClass({
 	},
 	handleGetNav:function(data){
 		var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
-		// if(location.pathname === this.props.route.path){
-			// browserHistory.replace('/mall/'+subnav);
-		// }
 		this.setState({
 			navList:data.pagelist
 		});
+		browserHistory.replace('/mall/'+subnav);
 	},
 	gotoSearch: function(){
 		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
@@ -36,23 +39,8 @@ var Mall = React.createClass({
 		var param = location.pathname.split('/').pop();
 		return param.indexOf('page')>=0;
 	},
-	componentWillMount:function(){
-		if(typeof window === 'undefined'){
-			var fs = require('fs');
-			global.imreadData.group = fs.readFileSync('./serverside/data/group.json','utf8');
-			this.handleGetNav(JSON.parse(global.imreadData.group));
-		}else{
-			if(window.imreadData){
-				console.log(imreadData);
-				return;
-				this.handleGetNav(imreadData);
-			}			
-		}
-	},
 	componentDidMount: function(){
-		if(!window.imreadData){
-			this.getNav();
-		}
+		this.getNav();
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
@@ -66,8 +54,10 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-
-		if(!this.props.params.subnav) this.getNav();
+		document.ontouchmove = function(e){
+			e.stopPropagation();
+		};
+		// if(!this.props.params.subnav) this.getNav();
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
@@ -82,7 +72,7 @@ var Mall = React.createClass({
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
-			// userList = <UserList hide={this.hide} route={this.props.route} />;
+			userList = <UserList hide={this.hide} route={this.props.route} />;
 		}
 
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,

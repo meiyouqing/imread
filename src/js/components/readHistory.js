@@ -1,3 +1,6 @@
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
 
 var readHistory = React.createClass({

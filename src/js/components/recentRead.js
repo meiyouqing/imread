@@ -1,9 +1,14 @@
+import storage from '../modules/storage'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
+import Loading from './loading'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
 var Book9 = require('./book9_recentRead');
 var NoData = require('./noData');
 
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/recentRead.css');
 }
 if(typeof window !== 'undefined'){
@@ -136,7 +141,8 @@ render: function() {
     var content;
 
     if (!this.state.list) {
-        content = < Loading / >
+        if(GLOBAL.isRouter(this.props))
+            content = < Loading / >
     } else if (this.state.list.length) {
         content = ( < ul > {
             this.state.list.map(function(book, i) {

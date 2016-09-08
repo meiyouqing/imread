@@ -1,3 +1,8 @@
+import myEvent from '../modules/myEvent'
+import { browserHistory, Link } from 'react-router'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 
 var NoData = React.createClass({
 	mixins: [Mixins()],

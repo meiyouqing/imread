@@ -1,13 +1,20 @@
+import myEvent from '../modules/myEvent'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
 var Header = require('./header');
 
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
 
 var mod = React.createClass({
+	mixins: [Mixins()],
 	rechargeHandle: function(e) {
 		var hash = location.pathname;
 		browserHistory.push(GLOBAL.setHref('balance'));
@@ -23,7 +30,7 @@ var mod = React.createClass({
 				if(data.code == 403)
 					POP._alert('支付失败');
 				else {
-					document.dispatchEvent(new Event('updateUser'));
+					that.disPatch('updateUser');
 					that.props.goBack();
 				}
 				// var autoPay = that.props.chargeMode==2? true:false;

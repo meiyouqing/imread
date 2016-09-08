@@ -1,9 +1,17 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
+import Mixins from '../modules/mixins'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
 	var isHidden = require('../modules/isHidden');
 }
-if(true||typeof window !== 'undefined'){
+if(false||typeof window !== 'undefined'){
 	require('../../css/reading.css');
 }
 
@@ -187,7 +195,7 @@ var Reading = React.createClass({
 	cacheReadLog: function(readLog) {
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return}
-		var bookIntroduce = {};
+		// var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
 		// var books = storage.get('bookIntroduce', 'array');
 		// for (var i = 0; i < books.length; i++) {
@@ -197,9 +205,9 @@ var Reading = React.createClass({
 		// 	}
 		// }
 
-		readLog.name = bookIntroduce.book_name || this.state.introduce.book_name;
-		readLog.author = bookIntroduce.author || this.state.introduce.author;
-		readLog.big_coverlogo = bookIntroduce.big_coverlogo || this.state.introduce.big_coverlogo;
+		readLog.name = this.state.introduce.book_name;
+		readLog.author = this.state.introduce.author;
+		readLog.big_coverlogo = this.state.introduce.big_coverlogo;
 		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
@@ -338,10 +346,10 @@ var Reading = React.createClass({
 	},
 	gotContent: function(data,autoPay){
 		if(!this.isMounted()){return;}
+		if(data.code === 403) return;
 		this.setState({
 			showSetting:false
 		})		
-
 		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
@@ -355,6 +363,7 @@ var Reading = React.createClass({
 		if(autoPay){
 			GLOBAL.cookie(that.bid,'autoPay',7)
 		}
+
 		if(data.pageType==='order'){
 
 			if(GLOBAL.cookie(that.bid)==='autoPay'){
@@ -378,11 +387,13 @@ var Reading = React.createClass({
 		that.setState({
 			data: data,
 			loading: false,
-			page: currentPage,
+			//page: currentPage,
 			pages: currentPage,
 			order: false
 		}, that.getChapterlist);
-		that.getNextContent(data);
+
+		if(that.isLogin())
+			that.getNextContent(data);
 	},
 	getContent: function() {
 		var book_info = this.APIParts('readingId');
@@ -393,7 +404,6 @@ var Reading = React.createClass({
 
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
-		//console.log(nextChapter.nextChapterId,this.state.chapterid)
 		if((nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
@@ -402,7 +412,6 @@ var Reading = React.createClass({
 			loading: true
 		});
 		var that = this;
-
 		bookContent.get({
 			bid: this.bid,
 			cid: this.chapterid,
@@ -422,6 +431,7 @@ var Reading = React.createClass({
 		});
 	},
 	getNextContent: function(data) {
+
 		if(!this.isMounted()){return;}
 		var that = this;
 		bookContent.get({
@@ -431,7 +441,7 @@ var Reading = React.createClass({
 			source_id : this.source_id,
 			book_id: this.book_id,
 			callback: function(data){
-				storage.set('nextChapter',data);
+				storage.set('nextChapter',data.success);
 			}.bind(this),
 			onError: GLOBAL.noop
 		});
@@ -478,7 +488,7 @@ var Reading = React.createClass({
 				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
-						document.dispatchEvent(new Event('updateUser'));
+						that.disPatch('updateUser');
 						that.gotContent(data);
 					});
 				}else{
@@ -518,7 +528,7 @@ var Reading = React.createClass({
 		}
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
-	toggleSettings: function(closeChapterlist) {
+	toggleSettings: function() {
 		if(!this.isMounted()){return;}
 		if (!this.state.showSetting && this.state.showIntercut) {
 			uploadLog.send('intercut', {
@@ -528,8 +538,7 @@ var Reading = React.createClass({
 			});
 		}
 		this.setState({
-			showSetting: !this.state.showSetting,
-			showChapterlist: closeChapterlist && false || this.state.showChapterlist
+			showSetting: !this.state.showSetting
 		});
 	},
 	onVisibilitychange: function(){
@@ -553,7 +562,6 @@ var Reading = React.createClass({
 		}
 		//扉页信息
 		this.states = this.props.location.state;
-
 		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
@@ -574,10 +582,10 @@ var Reading = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProps, nextState) {
-		// var that = this;
-
-		if((this.props.params !== nextProps.params) || (this.props.children !== nextProps.children))
+		// var that = this; || (this.props.children !== nextProps.children)
+		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
+		}
 
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
@@ -633,22 +641,22 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	handleScroll: function(e) {		
-		if(this.showDownload) {
-			var scroller = this.refs.scrollarea,
-				reader = this.refs.reading;
+	// handleScroll: function(e) {		
+	// 	if(this.showDownload) {
+	// 		var scroller = this.refs.scrollarea,
+	// 			reader = this.refs.reading;
 
-			if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
-				if(this.state.download)	  this.setState({download: false});
-			} else {
-				if(!this.state.download)	  this.setState({download: true});
-			}
-		}	//下载客户端提示
-
-		if (this.state.showSetting) {
-			this.toggleSettings(1);
-		}
-	},
+	// 		if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
+	// 			if(this.state.download)	  this.setState({download: false});
+	// 		} else {
+	// 			if(!this.state.download)	  this.setState({download: true});
+	// 		}
+	// 	}	//下载客户端提示
+	// 	console.log(111)
+	// 	if (this.state.showSetting) {
+	// 		this.toggleSettings();
+	// 	}
+	// },
 	changeOrder: function(){
 		this.setState({orderSeq: !this.state.orderSeq});
 	},
@@ -690,10 +698,7 @@ var Reading = React.createClass({
 		this.setState({order: false});
 	},
 	timeOut: function(){
-		setTimeout(function(){
-			if(this.state.loading)
-				GLOBAL.goBack();
-		}.bind(this), 10000)
+
 	},
 	render:function(){
 		var currentRoute = location.pathname.split('/');
@@ -733,14 +738,13 @@ var Reading = React.createClass({
 				);
 		}
 		if(this.state.loading) {
-			
 			return (
 				<div className="gg-body">
 					{/*{head}
 					<i className="u-loading u-book-loading">努力加载中...</i>*/}
 					<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<div className="fy-detail">
-							<p className="fy-title">{this.states.book_name || ''}</p>
+							<p className="fy-title">{this.states.book_name || '艾美阅读'}</p>
 							<p className="fy-author">{this.states.author || ''}</p>
 						</div>
 						<div className="fy-gw">发现阅读之美</div>

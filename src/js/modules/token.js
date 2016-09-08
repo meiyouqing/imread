@@ -1,3 +1,5 @@
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
 
 
 var Token = {
@@ -16,11 +18,13 @@ var Token = {
 					//GLOBAL.removeCookie('userPhone');
 					GLOBAL.removeCookie('userToken');
 					GLOBAL.removeCookie('userId');
+					GLOBAL.removeCookie('uuid');
 				}
 			}, function(res) {
 				//GLOBAL.removeCookie('userPhone');
 				GLOBAL.removeCookie('userToken');
 				GLOBAL.removeCookie('userId');
+				GLOBAL.removeCookie('uuid');
 			});
 		}
 	}

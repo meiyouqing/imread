@@ -1,3 +1,5 @@
+import AJAX from '../modules/AJAX'
+import React from 'react'
 import {Route, IndexRoute, WithRoute, IndexRedirect, RouterContext} from 'react-router';
 import App from './app'
 import User from './user'
@@ -29,6 +31,7 @@ import StoreList from './storeList'
 import UserInfo from './userInfo'
 import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
+import MLogin from './m_login'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -45,6 +48,7 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:readingId" component={Reading}>
+			<Route path="m_login" component={MLogin} />
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >
@@ -98,7 +102,7 @@ var topWrap = (
 		</Route>
 	)
 
-module.exports = (
+export default (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
 		{loginWrap}
@@ -120,6 +124,12 @@ module.exports = (
 						{bookWrap}
 						{searchWrap}
 					</Route>
+				</Route>
+
+				<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
 				</Route>
 
 				<Route path="userInfo" component={UserInfo}>

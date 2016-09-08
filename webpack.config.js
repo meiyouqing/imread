@@ -1,9 +1,7 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin'),
-	webpackDevMiddleware = require("webpack-dev-middleware"),
-    webpack = require('webpack'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+var webpack = require('webpack'),
+    // ExtractTextPlugin = require('extract-text-webpack-plugin'),
 	path    = require('path'),
-	debug   = process.argv.indexOf('-p')===-1;
+	debug   = true;
 	//console.log(process.argv)
 	
 module.exports = {
@@ -11,32 +9,35 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, (debug? 'public':'p/public')),
-        publicPath: '/',
-        filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
+        path: path.join(__dirname,'app'),
+        publicPath: '/public/',
+        filename: debug?'bundle.js':'[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
-	resolve:{
-		extensions: ['','.js','.jsx'] 
-	},
+	// resolve:{
+	// 	extensions: ['','.js','.jsx'] 
+	// },
 	module: {
 		loaders:[
 			// {test: /\.js[x]?$/,  exclude: /node_modules/,loader: 'babel-loader'},
-			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
-			{ test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") },
+			{test: /\.js$/, exclude: /node_modules/,include: __dirname, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
+			{test: /\.css$/, exclude: /node_modules/,loader: "style!css" },
 			{test: /\.(png|jpg|gif)$/,  exclude: /node_modules/,loader: 'url-loader?limit=20092'}
 		]
 	},
-	plugins: [
-		new ExtractTextPlugin("src/css/style.css"),
+	plugins: debug?
+				[]:
+				[
+		// new ExtractTextPlugin("src/css/style.css"),
 	    new webpack.optimize.DedupePlugin(),
 	    new webpack.optimize.OccurrenceOrderPlugin(),
-    		new HtmlWebpackPlugin({
-			filename: '../index.html',
-		    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
-		    inject: 'body', // Inject all scripts into the body 
-		    hash: !debug
-		  }),
+	    new webpack.HotModuleReplacementPlugin(),
+   //  		new HtmlWebpackPlugin({
+			// filename: '../index.html',
+		 //    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
+		 //    inject: 'body', // Inject all scripts into the body 
+		 //    hash: !debug
+		 //  }),
 		new webpack.ProvidePlugin({
 			React: 'react',
 			AJAX: '../modules/AJAX',

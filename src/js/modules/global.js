@@ -1,3 +1,5 @@
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
@@ -15,7 +17,7 @@ Date.prototype.Format = function (fmt) {
     return fmt;
 };
 
-var GLOBAL = {
+const GLOBAL = {
 	// state:1,
 	// historyPath: null,
 	header:{},
@@ -54,11 +56,15 @@ var GLOBAL = {
 		}
 		else 
 			route_id = route_key;
-
-		var route_path = window.location.pathname.split('/');
-
+		var route_path;
+		if(typeof window === 'undefined') {
+			return true;
+			route_path = global.requestURL.split('/');
+		}else{			
+			route_path = window.location.pathname.split('/');
+		}
 		if(route_path[route_path.length-1] == route_id)	return true;
-		else return false;
+		else return false;			
 
 		// var path = route.route.path.replace(/:([^\"]*)/,'');
 		// return window.location.pathname.split('/'+path)[0];

@@ -1,3 +1,10 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Blocklist = require('./blocklist');
 var Header = require('./header');
 var BookStore = require('./bookStore');
@@ -81,7 +88,8 @@ var Top = React.createClass({
 
 		var list, arr=[];
 		if(!this.state.list){
-			list = <Loading />
+			if(GLOBAL.isRouter(this.props))
+				list = <Loading />
 		}else{
 			if(this.state.list.length){
 				list = (

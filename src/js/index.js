@@ -2,11 +2,11 @@
 import browserHistory from './modules/history'
 import { Router, Route, createElement} from 'react-router'
 import ReactDOM from 'react-dom'
+import React from 'react'
 import routes from './components/routes'
 import GLOBAL from './modules/global';
 import Token from './modules/token';
 import { render } from 'react-dom';
-
 require('./modules/readConfig');
 
 

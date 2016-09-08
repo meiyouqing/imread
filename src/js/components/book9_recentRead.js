@@ -1,3 +1,6 @@
+import { browserHistory } from 'react-router'
+import GLOBAL from '../modules/global'
+import React from 'react'
 var Img = require('./img');
 
 var Book9 = React.createClass({

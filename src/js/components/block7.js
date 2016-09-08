@@ -1,3 +1,4 @@
+import React from 'react'
 var Book1 = require('./book1');
 
 var Recommend = React.createClass({

@@ -1,3 +1,4 @@
+import React from 'react'
 var Img = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.src !== nextProps.src;

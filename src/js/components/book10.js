@@ -1,3 +1,5 @@
+import { browserHistory } from 'react-router'
+import React from 'react'
 var Img = require('./img');
 var Book10 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
