@@ -20,7 +20,7 @@ var Subject = React.createClass({
 		}
 		return (
 			<li className={cls}>
-				<Link to={hrefStr} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundImage: 'url(/src/img/defaultTopBackground.png)',backgroundSize:'100%',height: height}}>
+				<Link to={hrefStr} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundImage: 'url(/src/img/defaultTopBackground.png)',backgroundSize:'cover',height: height,backgroundPosition: '50%'}}>
 					<span>{this.props.data.name}</span>
 				</Link>
 			</li>
