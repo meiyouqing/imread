@@ -40,7 +40,8 @@ var Mall = React.createClass({
 		return param.indexOf('page')>=0;
 	},
 	componentDidMount: function(){
-		this.getNav();
+		//console.log(this.props)
+		GLOBAL.isRouter(this.props) && this.getNav();
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);

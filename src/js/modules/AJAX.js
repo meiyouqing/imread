@@ -109,8 +109,8 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
-	var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'https://readapi.imread.com';
+	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -271,7 +271,9 @@ var AJAX = {
 		this.API._m = ao.method;
 		this.API._base = ao.base;
 		this.API._param = ao.param;
-		GLOBAL.setTitle(now);
+		if(typeof window !== 'undefined'){
+			GLOBAL.setTitle(now);
+		}
 	},
 	get: function(callback, onerror){
 		GETJSON(this.API._m,this.API._base,this.API._param,callback,onerror);

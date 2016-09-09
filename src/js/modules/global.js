@@ -39,9 +39,9 @@ const GLOBAL = {
 		else
 			browserHistory.goBack();
 	},
-	setHref:function(str,context){
+	setHref:function(str,routeLocation){
 		//TODO
-		return location.pathname+'/'+str
+		return routeLocation.pathname+'/'+str
 	},
 	isRouter: function(route){
 		var route_id = null,
@@ -69,7 +69,7 @@ const GLOBAL = {
 		// var path = route.route.path.replace(/:([^\"]*)/,'');
 		// return window.location.pathname.split('/'+path)[0];
 	},
-	typeHref: function(data,spm, route_type){
+	typeHref: function(data, routeLocation){
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
@@ -82,7 +82,7 @@ const GLOBAL = {
 		if(isNaN(type)) return '';
 		switch(type){
 			case 1://图书详情
-				return this.setHref('book/introduce.'+bid,route_type);
+				return this.setHref('book/introduce.'+bid,routeLocation);
 			// case 2://广告
 	  //   		switch (data.intercut_type) {
 	  //   			case 1://图书详情
@@ -100,14 +100,14 @@ const GLOBAL = {
    //  					return {url:"javascript:void(0)",target:target}
 	  //   		}
 			case 3://搜索
-				return this.setHref('search/search.'+data.name);
+				return this.setHref('search/search.'+data.name,routeLocation);
 			case 4://目录
 			case 5://分类
-				return this.setHref('cat/category.'+bid);
+				return this.setHref('cat/category.'+bid,routeLocation);
 			case 6://书城的子页面
-				return this.setHref('mall/page'+data.pgid);
+				return this.setHref('mall/page'+data.pgid,routeLocation);
 			case 7://书单
-				return this.setHref('sheet/bookSheet.'+bid);
+				return this.setHref('sheet/bookSheet.'+bid,routeLocation);
 			case 11://跳h5下载游戏
 	    		case 12://跳下载apk
 	    		case 13://跳内部网页
