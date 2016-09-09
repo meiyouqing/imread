@@ -1,6 +1,6 @@
 //"use strict"
 import browserHistory from './modules/history'
-import { Router, Route, createElement} from 'react-router'
+import { Router, Route} from 'react-router'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import routes from './components/routes'
@@ -28,7 +28,7 @@ if(typeof window !== 'undefined'){
 }
 
 render(
-	<Router createElement={createElement} routes={routes} history={browserHistory}/>, 
+	<Router routes={routes} history={browserHistory}/>, 
 	document.getElementById('appContainer')
 );
 

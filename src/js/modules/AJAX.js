@@ -1,6 +1,8 @@
 import storage from '../modules/storage'
 import GLOBAL from '../modules/global'
 import transformRequest from './transformRequest';
+import 'babel-polyfill'
+import fatch from 'isomorphic-fetch'
 var Config = {
 	payURLBase: 'http://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
@@ -125,7 +127,18 @@ function GETJSON(method, url, postdata, callback, onError) {
 			},0);
 		}
 	}
-	GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
+	//GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
+	fetch(getGETUrl(url,postdata))
+    .then(function(response) {
+        if (response.status >= 400) {
+        	onError &&　onError(false);
+            throw new Error("Bad response from server");
+        }
+        return response.json();
+    })
+    .then(function(stories) {
+        callback(stories)
+    })
 }
 function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse) {
 	method = method || 'POST';

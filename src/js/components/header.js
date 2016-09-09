@@ -39,13 +39,6 @@ var Header = React.createClass({
 			myEvent.execCallback('updateGuess');
 		}
 	},
-	componentDidMount: function(){
-		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
-		this.path = window.location.pathname.split('/'+this.path)[0];
-
-		if(this.props.path.path.split('/')[1] == 'self')
-			this.path = '/mall';
-	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.title !== nextProps.title 
 				|| this.props.left !== nextProps.left 
@@ -57,6 +50,12 @@ var Header = React.createClass({
 		}
 	},
 	componentDidMount:function(){
+		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
+
+		if(this.props.path.path.split('/')[1] == 'self')
+			this.path = '/mall';
+
 		var from = parseQuery(location.search);
 		if(this.props.skipurl && from.skipurl){
 			this.setState({
@@ -70,7 +69,7 @@ var Header = React.createClass({
 				{
 					this.state.isskip?
 					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
-					this.props.left
+					(this.props.left?this.props.left:<a className="f-fl icon-back icon-s" onClick={this.goBack}></a>)
 				}
 				{this.props.right}
 				<h1 className="title">{this.props.title}</h1>
