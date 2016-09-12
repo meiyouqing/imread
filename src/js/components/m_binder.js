@@ -2,8 +2,8 @@ var Header = require('./header');
 
 
 var Register = React.createClass({
+	mixins: [Mixins()],
 	getInitialState: function() {
-
 		return {
 			s: 0,
 			bindDetail: null,
@@ -36,8 +36,11 @@ var Register = React.createClass({
 				 if(data.success.img_url){
 				 	this.setState({img_code: ("data:image/jpeg;base64,"+data.success.img_url),img_show: true})
 				 } else {
-				 	 POP._alert(data.success.content);
-				 	 this.setState({isBind: true,img_code: null,img_show: false});
+				 	if(data.success.content.indexOf('成功')>=0){
+					 	 POP._alert(data.success.content);
+					 	 this.disPatch('telBind');
+					 	 this.setState({isBind: true,img_code: null,img_show: false});
+				 	}
 				 }
 				 
 			} else if(data.code === 403) {
@@ -105,6 +108,7 @@ var Register = React.createClass({
 		AJAX.getJSON('POST','/api/v1/migu/mobile/unbind', {cm: this.props.location.state.cm,url:this.props.location.state.url}, function(data) {
 			if(data.code === 200){
 				this.setState({bind_phone: null,url: null,isBind: false,s: 0});
+				this.disPatch('telBind');
 			} else
 				POP._alert('解绑失败');
 		}.bind(this));

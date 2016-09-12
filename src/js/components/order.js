@@ -58,7 +58,16 @@ var mod = React.createClass({
 		AJAX.go('mBind',{
 				cm:this.props.data.cm
 			},function(data){
-			this.setState({bind_phone: data.success.bind_phone,url:data.success.unbind_url || null});
+			
+			this.setState({bind_phone: data.success.bind_phone||'未绑定手机',url:data.success.unbind_url || null});
+			console.log(!data.success.unbind_url)
+			this.setState({another:!data.success.unbind_url?(<div className="block f-clearfix m-order-left" onClick={this.gotoBind}>
+					<div className="f-fl lh-30"><span className="f-mr-5">让他来买单</span></div>
+					<div className="f-fr f-s-14 bind-box">
+						<span className="l-30">绑定TA的手机号</span>
+						<span className="icon-h icon-return-black show"></span>
+					</div>
+				</div>):null});
 		}.bind(this));
 	},
 	gotoBind: function(){
@@ -71,20 +80,31 @@ var mod = React.createClass({
 		return {
 			aidou: 0,
 			bind_phone: '',
-			url: null
+			url: null,
+			another: null
 		}
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return this.state.aidou !== nextState.aidou
 			|| this.props.children !== nextPros.children
-			|| this.state.bind_phone !== nextState.bind_phone;
+			|| this.state.bind_phone !== nextState.bind_phone
+			|| this.state.another !== nextState.another;
 	},
 	componentDidMount: function() {
+		this.dataInit();
+		document.addEventListener('telBind',function(){//触发充值成功时更新个人信息
+			this.dataInit();
+		}.bind(this));
+
 		if(!this.props.isMigu) {
-			this.getBalance();
 			document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
 				this.getBalance();
 			}.bind(this));
+		};
+	},
+	dataInit: function(){
+		if(!this.props.isMigu) {
+			this.getBalance();
 		} else {
 			this.getBind();
 		}
@@ -99,17 +119,11 @@ var mod = React.createClass({
 				<div className="block f-clearfix m-order-left" onClick={this.gotoBind}>
 					<div className="f-fl lh-30"><span className="f-mr-5">支付号码</span></div>
 					<div className="f-fr f-s-14 bind-box">
-						<span className="l-30">{this.state.bind_phone || "未绑定手机"}</span>
+						<span className="l-30">{this.state.bind_phone}</span>
 						<span className="icon-h icon-return-black show"></span>
 					</div>
 				</div>
-				<div className="block f-clearfix m-order-left" onClick={this.gotoBind}>
-					<div className="f-fl lh-30"><span className="f-mr-5">让他来买单</span></div>
-					<div className="f-fr f-s-14 bind-box">
-						<span className="l-30">绑定TA的手机号</span>
-						<span className="icon-h icon-return-black show"></span>
-					</div>
-				</div>
+				{this.state.another}
 			</section>
 		}
 
