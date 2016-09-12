@@ -105,6 +105,7 @@ var Shelf = React.createClass({
 		})
 	},
 	gotoZy: function(){
+		GLOBAL.user.hideUser = true;
 		browserHistory.push('/mall');
 	},
 	gotoReading: function(){//详情页面
@@ -121,6 +122,7 @@ var Shelf = React.createClass({
 		}
 	},
 	gotoDownload: function(){//下载
+		if(!this.state.selected.length) return;
 		this.compClick();
 		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
 	},

@@ -105,8 +105,8 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
-	var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'https://readapi.imread.com';
+	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -170,6 +170,10 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 				//如果缓存中没有结果则触发callback
 				//TODO 比较新的结果和缓存结果，如果不同则重新触发callback
 				if (!cacheResponse) {
+					if(!res) {
+						onError(new Error('服务器返回为空'));
+						return;
+					}
 					callback(res);
 				}
 

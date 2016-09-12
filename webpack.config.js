@@ -1,6 +1,7 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin'),
+	//HtmlWebpackPlugin = require('html-webpack-plugin'),
 	// OpenBrowserPlugin = require('open-browser-webpack-plugin'),
 	//webpackDevMiddleware = require("webpack-dev-middleware"),
+    var HtmlWebpackPlugin = require('html-webpack-plugin'),
     webpack = require('webpack'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;

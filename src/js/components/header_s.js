@@ -21,14 +21,14 @@ var Header_s = React.createClass({
 	},
 	handleClick: function(e){
 		e.preventDefault();
+		this.refs.searchInput.blur();
 		if(this.state.search){
 			var	key = this.state.key;
 			if(GLOBAL.name==='searchList'){
 				AJAX.init('search.'+key);
 				this.props.goSearch();
 			}else{
-				var tester = /searchList\/search.([^\"]*)/,
-					link = '';
+				var tester = /searchList\/search.([^\"]*)/;
 				if(tester.test(location.pathname))
 					browserHistory.replace(location.pathname.replace(tester,'')+'searchList/search.'+key);
 				else
@@ -49,7 +49,6 @@ var Header_s = React.createClass({
 		GLOBAL.goBack(this.path);
 	},
 	componentDidMount: function(){
-
 		if(!this.props.keyValue){
 			this.refs.searchInput.focus();
 		} else {

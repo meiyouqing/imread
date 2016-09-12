@@ -136,6 +136,9 @@ var User = React.createClass({
 		}
 		return true;
 	},
+	gotoBalance:function(){
+		browserHistory.push(GLOBAL.setHref('balance'))
+	},
 	// shouldComponentUpdate: function(nextProp,nextState){
 	// 	//console.log(this.props,nextProp)
 	// 	return this.props.noMore !== nextState.noMore;
@@ -194,14 +197,14 @@ var User = React.createClass({
 		 if (this.isLogin()) {
 			userName = this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
 			logoutBtn = (<div>
-				<div className="avatar-wrap">
+				<div className="avatar-wrap" onClick={this.login}>
 					<img src={this.state.userInfo.portraitUrl || 'http://m.imread.com/src/img/user/avatar@2x.png'} />
 				</div>
-				<div className="username"><p className="f-ellipsis">{userName}</p><p>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
+				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>
 			);
 		} else {
-			logoutBtn = (<div>
+			logoutBtn = (<div onClick={this.login}>
 				<div className="avatar-wrap">
 						<img src='http://m.imread.com/src/img/user/avatar@2x.png' />
 				</div>
@@ -213,7 +216,7 @@ var User = React.createClass({
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll">
-						<section className="avatar-block f-pr" onClick={this.login}>
+						<section className="avatar-block f-pr">
 							<img src="http://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
 						
 								{logoutBtn}

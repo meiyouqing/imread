@@ -197,10 +197,13 @@ var Block7 = React.createClass({
 					{
 						this.state.contentlist.map(function(v,i){
 							if(i > 5) return;
-							var hrefStr = GLOBAL.setHref('searchList/search.'+v.name);
+							const handle = 	function(e){
+								e.preventDefault();
+								browserHistory.push({pathname:GLOBAL.setHref('searchList/search.'+v.name),state:v.name});
+							};
 							return (
 								<li key={i}>
-									<Link to={hrefStr} className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</Link>
+									<a onClick={handle} href="#" className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</a>
 								</li>
 							)
 						}.bind(this))

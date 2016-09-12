@@ -10,7 +10,6 @@ var Search = React.createClass({
 		}
 	},
 	getDate: function(){
-
 		AJAX.init(this.props.params.searchId);
 		AJAX.get(function(data){
 			this.setState({

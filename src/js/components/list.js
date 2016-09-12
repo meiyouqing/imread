@@ -129,7 +129,7 @@ var List = React.createClass({
 				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
-				noData = (<div className="g-main g-main-1"><NoData /></div>);
+				noData = (<div className="g-main g-main-1"><NoData type="emptySearch" /></div>);
 				content = null;
 				result_count = null;
 			}else{

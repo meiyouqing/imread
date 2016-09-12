@@ -329,7 +329,7 @@ var IntroduceTabs = React.createClass({
 					<div className={fixTabbar}>
 						<div className={"u-tabbar"} ref="tabbar">
 							<span onClick={this.toggleTab} className={"tab tab-0" + (this.state.current == 0 ? ' active' : '')}>简介</span>
-							<span onClick={this.toggleTab} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" seq":" rev")} onClick={this.troggleOrderList}></span></span>
+							<span onClick={this.toggleTab} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span></span>
 							<span onClick={this.toggleTab} className={"tab tab-2" + (this.state.current == 2 ? ' active' : '')}>推荐</span>
 						</div>
 					</div>

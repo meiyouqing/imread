@@ -21,16 +21,19 @@ var Mall = React.createClass({
 	},
 	getInitialState: function(){
 		return {
-			navList: null
+			navList: null,
+			showUser:false
 		}
 	},
 	hideUser: function(){
-		GLOBAL.removeClass(this.refs.blackBlock,'show');
-		GLOBAL.removeClass(this.refs.userlist,'show');
+		this.setState({
+			showUser:false
+		})
 	},
 	showUser: function(){
-		GLOBAL.addClass(this.refs.blackBlock,'show');
-		GLOBAL.addClass(this.refs.userlist,'show');
+		this.setState({
+			showUser:true
+		})
 	},
 	getLastparam: function(){
 		var param = location.pathname.split('/').pop();
@@ -56,9 +59,14 @@ var Mall = React.createClass({
 			e.stopPropagation();
 		};
 		if(!this.props.params.subnav) this.getNav();
+		if(GLOBAL.user.hideUser){
+			this.hideUser();
+			GLOBAL.user.hideUser = false;
+		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
+				|| this.state.showUser !== nextState.showUser
 				|| this.props.children !== nextProp.children
 				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
@@ -66,11 +74,10 @@ var Mall = React.createClass({
 		window.location.reload();
 	},
 	render:function(){
-
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
-			userList = <UserList hide={this.hide} route={this.props.route} />;
+			userList = <UserList route={this.props.route} />;
 		}
 
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
@@ -82,8 +89,8 @@ var Mall = React.createClass({
 
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
-				<section className="m-wrapper" ref="blackBlock" onClick={this.hideUser}></section>
-				<section className="m-user-list" ref="userlist">
+				<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
+				<section className={"m-user-list"+(this.state.showUser? ' show':'')}>
 					{userList}
 				</section>
 				{this.props.children}
