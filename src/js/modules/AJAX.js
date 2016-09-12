@@ -16,6 +16,10 @@ var API={
 	introduce:{method:'GET', base:'/api/v1/book/introduce', param:{bid:1 }},
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
 	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
+	mLogin:{method:'POST', base:'/api/v1/auth/login/sso', param:{user_identifier:'',nick_name:'',password:'',channel:6}},
+	mOrder:{method:'GET', base:'/api/v1/migu/order', param:{book_id:0,chapter_id:0,cm:0,firmnum:'',count:1}},
+	mBind:{method:'GET', base:'/api/v1/migu/check/bind', param:{cm:0}},
+	mSms:{method:'GET', base:'/api/v1/migu/login/sms', param:{}},
 	login:{method:'POST', base:'/api/v1/auth/login/custom', param:{phone:'',password:''}},
 	loginout:{method:'POST', base:'/api/v1/migu/logout',param:{}},
 	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
@@ -108,6 +112,7 @@ function GETJSON(method, url, postdata, callback, onError) {
 	//var urlBase = 'https://readapi.imread.com';
 	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
+
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}

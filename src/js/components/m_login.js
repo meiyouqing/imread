@@ -6,8 +6,9 @@ var Login = React.createClass({
 	mixins:[Mixins()],
 	getInitialState: function() {
 		return {
-			status: true,
-			s: 0
+			login_data: {},
+			show: false,
+			registering: false
 		};
 	},
 	handleSubmit: function(e) {
@@ -15,16 +16,18 @@ var Login = React.createClass({
 		var that = this;
 		if (that.loading) {return ;}
 		var postData = {
-			phone: this.refs.mobile_num.value,
-			password: this.refs.password.value//,
-			//'param': [{'bookId': 1, 'type': 2}, {'bookId': 2, 'type': 3}]
+			user_identifier: this.refs.user_id.value,
+			nick_name: this.refs.user_id.value,
+			password: this.refs.password.value,
+			channel: 6,
+			//redirect_uri: "http://192.168.0.249:8080/mall/page.9.3/book/introduce.26601/reading/crossDomain.371742137.371742177.26601.1"
 		};
-		if (!GLOBAL.assertNotEmpty(postData.phone, '请输入手机号')) {return ;}
-		if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
+		if (!GLOBAL.assertNotEmpty(postData.user_identifier, '请输入手机号')) {return ;}
+		//if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		AJAX.go('login',postData, function(data) {
+		AJAX.go('mLogin',postData, function(data) {
 			that.loading = false;
 			var options = {
 				expires: 1000
@@ -37,23 +40,19 @@ var Login = React.createClass({
 				token: postData.token
 			});
 
-			if(data.code == 200){
-				//判断登陆后的跳转
-				if(that.from && that.from.skipurl){
-					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
-				}else{
-					GLOBAL.goBack();
-					myEvent.execCallback('m_login');
-				}
+			// if(data.code == 200){
+				that.disPatch('updateUser');
+				GLOBAL.goBack();
+				myEvent.execCallback('m_login');
 
-			} else {
-				if(typeof data.error === 'string')
-					POP._alert(data.error);
-				else 
-					for(var key in data.error[0]){
-						POP._alert(data.error[0][key])
-					}
-			}
+			// } else {
+			// 	if(typeof data.error === 'string')
+			// 		POP._alert(data.error);
+			// 	else 
+			// 		for(var key in data.error[0]){
+			// 			POP._alert(data.error[0][key])
+			// 		}
+			// }
 			
 		}, function(res) {
 			that.loading = false;
@@ -61,185 +60,77 @@ var Login = React.createClass({
 		});
 		return false;
 	},
-	setLogin: function(){
-		this.setState({status: true});
-	},
-	setRegister: function(){
-		this.setState({status: false});
-	},
-	handleSubmits: function() {
-		var that = this;
-		if (that.loading) {return ;}
-		var postData = {
-			mobile_num: this.refs.mobile_num.value,
-			key: this.refs.key.value,
-			password: this.refs.password.value,
-			device_identifier: GLOBAL.getUuid(),
-			channel: 5,
-			promot: that.from.channel?that.from.channel:'H5'
-		};
-		if (!GLOBAL.assertNotEmpty(postData.mobile_num, '请输入手机号')) {return ;}
-		if (!GLOBAL.assertMatchRegExp(postData.mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-		if (!GLOBAL.assertNotEmpty(postData.key, '请输入验证码')) {return ;}
-		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
-
-		that.loading = true;
-		AJAX.getJSON('POST', '/api/v1/auth/register', postData, function(data) {
-			that.loading = false;
-			var options = {
-				expires: 1000
-			};
-			GLOBAL.cookie('userPhone', postData.mobile_num,options);
-			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.setUser({
-				phone: postData.mobile_num,
-				token: postData.token
-			});
-
-			if(data.code == 200){
-				POP._alert('注册成功');
-				//判断登陆后的跳转
-				//var isneed = false;
-				if(that.from && that.from.skipurl){
-					//isneed = /\?/.test(that.from.skipurl);
-					window.location.href = that.from.skipurl+'?devicetoken='+GLOBAL.getUuid();
-				}else{
-					that.setState({status: true});
-				}
-			}
-			else {
-				if(typeof data.error === 'string')
-					POP._alert(data.error);
-				else 
-					for(var key in data.error[0]){
-						POP._alert(data.error[0][key])
-					}
-			}
-
-		}, function(res) {
-			that.loading = false;
-			GLOBAL.defaultOnError(res);
-		});
-	},
 	goBack: function(){
 		this.goBackUrl(this.props.route);
 	},
-	getCode: function() {
-		if (this.state.s) {return ;}
-		var mobile_num = this.refs.mobile_num.value;
-		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
-		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-
-		AJAX.getJSON('GET', '/api/auth/key?', {
-			phone: mobile_num,
-			type: 'register'
-		}, function(data) {
-			if(data.code !== 200){
-				if(typeof data.error === 'string')
-					POP._alert(data.error);
-				else 
-					for(var key in data.error[0]){
-						POP._alert(data.error[0][key])
-					}
-			}	
-		}, function(res) {
-			this.setState({
-				s: 0
-			});
-			GLOBAL.defaultOnError(res);
-		}.bind(this));
-
-		this.setState({
-			s: 60
-		});
-		var inter = setInterval(function() {
-			if (this.state.s > 0 && this.isMounted()) {
-				this.setState({
-					s: this.state.s - 1
-				});
-			} else {
-				clearInterval(inter);
-			}
-		}.bind(this), 1000);
+	showPhone: function(){
+		this.setState({show: !this.state.show});
+	},
+	showRegister: function(){
+		this.setState({registering: !this.state.registering});
 	},
 	componentDidMount: function() {
-		this.refs.mobile_num.focus();
+		if(!this.props.location.state)	this.goBack();
+		this.setState({login_data: this.props.location.state});
 
-		//判断来源from
-		this.from = parseQuery(location.search);
+		this.refs.selector.onclick = function(e){
+			if(e.target.tagName === 'A'){
+				this.showPhone();
+				var times = setInterval(function(){
+					AJAX.go('mSms',{}, function(data) {
+						//alert(JSON.stringify(data))
+					}.bind(this));
+				}.bind(this),2000);
+			};
+		}.bind(this);
+		//this.refs.mobile_num.focus();
 	},
 	render: function() {
-		var skipurl = '',list;
-		if(this.from && this.from.skipurl)
-			skipurl = '?skipurl='+this.from.skipurl;
-
-		if(this.state.status)
-			list = (<div className="m-login">
-						<form className="u-registerform u-userform" onSubmit={this.handleSubmit}>
-								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
-								</div>
-								<div className="u-inputline-2 f-clearfix">
-										<input className="u-input-2" placeholder="密码" type="password" ref="password" />
-								</div>
-
-								<div className="u-inputline">
-									<button type="submit" className="u-btn u-btn-full">登录</button>
-								</div>
-								<div className="u-inputline active f-clearfix">
-									<div className="u-buttonc f-fl">
-									<Link className="tip" to={GLOBAL.setHref('compact')}>用户协议</Link>
-									</div>
-									<div className="u-buttonc f-fl">
-											<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
-									</div>
-								</div>
-						</form>
-						
-					</div>)
-		else 
-			list=(<div className="m-register">
-						<form className="u-registerform u-userform">
-								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
-									<div className="f-fr">
-										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
-									</div>
-								</div>
-								<div className="u-b-pass">
-									<div className="u-inputline-2 f-clearfix u-pass">
-											<input className="u-input-2" placeholder="密码"  type="password" ref="password"/>
-									</div>
-									<div className="u-inputline-2 f-clearfix u-key">
-											<input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
-									</div>
-								</div>
-								<div className="u-inputline">
-									<a className="u-btn u-btn-full" onClick={this.handleSubmits}>完成</a>
-								</div>
-
-								<div className="u-inputline active f-clearfix">
-									<div className="u-buttonc f-fl">
-									<Link className="tip" to={GLOBAL.setHref('compact')}>用户协议</Link>
-									</div>
-									<div className="u-buttonc f-fl">
-											<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
-									</div>
-								</div>
-							</form>
-					</div>)
+		var right =<button className="f-fr textBtn" onClick={this.showRegister}>注册</button>;
+		var left = <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>;
+		var isAndroid = GLOBAL.isAndroid();
 		return (
 			<div className="gg-body">
-				<div className="m-loginblock">
-					<div className="m-login-header">
-						<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
-						<div className="m-login-register">
-							<a className={this.state.status?'':"active"} onClick={this.setRegister}>注册</a>
-							<a className={"second "+(this.state.status?"active":'')} onClick={this.setLogin}>登录</a>
+				<Header title="支付登录" right={right}  left={left} path={this.props.route}/>
+				<div className="g-main">
+					<div className="bind-way">请使用咪咕账号登录，新用户请点击注册或快速登录</div>
+					<div className="u-userform m-modify">
+						<div className="u-inputline-2">
+						<input className="u-input-2" type="text" ref="user_id" placeholder="手机号/用户名" />
 						</div>
+						<div className="u-inputline-2">
+						<input className="u-input-2" type="password" ref="password" placeholder="密码" />
+						</div>
+						<div className="u-inputline f-pt-20"><button type="submit" onClick={this.handleSubmit} className="u-btn u-btn-full">登录</button></div>
+						<div className="u-inputline n-b"><a className="u-btn u-btn-full red"  onClick={this.showPhone}>快速登录</a></div>
+						<p className="u-notice">快速登录需发送短信，如遇拦截请选择允许。</p>
 					</div>
-					{list}
 				</div>
+
+				<section className="m-select-phone">
+						<div className={"m-wrapper"+(this.state.show?" show":"")} onClick={this.showPhone}></div>
+						<div className={"UI_selecter"+(this.state.show?" show":"")} >
+							<ul ref="selector">
+								<li>请选择手机运营商</li>
+								<li><a href={"sms:"+this.state.login_data.smsTo+(isAndroid?"?":"&")+"body="+this.state.login_data.cmccContent}>中国移动</a></li>
+								<li><a href={"sms:"+this.state.login_data.ltSmsto+(isAndroid?"?":"&")+"body="+this.state.login_data.cmccContent}>中国联通</a></li>
+							</ul>
+							<button onClick={this.closeSex} className="UI-cancel" onClick={this.showPhone}>取消</button>
+						</div>
+				</section>
+
+				<section className="m-r">
+					<div className={"m-wrapper"+(this.state.registering?" show":"")} onClick={this.showRegister}></div>
+					<div className={"m-r-notice" +(this.state.registering?" show":"")}>
+						<div className="">
+							<h1>注册咪咕账号</h1>
+							<p><a href="sms:106580808">移动用户可发送6-14位手机密码 到 <span>106580808</span></a></p>
+							<p><a href="sms:106554814018">联通用户可发送6-14位手机密码 到 <span>106554814018</span></a></p>
+							<span>完成密码设置，手机号码即为用户名</span>
+						</div>
+						<button onClick={this.showRegister}>好</button>
+					</div>
+				</section>
 				{this.props.children}
 			</div>
 		);

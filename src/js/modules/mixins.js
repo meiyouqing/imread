@@ -115,6 +115,7 @@ var mixins = function() {
         getBackUrl: function(path) {
             var path = path.path.replace(/:([^\"]*)/, '');
             path = location.pathname.split('/' + path)[0];
+            path = path.replace(/\/reading([^\"]*)/,'');
             return path;
         },
         goBackUrl: function(path) {
