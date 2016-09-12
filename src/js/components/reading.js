@@ -9,6 +9,7 @@ var Intercut = require('./intercut');
 var Hammer = require('../modules/hammer');
 var isHidden = require('../modules/isHidden');
 var PayOrder = require('./order');
+var ReadConfig = require('../modules/readConfig');
 require('../../css/reading.css');
 
 var styleMixins = {
@@ -176,7 +177,8 @@ var Reading = React.createClass({
 			orderData: null,
 			introduce: null,
 			orderSeq: true,
-			chapterlistMore: true
+			chapterlistMore: true,
+			fromId: false//true:咪咕 
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -331,11 +333,12 @@ var Reading = React.createClass({
 			});
 		}
 	},
-	gotContent: function(data,autoPay){
+	gotContent: function(data,from){
 		if(!this.isMounted()){return;}
 		if(data.code === 403) return;
 		this.setState({
-			showSetting:false
+			showSetting:false,
+			fromId: from || false
 		})		
 		data = data.success?data.success:data;
 		//如果是付费章节，跳到确认订单
@@ -347,12 +350,18 @@ var Reading = React.createClass({
 
 		var that = this;
 		//设置auto pay cookie
-		if(autoPay){
-			GLOBAL.cookie(that.bid,'autoPay',7)
+		// if(autoPay){
+		// 	GLOBAL.cookie(that.bid,'autoPay',7)
+		// }
+		if(data.buyMsg) {
+			that.setState({
+				order: true,
+				orderData: data
+			})
+			that.getIntroduce(that.confirmOrder.bind(that,data));
+			return;
 		}
-
 		if(data.pageType==='order'){
-
 			if(GLOBAL.cookie(that.bid)==='autoPay'){
 				that.autoPay(data);
 				return;
@@ -464,10 +473,14 @@ var Reading = React.createClass({
 	autoPay: function(orderData) {
 		//console.log(orderData);	
 		var that = this;
-		if(that.isLogin()){
-			pay();
-		}else{
-			that.goLogin(pay);
+		if(!this.state.fromId){
+			if(that.isLogin()){
+				pay();
+			}else{
+				that.goLogin(pay);
+			}
+		} else {
+			pay_m();
 		}
 		function pay(){	
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
@@ -488,6 +501,22 @@ var Reading = React.createClass({
 					// }
 				}
 			})
+		};
+
+		function pay_m(){
+			AJAX.go('mOrder',{
+				book_id:that.book_id,
+				chapter_id:that.chapterid,
+				cm:orderData.cm,
+				firmnum:'',
+				count:1
+			},function(data){
+				if(data.code == 403)
+					POP._alert('支付失败');
+				else {
+					that.gotContent(data);
+				}
+			});
 		}
 	},
 	//type -1 为第一章， 1位最后一章
@@ -536,7 +565,7 @@ var Reading = React.createClass({
 		}
 	},
 	componentDidMount:function(){
-		this.getContent();
+		if(GLOBAL.isRouter(this.props)) this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
 		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
 		if (GLOBAL.cookie('showGuide') != '1') {
@@ -679,6 +708,19 @@ var Reading = React.createClass({
 	downLoad: function(){
 		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
+	logout: function(e) {
+		e.preventDefault && (e.preventDefault());
+		POP.confirm('确定退出登录?',function() {
+			AJAX.init('loginout');
+			AJAX.get(function(res){
+			}.bind(this));
+			GLOBAL.removeCookie('userPhone');
+			GLOBAL.removeCookie('userToken');
+			GLOBAL.removeCookie('uuid');
+
+			this.getContent();
+		}.bind(this));
+	},
 	goBack: function(){
 		GLOBAL.cookie(this.bid,'autoPay',7)
 		this.getContent();
@@ -715,10 +757,11 @@ var Reading = React.createClass({
 			);
 		}
 		if(this.state.order && this.state.introduce){
+			var right = this.state.fromId?(<a className="icon-s icon-bookstore right" onClick={this.logout}></a>):null;
 			return (<div className="gg-body">
-				<Header path={this.props.route} right={null} title={"确认订购"} />
+				<Header path={this.props.route} right={right} title={"确认订购"} />
 				<div className="g-main g-main-1">
-					<PayOrder data={this.state.orderData}  goBack={this.goBack}  route={this.props.route} introduce={this.state.introduce} />
+					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
 				</div>
 				{this.props.children}
 				</div>
@@ -852,7 +895,7 @@ var Reading = React.createClass({
 					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
-								return <p key={i}>{p}</p>;
+								return <p key={i} dangerouslySetInnerHTML={{__html: p}}></p>;
 							})
 						}
 					</section>

@@ -53,7 +53,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .f-pt-10{padding-top: 10px;}.f-pt-20{padding-top: 20px;}
 .f-mr-10{margin-right: 10px;}
 .f-mb-10{margin-bottom: 10px;}.f-mb--10{margin-bottom: -10px;}.f-mb-15{margin-bottom: 15px;}.f-mb-20{margin-bottom: 20px;}.f-mb-30{margin-bottom: 30px;}
-.f-mt-10{margin-top: 10px;}.f-mt-15{margin-top: 15px;}.f-mt-20{margin-top: 20px;}.f-mt-30{margin-top: 30px;}
+.f-mt-5{margin-top: 5px;}.f-mt-10{margin-top: 10px;}.f-mt-15{margin-top: 15px;}.f-mt-20{margin-top: 20px;}.f-mt-30{margin-top: 30px;}
 .f-tl{text-align: left !important;}.f-tc{text-align: center !important;}.f-tr{text-align: right !important;}
 .f-fw-b{font-weight: bold;}
 .f-fc-000{color: #000 !important;}.

@@ -44,3 +44,14 @@
 .u-lines .u-line a span{pointer-events:none;    vertical-align: middle;}
 .u-lines .u-line .s-title{display: inline-block;color: #777777;font-size: 12px;margin-left: 15px;}
 
+.m-select-phone li:first-child{font-size: 12px;color: #777}
+.m-select-phone li a{display:block;}
+.m-r-notice{width: 80%;background: #fff;font-size:13px;position: absolute;z-index: 11;margin-top:-100px;left: 10%;border-radius: 3px;top:600px;opacity:0;transition: all .2s ease; -webkit-transition: all .2s ease;}
+.m-r-notice.show{top: 50%;opacity: 1}
+.m-r-notice>div{padding: 10px 35px 15px;text-align: justify;}
+.m-r-notice>div h1{text-align: center;font-size: 18px;padding-bottom: 5px}
+.m-r-notice>div span{color: #777;}
+.m-r-notice>div p{line-height: 20px}
+.m-r-notice>div p span{color: #0196aa}
+.m-r-notice>button{display: block;width: 100%;line-height: 36px;font-size: 16px;border-top: 1px solid #eeeeee;color: #007aff;}
+a.red{background: #ff6d6d;}

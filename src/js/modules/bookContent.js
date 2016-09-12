@@ -1,33 +1,47 @@
 var ReadConfig = require('../modules/readConfig');
 
-var goto_mlogin = function(callback){
+var goto_mlogin = function(options,callback){
 	var hash = location.pathname + '/m_login';
-      browserHistory.push(hash);
-      POP._alert('请先登录');
-      myEvent.setCallback('m_login', callback);
+      browserHistory.push({pathname:hash,state: options});
+      // POP._alert('请先登录');
+      // myEvent.setCallback('m_login', callback);
   };
+
+ var a_url = 'https://readapi.imread.com';
+a_url = 'http://192.168.0.34:9090';
+a_url = 'http://192.168.0.252:8080';
 
 var BookContent = (function() {
 	//移动咪咕阅读
 	//@source_id 1
 	function getContent1(options) {
 
-		
-
+	
 		var getContent = function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
-			var url = 'https://readapi.imread.com/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cm;
+			var url = a_url+'/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cm;
 			AJAX.getJSON('GET', url, {}, function(res){
 				if(res.success){
+					res.success['cm'] = sourceConfig.cm;
 					if(res.success.loginSubmitUrl){
-						gotoMigu(sourceConfig);
-						// if(location.pathname.slice(-5) == 'login')	return;
+						//gotoMigu(sourceConfig);
+						if(location.pathname.slice(-5) == 'login')	return;
 						// goto_mlogin(options.callback.bind(this,res));
+						goto_mlogin(res.success);
 					}else
-						options.callback(res);
+						options.callback(res,true);
 				}
-				else
-					gotoMigu(sourceConfig);
+				else{
+					if(typeof res.error === 'string')
+						POP._alert(res.error);
+					else 
+						for(var key in res.error[0]){
+							POP._alert(res.error[0][key])
+					}
+					GLOBAL.goBack();
+					//gotoMigu(sourceConfig);
+				}
+					
 			}, function() {
 				if(options.noCross){return} //不要跳转
 

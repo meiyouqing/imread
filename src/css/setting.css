@@ -6,7 +6,7 @@
 .m-settingblock .m-set-footer img{width: 100%;position: absolute; bottom: 0;left: 0;}
 .m-settingblock .m-list{position: relative;z-index: 1;}
 
-.u-userform.m-modify{padding: 40px 55px;margin: 0}
+.u-userform.m-modify{padding: 40px 12%;margin: 0}
 
 .m-feedbackblock .u-userform{padding: 0;margin: 0}
 .m-feedbackblock .u-inputline{margin: 0;}
