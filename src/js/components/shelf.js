@@ -113,7 +113,6 @@ var Shelf = React.createClass({
 		})
 	},
 	gotoZy: function(){
-		GLOBAL.user.hideUser = true;
 		browserHistory.push('/mall');
 	},
 	gotoReading: function(){//详情页面

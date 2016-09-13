@@ -59,10 +59,6 @@ var Mall = React.createClass({
 			e.stopPropagation();
 		};
 		if(!this.props.params.subnav) this.getNav();
-		if(GLOBAL.user.hideUser){
-			this.hideUser();
-			GLOBAL.user.hideUser = false;
-		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
@@ -77,7 +73,7 @@ var Mall = React.createClass({
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;
-			userList = <UserList route={this.props.route} />;
+			userList = <UserList route={this.props.route} hideUser={this.hideUser}/>;
 		}
 
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,

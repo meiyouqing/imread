@@ -546,6 +546,10 @@ var Reading = React.createClass({
 	},
 	toggleSettings: function() {
 		if(!this.isMounted()){return;}
+		if(this.state.showChapterlist){
+			this.toggleChapterlist();
+			//return;
+		}
 		if (!this.state.showSetting && this.state.showIntercut) {
 			uploadLog.send('intercut', {
 				content_id: this.intercutList.content_id,
@@ -553,9 +557,11 @@ var Reading = React.createClass({
 				show_class: this.intercutList.show_class
 			});
 		}
-		this.setState({
-			showSetting: !this.state.showSetting
-		});
+		setTimeout(()=>{
+			this.setState({
+				showSetting: !this.state.showSetting
+			});			
+		},10)
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){
@@ -629,6 +635,7 @@ var Reading = React.createClass({
 				clearTimeout(time);
 				time= setTimeout(function() {
 					this.getChapterlist(true);
+
 				}.bind(this), 100);
 			};
 		}.bind(this)
@@ -804,6 +811,7 @@ var Reading = React.createClass({
 						(<i className="u-miguLogo"></i>):
 						null
 				}
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
@@ -873,7 +881,6 @@ var Reading = React.createClass({
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
-				<div className={"u-hideChapterlist" + (this.state.showChapterlist && ' active' || '')} onClick={this.toggleChapterlist}></div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">

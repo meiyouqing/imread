@@ -78,6 +78,7 @@ var recentRead = React.createClass({
             });
             this.setState({
                 list: list,
+                right:list.length? this.state.right:null,
                 noMore: true
             });
        // }

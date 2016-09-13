@@ -32,6 +32,7 @@ var StoreList = React.createClass({
 				list = this.state.scrollUpdate? this.state.list.concat(data.success):data.success;
 			this.setState({
 				list: list,
+				right:list.length? this.state.right:null,
 				scrollUpdate: false
 			});
 		},this.onerror)
