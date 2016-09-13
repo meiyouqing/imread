@@ -35,6 +35,14 @@ var Shelf = React.createClass({
 		this.setState({showModelList: !this.state.showModelList});
 	},
 	settingClick: function(e){
+		//如果书架是空，返回
+		if(!this.state.shelfList.length){
+			this.setState({
+				showModelList:false
+			})
+			POP._alert('亲，书架还空荡荡的哦');
+			return;
+		}
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
@@ -105,7 +113,6 @@ var Shelf = React.createClass({
 		})
 	},
 	gotoZy: function(){
-		GLOBAL.user.hideUser = true;
 		browserHistory.push('/mall');
 	},
 	gotoReading: function(){//详情页面

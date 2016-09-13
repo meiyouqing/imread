@@ -8,7 +8,7 @@ var Book8 = require('./book8_bookSheet');
 
 var Recommend = React.createClass({
 	render: function(){
-		 return <p className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span>{this.props.block.short_recommend_words}</p>
+		 return <Link to={this.props.href} className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span>{this.props.block.short_recommend_words}</Link>
 	}
 
 });
@@ -408,11 +408,11 @@ var Blocklist = React.createClass({
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
-			var recommend = block.icon_word?<Recommend block={block} />:null;
 			hrefStr = GLOBAL.setHref('more/blocks.'+block.id);
 
 			if(that.props.pageId)
 				hrefStr = GLOBAL.setHref('more/blocks.'+block.id+'.'+that.props.pageId);
+			var recommend = block.icon_word?<Recommend block={block} href={hrefStr} />:null;
 
 			switch (block.style) {
 				case 1 :
