@@ -39,7 +39,7 @@ var Login = React.createClass({
 
 			if(data.code == 200){
 				GLOBAL.cookie('userToken', data.token, options);
-				GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
+				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				//判断登陆后的跳转
@@ -102,7 +102,7 @@ var Login = React.createClass({
 			if(data.code == 200){
 				GLOBAL.cookie('userPhone', postData.mobile_num,options);
 				GLOBAL.cookie('userToken', data.token, options);
-				GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
+				// GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				POP._alert('注册成功');

@@ -9,7 +9,7 @@ var goto_mlogin = function(options,callback){
 
  var a_url = 'https://readapi.imread.com';
 a_url = 'http://192.168.0.34:9090';
-a_url = 'http://192.168.0.252:8080';
+//a_url = 'http://192.168.0.252:8080';
 
 var BookContent = (function() {
 	//移动咪咕阅读
@@ -27,6 +27,8 @@ var BookContent = (function() {
 						//gotoMigu(sourceConfig);
 						if(location.pathname.slice(-5) == 'login')	return;
 						// goto_mlogin(options.callback.bind(this,res));
+						res.success.book_id = options.book_id;
+						res.success.chapter_id = options.cid;
 						goto_mlogin(res.success);
 					}else
 						options.callback(res,true);

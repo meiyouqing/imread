@@ -366,7 +366,6 @@ var Reading = React.createClass({
 				that.autoPay(data);
 				return;
 			}
-
 			that.setState({
 				order: true,
 				orderData: data
@@ -447,27 +446,17 @@ var Reading = React.createClass({
 		that.setState({
 			chapterName : data.name
 		})
-		if(that.isLogin()){
+		if(!this.state.fromId){
+			if(that.isLogin()){
+				goOrder();
+			}else{
+				that.goLogin(goOrder);
+			}
+		} else {
 			goOrder();
-		}else{
-			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			// var params = {name:that.state.bookName,data: data}
-			// window.localStorage.onsale_book = JSON.stringify(params);
-			// window.localStorage.payLink = data.orderUrl;
-			// browserHistory.push(GLOBAL.setHref('order'));
-
-			that.setState({order: true,orderData: data})
-			// require.ensure([], function(require) {
-			// 	var Order = require('./order');
-			// 	that.props.popup(<Order 
-			// 		paySuccess={that.gotContent} 
-			// 		data={data} 
-			// 		bookName={that.state.bookName} 
-			// 		chargeMode={that.chargeMode} 
-			// 		chapterCount={that.chapterCount} />);
-			// });						
+			that.setState({order: true,orderData: data})					
 		}
 	},
 	autoPay: function(orderData) {
@@ -757,7 +746,7 @@ var Reading = React.createClass({
 			);
 		}
 		if(this.state.order && this.state.introduce){
-			var right = this.state.fromId?(<a className="icon-s icon-bookstore right" onClick={this.logout}></a>):null;
+			var right = this.state.fromId?(<a className="icon-s icon-tc right" onClick={this.logout}></a>):null;
 			return (<div className="gg-body">
 				<Header path={this.props.route} right={right} title={"确认订购"} />
 				<div className="g-main g-main-1">

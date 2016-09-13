@@ -71,15 +71,20 @@ var Block5 = React.createClass({
 	handleResize: function(e) {
 		this.setState(this.getWidthAndHeight());
 	},
+	updateIndex: function(){
+		this.setState({update: this.state.update+1});
+	},
 	componentDidMount: function() {
 		//alert('mount')
 		this.initSwipe();
 		//横竖屏切换 重新计算高度
 		window.addEventListener('resize', this.handleResize, false);
 
-		document.addEventListener('updateMall',function(){//触发登录时更新
-			this.setState({update: this.state.update+1});
-		}.bind(this));
+		document.addEventListener('updateMall',this.updateIndex);
+	},
+	componentWillUnmount: function(){
+		 document.removeEventListener("updateMall", this.updateIndex, false);
+		 window.removeEventListener('resize', this.handleResize, false);
 	},
 	componentDidUpdate: function() {
 		//alert('update')

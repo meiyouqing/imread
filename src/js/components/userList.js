@@ -67,14 +67,13 @@ var User = React.createClass({
 	componentDidMount: function() {
 		this.getUserInfo();
 
-		document.addEventListener('updateUser',function(){//触发登录时更新个人信息
-			this.getUserInfo();
-		}.bind(this));
+		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
+		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
 
-		document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
-			this.getUserInfo();
-		}.bind(this));
-
+	},
+	componentWillUnmount: function(){
+		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,false), false);
+		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,false),false);
 	},
 	componentDidUpdate: function(nextProp){
 	},

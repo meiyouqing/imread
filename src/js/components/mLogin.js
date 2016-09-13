@@ -2,7 +2,7 @@ var Header = require('./header');
 var myEvent = require('../modules/myEvent');
 require('../../css/login.css');
 
-var Login = React.createClass({
+var mLogin = React.createClass({
 	mixins:[Mixins()],
 	getInitialState: function() {
 		return {
@@ -34,14 +34,15 @@ var Login = React.createClass({
 			};
 			//GLOBAL.cookie('userPhone', postData.phone, options);
 			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('userId', data.user_id, options);
+			GLOBAL.cookie('userId', data.userInfo.user_id, options);
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
 			});
 
 			// if(data.code == 200){
-				that.disPatch('updateUser');
+				this.disPatch('updateUser');
+				this.disPatch('telBind');
 				GLOBAL.goBack();
 				myEvent.execCallback('m_login');
 
@@ -54,7 +55,7 @@ var Login = React.createClass({
 			// 		}
 			// }
 			
-		}, function(res) {
+		}.bind(this), function(res) {
 			that.loading = false;
 			GLOBAL.defaultOnError(res);
 		});
@@ -69,20 +70,46 @@ var Login = React.createClass({
 	showRegister: function(){
 		this.setState({registering: !this.state.registering});
 	},
+	checkSms: function(content){
+		var n = 0;
+		var times = setInterval(function(){
+			if(n>=5) {
+				clearInterval(time);	
+				POP._alert('登录失败');
+				return;
+			};
+			n++;
+			AJAX.go('mSms',{
+				cm: this.state.login_data.cm,
+				smsContent:content,
+				bookId: this.state.login_data.book_id,
+				chapterId: this.state.login_data.chapter_id
+			}, function(data) {
+				if(data.code === 200){
+					POP._alert('登录成功');
+					clearInterval(times);
+					GLOBAL.cookie('userToken', "loaded", {expires: 1000});
+					this.disPatch('updateUser');
+					this.disPatch('telBind');
+					GLOBAL.goBack();
+				}
+			}.bind(this));
+		}.bind(this),3000);
+	},
 	componentDidMount: function() {
 		if(!this.props.location.state)	this.goBack();
 		this.setState({login_data: this.props.location.state});
 
-		this.refs.selector.onclick = function(e){
-			if(e.target.tagName === 'A'){
-				this.showPhone();
-				var times = setInterval(function(){
-					AJAX.go('mSms',{}, function(data) {
-						//alert(JSON.stringify(data))
-					}.bind(this));
-				}.bind(this),2000);
-			};
-		}.bind(this);
+		// this.refs.selector.onclick = function(e){
+		// 	if(e.target.tagName === 'A'){
+		// 		this.showPhone();
+		// 		var times = setInterval(function(){
+		// 			AJAX.go('mSms',{}, function(data) {
+		// 				//alert(JSON.stringify(data))
+		// 			}.bind(this));
+		// 		}.bind(this),2000);
+		// 	};
+		// }.bind(this);
 		//this.refs.mobile_num.focus();
 	},
 	render: function() {
@@ -112,8 +139,8 @@ var Login = React.createClass({
 						<div className={"UI_selecter"+(this.state.show?" show":"")} >
 							<ul ref="selector">
 								<li>请选择手机运营商</li>
-								<li><a href={"sms:"+this.state.login_data.smsTo+(isAndroid?"?":"&")+"body="+this.state.login_data.cmccContent}>中国移动</a></li>
-								<li><a href={"sms:"+this.state.login_data.ltSmsto+(isAndroid?"?":"&")+"body="+this.state.login_data.cmccContent}>中国联通</a></li>
+								<li><a onClick={this.checkSms.bind(this,this.state.login_data.cmccRm)} href={"sms:"+this.state.login_data.smsTo+(isAndroid?"?":"&")+"body="+this.state.login_data.cmccContent}>中国移动</a></li>
+								<li><a onClick={this.checkSms.bind(this,this.state.login_data.noCmccRm)} href={"sms:"+this.state.login_data.ltSmsto+(isAndroid?"?":"&")+"body="+this.state.login_data.noCmccContent}>中国联通</a></li>
 							</ul>
 							<button onClick={this.closeSex} className="UI-cancel" onClick={this.showPhone}>取消</button>
 						</div>
@@ -137,4 +164,4 @@ var Login = React.createClass({
 	}
 });
 
-module.exports  = Login;
+module.exports  = mLogin;
