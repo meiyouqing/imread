@@ -8,7 +8,8 @@ var mLogin = React.createClass({
 		return {
 			login_data: {},
 			show: false,
-			registering: false
+			registering: false,
+			onlogin: false
 		};
 	},
 	handleSubmit: function(e) {
@@ -72,10 +73,13 @@ var mLogin = React.createClass({
 	},
 	checkSms: function(content){
 		var n = 0;
+		this.showPhone();
+		this.setState({onlogin: true});
 		var times = setInterval(function(){
 			if(n>=5) {
 				clearInterval(time);	
 				POP._alert('登录失败');
+				this.setState({onlogin: false});
 				return;
 			};
 			n++;
@@ -87,6 +91,7 @@ var mLogin = React.createClass({
 			}, function(data) {
 				if(data.code === 200){
 					POP._alert('登录成功');
+					this.setState({onlogin: false});
 					clearInterval(times);
 					GLOBAL.cookie('userToken', "loaded", {expires: 1000});
 					this.disPatch('updateUser');
@@ -116,10 +121,16 @@ var mLogin = React.createClass({
 		var right =<button className="f-fr textBtn" onClick={this.showRegister}>注册</button>;
 		var left = <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>;
 		var isAndroid = GLOBAL.isAndroid();
+		var loading = null;
+
+		// if(this.state.onlogin)
+		// 	loading = <div className="UI_confirm"></div>
+
 		return (
 			<div className="gg-body">
 				<Header title="支付登录" right={right}  left={left} path={this.props.route}/>
-				<div className="g-main">
+				<div className="g-main g-main-1">
+					{loading}
 					<div className="bind-way">请使用咪咕账号登录，新用户请点击注册或快速登录</div>
 					<div className="u-userform m-modify">
 						<div className="u-inputline-2">
