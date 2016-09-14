@@ -1,7 +1,7 @@
 var Header = require('./header');
 
 
-var Register = React.createClass({
+var mBinder = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
@@ -30,16 +30,26 @@ var Register = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.msisdn, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.msisdn, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.code, '请输入验证码')) {return ;}
+		if(isImgCode)
+			if (!GLOBAL.assertNotEmpty(postData.verifyNum, '请输入图形验证码')) {return ;}
 
+		this.refs.img_key.value = '';
 		AJAX.getJSON('POST','/api/v1/migu/get/bind/yzm', postData, function(data) {
-			if(data.code === 200 && data.success.content){
+			if(data.code === 200){
 				 if(data.success.img_url){
-				 	this.setState({img_code: ("data:image/jpeg;base64,"+data.success.img_url),img_show: true})
+				 	if(this.state.img_code) {
+				 		this.setState({img_code: null,img_show: false});
+				 		POP._alert(data.success.content);
+				 	} else 
+				 		this.setState({img_code: ("data:image/jpeg;base64,"+data.success.img_url),img_show: true})
 				 } else {
 				 	if(data.success.content.indexOf('成功')>=0){
 					 	 POP._alert(data.success.content);
 					 	 this.disPatch('telBind');
+					 	 this.getBind();
 					 	 this.setState({isBind: true,img_code: null,img_show: false});
+				 	} else {
+				 		POP._alert(data.success.content);
 				 	}
 				 }
 				 
@@ -107,8 +117,8 @@ var Register = React.createClass({
 	unBind: function(){
 		AJAX.getJSON('POST','/api/v1/migu/mobile/unbind', {cm: this.props.location.state.cm,url:this.props.location.state.url}, function(data) {
 			if(data.code === 200){
-				this.setState({bind_phone: null,url: null,isBind: false,s: 0});
 				this.disPatch('telBind');
+				this.setState({bind_phone: null,url: null,isBind: false,s: 0});
 			} else
 				POP._alert('解绑失败');
 		}.bind(this));
@@ -134,7 +144,9 @@ var Register = React.createClass({
 			|| this.state.bindDetail !== nextState.bindDetail
 			|| this.state.url !== nextState.url
 			|| this.state.isBind !== nextState.isBind
-			|| this.state.getBind !== nextState.getBind;
+			|| this.state.getBind !== nextState.getBind
+			|| this.state.img_code !== nextState.img_code
+			|| this.state.img_show !== nextState.img_show;
 	},
 	render: function() {
 
@@ -166,7 +178,7 @@ var Register = React.createClass({
 							</div>
 
 							<div className="u-inputline m-25">
-										<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
+										<a className="u-btn u-btn-full" onClick={this.handleSubmit.bind(this,false)}>完成</a>
 									</div>
 						</div>
 					</div>)
@@ -196,4 +208,4 @@ var Register = React.createClass({
 	}
 });
 
-module.exports  = Register;
+module.exports  = mBinder;

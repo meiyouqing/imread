@@ -5,17 +5,21 @@ require('../../css/pay.css');
 var mod = React.createClass({
 	mixins: [Mixins()],
 	rechargeHandle: function(e) {
-		var hash = location.pathname;
-		browserHistory.push(GLOBAL.setHref('balance'));
-		myEvent.setCallback('recharge',function(){
-			browserHistory.push(hash);
-			this.getBalance();
-		}.bind(this))
+		if(this.props.isMigu){
+			browserHistory.push(GLOBAL.setHref('m_recharge'));
+		} else {
+		 	var hash = location.pathname;
+			browserHistory.push(GLOBAL.setHref('balance'));
+			myEvent.setCallback('recharge',function(){
+				browserHistory.push(hash);
+				this.getBalance();
+			}.bind(this));
+		}
  	},
 	payHandle: function(count) {
 		var that = this;
 		if(this.props.isMigu){
-			if(!this.state.bind_phone){this.gotoBind();return}
+			if(!this.state.bind_phone || this.state.bind_phone=="未绑定手机"){this.gotoBind();return}
 			AJAX.go('mOrder',{
 				book_id:this.props.introduce.book_id,
 				chapter_id:this.props.chapterid,
@@ -60,7 +64,6 @@ var mod = React.createClass({
 			},function(data){
 			
 			this.setState({bind_phone: data.success.bind_phone||'未绑定手机',url:data.success.unbind_url || null});
-			console.log(!data.success.unbind_url)
 			this.setState({another:!data.success.unbind_url?(<div className="block f-clearfix m-order-left" onClick={this.gotoBind}>
 					<div className="f-fl lh-30"><span className="f-mr-5">让他来买单</span></div>
 					<div className="f-fr f-s-14 bind-box">
@@ -85,21 +88,19 @@ var mod = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
+
 		return this.state.aidou !== nextState.aidou
 			|| this.props.children !== nextPros.children
 			|| this.state.bind_phone !== nextState.bind_phone
-			|| this.state.another !== nextState.another;
+			|| this.state.another !== nextState.another
+			|| this.props.data !== nextPros.data;
 	},
 	componentDidMount: function() {
 		this.dataInit();
-		document.addEventListener('telBind',function(){//触发充值成功时更新个人信息
-			this.dataInit();
-		}.bind(this));
+		document.addEventListener('telBind',this.dataInit);
 
 		if(!this.props.isMigu) {
-			document.addEventListener('rechargeSuccess',function(){//触发充值成功时更新个人信息
-				this.getBalance();
-			}.bind(this));
+			 document.addEventListener('rechargeSuccess',this.getBalance,false);
 		};
 	},
 	dataInit: function(){
@@ -109,12 +110,19 @@ var mod = React.createClass({
 			this.getBind();
 		}
 	},
+	componentWillUnmount: function(){
+		 document.removeEventListener("telBind", this.dataInit, false);
+		 document.removeEventListener('rechargeSuccess',this.getBalance);
+	},
 	render: function() {
 		var isMigu = this.props.isMigu;
 		var twenty = (isMigu && this.props.data.twentyPrice)?<div className="yhui" onClick={this.payHandle.bind(this,20)}>20章优惠价<span className="f-fc-EF5">{this.props.data.twentyPrice}</span>元</div>:null;
 		var baseQuestion = null,code=null,telephoneBlock=null;
+		var list =  null;
 
 		if(isMigu){
+			if(!this.state.bind_phone)
+				list = (<div className="m-mg-loading"><Loading /></div>)
 			telephoneBlock = <section>
 				<div className="block f-clearfix m-order-left" onClick={this.gotoBind}>
 					<div className="f-fl lh-30"><span className="f-mr-5">支付号码</span></div>
@@ -127,27 +135,28 @@ var mod = React.createClass({
 			</section>
 		}
 
-		if(this.props.data.verifyCodePicUrl){
-			baseQuestion = 'data:image/jpeg;base64,'+this.props.data.verifyCodePicUrl;
-			var list = this.props.data.answerList[this.props.data.answerList.length-1],arr=[];
-			for(var key in list){
-				arr.push(list[key])
-			};
-			code = (<div className="m-o-code">
-					<img src={baseQuestion} />
-					<div className="f-fr">
-					{	
-						arr.map(function(i,v){
-							return <img key={v} onClick={this.selectAnswer.bind(this,v)} src={"data:image/jpeg;base64,"+i} />
-						}.bind(this))
-					}
-					</div>
-				</div>)
-		};
+		// if(this.props.data.verifyCodePicUrl){
+		// 	baseQuestion = 'data:image/jpeg;base64,'+this.props.data.verifyCodePicUrl;
+		// 	var list = this.props.data.answerList[this.props.data.answerList.length-1],arr=[];
+		// 	for(var key in list){
+		// 		arr.push(list[key])
+		// 	};
+		// 	code = (<div className="m-o-code">
+		// 			<img src={baseQuestion} />
+		// 			<div className="f-fr">
+		// 			{	
+		// 				arr.map(function(i,v){
+		// 					return <img key={v} onClick={this.selectAnswer.bind(this,v)} src={"data:image/jpeg;base64,"+i} />
+		// 				}.bind(this))
+		// 			}
+		// 			</div>
+		// 		</div>)
+		// };
 
 		return (<div>
-				{
+				{	
 					<div className="m-order">
+						{list}
 						<div className="block">
 							<div className="m-order-detail">
 								<h5 className="f-mb10 f-ellipsis">《{this.props.introduce.book_name}》</h5>

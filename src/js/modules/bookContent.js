@@ -8,8 +8,9 @@ var goto_mlogin = function(options,callback){
   };
 
  var a_url = 'https://readapi.imread.com';
-// a_url = 'http://192.168.0.34:9090';
-// a_url = 'http://192.168.0.252:8080';
+a_url = 'http://192.168.0.34:9090';
+//a_url = 'http://192.168.0.252:8080';
+
 
 var BookContent = (function() {
 	//移动咪咕阅读
@@ -21,26 +22,29 @@ var BookContent = (function() {
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			var url = a_url+'/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cm;
 			AJAX.getJSON('GET', url, {}, function(res){
-				if(res.success){
-					res.success['cm'] = sourceConfig.cm;
-					if(res.success.loginSubmitUrl){
-						//gotoMigu(sourceConfig);
-						if(location.pathname.slice(-5) == 'login')	return;
-						// goto_mlogin(options.callback.bind(this,res));
-						goto_mlogin(res.success);
-					}else
-						options.callback(res,true);
-				}
-				else{
-					if(typeof res.error === 'string')
-						POP._alert(res.error);
-					else 
-						for(var key in res.error[0]){
-							POP._alert(res.error[0][key])
-					}
-					GLOBAL.goBack();
-					//gotoMigu(sourceConfig);
-				}
+				gotoMigu(sourceConfig);
+				// if(res.success){
+				// 	res.success['cm'] = sourceConfig.cm;
+				// 	if(res.success.loginSubmitUrl){
+				// 		//gotoMigu(sourceConfig);
+				// 		if(location.pathname.slice(-5) == 'login')	return;
+				// 		// goto_mlogin(options.callback.bind(this,res));
+				// 		res.success.book_id = options.book_id;
+				// 		res.success.chapter_id = options.cid;
+				// 		goto_mlogin(res.success);
+				// 	}else
+				// 		options.callback(res,true);
+				// }
+				// else{
+				// 	if(typeof res.error === 'string')
+				// 		POP._alert(res.error);
+				// 	else 
+				// 		for(var key in res.error[0]){
+				// 			POP._alert(res.error[0][key])
+				// 	}
+				// 	GLOBAL.goBack();
+				// 	//gotoMigu(sourceConfig);
+				// }
 					
 			}, function() {
 				if(options.noCross){return} //不要跳转

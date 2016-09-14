@@ -52,8 +52,8 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .f-pb-10{padding-bottom: 10px;}.f-pb-20{padding-bottom: 20px;}
 .f-pt-10{padding-top: 10px;}.f-pt-20{padding-top: 20px;}
 .f-mr-10{margin-right: 10px;}
-.f-mb-10{margin-bottom: 10px;}.f-mb--10{margin-bottom: -10px;}.f-mb-15{margin-bottom: 15px;}.f-mb-20{margin-bottom: 20px;}.f-mb-30{margin-bottom: 30px;}
-.f-mt-5{margin-top: 5px;}.f-mt-10{margin-top: 10px;}.f-mt-15{margin-top: 15px;}.f-mt-20{margin-top: 20px;}.f-mt-30{margin-top: 30px;}
+.f-mb-10{margin-bottom: 10px;}.f-mb-10{margin-bottom: -10px;}.f-mb-15{margin-bottom: 15px;}.f-mb-20{margin-bottom: 20px;}.f-mb-30{margin-bottom: 30px;}
+.f-mt-5{margin-top: 5px;}.f-mt-10{margin-top: 10px;}.f-mt-15{margin-top: 15px;}.f-mt-20{margin-top: 20px;}.f-mt-25{margin-top: 25px;}.f-mt-30{margin-top: 30px;}
 .f-tl{text-align: left !important;}.f-tc{text-align: center !important;}.f-tr{text-align: right !important;}
 .f-fw-b{font-weight: bold;}
 .f-fc-000{color: #000 !important;}.
@@ -175,6 +175,10 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .subCat-5 .swipe-nav-item-active{background: #41C2C2;}
 .swipe .u-adimg{pointer-events:none;}
 .subCat-11{padding: 4px;}
+
+/*插屏广告*/
+.ad-xp .subCat-5{position: absolute;width: 100%;height: 100%;}
+.ad-xp .subCat-5 .swipe .swipe-wrap,.ad-xp .subCat-5 .swipe .swipe-wrap .swipe-ad{height: 100%;}
 
 .subCat-6{border-style: solid;border-color: #EEEEEE;border-width: 1px 1px 0 1px; margin: 0 10px 10px 10px;}
 .u-book-6{float: left;box-sizing: border-box;width: 50%;border-bottom: 1px solid #EEEEEE;margin-top: 0;}
@@ -512,6 +516,7 @@ progress::-webkit-progress-value  { background: #17d671; }
 .icon-h.show{display: block;}
 .icon-20{width: 20px;height: 20px;display: inline-block;vertical-align: middle;}
 .icon-deletes{background:url(../img/icons/delete@2x.png) no-repeat;position: absolute;right: 15px;top: 50%;margin-top: -10px;}
+.icon-tc{background: url(../img/icon88/tuichu@2x.png) no-repeat;}
 
 .icon-w-paixu,.icon-y-paixu,.icon-w-paixu.seq,.icon-y-paixu.seq,.icon-y-paixu.rev,.icon-w-paixu.rev,.icon-return-black,.icon-deletes,.icon-lock,.icon-love-store,.icon-b-paixu,.icon-love-store.active,.icon-n.icon-fengmian,.icon-n.icon-liebiao,.icon-n.icon-jingyong,.icon-n.icon-xiazai,.icon-n.icon-shanchu,.icon-paixu,.icon-white-aidou,.icon-black-aidou,.icon-black-aidou,.icon-black-aidou.active,.icon-QQ,.icon-WX,.icon-WB{background-size: cover;}
 
