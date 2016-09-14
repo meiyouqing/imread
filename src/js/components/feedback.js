@@ -1,8 +1,23 @@
 var Header = require('./header');
 
 var Feedback = React.createClass({
+	getInitialState:function(){
+		return{showFeedFooter:true}
+	},
 	componentDidMount: function() {
-		this.refs.contact.focus();
+		//this.refs.contact.focus();
+		this.refs.contact.addEventListener('focus',()=>{
+			this.setState({showFeedFooter:false})
+		},false)
+		this.refs.contact.addEventListener('blur',()=>{
+			this.setState({showFeedFooter:true})
+		},false)
+		this.refs.message.addEventListener('focus',()=>{
+			this.setState({showFeedFooter:false})
+		},false)
+		this.refs.message.addEventListener('blur',()=>{
+			this.setState({showFeedFooter:true})
+		},false)
 	},
 	handleSubmit: function() {
 		var message = this.refs.message.value.trim();
@@ -32,7 +47,7 @@ var Feedback = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		return false;
+		return this.state.showFeedFooter !== nextProps.showFeedFooter;
 	},
 	render: function() {
 		var right = <span className="f-fr icon-s icon-right" onClick={this.handleSubmit} ></span>;
@@ -49,7 +64,7 @@ var Feedback = React.createClass({
 						</div>				
 					</form>
 
-					<div className="u-feed-footer">
+					<div className={"u-feed-footer"+(this.state.showFeedFooter?'':' f-hide')} ref="feedFooter">
 						<a target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=786f00b8efdacdbb72445d108282fbac256bc9e0c7c4b39d16a1b24185e9d32c"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
 						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" /></a>
 						<a href="http://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>

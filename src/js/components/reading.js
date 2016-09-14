@@ -966,7 +966,7 @@ var Reading = React.createClass({
 						<div className="u-bookname f-ellipsis">
 							<span>目录</span>
 							<div onClick={this.changeOrder} >
-								<span>顺序</span>
+								<span>{this.state.orderSeq?'顺序':'倒序'}</span>
 								<span className={"icon-20 icon-w-paixu f-fr" + (this.state.orderSeq?' rev':' seq')}></span>
 							</div>
 						</div>
