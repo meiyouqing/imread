@@ -178,7 +178,11 @@ var Reading = React.createClass({
 			introduce: null,
 			orderSeq: true,
 			chapterlistMore: true,
-			fromId: false//true:咪咕 
+			fromId: false,//true:咪咕 ,
+			adHc: null,	//呼出广告
+			adXp: null,	//插屏
+			showIntercutXp: false,
+			intercutXp: null
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -299,7 +303,7 @@ var Reading = React.createClass({
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
 			that.isOnShelf = +data.is_self;
-			that.getAD_block5(data);
+			//that.getAD_block5(data);
 			if(typeof callback==='function'){callback()}
 		}
 	},
@@ -312,7 +316,6 @@ var Reading = React.createClass({
 				that.intercut_id = data.intercutList[randIndex].content_id;
 				//广告图片加载好之后再显示广告
 				GLOBAL.loadImage(data.intercutList[randIndex].image_url, callback);
-				
 				function callback() {
 					var intercutList = (
 						<div>
@@ -328,6 +331,33 @@ var Reading = React.createClass({
 					that.setState({
 						intercutList: intercutList,
 						showIntercut: true
+					});
+				}
+			});
+		}
+	},
+	getAD_xp: function(data){
+		var that = this;
+		if (data.content && data.content.length) {
+			require.ensure(['./block9'],function(require){
+				var Block9 = require('./block9');
+				var randIndex = Math.floor(Math.random() * data.content.length) % data.content.length;
+				//广告图片加载好之后再显示广告
+				GLOBAL.loadImage(data.content[randIndex].image_url, callback);
+				function callback() {
+					var intercutXp = (
+						<div>
+							<Block9 data={{
+								contentlist: [data.content[randIndex]]
+							}} type="11" fromReading={true} />
+
+						</div>
+					);
+
+					if(!that.isMounted()){return;}
+					that.setState({
+						intercutXp: intercutXp,
+						showIntercutXp: true
 					});
 				}
 			});
@@ -390,12 +420,35 @@ var Reading = React.createClass({
 		if(that.isLogin())
 			that.getNextContent(data);
 	},
+	getAd_xp: function(bid){
+		AJAX.go('adXp',{bid: bid,page:1,page_size:0,order_type:'asrc',vt:9},function(res){
+			if(res.content)	{
+				this.setState({adXp: res});
+				if(!this.state.adXp)
+					this.getAD_xp(res);
+			}
+		}.bind(this));
+	},
+	getAd_hc: function(bid){
+		AJAX.go('adHc',{bid: bid},function(res){
+			if(res.intercutList)	{
+				this.setState({Adhc: res});
+				if(!this.state.adHc)
+					this.getAD_block5(res);
+			}
+		}.bind(this));
+	},
 	getContent: function() {
 		var book_info = this.APIParts('readingId');
 		this.bid = book_info[1];
 		this.chapterid = book_info[2];
 		this.source_id = book_info[4];
 		this.book_id = book_info[3];
+
+		if(this.state.Adhc)
+			this.getAD_block5(this.state.Adhc);
+		if(this.state.adXp)
+			this.getAD_xp(this.state.adXp);
 
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
@@ -559,10 +612,17 @@ var Reading = React.createClass({
 			this.time = Date.now();
 		}
 	},
+	getAds: function(){
+		var bookid = this.APIParts('readingId')[3];
+		this.getAd_hc(bookid);
+		this.getAd_xp(bookid);
+	},
 	componentDidMount:function(){
+		this.getAds();
 		if(GLOBAL.isRouter(this.props)) this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
 		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
+
 		if (GLOBAL.cookie('showGuide') != '1') {
 			this.setState({
 				showGuide: true
@@ -596,6 +656,16 @@ var Reading = React.createClass({
 		// var that = this; || (this.props.children !== nextProps.children)
 		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
+		}
+
+		if(this.refs.swiper) {
+			this.hammer = new Hammer(this.refs.swiper);
+			this.hammer.off('swipeup');
+		    	this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+		    	this.hammer.on("swipeup", function (ev) {
+		    		console.log(1)
+		    		this.setState({showIntercutXp: false});
+		    	}.bind(this));
 		}
 
 		var scrollarea = this.refs.scrollarea;
@@ -692,7 +762,9 @@ var Reading = React.createClass({
 				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
 				|| this.props.children !== nextProps.children
 				|| this.props.params !== nextProps.params
-				|| this.state.introduce !== nextState.introduce;
+				|| this.state.introduce !== nextState.introduce
+				|| this.state.orderData !==nextState.orderData
+				|| this.state.intercutList !== nextState.intercutList;
 	},
 	
 	hideGuide:function(e) {
@@ -792,7 +864,10 @@ var Reading = React.createClass({
 		}
 		return (
 			<div className="gg-body m-reading-body" ref="container">
-
+				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
+					{this.state.intercutXp}
+					<div className="banner">点击图片查看更多，滑动翻页继续阅读</div>
+				</div>
 				<div className={"style " + classNames}>
 				{
 

@@ -46,6 +46,7 @@ module.exports = {
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
+			Hammer: '../modules/hammer',
 			POP: '../modules/confirm',
 			Order: '../modules/order',
 			parseQuery: '../modules/parseQuery'

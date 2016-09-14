@@ -88,14 +88,15 @@ var mod = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
+
 		return this.state.aidou !== nextState.aidou
 			|| this.props.children !== nextPros.children
 			|| this.state.bind_phone !== nextState.bind_phone
-			|| this.state.another !== nextState.another;
+			|| this.state.another !== nextState.another
+			|| this.props.data !== nextPros.data;
 	},
 	componentDidMount: function() {
 		this.dataInit();
-		
 		document.addEventListener('telBind',this.dataInit);
 
 		if(!this.props.isMigu) {

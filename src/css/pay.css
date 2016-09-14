@@ -68,7 +68,7 @@
 .img-block.show{display:block}
 .img-code{position: absolute; width: 76%;left: 12%; background: #fff;z-index: 11;top: 30%;text-align: center;border-radius: 2px;}
 .img-code img{margin: 15px 0;}
-.img-code input{display: block;width: 70%;border: 1px solid #0196aa;margin: 0 auto;margin-bottom: 15px;line-height: 24px;padding: 0 10px;}
+.img-code input{display: block;width: 70%;border: 1px solid #0196aa;margin: 0 auto;margin-bottom: 15px;line-height: 30px;padding: 0 10px;font-size: 15px;}
 .img-code button{height: 40px;line-height: 40px;font-size: 15px;color: #0196aa;}
 .img-code div{border-top: 1px solid #eee;}
 .img-code button:first-child{border-right: 1px solid #eee;color: #000;}
