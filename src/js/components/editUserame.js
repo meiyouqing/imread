@@ -2,7 +2,7 @@ var Header = require('./header');
 var Mixins = require('../modules/mixins');
 require('../../css/userinfo.css');
 
-var tag = React.createClass({
+var EditUsername = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
@@ -13,7 +13,7 @@ var tag = React.createClass({
 		if(!this.refs.username.value) {POP._alert('昵称不能为空'); return;}
 
 		var pramas = {
-			user_name:this.refs.username.value
+			user_name:this.refs.username.value.trim()
 		}
 
 		// AJAX.go('edituser',pramas,function(res){
@@ -37,7 +37,9 @@ var tag = React.createClass({
 		return;
 	},
 	componentDidMount: function() {
-
+		this.refs.username.focus();
+		const username = this.props.location.state.username;
+		this.refs.username.value = username || ''; 
 		this.refs.username.oninput = function(e){
 			if(this.refs.username.value.length>10)
 				this.refs.username.value = this.refs.username.value.substring(0,10);
@@ -59,4 +61,4 @@ var tag = React.createClass({
 	}
 });
 
-module.exports = tag;
+module.exports = EditUsername;

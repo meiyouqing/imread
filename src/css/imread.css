@@ -112,7 +112,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-bar-head .iconfont {width: 48px;box-sizing:border-box;margin-right: -10px; margin-left: -10px; font-size: 18px;color: #fff;font-weight: normal;text-align: center;}
 .m-bar-head .textBtn {z-index: 1;position: relative;margin-left: -10px; padding-right: 15px; padding-left: 15px;font-size: 14px;line-height: 44px;color: #fff;font-weight: normal;}
 .m-bar-head .textBtn.no-ml{margin-left: 0}
-.m-bar-head .title {display: inline-block; position: absolute; right: 45px; left: 45px; width: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #fff; letter-spacing: 0.2em; font-size: 18px; line-height: 44px; text-align: center; }
+.m-bar-head .title {display: inline-block; position: absolute; right: 45px; left: 45px; width: auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #fff; letter-spacing: 0.05em; font-size: 18px; line-height: 44px; text-align: center; }
 .m-bar-tab {bottom: 0; height: 50px; padding: 5px 0; border-top: 1px solid #DBDBDB; border-bottom: 0; -webkit-touch-callout: none; }
 .m-bar-tab .item {height: 50px; text-align: center; color: #929292; }
 .m-bar-tab .item.z-active{color: #41c2c2;}
@@ -355,7 +355,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 
 .u-cover{position: absolute;z-index: 3000;top: 0;bottom: 0;width: 100%;background-color: #fff;color: #FFF;}
 
-.u-btn{display: inline-block;height: 40px;padding: 0 30px;line-height: 40px;background-color: #0196aa;font-size: 18px;text-align: center;color: #ffffff !important;letter-spacing: 0.2em;-moz-border-radius: 5px;border-radius: 2px;}
+.u-btn{display: inline-block;height: 40px;padding: 0 30px;line-height: 40px;background-color: #0196aa;font-size: 18px;text-align: center;color: #ffffff !important;letter-spacing: 0.1em;-moz-border-radius: 5px;border-radius: 2px;}
 .u-btn-full{width: 100%;padding: 0;}
 .u-btn-disabled{background-color: #E1E1E1;color: #B1B1B1 !important;}
 .u-btn-1{display: block;position: absolute;z-index: 111;width:100%;bottom: 0;height: 51px;line-height: 51px;text-align: center;background-color: #41c2c2;font-size: 15px;text-align: center;color: #fff;letter-spacing: 0.2em;}

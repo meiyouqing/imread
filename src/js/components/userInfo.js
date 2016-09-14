@@ -2,7 +2,7 @@ var Header = require('./header');
 var Mixins = require('../modules/mixins');
 require('../../css/userinfo.css');
 
-var tag = React.createClass({
+var UserInfo = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
@@ -155,7 +155,7 @@ var tag = React.createClass({
 	},
 	gotoEditname: function(){
 		if(!this.state.isEdit)  return;
-		browserHistory.push(GLOBAL.setHref('editUserame'));
+		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user.user_name}});
 	},
 	getData: function() {
 		AJAX.init('me');
@@ -164,8 +164,8 @@ var tag = React.createClass({
 
 			this.setState({
 				user:data,
-				user_birthday: data.user_birthday,
-				user_name: data.user_name,
+				user_birthday: data.user_birthday || '请设置生日',
+				user_name: data.user_name || data.mobile_num,
 				portraitUrl: data.portraitUrl
 			});
 		}.bind(this));
@@ -174,10 +174,10 @@ var tag = React.createClass({
 		var user_gender;
 		switch(index){
 				case '1':
-					user_gender = '男';
+					user_gender = '男生';
 					break;
 				case '2' :
-					user_gender = '女';
+					user_gender = '女生';
 					break;
 				default:
 					user_gender = "保密"
@@ -249,4 +249,4 @@ var tag = React.createClass({
 	}
 });
 
-module.exports = tag;
+module.exports = UserInfo;

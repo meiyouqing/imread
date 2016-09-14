@@ -214,11 +214,12 @@ var Reading = React.createClass({
 		if (!this.state.data) {return ;}
 		var readLog = [{
 			content_id: bid,
+			chapter_id:chapterid,
 			current_chapterid: chapterid,
 			current_time:(new Date()).Format('yyyyMMddhhmmss'),
-			chapter_read_time:(new Date()).Format('yyyyMMddhhmmss'),
+			chapter_read_time:Date.now()-this.startTime,
 			chapter_offset:0,
-			read_time: (new Date()).Format('yyyyMMddhhmmss'),
+			read_time: Date.now()-this.startTime,
 			chapter_name: this.state.data.name,
 			//chapter_read_time: Date.now()-this.time,
 			playorder: this.state.data.chapterSort
@@ -618,6 +619,7 @@ var Reading = React.createClass({
 		this.getAd_xp(bookid);
 	},
 	componentDidMount:function(){
+		this.startTime = Date.now();
 		this.getAds();
 		if(GLOBAL.isRouter(this.props)) this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);

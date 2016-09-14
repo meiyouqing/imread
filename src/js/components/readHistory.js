@@ -3,6 +3,7 @@ var Header = require('./header');
 var readHistory = React.createClass({
 	mixins: [Mixins()],
 	getDefaultProps: function() {
+		GLOBAL.setTitle('readHistory');
 		return {
 			height: document.body.offsetHeight - 44
 		}
@@ -13,7 +14,7 @@ var readHistory = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route}/>
+				<Header right={null} path={this.props.route} title={GLOBAL.title}/>
 				<iframe src={"http://m.imread.com/iframe/readHistory.html?referer=3&user_id=" + GLOBAL.cookie('userId')} className="g-main" style={{height: this.props.height}}></iframe>
 			</div>
 		);

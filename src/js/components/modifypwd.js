@@ -7,7 +7,6 @@ var Modifypwd = React.createClass({
 			new_pwd = this.refs.new_pwd.value,
 			new_pwd_s = this.refs.new_pwd_s.value;
 
-
 		if(!this.showNotice(old_pwd,'请输入旧密码')) return;
 		if(!this.showNotice(new_pwd,'请输入新密码')) return;
 		if(new_pwd.length<6) {POP._alert('密码不能少于6位'); return}
@@ -45,7 +44,7 @@ var Modifypwd = React.createClass({
 				<div className="g-main">
 					<div className="u-userform m-modify">
 						<div className="u-inputline-2">
-						<input className="u-input-2" type="text" ref="old_pwd" placeholder="旧密码" />
+						<input className="u-input-2" type="password" ref="old_pwd" placeholder="旧密码" />
 						</div>
 						<div className="u-inputline-2">
 						<input className="u-input-2" type="password" ref="new_pwd" placeholder="新密码" />
