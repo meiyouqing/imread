@@ -126,6 +126,7 @@ var chapterMixins = {
 		if (!this.state.data.nextChapterId) {
 			return this.alert('已经是最后一章了', 1);
 		}
+		this.setState({showSetting: false});
 		this.goToChapter(this.state.data.nextChapterId);	
 	},
 	goToChapter: function(chapterid, Offset) {
@@ -160,6 +161,7 @@ var Reading = React.createClass({
 			pages: 1,
 			page_size: 20,
 			vt: 9,
+			showFy: true,
 			// bid: this.APIParts()[1],
 			// chapterid: this.APIParts()[2],
 			// source_id: this.APIParts()[4],
@@ -410,23 +412,27 @@ var Reading = React.createClass({
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
-		that.setState({
-			data: data,
-			loading: false,
-			//page: currentPage,
-			pages: currentPage,
-			order: false
-		}, that.getChapterlist);
+			that.setState({
+				data: data,
+				//loading: false,
+				//page: currentPage,
+				pages: currentPage,
+				order: false
+			}, that.getChapterlist);
+
+			setTimeout(function(){
+				that.setState({loading: false});
+			},800);
+
+		this.getAd_xp(this.book_id,data.chapterSort);
 
 		if(that.isLogin())
 			that.getNextContent(data);
 	},
-	getAd_xp: function(bid){
-		AJAX.go('adXp',{bid: bid,page:1,page_size:0,order_type:'asrc',vt:9},function(res){
+	getAd_xp: function(bid,page){
+		AJAX.go('adXp',{bid: bid,page:(Number(page)+1),page_size:1,order_type:'asrc',vt:9},function(res){
 			if(res.content)	{
 				this.setState({adXp: res});
-				if(!this.state.adXp)
-					this.getAD_xp(res);
 			}
 		}.bind(this));
 	},
@@ -616,10 +622,14 @@ var Reading = React.createClass({
 	getAds: function(){
 		var bookid = this.APIParts('readingId')[3];
 		this.getAd_hc(bookid);
-		this.getAd_xp(bookid);
 	},
 	componentDidMount:function(){
 		this.startTime = Date.now();
+
+		setTimeout(function(){
+			this.setState({showFy: false})
+		}.bind(this),1000);
+		
 		this.getAds();
 		if(GLOBAL.isRouter(this.props)) this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
@@ -707,7 +717,7 @@ var Reading = React.createClass({
 		}
 		this.setState({
 			showChapterlist: !this.state.showChapterlist,
-			showSetting: this.state.showChapterlist
+			showSetting: false
 		});
 	},
 	handleClick: function(e) {
@@ -804,7 +814,7 @@ var Reading = React.createClass({
 		var ChapterlistHrefBase = currentRoute.join('/');
 		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
 		var classNames = readingStyle.getClass(this.state.style);
-		var intercut;
+		var intercut,loading=null;
 
 		//防止排序时候的绑定
 		var chapterlist = {};
@@ -836,7 +846,8 @@ var Reading = React.createClass({
 				</div>
 				);
 		}
-		if(this.state.loading) {
+
+		if(this.state.showFy){
 			return (
 				<div className="gg-body">
 					{/*{head}
@@ -852,6 +863,11 @@ var Reading = React.createClass({
 				</div>
 			);
 		}
+
+		if(this.state.loading) {
+			loading = <Loading />
+		}
+
 		if (this.state.intercut) {
 			intercut = <Intercut data={this.state.intercut} />
 			if (!this.uploadLogIntercut) {
@@ -870,7 +886,7 @@ var Reading = React.createClass({
 					<div className="banner">点击图片查看更多，滑动翻页继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleChapterlist}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
@@ -963,6 +979,7 @@ var Reading = React.createClass({
 						null
 				}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
+					{loading}
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{

@@ -35,6 +35,7 @@ var Modifypwd = React.createClass({
 	},
 	componentDidMount: function(){
 		this.checkLogin(this.props.route);
+		this.refs.old_pwd.focus();
 	},
 	render:function() {
 		var right = <div className="f-fr icon-s icon-right" onClick={this.clickHandle} ></div>;

@@ -418,7 +418,6 @@ progress::-webkit-progress-value  { background: #17d671; }
 /*列表模式*/
 .g-scroll.active .shelfWrap{position: relative;top: 0;left: 0;padding: 0}
 .g-scroll.active .shelfWrap li{position:relative;float:none;width: auto;height: 120px;padding: 10px 15px;border-bottom: 1px solid #cccccc}
-.g-scroll.active .shelfWrap li:last-child{border: 0;}
 .g-scroll.active .shelfWrap .u-book-2 a{margin: 0;}
 .g-scroll.active .shelfWrap .u-book-2 .pro-box{height: 120px;overflow: hidden;}
 .g-scroll.active .shelfWrap .u-book-2 .pro-box .intro-box{position:absolute;height: 100%;left: 105px;right: 0;}
