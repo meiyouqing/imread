@@ -86,7 +86,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .g-nav.g-top .m-nav{background-color: #20ced7;color: #fff;}
 .g-nav.g-top .m-nav a{height: 44px;line-height: 44px;font-size: 16px;}
 .g-main{position: absolute;top: 44px;bottom: 50px;width: 100%;overflow: hidden;}
-.g-subMall > .g-main {top: 80px;}
+.g-subMall > .g-main {top: 84px;}
 .g-main-1{bottom: 0;}
 .g-main-2{top: 0;}
 .g-main-3{bottom: 0;top: 84px;background: #eeeeee;}
@@ -119,7 +119,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-bar-tab .item .iconfont {width: 24px; height: 24px; line-height: 24px;padding-top: 0; padding-bottom: 0; }
 .m-bar-tab .item .iconfont ~ .label {display: block; overflow: hidden; text-overflow: ellipsis;font-size: 10px;line-height: 14px;}
 
-.m-block-c {background: #F0F0F0}
+.m-block-c {background: #F0F0F0;overflow: hidden;}
 .m-block{background: #FFFFFF;padding: 0 5px;margin-bottom: 10px;border-top: 1px solid #EEE;border-bottom: 1px solid #EEE; }
 .m-block.n-padding{padding: 0;}
 .m-block:first-child{margin-top: 0;border-top: none;}
@@ -130,6 +130,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-list .recommend{border-bottom: 1px solid #eeeeee;text-align: justify;}
 .m-block .content .recommend .iconWord,.hot,.m-list .recommend .iconWord{padding:0 2px;margin-right: 5px;display: inline-block;background-color: #0196aa;color: #FFF;line-height: 15px;}
 .m-block.m-block-top .content{padding: 0;}
+.m-block.m-block-top{margin-top: 10px;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
 .m-block > .title h2{font-size: 17px;color: #000;}
 .m-block > .title h2.style-2{color: #EA2510;}
@@ -284,7 +285,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-5 .topNb.NO1,.u-book-5 .topNb.NO2,.u-book-5 .topNb.NO3{background-color: #41C2C2;font-size: 13px;}
 .u-book-5 > a{display: inline-block;width: 100%;height: 100%;overflow: hidden;}
 .u-book-5 a span{vertical-align: middle;line-height: 50px;max-width: 90%}
-.u-book-5 a span.hot{font-size: 10px;height: 16px;width: 16px;padding: 0;line-height: 17px;text-align: center;margin:0 0 0 5px;background: #fd6775;border-radius: 1px }
+.u-book-5 a span.hot{font-size: 10px;width: 16px;padding: 0;line-height: 17px;text-align: center;margin:0 0 0 5px;background: #fd6775;border-radius: 1px }
 
 .u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;height: 176px}
 .u-book-10 a{display: block;width: 100%;}

@@ -1,7 +1,7 @@
 .m-reading{position: absolute;left: 0;right: 0;top: 0;bottom: 0;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;overflow-y: auto;-webkit-overflow-scrolling: touch;}
-.u-readingContent{padding: 0 30px;font-size: 19px;line-height: 1.75;text-indent: 2em;}
+.u-readingContent{padding: 0 15px;font-size: 19px;line-height: 1.75;text-indent: 2em;}
 .u-readingContent p{margin-bottom: 20px;text-align:justify;}
-.u-chapterName{margin: 71px 30px 60px 30px;font-size: 21px;}
+.u-chapterName{margin: 71px 15px 60px 15px;font-size: 21px;}
 .u-action-top, .u-action-middle, .u-action-bottom{position: absolute;z-index: 4000;cursor: pointer;}
 .u-action-top, .u-action-bottom{width: 100%;height: 40%;left: 0;top: 0;}
 .u-action-bottom{top: 60%;}

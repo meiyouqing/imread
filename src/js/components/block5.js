@@ -48,7 +48,7 @@ var Block5 = React.createClass({
 					img.setAttribute("data-load-state", 'loading');
 					GLOBAL.loadImage(src, function() {
 						img.src = src;
-						img.style.height = that.state.height + 'px';
+						img.style.height = that.props.style !== 11?that.state.height:70 + 'px';
 						img.setAttribute("data-load-state", 'loaded');
 					});
 				}
@@ -139,7 +139,7 @@ var Block5 = React.createClass({
 			<section className="m-block-top m-block n-padding">
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
-						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: this.state.height}}>
+						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:'70px')}}>
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
