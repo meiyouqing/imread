@@ -91,9 +91,9 @@ var Register = React.createClass({
 		}.bind(this), 1000);
 	},
 	componentDidMount: function() {
-		this.refs.mobile_num.focus();
+		//this.refs.mobile_num.focus();
 		//判断来源from
-		this.from = parseQuery(location.search);
+		//this.from = parseQuery(location.search);
 	},
 	render: function() {
 			{/*<div className="gg-body">
@@ -123,7 +123,7 @@ var Register = React.createClass({
 		return (
 
 			<div className="g-ggWraper  gg-body">
-				<Header right={null} title={'修改密码'} path={this.props.route}/>
+				<Header right={null} title={'忘记密码'} path={this.props.route}/>
 				<div className="g-main">
 					<div className="u-userform m-modify m-forget">
 						<div className="u-inputline-2">
