@@ -8,7 +8,7 @@ var Book8 = require('./book8_bookSheet');
 
 var Recommend = React.createClass({
 	render: function(){
-		 return <Link to={this.props.href} className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span>{this.props.block.short_recommend_words}</Link>
+		 return <Link to={this.props.href} className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span><span>{this.props.block.short_recommend_words}</span></Link>
 	}
 
 });

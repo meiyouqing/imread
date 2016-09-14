@@ -1,5 +1,5 @@
 .m-reading{position: absolute;left: 0;right: 0;top: 0;bottom: 0;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;overflow-y: auto;-webkit-overflow-scrolling: touch;}
-.u-readingContent{padding: 0 30px;font-size: 19px;line-height: 1.5;text-indent: 2em;}
+.u-readingContent{padding: 0 30px;font-size: 19px;line-height: 1.75;text-indent: 2em;}
 .u-readingContent p{margin-bottom: 20px;text-align:justify;}
 .u-chapterName{margin: 71px 30px 60px 30px;font-size: 21px;}
 .u-action-top, .u-action-middle, .u-action-bottom{position: absolute;z-index: 4000;cursor: pointer;}
@@ -120,7 +120,7 @@
 .m-reading-fy .fy-detail{margin-top: 40%;text-align: center;}
 .m-reading-fy .fy-title{font-size: 23px;}
 .m-reading-fy .fy-author{font-size: 17px;margin-top: 10px;}
-.m-reading-fy .fy-gw{position: absolute;bottom: 55px;width: 100%;text-align: center;font-size: 15px;color: #777777;}
+.m-reading-fy .fy-gw{position: absolute;bottom: 55px;width: 100%;text-align: center;font-size: 15px;}
 .ad-xp{position: absolute;top:-;left: 0;width: 100%;height: 100%;z-index: 9999;}
 .ad-xp .banner{position: absolute;bottom: 0;height: 40px;color: #fff;text-align: center; width: 100%;line-height: 40px;font-size: 15px;background: rgba(0,0,0,.3);}
 
@@ -300,9 +300,9 @@
 .m-reading-body .style-4 .u-chapterlist .chapterlist .chapter .name.lock,.m-reading-body .style-4 .u-chapterlist .u-bookname > div,.m-reading-body .style-4,.m-reading-fy{color: #696b7a}
 .m-reading-body .style-4 .font-list .circle{background: #1e1e2a}
 .m-reading-body .style-4 .u-chapterlist,.m-reading-body .style-4 .u-settings{background: #2b2d3c;}
-.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid #414351}
+.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid  rgba(105,107,122,.2)}
 
-.m-reading-body .style-4 .u-settings-font,.m-reading-body .style-4 .u-settings-bottom{border-top: 1px solid #6a6b7a}
+.m-reading-body .style-4 .u-settings-font,.m-reading-body .style-4 .u-settings-bottom{border-top: 1px solid rgba(105,107,122,.2)}
 
 .m-reading-body .style-4 .icon-r.prv,
 .m-reading-body .style-4 .icon-r.next,
