@@ -120,6 +120,7 @@ var chapterMixins = {
 		if (!this.state.data.preChapterId) {
 			return this.alert('已经是第一章了', -1);
 		}
+		this.setState({showSetting: false});
 		this.goToChapter(this.state.data.preChapterId);
 	},
 	nextChapter: function() {
@@ -182,7 +183,6 @@ var Reading = React.createClass({
 			chapterlistMore: true,
 			fromId: false,//true:咪咕 ,
 			adHc: null,	//呼出广告
-			adXp: null,	//插屏
 			showIntercutXp: false,
 			intercutXp: null
 		}
@@ -412,17 +412,15 @@ var Reading = React.createClass({
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
+		setTimeout(function(){
 			that.setState({
 				data: data,
-				//loading: false,
+				loading: false,
 				//page: currentPage,
 				pages: currentPage,
 				order: false
 			}, that.getChapterlist);
-
-			setTimeout(function(){
-				that.setState({loading: false});
-			},800);
+		},800);
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
@@ -430,9 +428,9 @@ var Reading = React.createClass({
 			that.getNextContent(data);
 	},
 	getAd_xp: function(bid,page){
-		AJAX.go('adXp',{bid: bid,page:(Number(page)+1),page_size:1,order_type:'asrc',vt:9},function(res){
+		AJAX.go('adXp',{bid: bid,page:(Number(page)),page_size:1,order_type:'asrc',vt:9},function(res){
 			if(res.content)	{
-				this.setState({adXp: res});
+				this.getAD_xp(res);
 			}
 		}.bind(this));
 	},
@@ -454,8 +452,6 @@ var Reading = React.createClass({
 
 		if(this.state.Adhc)
 			this.getAD_block5(this.state.Adhc);
-		if(this.state.adXp)
-			this.getAD_xp(this.state.adXp);
 
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
@@ -862,6 +858,13 @@ var Reading = React.createClass({
 					{this.props.children}
 				</div>
 			);
+		}
+
+		if(!this.state.data){
+			return (<div className="gg-body">
+						<div className={"m-reading-fy style-" + (this.state.style.style)}>
+						<Loading />
+						</div></div>)
 		}
 
 		if(this.state.loading) {
