@@ -868,12 +868,6 @@ var Reading = React.createClass({
 					<div className="banner">点击图片查看更多，滑动翻页继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				{
-
-					this.source_id == '1'?
-						(<i className="u-miguLogo"></i>):
-						null
-				}
 				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
@@ -960,6 +954,12 @@ var Reading = React.createClass({
 					</div>
 				</section>
 				<div className={"m-reading"} ref="scrollarea">
+					{
+
+					this.source_id == '1'?
+						(<i className="u-miguLogo"></i>):
+						null
+				}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
