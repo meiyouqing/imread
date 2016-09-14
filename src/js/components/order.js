@@ -12,7 +12,7 @@ var mod = React.createClass({
 			browserHistory.push(GLOBAL.setHref('balance'));
 			myEvent.setCallback('recharge',function(){
 				browserHistory.push(hash);
-				this.getBalance();
+				//this.getBalance();
 			}.bind(this));
 		}
  	},

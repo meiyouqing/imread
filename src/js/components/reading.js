@@ -591,7 +591,7 @@ var Reading = React.createClass({
 		if(!this.isMounted()){return;}
 		if(this.state.showChapterlist){
 			this.toggleChapterlist();
-			//return;
+			return;
 		}
 		if (!this.state.showSetting && this.state.showIntercut) {
 			uploadLog.send('intercut', {
@@ -695,7 +695,6 @@ var Reading = React.createClass({
 				clearTimeout(time);
 				time= setTimeout(function() {
 					this.getChapterlist(true);
-
 				}.bind(this), 100);
 			};
 		}.bind(this)
@@ -707,7 +706,7 @@ var Reading = React.createClass({
 		}
 		this.setState({
 			showChapterlist: !this.state.showChapterlist,
-			showSetting: this.state.showChapterlist
+			showSetting: false
 		});
 	},
 	handleClick: function(e) {

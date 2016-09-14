@@ -256,20 +256,15 @@ var IntroduceTabs = React.createClass({
 	shouldComponentUpdate: function(nextProps, netxtState) {
 		return true;
 	},
-	toggleTab: function(e) {
-		var index = 0;
-		for (var i = 0; i < e.target.parentNode.children.length; i++) {
-			if (e.target === e.target.parentNode.children[i]) {
-				index = i;
-				break;
-			}
-		}
+	toggleTab: function(index) {
 		this.setState({
 			current: index
 		});
-
-		if (index == 1 && !this.props.chapterlist) {
-			this.props.getChapterlist();
+		if (index == 1) {
+			if(!this.props.chapterlist) this.props.getChapterlist();
+			this.setState({showOrderIcon:true})
+		}else{
+			this.setState({showOrderIcon:false})
 		}
 	},
 	troggleOrderList: function(e){
@@ -323,14 +318,16 @@ var IntroduceTabs = React.createClass({
 
 		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
-
+		const orderIcon = this.state.showOrderIcon?
+				<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span>:
+				null;
 		return (
 				<div className="u-tabs u-bookIntroduce">
 					<div className={fixTabbar}>
 						<div className={"u-tabbar"} ref="tabbar">
-							<span onClick={this.toggleTab} className={"tab tab-0" + (this.state.current == 0 ? ' active' : '')}>简介</span>
-							<span onClick={this.toggleTab} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span></span>
-							<span onClick={this.toggleTab} className={"tab tab-2" + (this.state.current == 2 ? ' active' : '')}>推荐</span>
+							<span onClick={this.toggleTab.bind(this,0)} className={"tab tab-0" + (this.state.current == 0 ? ' active' : '')}>简介</span>
+							<span onClick={this.toggleTab.bind(this,1)} className={"tab tab-1" + (this.state.current == 1 ? ' active' : '')}>目录{orderIcon}</span>
+							<span onClick={this.toggleTab.bind(this,2)} className={"tab tab-2" + (this.state.current == 2 ? ' active' : '')}>推荐</span>
 						</div>
 					</div>
 					<div className="contents" ref="contents">

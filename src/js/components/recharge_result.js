@@ -22,7 +22,7 @@ var RechageRes = React.createClass({
 		}
 	},
 	success: function(){
-		console.log('成功');
+		//console.log('成功');
 		this.setState({success: true,status: '充值成功'});
 		this.disPatch('rechargeSuccess');
 	},
@@ -58,7 +58,7 @@ var RechageRes = React.createClass({
 		this.checkCharge();
 	},
 	render: function() {
-		 var right = < button className = "f-fr textBtn" onClick = { GLOBAL.goBack } > 完成 < /button>;
+		 var right = < button className = "f-fr textBtn" onClick = { this.completed } > 完成 < /button>;
 		 var list;
 
 		 if(this.state.success == null)

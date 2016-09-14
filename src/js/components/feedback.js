@@ -38,7 +38,7 @@ var Feedback = React.createClass({
 		var right = <span className="f-fr icon-s icon-right" onClick={this.handleSubmit} ></span>;
 		return (
 			<div className="gg-body">
-				<Header right={right} path={this.props.route}/>
+				<Header right={right} path={this.props.route} title="意见反馈"/>
 				<div className="m-feedbackblock m-userblocks">
 					<form className="u-feedbackform u-userform">	
 						<div className="u-inputline">

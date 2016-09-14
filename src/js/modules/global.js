@@ -109,30 +109,32 @@ var GLOBAL = {
 	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
 	},
-	setTitle: function(parts){
-		var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
-		parts = parts.split('.');
-		var n=parts[0],
-			id=parts[1];
-		switch(n){
-			case 'block':
-			case 'more':
-			case 'category':
-				this.title = GLOBAL.bookList[id];
-				break;
-			case 'introduce':
-				this.title = GLOBAL.book[id];
-				break;
-			case 'reading':
-				break;
-			default:
-				this.title = title[n];
-				break;
-		}
-		var rTitle = this.title? ('-'+this.title):'';
-		document.title = '艾美阅读' + rTitle;
-		return this.title;
-	},
+	// setTitle: function(parts){
+	// 	console.log(parts)
+	// 	var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',listTag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
+	// 	parts = parts.split('.');
+	// 	var n=parts[0],
+	// 		id=parts[1];
+	// 	switch(n){
+	// 		case 'block':
+	// 		case 'more':
+	// 		case 'category':
+	// 			this.title = GLOBAL.bookList[id];
+	// 			break;
+	// 		case 'introduce':
+	// 			this.title = GLOBAL.book[id];
+	// 			break;
+	// 		case 'reading':
+	// 			break;
+	// 		default:
+	// 			this.title = title[n];
+	// 			break;
+	// 	}
+	// 	var rTitle = this.title? ('-'+this.title):'';
+	// 	document.title = '艾美阅读' + rTitle;
+	// 	console.log(this.title)
+	// 	return this.title;
+	// },
 	setBookName:function(data){
 		if(!data.length||!this.isArray(data)){return}
 		data.forEach(function(v){

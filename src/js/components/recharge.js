@@ -69,6 +69,10 @@ var Recharge = React.createClass({
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
+		if(/^133|^153|^180|^181|^189|^177/.test(mobile_num)) {
+			POP._alert('暂不支持电信号码');
+			return;
+		}
 		//this.params_init.mobileNum = mobile_num;
 		var countDown = function(){
 			this.setState({
@@ -196,7 +200,7 @@ var Recharge = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route} title="艾豆充值"/>
+				<Header right={null} path={this.props.route} title="话费充值"/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						<div className="u-divider"></div>

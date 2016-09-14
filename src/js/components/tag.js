@@ -64,7 +64,7 @@ var tag = React.createClass({
 		return (
 			<div className="gg-body">
 				<div className="tags-block">
-					<Header right={false} path={this.props.route} page='tag'/>
+					<Header right={false} path={this.props.route} page='tag' title="我的标签"/>
 					<div className="g-main g-main-1">
 						<div  className="g-scroll">
 							<div className="tag-block">
