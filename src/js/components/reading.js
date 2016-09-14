@@ -663,7 +663,6 @@ var Reading = React.createClass({
 			this.hammer.off('swipeup');
 		    	this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
 		    	this.hammer.on("swipeup", function (ev) {
-		    		console.log(1)
 		    		this.setState({showIntercutXp: false});
 		    	}.bind(this));
 		}
