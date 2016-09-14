@@ -190,7 +190,7 @@ var Recharge = React.createClass({
 		if(phoneNumber){
 			this.refs.mobile_num.value = phoneNumber;
 		}else{
-			this.refs.mobile_num.focus();
+			if(GLOBAL.isAndroid) this.refs.mobile_num.focus();
 		}
 	},
 	render: function() {

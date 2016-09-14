@@ -20,7 +20,6 @@ var GLOBAL = {
 	bookList:{},
 	book:{},
 	title:'',
-	name:'',
 	route:[],
 	unRendered:[],
 	orderLIst:{},
