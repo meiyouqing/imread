@@ -889,17 +889,20 @@ var Reading = React.createClass({
 					<div className="banner">点击图片查看更多，滑动翻页继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleChapterlist}></div>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
 						<span onClick={this.downLoad} className="download f-fr"></span>
+					</div>
 
+					<div className="u-settings u-settings-top ad">
 						<div className={this.state.showIntercut ? "" : "f-hide"}>
 							{this.state.intercutList}
 						</div>
 					</div>
+				
 			
 					<div className={"u-settings u-settings-font" + (!this.state.showSettingFont && ' f-hide' || '')}>
 						{/*<div className="setting-fontfamily setting-font-line f-flexbox">

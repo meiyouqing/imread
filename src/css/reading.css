@@ -70,7 +70,8 @@
 .setting-font-line{height: 50px;line-height: 50px;}
 .setting-font-line .title{width: 40px;line-height: 44px;text-align: center;font-size: 16px;}
 .setting-font-line .item{position:relative;box-sizing: border-box;margin: 0 3%;border-radius: 15px;text-align: center;}
-
+.u-settings.ad{top: 61px!important;}
+.u-settings-top.ad{border-bottom: 0!important}
 .setting-fontfamily .item.active, .setting-line-height .item.active, .setting-fontsize .item.active{background: #444444;}
 .setting-fontsize{margin: 0 5% 5px;}
 .setting-fontsize span{display: inline-block;vertical-align: middle;}
