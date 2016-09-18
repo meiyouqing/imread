@@ -1,17 +1,26 @@
 var Img = require('./img');
 var Book10 = React.createClass({
+	getInitialState: function() {
+		return {
+			height: null
+		}
+	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data
-		|| this.props.icon !==nextProps.icon;
+		|| this.props.icon !==nextProps.icon
+		|| this.state.height !== nextState.height;
 	},
 	clickHandle: function(){
 		if(this.props.icon)	return;
 		var hrefStr = location.pathname.replace(/\/sheet([^\"]*)/,'')+'/sheet/bookSheet.'+(this.props.data.sheet_id || this.props.data.content_id);
 		browserHistory.push(hrefStr);
 	},
+	componentDidMount: function(){
+		this.setState({height: (window.screen.width-18)/2 + 'px'});
+	},
 	render: function() {
 		return (
-			<li  className="u-book-10">
+			<li  className="u-book-10" style={{height: this.state.height}}>
 				<a onClick={this.clickHandle}>
 					<Img newType={true} src={this.props.data.image_url} />
 					<div className="f-b-block">

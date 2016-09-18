@@ -599,7 +599,7 @@ var Reading = React.createClass({
 				this.toggleChapterlist();
 				return;
 			}
-			if (!this.state.showSetting && this.state.showIntercut) {
+			if (this.state.showSetting && this.state.showIntercut) {
 				uploadLog.send('intercut', {
 					content_id: this.intercutList.content_id,
 					event: 1,
@@ -609,7 +609,7 @@ var Reading = React.createClass({
 			this.setState({
 				showSetting: !this.state.showSetting
 			});			
-		},100)
+		},10)
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){
@@ -624,7 +624,6 @@ var Reading = React.createClass({
 	},
 	componentDidMount:function(){
 		this.startTime = Date.now();
-
 		setTimeout(function(){
 			this.setState({showFy: false})
 		}.bind(this),1000);
@@ -667,6 +666,10 @@ var Reading = React.createClass({
 		// var that = this; || (this.props.children !== nextProps.children)
 		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
+		}
+		if(this.state.showSetting || this.state.showChapterlist){
+			var hammer = new Hammer(this.refs.mask);
+			hammer.on('tap',this.toggleSettings)
 		}
 
 		if(this.refs.swiper) {
@@ -719,7 +722,6 @@ var Reading = React.createClass({
 		});
 	},
 	handleClick: function(e) {
-
 		var y = e.center.y;
 		var h = document.body.offsetHeight;
 		if (y < 0.3 * h) {
@@ -766,6 +768,7 @@ var Reading = React.createClass({
 				|| this.state.data !== nextState.data
 				|| this.state.showChapterlist !== nextState.showChapterlist
 				|| this.state.showSettingFont !== nextState.showSettingFont
+				|| this.state.showSetting !== nextState.showSetting
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
@@ -885,6 +888,7 @@ var Reading = React.createClass({
 				this.uploadLogIntercut = true;
 			}
 		}
+
 		return (
 			<div className="gg-body m-reading-body" ref="container">
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
@@ -892,7 +896,7 @@ var Reading = React.createClass({
 					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
 						<span className="back f-fl" onClick={this.goOut}></span>
@@ -1021,7 +1025,7 @@ var Reading = React.createClass({
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>
 					<div className="reading-guide-item guide-top">
 						<div className="guide-tip">
-							<span>点击 向上滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页首到上一页</span>
 						</div>
@@ -1034,13 +1038,13 @@ var Reading = React.createClass({
 							<div className="guide-tip">
 								<span>点击中间</span>
 								<br />
-								<span>呼出工具框</span>
+								<span>呼出菜单</span>
 							</div>
 						</div>
 					</div>
 					<div className="reading-guide-item guide-bottom">
 						<div className="guide-tip">
-							<span>点击 向下滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页尾到下一页</span>
 						</div>

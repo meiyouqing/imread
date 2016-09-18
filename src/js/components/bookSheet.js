@@ -69,10 +69,12 @@ var Module = React.createClass({
 			data: null,
 			collected: false,
 			scrollUpdate: false,
-			UFO:false
+			UFO:false,
+			height: null
 		}
 	},
 	componentDidMount: function(){
+		this.setState({height: (window.screen.width-8)/2});
 		var obj = parseQuery(location.search);
 	      if(obj.action && obj.action=='openapp'){
 	      	var p = "detail/" + encodeURI('[{"detail":[{"sheetid":"'+ obj.sheet_id +'","type":"10"}],"pushcmd":"10"}]');
@@ -90,6 +92,7 @@ var Module = React.createClass({
 					|| this.state.scrollUpdate !== nextState.scrollUpdate
 					|| this.state.UFO !== nextState.UFO
 					|| this.state.noMore !== nextState.noMore 
+					|| this.state.height !== nextState.height
 					|| this.props.children !== nextProps.children;
 	},
 	render:function(){
@@ -110,7 +113,7 @@ var Module = React.createClass({
 					<div>
 						<section className="m-block m-sheet">
 							<div className="content">
-								<div className="m-sheet-header">
+								<div className="m-sheet-header" style={{height: this.state.height+'px'}}>
 									<div className="u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
 									<img src={this.state.data.image_url} />
 									<div className="m-b-footer">
@@ -119,7 +122,7 @@ var Module = React.createClass({
 										<span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
 									</div>
 								</div>
-								<div className="u-m-store" onClick={this.addFavaHandle}>
+								<div className="u-m-store" onClick={this.addFavaHandle} style={{top: (this.state.height-30)+'px'}}>
 									<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
 								</div>
 								<div className="u-sheet-detail">
