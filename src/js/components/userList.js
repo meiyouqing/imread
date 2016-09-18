@@ -194,7 +194,7 @@ var User = React.createClass({
 		var userName = '',aidou=0;
 
 		 if (this.isLogin()) {
-			userName = this.state.userInfo.user_name || GLOBAL.cookie('userPhone');
+			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
 			logoutBtn = (<div>
 				<div className="avatar-wrap" onClick={this.login}>
 					<img src={this.state.userInfo.portraitUrl || 'http://m.imread.com/src/img/user/avatar@2x.png'} />

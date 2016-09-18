@@ -8,8 +8,8 @@ var goto_mlogin = function(options,callback){
   };
 
  var a_url = 'https://readapi.imread.com';
-a_url = 'http://192.168.0.34:9090';
-a_url = 'http://192.168.0.252:8080';
+// a_url = 'http://192.168.0.34:9090';
+// a_url = 'http://192.168.0.252:8080';
 
 
 var BookContent = (function() {
