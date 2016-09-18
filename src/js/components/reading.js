@@ -604,11 +604,12 @@ var Reading = React.createClass({
 			});
 		}
 		//alert(navigator.userAgent)
-		var time = 10;
+		var time = 200;
+
 		if(navigator.userAgent.indexOf('QQ')>=0){
 			time = 400;
-			if(this.state.showSetting) time =10;
 		}
+		if(this.state.showSetting) time =10;
 		setTimeout(()=>{
 			this.setState({
 				showSetting: !this.state.showSetting
@@ -769,6 +770,7 @@ var Reading = React.createClass({
 				|| this.state.data !== nextState.data
 				|| this.state.showChapterlist !== nextState.showChapterlist
 				|| this.state.showSettingFont !== nextState.showSettingFont
+				|| this.state.showSetting !== nextState.showSetting
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
@@ -1025,7 +1027,7 @@ var Reading = React.createClass({
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>
 					<div className="reading-guide-item guide-top">
 						<div className="guide-tip">
-							<span>点击 向上滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页首到上一页</span>
 						</div>
@@ -1038,13 +1040,13 @@ var Reading = React.createClass({
 							<div className="guide-tip">
 								<span>点击中间</span>
 								<br />
-								<span>呼出工具框</span>
+								<span>呼出菜单</span>
 							</div>
 						</div>
 					</div>
 					<div className="reading-guide-item guide-bottom">
 						<div className="guide-tip">
-							<span>点击 向下滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页尾到下一页</span>
 						</div>
