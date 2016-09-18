@@ -118,25 +118,20 @@ var UserInfo = React.createClass({
 		}.bind(this);
 	},
 	selectDate: function(){
-		if(!this.state.isEdit)  return;
-		this.refs.date.click();
+		if(!this.state.isEdit || GLOBAL.isAndroid())  return;
 		this.refs.date.focus();
 	},
-	forAndroid: function(){
-
-		if(!GLOBAL.isAndroid()) return;
-		var time;
-		clearInterval(time);
-		time =  setInterval(function(){
-			if(!this.refs.date) {
-				clearInterval(time);
-				return;
-			}
-			if(this.state.user_birthday != this.refs.date.value && this.refs.date.value){
-				this.setState({user_birthday: this.refs.date.value});
-				clearInterval(time);
-			} else if(this.state.user_birthday == this.refs.date.value){
-				return;
+	updateBirthday:function(){
+		this.setState({user_birthday: this.refs.date.value || '请设置生日'});
+	},
+	forAndroid: function(e){
+		if(!GLOBAL.isAndroid() || !this.refs.date) return;
+		clearInterval(this.time);
+		this.time =  setInterval(function(){
+			//console.log(this.refs.date.value)
+			if(this.state.user_birthday !== this.refs.date.value){
+				this.setState({user_birthday:  this.refs.date.value || '请设置生日'});
+				clearInterval(this.time);
 			}
 		}.bind(this),500); 
 	},
@@ -194,12 +189,12 @@ var UserInfo = React.createClass({
 
 		if(this.checkLogin(this.props.route)) this.getData();
 	},
-	componentDidUpdate:function(){
-		if(this.refs.date)
-			this.refs.date.oninput = function(){
-				this.setState({user_birthday: this.refs.date.value})
-			}.bind(this);
-	},
+	// componentDidUpdate:function(){
+	// 	if(this.refs.date)
+	// 		this.refs.date.oninput = function(){
+	// 			//this.setState({user_birthday: this.refs.date.value})
+	// 		}.bind(this);
+	// },
 	render: function() {
 		var list;
 		if(!this.state.user)
@@ -219,7 +214,7 @@ var UserInfo = React.createClass({
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
 							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
 						</ul>
-						<input onClick={this.forAndroid}  type="date" ref="date" id="dater" className={'dateInput' + (GLOBAL.isAndroid()?' position':'')}/>
+						<input onChange={this.updateBirthday} onBlur={this.updateBirthday} onInput={this.updateBirthday} type="date" ref="date" id="dater" className={'dateInput' + (GLOBAL.isAndroid()?' position':'')}/>
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>

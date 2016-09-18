@@ -203,7 +203,7 @@ var Reading = React.createClass({
 		readLog.name = this.state.introduce.book_name;
 		readLog.author = this.state.introduce.author;
 		readLog.big_coverlogo = this.state.introduce.big_coverlogo;
-		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
+		readLog.recent_time = new Date().getTime();
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
 		readLog.chapter_id = this.chapterid;
@@ -590,24 +590,26 @@ var Reading = React.createClass({
 		}
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
+	timeoutId:0,
 	toggleSettings: function() {
 		if(!this.isMounted()){return;}
-		if(this.state.showChapterlist){
-			this.toggleChapterlist();
-			return;
-		}
-		if (!this.state.showSetting && this.state.showIntercut) {
-			uploadLog.send('intercut', {
-				content_id: this.intercutList.content_id,
-				event: 1,
-				show_class: this.intercutList.show_class
-			});
-		}
-		setTimeout(()=>{
+		clearTimeout(this.timeoutId);
+		this.timeoutId = setTimeout(()=>{
+			if(this.state.showChapterlist){
+				this.toggleChapterlist();
+				return;
+			}
+			if (!this.state.showSetting && this.state.showIntercut) {
+				uploadLog.send('intercut', {
+					content_id: this.intercutList.content_id,
+					event: 1,
+					show_class: this.intercutList.show_class
+				});
+			}
 			this.setState({
 				showSetting: !this.state.showSetting
 			});			
-		},10)
+		},100)
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){

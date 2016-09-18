@@ -87,7 +87,6 @@ var recentRead = React.createClass({
         this.lazyloadImage(this.refs.container);
     },
     deleteBook: function(e) {
-
         var bid = e.target.getAttribute('data-bid');
         if (!bid) {return; }
         var that =  this;
