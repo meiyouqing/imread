@@ -136,7 +136,7 @@ var chapterMixins = {
 			return 'reading/crossDomain.' + $2 + '.' + chapterid;
 		}.bind(this)),state:this.props.location.state});
 
-		if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
+		//if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -420,7 +420,8 @@ var Reading = React.createClass({
 				pages: currentPage,
 				order: false
 			}, that.getChapterlist);
-		},800);
+			this.refs.scrollarea.scrollTop = 0;
+		}.bind(this),800);
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
@@ -668,9 +669,9 @@ var Reading = React.createClass({
 
 		if(this.refs.swiper) {
 			this.hammer = new Hammer(this.refs.swiper);
-			this.hammer.off('swipeup');
-		    	this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-		    	this.hammer.on("swipeup", function (ev) {
+			this.hammer.off('swipeup swipeleft swiperight');
+		    	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+		    	this.hammer.on("swipeleft swiperight", function (ev) {
 		    		this.setState({showIntercutXp: false});
 		    	}.bind(this));
 		}
@@ -716,6 +717,7 @@ var Reading = React.createClass({
 		});
 	},
 	handleClick: function(e) {
+
 		var y = e.center.y;
 		var h = document.body.offsetHeight;
 		if (y < 0.3 * h) {
@@ -885,7 +887,7 @@ var Reading = React.createClass({
 			<div className="gg-body m-reading-body" ref="container">
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
 					{this.state.intercutXp}
-					<div className="banner">点击图片查看更多，滑动翻页继续阅读</div>
+					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
 				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')} onClick={this.toggleSettings}></div>
@@ -976,6 +978,8 @@ var Reading = React.createClass({
 
 					</div>
 				</section>
+				{loading}
+
 				<div className={"m-reading"} ref="scrollarea">
 					{
 
@@ -984,7 +988,7 @@ var Reading = React.createClass({
 						null
 				}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
-					{loading}
+					
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
