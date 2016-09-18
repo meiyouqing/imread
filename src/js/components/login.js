@@ -70,6 +70,7 @@ var Login = React.createClass({
 	},
 	setRegister: function(){
 		this.setState({status: false});
+
 	},
 	handleSubmits: function() {
 		var that = this;
@@ -175,32 +176,35 @@ var Login = React.createClass({
 			}
 		}.bind(this), 1000);
 	},
+	//安卓下键盘位移
+	timeoutId:0,
+	handleFocus:function (){
+		if(!GLOBAL.isAndroid) return;
+		clearTimeout(this.timeoutId);
+		this.refs.loginBlock.style.height = '1000px';
+		this.refs.gScroll.scrollTop = 205;
+	},
+	handleBlur:function (){
+		if(!GLOBAL.isAndroid) return;
+		this.timeoutId = setTimeout(()=>{
+			this.refs.loginBlock.style.height = '100%';
+			this.refs.gScroll.scrollTop = 0;				
+		},100)
+	},
 	componentDidMount: function() {
-		this.refs.mobile_num.focus();
-
 		//判断来源from
 		this.from = parseQuery(location.search);
-
-		//安卓下键盘位移
-		this.refs.mobile_num.addEventListener('focus',handleFocus.bind(this),false);
-		this.refs.mobile_num.addEventListener('blur',handleBlur.bind(this),false);
-		function handleFocus(){
-			this.refs.loginBlock.style.height = '1000px';
-			this.refs.loginBlock.scrollTop = 205;
-			//console.log(this.refs.loginBlock.style.height)
-		}
 	},
 	render: function() {
 		var list;
-
 		if(this.state.status)
 			list = (<div className="m-login">
 						<form className="u-registerform u-userform" onSubmit={this.handleSubmit}>
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 								<div className="u-inputline-2 f-clearfix">
-										<input className="u-input-2" placeholder="密码" type="password" ref="password" />
+										<input className="u-input-2" placeholder="密码" type="password" ref="password" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 
 								<div className="u-inputline">
@@ -221,17 +225,17 @@ var Login = React.createClass({
 			list=(<div className="m-register">
 						<form className="u-registerform u-userform">
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 									<div className="f-fr">
 										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 									</div>
 								</div>
 								<div className="u-b-pass">
 									<div className="u-inputline-2 f-clearfix u-pass">
-											<input className="u-input-2" placeholder="密码"  type="password" ref="password"/>
+											<input className="u-input-2" placeholder="密码"  type="password" ref="password" onFocus={this.handleFocus} onBlur={this.handleBlur}/>
 									</div>
 									<div className="u-inputline-2 f-clearfix u-key">
-											<input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
+											<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onFocus={this.handleFocus} onBlur={this.handleBlur}/>
 									</div>
 								</div>
 								<div className="u-inputline">
@@ -242,15 +246,12 @@ var Login = React.createClass({
 									<div className="u-buttonc f-fl">
 									<Link className="tip" to={GLOBAL.setHref('compact')}>用户协议</Link>
 									</div>
-									<div className="u-buttonc f-fl">
-											<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
-									</div>
 								</div>
 							</form>
 					</div>)
 		return (
 			<div className="gg-body">
-				<div className="g-scroll">
+				<div className="g-scroll" ref="gScroll">
 					<div className="m-loginblock" ref="loginBlock">
 						<div className="m-login-header">
 							<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>

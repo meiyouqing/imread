@@ -193,16 +193,29 @@ var Recharge = React.createClass({
 		var phoneNumber = GLOBAL.cookie('payUser');
 		if(phoneNumber){
 			this.refs.mobile_num.value = phoneNumber;
-		}else{
-			if(GLOBAL.isAndroid) this.refs.mobile_num.focus();
 		}
+	},
+	//安卓下键盘位移
+	timeoutId:0,
+	handleFocus:function (){
+		if(!GLOBAL.isAndroid) return;
+		clearTimeout(this.timeoutId);
+		this.refs.registerblock.style.height = '360px';
+		this.refs.gScroll.scrollTop = 120;
+	},
+	handleBlur:function (){
+		if(!GLOBAL.isAndroid || !this.refs.registerblock) return;
+		this.timeoutId = setTimeout(()=>{
+			this.refs.registerblock.style.height = 'auto';
+			this.refs.gScroll.scrollTop = 0;				
+		},100)
 	},
 	render: function() {
 		return (
 			<div className="gg-body">
 				<Header right={null} path={this.props.route} title="话费充值"/>
 				<div className="g-main g-main-1">
-					<div className="g-scroll m-balance">
+					<div className="g-scroll m-balance" ref="gScroll">
 						<div className="u-divider"></div>
 						<div className="u-balance-r f-tl">
 							<h5 className="tipTitle f-mb5">充值订单</h5>
@@ -210,16 +223,16 @@ var Recharge = React.createClass({
 							<p className="f-fc-777">支付金额：{this.state.sum}元</p>
 						</div>
 						<div className="u-divider u-p-10"></div>
-						<div className="m-registerblock">
+						<div className="m-registerblock" ref="registerblock">
 							<form className="u-registerform u-userform">
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 									<div className="f-fr">
 										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 									</div>
 								</div>
 								<div className="u-inputline-2 f-clearfix">
-										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
+										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 								<div className="u-inputline u-p-25">
 									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
