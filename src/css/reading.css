@@ -138,6 +138,7 @@
 .m-reading-body .font-list .active .circle{background: #0096aa;border: 1px solid #0096aa;opacity: 1}
 .m-reading-body .font-list .active .line{opacity: 1;background: #0096aa;}
 .u-readingsetting .m-block{background: transparent;}
+.m-reading-body .m-block-top.m-block{margin-top: 0}
 /*主题*/
 
 /*字体大小*/
