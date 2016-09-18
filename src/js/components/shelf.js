@@ -7,6 +7,7 @@ var Shelf = React.createClass({
 		var bid = v.content_id;
 		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
+			this.setState({showModelList:false});
 			if(!this.state.reading) return;
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
