@@ -34,7 +34,7 @@
 .u-chapterlist .chapterlist .chapter .name.lock{color: #777777;}
 .u-chapter-action{position: absolute;bottom: 0;left: 0; right: 0;height: 55px;line-height: 35px;padding: 10px 0;box-sizing:border-box;border-top: 1px solid #eeeeee;text-align: center;color: #444444;cursor: pointer;}
 .u-chapter-page:last-child{border-left: 1px solid #eeeeee;}
-.u-fixTabbar{z-index: 10}
+.u-fixTabbar{z-index: 10; border-bottom: 1px solid #ccc;}
 
 .u-miguLogo {display: block;position: absolute;top: 15px;right: 15px;width: 56px;height: 14px;background-image: url(../img/reading/pic_migulogo.png);background-size: contain;}
 

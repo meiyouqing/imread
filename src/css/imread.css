@@ -287,21 +287,19 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-5 a span{vertical-align: middle;line-height: 50px;max-width: 90%}
 .u-book-5 a span.hot{font-size: 10px;width: 16px;padding: 0;line-height: 17px;text-align: center;margin:0 0 0 5px;background: #fd6775;border-radius: 1px }
 
-.u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;height: 176px}
-.u-book-10 a{display: block;width: 100%;}
-.u-book-10 a img{width: 100%;height: 176px;}
+.u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;}
+.u-book-10 a{display: block;width: 100%;height: 100%;}
+.u-book-10 a img{width: 100%;height: 100%;}
 .u-book-10 a span{background: transparent;color: #fff;display: inline-block;line-height: 40px;}
 .u-book-10 a span.book-name{margin-left: 10px;font-size: 15px;max-width: 60%;}
 .u-book-10 .delete{position: absolute;top: 0;right: 0;width:34px;height:40px;background: url(../img/icons/shanchu@2x.png) no-repeat;background-size: cover;text-align: right;padding: 0 3px;line-height: 30px;color: #ce403e;}
-@media screen and (max-width: 320px) {
+/*@media screen and (max-width: 320px) {
 	.u-book-10{height: 145px}
-	.u-book-10 a img{height: 145px;}
 }
 
 @media screen and (min-width:321px) and (max-width: 375px) {
 	.u-book-10{height: 165px}
-	.u-book-10 a img{height: 165px;}
-}
+}*/
 
 
 .u-lines{background: #FFFFFF;border-top: 1px solid #EEE;border-bottom: 1px solid #EEE;}
