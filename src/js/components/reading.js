@@ -603,11 +603,17 @@ var Reading = React.createClass({
 				show_class: this.intercutList.show_class
 			});
 		}
+		//alert(navigator.userAgent)
+		var time = 10;
+		if(navigator.userAgent.indexOf('QQ')>=0){
+			time = 400;
+			if(this.state.showSetting) time =10;
+		}
 		setTimeout(()=>{
 			this.setState({
 				showSetting: !this.state.showSetting
 			});			
-		},10)
+		},time)
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){
@@ -717,7 +723,6 @@ var Reading = React.createClass({
 		});
 	},
 	handleClick: function(e) {
-
 		var y = e.center.y;
 		var h = document.body.offsetHeight;
 		if (y < 0.3 * h) {
@@ -883,6 +888,7 @@ var Reading = React.createClass({
 				this.uploadLogIntercut = true;
 			}
 		}
+
 		return (
 			<div className="gg-body m-reading-body" ref="container">
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
