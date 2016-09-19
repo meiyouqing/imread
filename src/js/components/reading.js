@@ -79,24 +79,34 @@ var styleMixins = {
 
 var chapterMixins = {
 	getChapterlist: function(next) {
-		if (this.state.getChapterlistLoading) {
+		if (this.state.getChapterlistLoading || this.state.chapterlistNoMore) {
 			return ;
 		}
-		next = next || 0;
-		if (this.state.page + next < 1 || this.state.page + next > this.state.pages) {return;}
+		// next = next || 0;
+		// if (this.state.page + next < 1 || this.state.page + next > this.state.pages) {return;}
+
+		var page;
+		if(this.state.orderSeq)
+			page = this.state.page + 1;
+		else
+			page = this.state.page - 1;
+
+		if(page==0)	return;
+
 		this.setState({
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+(this.state.page+next));
+		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+page);
 		AJAX.get(function(data) {
 			this.setState({
-				pages: Math.ceil(+data.totalSize / this.state.page_size),
-				chapterlist: this.state.chapterlist.concat(data.chapterList),
-				page: this.state.page + next,
+				pages: Math.ceil(data.totalSize / this.state.page_size),
+				chapterlist: (this.state.orderSeq?(this.state.chapterlist || []).concat(data.chapterList):data.chapterList.concat(this.state.chapterlist || [])),
+				page: page,
 				getChapterlistLoading: false,
-				chapterlistNoMore: (data.chapterList.length < this.state.page_size)
+				chapterlistNoMore: this.state.orderSeq?(data.chapterList.length<this.state.page_size):(page<=1),
 			});
+			if(!this.state.orderSeq && data.chapterList.length<this.state.page_size)  this.getChapterlist();
 			for (var i = 0; i < data.chapterList.length; i++) {
 				if (data.chapterList[i].cid == this.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
@@ -109,6 +119,19 @@ var chapterMixins = {
 				}
 			}
 		}.bind(this));	
+	},
+	troggleChapterlist: function(){
+
+		this.setState({orderSeq: !this.state.orderSeq,chapterlist:[],chapterlistNoMore:false});
+		var page = 0;
+		if(this.state.orderSeq)
+			page = Math.ceil(this.state.introduce.chapter_count/this.state.page_size)+1;
+		this.setState({page: page});
+
+		setTimeout(function(){
+			this.getChapterlist();
+		}.bind(this),200)
+		
 	},
 	prevPage: function() {
 		this.getChapterlist(-1);
@@ -158,7 +181,7 @@ var Reading = React.createClass({
 			data: null,
 			loading: true,
 			getChapterlistLoading: false,
-			page: 1,
+			page: 0,
 			pages: 1,
 			page_size: 20,
 			vt: 9,
@@ -420,7 +443,7 @@ var Reading = React.createClass({
 				pages: currentPage,
 				order: false
 			}, that.getChapterlist);
-			this.refs.scrollarea.scrollTop = 0;
+			if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
 		}.bind(this),800);
 
 		this.getAd_xp(this.book_id,data.chapterSort);
@@ -752,7 +775,8 @@ var Reading = React.createClass({
 	// 	}
 	// },
 	changeOrder: function(){
-		this.setState({orderSeq: !this.state.orderSeq});
+		//this.setState({orderSeq: !this.state.orderSeq});
+		this.troggleChapterlist();
 	},
 	isdownLoad: function(){
 		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
@@ -870,7 +894,9 @@ var Reading = React.createClass({
 			return (<div className="gg-body">
 						<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<Loading />
-						</div></div>)
+						</div>
+						{this.props.children}
+						</div>)
 		}
 
 		if(this.state.loading) {

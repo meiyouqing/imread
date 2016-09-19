@@ -143,7 +143,9 @@ var Login = React.createClass({
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
-
+		
+		var inter;
+		clearInterval(inter);
 		AJAX.getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
 			type: 'register'
@@ -155,26 +157,26 @@ var Login = React.createClass({
 					for(var key in data.error[0]){
 						POP._alert(data.error[0][key])
 					}
+			} else {
+				this.setState({
+					s: 60
+				});
+				inter = setInterval(function() {
+					if (this.state.s > 0 && this.isMounted()) {
+						this.setState({
+							s: this.state.s - 1
+						});
+					} else {
+						clearInterval(inter);
+					}
+				}.bind(this), 1000);
 			}	
-		}, function(res) {
+		}.bind(this), function(res) {
 			this.setState({
 				s: 0
 			});
 			GLOBAL.defaultOnError(res);
 		}.bind(this));
-
-		this.setState({
-			s: 60
-		});
-		var inter = setInterval(function() {
-			if (this.state.s > 0 && this.isMounted()) {
-				this.setState({
-					s: this.state.s - 1
-				});
-			} else {
-				clearInterval(inter);
-			}
-		}.bind(this), 1000);
 	},
 	//安卓下键盘位移
 	timeoutId:0,
