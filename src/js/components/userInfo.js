@@ -206,7 +206,7 @@ var UserInfo = React.createClass({
 						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}
-						<img src={this.state.portraitUrl || "http://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
+						<img src={this.state.portraitUrl || "https://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
 					</section>
 					<section className="m-user-detail">
 						<ul>

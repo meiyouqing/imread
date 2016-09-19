@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import routes from './components/routes'
 import GLOBAL from './modules/global'
 import Token from './modules/token'
-
+//force to https
 if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
 	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
 	GLOBAL.header.appid = appid;

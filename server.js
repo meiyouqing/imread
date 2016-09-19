@@ -7,14 +7,14 @@ app.use(compression())
 app.disable('x-powered-by');
 
 // serve our static stuff like index.css
-app.use(express.static(path.join(__dirname, 'p/tmp')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // send all requests to index.html so browserHistory works
 app.get('*', function (req, res) {	
-  res.sendFile(path.join(__dirname, 'p/index.html'))
+  res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-var PORT = process.argv[2] || 8080
+var PORT = process.argv[2] || 8000
 app.listen(PORT, function() {
   console.log('Production Express server running at localhost:' + PORT)
 })

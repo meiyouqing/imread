@@ -8,8 +8,8 @@ var goto_mlogin = function(options,callback){
   };
 
  var a_url = 'https://readapi.imread.com';
-// a_url = 'http://192.168.0.34:9090';
-// a_url = 'http://192.168.0.252:8080';
+// a_url = 'https://192.168.0.34:9090';
+// a_url = 'https://192.168.0.252:8080';
 
 
 var BookContent = (function() {
@@ -107,7 +107,7 @@ var BookContent = (function() {
 		var getContent =  function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-			//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+			//var totalUrl = 'https://192.168.0.34:9090' + sourceConfig.chapter_content;
 			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 							 .replace(/\?*/, '')
 						      .replace('$bid', options.book_id)
@@ -131,7 +131,7 @@ var BookContent = (function() {
 
 	// 	var sourceConfig = ReadConfig['config-' + options.source_id];
 	// 	var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
-	// 	//var totalUrl = 'http://192.168.0.34:9090' + sourceConfig.chapter_content;
+	// 	//var totalUrl = 'https://192.168.0.34:9090' + sourceConfig.chapter_content;
 	// 	var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 	// 					 .replace(/\?*/, '')
 	// 				      .replace('$bid', options.book_id)

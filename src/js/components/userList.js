@@ -46,7 +46,7 @@ var User = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: {
-				portraitUrl: 'http://m.imread.com/src/img/user/avatar@2x.png',
+				portraitUrl: 'https://m.imread.com/src/img/user/avatar@2x.png',
 				balance: 0
 			},
 		};
@@ -197,7 +197,7 @@ var User = React.createClass({
 			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
 			logoutBtn = (<div>
 				<div className="avatar-wrap" onClick={this.login}>
-					<img src={this.state.userInfo.portraitUrl || 'http://m.imread.com/src/img/user/avatar@2x.png'} />
+					<img src={this.state.userInfo.portraitUrl || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
 				</div>
 				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>
@@ -205,7 +205,7 @@ var User = React.createClass({
 		} else {
 			logoutBtn = (<div onClick={this.login}>
 				<div className="avatar-wrap">
-						<img src='http://m.imread.com/src/img/user/avatar@2x.png' />
+						<img src='https://m.imread.com/src/img/user/avatar@2x.png' />
 				</div>
 				<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
 				</div>
@@ -216,7 +216,7 @@ var User = React.createClass({
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll" onClick={this.props.hideUser}>
 						<section className="avatar-block f-pr">
-							<img src="http://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
+							<img src="https://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
 						
 								{logoutBtn}
 	

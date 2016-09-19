@@ -25,7 +25,7 @@ var Detail = React.createClass({
 		this.shelfAdding(param,this.props.onShelf);
 	},
 	gotoDownload: function(){
-		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
+		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
 	startReading: function(){
 		var readLog = storage.get('readLogNew');

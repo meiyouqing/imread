@@ -132,7 +132,7 @@ var Shelf = React.createClass({
 	gotoDownload: function(){//下载
 		if(!this.state.selected.length) return;
 		this.compClick();
-		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
+		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
 	delBtnClick: function(){//删除书架书籍
 		if(!this.state.selected.length) {
@@ -280,7 +280,7 @@ var Shelf = React.createClass({
 		var header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
-		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="https://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		// var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
