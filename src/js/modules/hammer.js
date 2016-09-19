@@ -1,5 +1,5 @@
 /*! Hammer.JS - v2.0.4 - 2014-09-28
- * http://hammerjs.github.io/
+ * //hammerjs.github.io/
  *
  * Copyright (c) 2014 Jorik Tangelder;
  * Licensed under the MIT license */

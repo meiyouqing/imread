@@ -21,7 +21,7 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader'},
+			{test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
 			{test: /\.css$/, loader: "style!css" },
 			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
 		]
@@ -46,6 +46,6 @@ module.exports = {
 			POP: '../modules/confirm',
 			parseQuery: '../modules/parseQuery'
 		}),
-		new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
+		// new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
 	] 
 };
