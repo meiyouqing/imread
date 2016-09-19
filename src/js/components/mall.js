@@ -22,7 +22,8 @@ var Mall = React.createClass({
 	getInitialState: function(){
 		return {
 			navList: null,
-			showUser:false
+			showUser:false,
+			// onNotice: true
 		}
 	},
 	hideUser: function(){
@@ -41,7 +42,6 @@ var Mall = React.createClass({
 	},
 	componentDidMount: function(){
 		this.getNav();
-		//if(!this.props.params.subnav) browserHistory.replace('/mall');
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
@@ -63,12 +63,16 @@ var Mall = React.createClass({
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
 				|| this.state.showUser !== nextState.showUser
+				|| this.state.onNotice !== nextState.onNotice
 				|| this.props.children !== nextProp.children
 				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
 	reload: function(){
 		window.location.reload();
 	},
+	// closeNotice: function(){
+	// 	this.setState({onNotice: false});
+	// },
 	render:function(){
 		var mallNav,userList;
 		if(this.state.navList){
@@ -79,10 +83,14 @@ var Mall = React.createClass({
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
+		// var notice = (<section className="safari">
+						
+		// 				<div className="notice-safari" onClick={this.closeNotice}></div><span>为确保最佳体验，请在"设置-Safari-阻止Cookie"中选择"始终允许"</span>
+		// 			</section>)
 
-		return (
-			<div className="g-mall">
+		return (<div>
 
+			<div className={"g-mall hide"}>
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{mallNav}
 				<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
@@ -90,7 +98,7 @@ var Mall = React.createClass({
 					{userList}
 				</section>
 				{this.props.children}
-			</div>
+			</div></div>
 			)
 	}
 })

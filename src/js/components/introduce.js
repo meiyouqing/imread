@@ -73,7 +73,7 @@ var Introduce = React.createClass({
 			isOnshelf: false,
 			bid: this.APIParts('introduceId')[1],
 			chapterlist: null,
-			page: 1,
+			page: 0,
 			page_size: 20,
 			vt: 9,
 			getChapterlistLoading: false,
@@ -81,6 +81,7 @@ var Introduce = React.createClass({
 			noMoreChapterlist: false,
 			noData:false,
 			UFO:false,
+			seq: true
 		};
 	},
 	cacheBook: function(data) {
@@ -130,22 +131,32 @@ var Introduce = React.createClass({
 		}.bind(this));
 	},
 	getChapterlist: function(next) {
+
 		if (!this.isMounted() || this.state.getChapterlistLoading || this.state.noMoreChapterlist) {
 			return ;
 		}
+
+		var page;
+		if(this.state.seq)
+			page = this.state.page + 1;
+		else
+			page = this.state.page - 1;
+		if(page==0)	return;
+
 		this.setState({
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+(this.state.page+(next?1:0)));
+		AJAX.init('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+page);
 
 		AJAX.get(function(data) {
 			this.setState({
-				noMoreChapterlist: Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + (next ? 1 : 0)),
-				chapterlist:(this.state.chapterlist || []).concat(data.chapterList),
-				page: this.state.page + (next ? 1 : 0),
+				noMoreChapterlist:this.state.seq?(Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + 1)):(page<=1),
+				chapterlist:(this.state.seq?(this.state.chapterlist || []).concat(data.chapterList):data.chapterList.concat(this.state.chapterlist || [])),
+				page: page,
 				getChapterlistLoading: false
 			});
+			if(!this.state.seq && data.chapterList.length<this.state.page_size)  this.getChapterlist();
 		}.bind(this));	
 	},
 	onShelf:function(){
@@ -163,6 +174,18 @@ var Introduce = React.createClass({
 				browserHistory.push(href);
 			}.bind(this));
 		}
+	},
+	troggleChapterlist: function(){
+		this.setState({seq: !this.state.seq,chapterlist:[],noMoreChapterlist:false});
+		var page = 0;
+		if(this.state.seq)
+			page = Math.ceil(this.state.book.chapter_count/this.state.page_size+1);
+		this.setState({page: page});
+
+		setTimeout(function(){
+			this.getChapterlist();
+		}.bind(this),200)
+		
 	},
 	componentWillReceiveProps: function(nextProps){
 		if(!this.isMounted()){return;}
@@ -224,7 +247,7 @@ var Introduce = React.createClass({
 		}else{
 			header = <Header title={this.state.book.book_name} right={right}  path={this.props.route} />
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" book={this.state.book} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
+			introduceTabs = <IntroduceTabs key="3" book={this.state.book} troggleChapterlist={this.troggleChapterlist} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
 			<div className="gg-body">
@@ -272,6 +295,7 @@ var IntroduceTabs = React.createClass({
 		this.setState({
 			current: 1,
 		});
+		this.props.troggleChapterlist();
 		if(this.props.chapterlist)
 			this.setState({
 				orderSeq: !this.state.orderSeq,
