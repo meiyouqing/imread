@@ -25,7 +25,7 @@ var mixins = function() {
                             //img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
                         }
                         img.setAttribute('data-lazyload-src', "loading");
-                        //GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'http://m.imread.com/src/img/defaultCover.png'));
+                        //GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'https://m.imread.com/src/img/defaultCover.png'));
                         GLOBAL.loadImage(src, callback.bind(null, src));
                     }
                 })(i);
@@ -89,6 +89,7 @@ var mixins = function() {
                     if (data.code === 200) {
                         POP._alert("加入书架成功");
                         GLOBAL.onShelf[param[0].bookId] = 1;
+                        POP._alert('成功加入书架');
                         (typeof callback === 'function') && callback(data);
                     } else {
                         that.ajaxError(data);

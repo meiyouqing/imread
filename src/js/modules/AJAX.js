@@ -1,6 +1,6 @@
 import transformRequest from './transformRequest';
 var Config = {
-	payURLBase: 'http://pay.imread.com:8081',
+	payURLBase: 'https://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
 var API={
@@ -111,9 +111,10 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
+	var urlBase = 'https://m.imread.com';
 	var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
-	//var urlBase = 'http://192.168.0.252:8080';
+	//var urlBase = 'https://192.168.0.34:9090';
+	//var urlBase = 'https://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;

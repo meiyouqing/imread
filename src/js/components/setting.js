@@ -67,7 +67,7 @@ var Setting = React.createClass({
 				href: 'compact'
 			}, {
 				title: '官方网站',
-				href: 'http://www.imread.com',
+				href: 'https://www.imread.com',
 				target: '_self'
 			}]
 		];
@@ -83,7 +83,7 @@ var Setting = React.createClass({
 							})
 						}
 						<div className="m-set-footer">
-							<img src="http://m.imread.com/src/img/back/bg-@2x.png" />
+							<img src="https://m.imread.com/src/img/back/bg-@2x.png" />
 						</div>
 					</div>
 
