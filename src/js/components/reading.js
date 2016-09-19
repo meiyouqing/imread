@@ -448,7 +448,7 @@ var Reading = React.createClass({
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
-		if(that.isLogin())
+		if(that.isLogin() && !from)
 			that.getNextContent(data);
 	},
 	getAd_xp: function(bid,page){

@@ -21,7 +21,7 @@ var Modifypwd = React.createClass({
 					GLOBAL.goBack();
 				},500);
 			} else
-				POP._alert(data.error[0].password);
+				POP._alert(data.error[0].password || "修改失败");
 		});
 	},
 	showNotice: function(prama,notice){
