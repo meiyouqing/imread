@@ -53,7 +53,8 @@ var Chapterlist = React.createClass({
 	render: function() {
 		var loading, content;
 
-		var store = this.props.currentChapterId?this.props.currentChapterId:[];
+		var store = this.props.store?this.props.store:[];
+
 		if (!this.props.chapterlist) {
 			loading = <i className="u-sLoading">目录努力加载中...</i>
 		} else {
