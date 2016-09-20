@@ -562,7 +562,7 @@ var Reading = React.createClass({
 							POP._alert('支付失败');
 						else {
 							that.disPatch('updateUser');
-							that.props.goBack();
+							//that.props.goBack();
 						}
 					});
 				}else{
