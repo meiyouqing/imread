@@ -864,7 +864,7 @@ var Reading = React.createClass({
 		if(this.state.order && this.state.introduce){
 			var right = this.state.fromId?(<a className="icon-s icon-tc right" onClick={this.logout}></a>):null;
 			return (<div className="gg-body">
-				<Header path={this.props.route} right={right} title={"确认订购"} />
+				<Header path={this.props.route} right={right} title={"确认订单"} />
 				<div className="g-main g-main-1">
 					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
 				</div>

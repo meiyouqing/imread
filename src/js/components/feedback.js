@@ -23,8 +23,8 @@ var Feedback = React.createClass({
 		var message = this.refs.message.value.trim();
 		var contact = this.refs.contact.value.trim();
 
-		if (!GLOBAL.assertNotEmpty(message, '内容不能为空')) {return ;}
-		if (!GLOBAL.assertNotEmpty(contact, '内容不能为空')) {return ;}  
+		if (!GLOBAL.assertNotEmpty(message, '请输入反馈意见')) {return ;}
+		if (!GLOBAL.assertNotEmpty(contact, '请输入联系方式')) {return ;}  
 
 		AJAX.go("advice", {
 			'message': message,
@@ -40,7 +40,7 @@ var Feedback = React.createClass({
 		this.refs.gzh.select();
 		try{
 			var suc = document.execCommand('copy');
-			var msg = suc? '微信公众号已复制到剪切板' : '复制失败，请手动复制';
+			var msg = suc? '微信公众号已复制，请添加关注' : '复制失败，请手动复制';
 			POP._alert(msg);
 		}catch(e){
 			POP._alert('复制失败，请手动复制');
@@ -65,7 +65,7 @@ var Feedback = React.createClass({
 					</form>
 
 					<div className={"u-feed-footer"+(this.state.showFeedFooter?'':' f-hide')} ref="feedFooter">
-						<a target="_blank" href="https://shang.qq.com/wpa/qunwpa?idkey=786f00b8efdacdbb72445d108282fbac256bc9e0c7c4b39d16a1b24185e9d32c"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
+						<a target="_blank" href="tencent://message/?uin=63401620"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
 						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" /></a>
 						<a href="https://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
 					</div>

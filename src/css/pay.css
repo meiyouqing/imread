@@ -45,7 +45,7 @@
 .m-recharge .result-fail .u-btn{padding: 0 10px;letter-spacing: normal;}
 
 .m-order{margin: 0 15px;}
-.m-order .m-order-detail{padding:12px 20px;background: #f2f2f2;height: 56px;font-size: 17px}
+.m-order .m-order-detail{padding:12px 20px;background: #f2f2f2;height: 56px;font-size: 17px;line-height: 28px;}
 .m-order .m-order-detail h5{font-size: 17px;}
 .m-order .payNote{line-height: 28px;}
 .m-order .mt-45{margin-top: 45px;}
@@ -57,6 +57,8 @@
 .m-order .yhui{margin:20px 0;border: 1px solid #0196aa;text-align: center;line-height: 38px;font-size: 18px;color: #0196aa;}
 .m-order .m-o-code{margin: 15px 0;}
 .m-order .m-o-code div img{margin-left: 5px;}
+.m-order .f-l-50 span{float: right;}
+.m-order .f-fc-EF5{font-size: 21px;}
 .u-inputline.n-b{margin-bottom: 0}
 .u-inputline.j-b{margin: 60px 12% 0;}
 .bind-box{height: 30px;}

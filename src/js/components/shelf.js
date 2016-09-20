@@ -159,7 +159,6 @@ var Shelf = React.createClass({
 		var isReverse = true;
 		if(this.models.order_model !== i)  isReverse = false;
 		if(bool) isReverse = false;
-
 		switch(i){
 			case '1':
 				if(isReverse){
@@ -168,7 +167,7 @@ var Shelf = React.createClass({
 				} else {
 					arr = arr.sort(function(a,b){
 						var x = a.playorder/a.count,y=b.playorder/b.count;
-						return y-x;});
+						return x-y;});
 					if(this.models.reading_order == 1)
 						arr.reverse();
 				}
@@ -232,7 +231,12 @@ var Shelf = React.createClass({
 		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
-		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
+		this.models = localStorage.models?JSON.parse(localStorage.models):{
+			order_model: '0',
+			book_order: '0',
+			recent_order: '0',
+			reading_order: '0'
+		};//获取模式和排序
 		return {
 			title: '书架',
 			setting:false,
@@ -272,7 +276,11 @@ var Shelf = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextPros,nextState) {
-
+		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 
+			setTimeout(function(){
+				this.getList();
+			}.bind(this),100);
+			
 		if(GLOBAL.isRouter(this.props) && !this.state.shelfList && !!nextState.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
