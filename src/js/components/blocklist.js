@@ -401,7 +401,6 @@ var Blocklist = React.createClass({
 		}
 	},
 	getUpdate: function(blockList){
-	
 		var that = this,hrefStr;
 		var comps = blockList.map(function(block, i) {
 			//console.log('风格' + block.style)

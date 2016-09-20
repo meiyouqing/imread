@@ -41,6 +41,7 @@ var mod = React.createClass({
 					else {
 						that.disPatch('updateUser');
 						that.props.goBack();
+						that.props.storeBookOrdered(that.props.chapterid);
 					}
 					// var autoPay = that.props.chargeMode==2? true:false;
 					// that.props.paySuccess(data, autoPay);

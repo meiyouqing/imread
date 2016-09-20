@@ -541,7 +541,7 @@ var Reading = React.createClass({
 		}
 	},
 	autoPay: function(orderData) {
-		//console.log(orderData);	
+
 		var that = this;
 		if(!this.state.fromId){
 			if(that.isLogin()){
@@ -561,8 +561,10 @@ var Reading = React.createClass({
 						if(data.code !== 200)
 							POP._alert('支付失败');
 						else {
+			
+							that.storeBookOrdered(that.chapterid);
 							that.disPatch('updateUser');
-							that.props.goBack();
+							that.goBack();
 						}
 					});
 				}else{
@@ -792,8 +794,10 @@ var Reading = React.createClass({
 				this.setState({download: true});
 			}.bind(this),500);
 	},
+	orderedBook: [],
 	storeBookOrdered: function(cid){
-		this.setState({orderedBook: this.state.orderedBook.push(cid)});
+		this.orderedBook.push(cid)
+		this.setState({orderedBook: this.orderedBook});
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.loading !== nextState.loading 
@@ -809,6 +813,7 @@ var Reading = React.createClass({
 				|| this.props.params !== nextProps.params
 				|| this.state.introduce !== nextState.introduce
 				|| this.state.orderData !==nextState.orderData
+				|| this.state.orderedBook !==nextState.orderedBook
 				|| this.state.intercutList !== nextState.intercutList;
 	},
 	
@@ -874,7 +879,7 @@ var Reading = React.createClass({
 			return (<div className="gg-body">
 				<Header path={this.props.route} right={right} title={"确认订单"} />
 				<div className="g-main g-main-1">
-					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
+					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]} storeBookOrdered={this.storeBookOrdered} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
 				</div>
 				{this.props.children}
 				</div>
@@ -1013,7 +1018,7 @@ var Reading = React.createClass({
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} store={this.state.orderedBook} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 
 					</div>
