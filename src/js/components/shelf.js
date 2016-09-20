@@ -167,7 +167,7 @@ var Shelf = React.createClass({
 				} else {
 					arr = arr.sort(function(a,b){
 						var x = a.playorder/a.count,y=b.playorder/b.count;
-						return x-y;});
+						return y-x;});
 					if(this.models.reading_order == 1)
 						arr.reverse();
 				}
@@ -194,7 +194,7 @@ var Shelf = React.createClass({
 				} else {
 					arr.sort(function(a,b){
 						var x=Number(a.mark_time), y = Number(b.mark_time);
-						return x-y; });
+						return y-x; });
 					if(this.models.recent_order == 1)
 						arr.reverse();
 				}

@@ -102,7 +102,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 /* /grid */
 
 /* module */
-.m-nav{position: absolute;z-index:10;width:100%;background-color: #fff;box-shadow: 0 1px 5px 5px rgba(0,0,0,.1);-webkit-box-shadow: 0 1px 5px 5px rgba(0,0,0,.1);}
+.m-nav{position: absolute;z-index:10;width:100%;background-color: #fff;box-shadow: 0 7px 5px -1px rgba(0,0,0,.1);-webkit-box-shadow: 0 7px 5px -1px rgba(0,0,0,.1);}
 .m-nav a{display:block;box-sizing:border-box;height: 40px;line-height: 40px;font-size:16px;text-align: center;}
 .m-nav a.z-active{color: #0196aa;border-bottom: 1px solid #0196aa;}
 

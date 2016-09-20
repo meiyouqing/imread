@@ -107,7 +107,6 @@ var BookContent = (function() {
 
 		var getContent =  function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
-			alert(sourceConfig.source_host.replace('http://readapi.imread.com','https://m.imread.com'))
 			var totalUrl = sourceConfig.source_host.replace('http://readapi.imread.com','https://m.imread.com') + sourceConfig.chapter_content;
 			//var totalUrl = 'https://192.168.0.34:9090' + sourceConfig.chapter_content;
 			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
