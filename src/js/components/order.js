@@ -46,7 +46,8 @@ var mod = React.createClass({
 					// that.props.paySuccess(data, autoPay);
 				});
 			}else{
-				POP._alert('艾豆不足，请充值',this.rechargeHandle);
+				POP._alert('艾豆不足，请充值');
+				this.rechargeHandle();
 			}
 		}
 	},
@@ -160,9 +161,9 @@ var mod = React.createClass({
 						<div className="block">
 							<div className="m-order-detail">
 								<h5 className="f-mb10 f-ellipsis">《{this.props.introduce.book_name}》</h5>
-								<p className="chapter f-bb-eee f-pb-10 f-ellipsis">{(this.props.introduce.charge_mode == 2) ?this.props.data.name:"购买全本"}</p>
+								<p className="chapter f-pb-10 f-ellipsis">{(this.props.introduce.charge_mode == 2) ?this.props.data.name:"全本购买"}</p>
 							</div>
-							<p className="f-tr f-l-50"><span className="f-fl f-r-notice">{(this.props.introduce.charge_mode == 2) ?'支付成功后将自动续订':""}</span><span className="f-fc-000">需支付</span><span className="f-s-10">¥</span><span className="f-fc-EF5">{this.props.data.marketPrice || this.props.introduce.price}</span></p>
+							<p className="f-tr f-l-50"><span className="f-fl f-r-notice">{(this.props.introduce.charge_mode == 2) ?'支付成功后将自动续订':""}</span><span className="f-fc-EF5">{this.props.data.marketPrice || this.props.introduce.price}</span><span className="f-s-y">¥</span><span className="f-fc-000">需支付</span></p>
 						</div>
 						<div className="block f-clearfix m-order-left">
 							<div className="f-fl lh-30"><span className="f-mr-5">{isMigu?"书券余额":"艾豆余额"}</span></div>
@@ -170,7 +171,7 @@ var mod = React.createClass({
 						</div>
 						{telephoneBlock}
 						{code}
-						<div className="f-mt-20"><input type="button" className="u-btn u-btn-full" onClick={this.payHandle.bind(this,1)} value="确认订购" /></div>
+						<div className="f-mt-40"><input type="button" className="u-btn u-btn-full" onClick={this.payHandle.bind(this,1)} value="确认订购" /></div>
 						{twenty}
 					</div>}
 			</div>

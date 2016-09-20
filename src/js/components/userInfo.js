@@ -196,6 +196,7 @@ var UserInfo = React.createClass({
 	// 		}.bind(this);
 	// },
 	render: function() {
+
 		var list;
 		if(!this.state.user)
 			list = <Loading />
@@ -210,7 +211,7 @@ var UserInfo = React.createClass({
 					</section>
 					<section className="m-user-detail">
 						<ul>
-							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user_name}</span></li>
+							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user_name || this.state.user.user_name || this.state.user.mobile_num}</span></li>
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
 							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
 						</ul>

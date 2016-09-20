@@ -15,11 +15,11 @@ var RechageRes = React.createClass({
 		};
 	},
 	completed: function(){
-		if(myEvent.callback.recharge){
+		//if(myEvent.callback.recharge){
 			myEvent.execCallback('recharge');		
-		}else{
-			myEvent.execCallback('rechargeDef');		
-		}
+		// }else{
+		// 	myEvent.execCallback('rechargeDef');		
+		// }
 	},
 	success: function(){
 		//console.log('成功');

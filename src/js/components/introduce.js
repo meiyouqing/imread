@@ -191,7 +191,7 @@ var Introduce = React.createClass({
 		if(!this.isMounted()){return;}
 		this.setState({
 			chapterlist: null,
-			page:1
+			page:0
 		})
 	},
 	componentDidMount: function() {
