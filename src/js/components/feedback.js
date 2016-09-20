@@ -24,7 +24,7 @@ var Feedback = React.createClass({
 		var contact = this.refs.contact.value.trim();
 
 		if (!GLOBAL.assertNotEmpty(message, '请输入反馈意见')) {return ;}
-		if (!GLOBAL.assertNotEmpty(contact, '请输入联系方式')) {return ;}  
+		//if (!GLOBAL.assertNotEmpty(contact, '请输入联系方式')) {return ;}  
 
 		AJAX.go("advice", {
 			'message': message,
@@ -65,7 +65,7 @@ var Feedback = React.createClass({
 					</form>
 
 					<div className={"u-feed-footer"+(this.state.showFeedFooter?'':' f-hide')} ref="feedFooter">
-						<a target="_blank" href="tencent://message/?uin=63401620"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
+						<a target="_blank" href="http://qm.qq.com/cgi-bin/qm/qr?k=yvE1mfItNhQSQEEaDXwEltjy-UUsaSy-"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
 						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><input defaultValue={"艾美阅读"}  className="u-r" ref="gzh" /></a>
 						<a href="https://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
 					</div>

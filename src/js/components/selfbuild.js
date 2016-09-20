@@ -44,7 +44,7 @@ var Selfbuild = React.createClass({
 		}
 		else
 			content = <div className="g-main g-main-1">
-					<div className="g-scroll" ref="container" onScroll={this.scrollHandle}>
+					<div className="g-scroll m-self-build" ref="container" onScroll={this.scrollHandle}>
 						<Blocklist2 blockList={this.state.data}></Blocklist2>
 					</div>
 				</div>

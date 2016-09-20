@@ -143,7 +143,7 @@ var Block9 = React.createClass({
 			                		
 									var hrefObj = GLOBAL.typeHref(v);
 									var search="?devicetoken="+GLOBAL.cookie('uuid')
-									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:'_self'};
+									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
 
 			                		return (
 			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: "100%",backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
