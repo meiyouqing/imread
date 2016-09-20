@@ -52,6 +52,8 @@ var Chapterlist = React.createClass({
 	},
 	render: function() {
 		var loading, content;
+
+		var store = this.props.currentChapterId?this.props.currentChapterId:[];
 		if (!this.props.chapterlist) {
 			loading = <i className="u-sLoading">目录努力加载中...</i>
 		} else {
@@ -63,7 +65,7 @@ var Chapterlist = React.createClass({
 						var lock;
 						// console.log(this.props.store,chapter.cid)
 						var currentChapterId = this.props.currentChapterId || this.state.currentChapterId;
-						if (chapter.feeType != '0' && (this.props.store.indexOf(chapter.cid)<0)) {
+						if (chapter.feeType != '0' && (store.indexOf(chapter.cid)<0)) {
 							lock = <span className="icon-n icon-lock f-fr"></span>;
 						}
 						return (
