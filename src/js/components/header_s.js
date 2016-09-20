@@ -51,7 +51,7 @@ var Header_s = React.createClass({
 	componentDidMount: function(){
 		// console.log(this.props.keyValue)
 		if(!this.props.keyValue && !this.state.key){
-			this.refs.searchInput.focus();
+			//this.refs.searchInput.focus();
 		} else {
 			if(typeof this.props.keyValue === 'string')
 				this.setState({key: this.props.keyValue})

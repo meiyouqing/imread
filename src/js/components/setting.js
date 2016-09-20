@@ -83,7 +83,7 @@ var Setting = React.createClass({
 							})
 						}
 						<div className="m-set-footer">
-							<img src="https://m.imread.com/src/img/back/bg-@2x.png" />
+							<img src="https://m.imread.com/src/img/back/bg-@2x.jpg" />
 						</div>
 					</div>
 

@@ -214,7 +214,7 @@ var User = React.createClass({
 		return (
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
-					<div className="m-userblock g-scroll" onClick={this.props.hideUser}>
+					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
 							<img src="https://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
 						
