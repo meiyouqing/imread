@@ -5,7 +5,7 @@ var Subject = React.createClass({
 		return this.props.data !== nextProps.data;
 	},
 	render: function() { 
-		var cls = this.props.style==12? 'u-book-7':'u-book-8';
+		var cls = this.props.style==12? 'u-book-8 u-book-8-small':'u-book-8';
 		var height = this.props.style==12? 
 					(document.body.offsetWidth-40)/2*0.38 
 					: (document.body.offsetWidth-27)/2;
@@ -17,7 +17,7 @@ var Subject = React.createClass({
 		}
 		return (
 			<li className={cls}>
-				<Link to={hrefStr} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundImage: 'url(/src/img/defaultTopBackground.png)',backgroundSize:'cover',height: height,backgroundPosition: '50%'}}>
+				<Link to={hrefStr} className="u-lazyload-img" data-lazyload-src={this.props.data.image_url ||this.props.data.intercut_url || this.props.data.big_coverlogo} style={{backgroundColor:'#e3e3e3',height:height}}>
 					<span>{this.props.data.name}</span>
 				</Link>
 			</li>

@@ -244,14 +244,10 @@ var Block12 = React.createClass({
 		return this.props.data !== nextProps.data;
 	},
 	render:function(){
-		var title = this.props.data.style==12?
-					(<div className="title"> <h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2> </div>)
-					:null;
 		return (
 			<section className="m-block">
-				{title}
 				<div className="content">
-					<ul className={"f-clearfix subCat-"+this.props.data.style}>
+					<ul className="f-clearfix subCat-13">
 					{
 						this.props.data.contentlist.slice(0,this.props.data.contentlist.length-(this.props.data.contentlist.length%2)).map(function(v,i){
 							return <Book7 key={i} data={v} style={this.props.data.style} />
