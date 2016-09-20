@@ -146,7 +146,8 @@ var Block5 = React.createClass({
 			                		
 									var hrefObj = GLOBAL.typeHref(v);
 									var search="?devicetoken="+GLOBAL.cookie('uuid')
-									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:'_self'};
+									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
+								
 									var imger = <img data-src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>;
 
 									if(this.props.data.contentlist.length<2) 

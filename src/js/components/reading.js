@@ -207,7 +207,8 @@ var Reading = React.createClass({
 			fromId: false,//true:咪咕 ,
 			adHc: null,	//呼出广告
 			showIntercutXp: false,
-			intercutXp: null
+			intercutXp: null,
+			orderedBook: [] //解锁章节本地
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -557,8 +558,12 @@ var Reading = React.createClass({
 				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
-						that.disPatch('updateUser');
-						that.gotContent(data);
+						if(data.code !== 200)
+							POP._alert('支付失败');
+						else {
+							that.disPatch('updateUser');
+							that.props.goBack();
+						}
 					});
 				}else{
 					that.setState({
@@ -786,6 +791,9 @@ var Reading = React.createClass({
 			setTimeout(function(){
 				this.setState({download: true});
 			}.bind(this),500);
+	},
+	storeBookOrdered: function(cid){
+		this.setState({orderedBook: this.state.orderedBook.push(cid)});
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.loading !== nextState.loading 

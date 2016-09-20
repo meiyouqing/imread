@@ -87,7 +87,6 @@ var mixins = function() {
 
                 AJAX.go('addBook', { param: JSON.stringify(param) }, function(data) {
                     if (data.code === 200) {
-                        POP._alert("加入书架成功");
                         GLOBAL.onShelf[param[0].bookId] = 1;
                         POP._alert('成功加入书架');
                         (typeof callback === 'function') && callback(data);

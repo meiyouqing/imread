@@ -103,19 +103,36 @@ var topWrap = (
 		</Route>
 	)
 
+var selfWrap = (
+		<Route path="self/:selfId" component={SelfBuild}>
+					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					{loginWrap}
+					{bookWrap}
+					{searchWrap}
+		</Route>
+	)
+
 module.exports = (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
 		{loginWrap}
-		<Route path="/self/:selfId" component={SelfBuild}>
-			{bookWrap}
-			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
-				{bookWrap}
-				{searchWrap}
-			</Route>
-		</Route>
+		{selfWrap}
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+
+				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
 					{loginWrap}

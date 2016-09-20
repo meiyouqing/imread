@@ -102,7 +102,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 /* /grid */
 
 /* module */
-.m-nav{position: absolute;z-index:10;width:100%;background-color: #fff;border-bottom: 1px solid #ccc;}
+.m-nav{position: absolute;z-index:10;width:100%;background-color: #fff;box-shadow: 0 1px 5px 5px rgba(0,0,0,.1);-webkit-box-shadow: 0 1px 5px 5px rgba(0,0,0,.1);}
 .m-nav a{display:block;box-sizing:border-box;height: 40px;line-height: 40px;font-size:16px;text-align: center;}
 .m-nav a.z-active{color: #0196aa;border-bottom: 1px solid #0196aa;}
 
@@ -134,6 +134,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-block .content .recommend .iconWord,.hot,.m-list .recommend .iconWord{padding:0 2px;margin-right: 5px;display: inline-block;background-color: #0196aa;color: #FFF;line-height: 15px;}
 .m-block.m-block-top .content{padding: 0;}
 .m-block.m-block-top{margin-top: 10px;}
+.m-self-build .m-block.m-block-top{margin-top: 0px;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
 .m-block > .title h2{font-size: 17px;color: #000;}
 .m-block > .title h2.style-2{color: #EA2510;}
