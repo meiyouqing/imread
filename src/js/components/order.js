@@ -2,7 +2,7 @@ var Header = require('./header');
 
 require('../../css/pay.css');
 
-var mod = React.createClass({
+var Order = React.createClass({
 	mixins: [Mixins()],
 	rechargeHandle: function(e) {
 		if(this.props.isMigu){
@@ -180,4 +180,4 @@ var mod = React.createClass({
 	}
 });
 
-module.exports  = mod;
+module.exports  = Order;
