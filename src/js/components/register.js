@@ -26,6 +26,10 @@ var Register = React.createClass({
 		if (!GLOBAL.assertMatchRegExp(postData.mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.key, '请输入验证码')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
+		if(postData.password.trim().length<6) {
+			POP._alert('密码不能少于6位');
+			return;
+		}
 
 		that.loading = true;
 		AJAX.getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {

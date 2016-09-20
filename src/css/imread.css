@@ -192,17 +192,18 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-6:nth-child(2n+1){border-right: 1px solid #EEEEEE;}
 .empty-book-6{position: relative;left: 1px;top: 1px;border-bottom: none;background: #FFFFFF;}
 
-.subCat-12{padding: 0 10px;width: 100%;}
+.subCat-12{padding:10px;width: 100%;box-sizing:border-box;margin-right: -7px;}
 .u-book-7{float: left;width: 50%;margin-top: 20px;}
 .u-book-7:nth-child(1),.u-book-7:nth-child(2),.u-book-8:nth-child(1),.u-book-8:nth-child(2){margin-top: 0;}
 .u-book-7 a, .u-book-8 a{display: block;position: relative;margin-right: 20px;text-align: center;background-repeat: no-repeat;-webkit-background-size: cover;-moz-background-size: cover;background-size: cover;}
 .u-book-7 a::before{content: ' ';display: inline-block;width: 0;overflow: hidden;height: 100%;vertical-align: middle;}
 .u-book-7 a span{display: inline-block;vertical-align: middle;font-size: 17px;color: #fff;letter-spacing: 10px;text-indent: 10px;}
 
-.subCat-13{padding: 10px 5px;;margin-right: -7px;}
+.subCat-13{padding: 10px 5px;margin-right: -7px;}
 .u-book-8{float: left;width: 50%;margin-top: 5px;}
 .u-book-8 a{margin-right: 7px;}
 .u-book-8 a span{display: block;position: absolute;left:0;right: 0;bottom: 0;height:50px;line-height: 50px;background-color: rgba(0,0,0,.5);text-align: center;font-size: 15px;color: #fff;letter-spacing: 0.1em;}
+.u-book-8.u-book-8-small a span{height:30px;line-height: 30px;background-color: rgba(0,0,0,.3);}
 
 .subCat-14{}
 /*.subCat-14 li{padding: 10px 10px 10px 0;margin-left: 10px;}*/
@@ -290,9 +291,9 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-5 a span{vertical-align: middle;line-height: 50px;max-width: 90%}
 .u-book-5 a span.hot{font-size: 10px;width: 16px;padding: 0;line-height: 17px;text-align: center;margin:0 0 0 5px;background: #fd6775;border-radius: 1px }
 
-.u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;}
-.u-book-10 a{display: block;width: 100%;height: 100%;}
-.u-book-10 a img{width: 100%;height: 100%;}
+.u-book-10{margin: 10px 5px 0;position: relative;top: 0;left: 0;min-height: 100px;background-color: ##e3e3e3}
+.u-book-10 a{display: block;}
+.u-book-10 a img{display:block;width: 100%;height: auto;margin: 0 auto;}
 .u-book-10 a span{background: transparent;color: #fff;display: inline-block;line-height: 40px;}
 .u-book-10 a span.book-name{margin-left: 10px;font-size: 15px;max-width: 60%;}
 .u-book-10 .delete{position: absolute;top: 0;right: 0;width:34px;height:40px;background: url(../img/icons/shanchu@2x.png) no-repeat;background-size: cover;text-align: right;padding: 0 3px;line-height: 30px;color: #ce403e;}

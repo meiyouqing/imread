@@ -14,7 +14,7 @@ var recentRead = React.createClass({
             scrollUpdate: false,
             noMore: false,
             icon: null,
-            right: < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>,
+            right: null,
             left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
         }
     },
@@ -78,7 +78,7 @@ var recentRead = React.createClass({
             });
             this.setState({
                 list: list,
-                right:list.length? this.state.right:null,
+                right:list.length? < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>:null,
                 noMore: true
             });
        // }
@@ -101,6 +101,14 @@ var recentRead = React.createClass({
                     break;
                 }
             }
+            if(!that.state.list.length){
+                that.setState({
+                    right:null,
+                    left:<a className="f-fl icon-s icon-back" onClick={that.goBack} ></a>
+                });  
+                return;              
+            }
+
         };
 
          var readLog = storage.get('readLogNew');

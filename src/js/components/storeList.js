@@ -72,6 +72,9 @@ var StoreList = React.createClass({
 	            }
 	            if(that.state.list.length == 0){
 	            	that.initData(true);
+		    	    that.setState({
+		            	left: <a className="f-fl icon-s icon-back" onClick={that.goBack} ></a>
+		        	});
 	            }
 	      }
 	      AJAX.go('collectionDelete', {
