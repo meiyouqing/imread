@@ -1038,20 +1038,8 @@ var Reading = React.createClass({
 
 					</div>
 				</section>
-<<<<<<< HEAD
 				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
 					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
-=======
-				{loading}
-
-				<div className={"m-reading"} ref="scrollarea">
-					{
-
-					this.source_id == '1'?
-						(<i className="u-miguLogo"></i>):
-						null
-				}
->>>>>>> react-router
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					
 					<section className="u-chapterName">{this.state.data.name}</section>
