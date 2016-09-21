@@ -48,12 +48,14 @@ var Chapterlist = React.createClass({
 				|| this.props.loading !== nextProps.loading
 				|| this.props.currentChapterId !== nextProps.currentChapterId
 				|| this.state.needUpdate !== nextState.needUpdate
+				|| this.props.isBuyAll !== nextProps.isBuyAll
 				|| this.props.order !== nextProps.order;
 	},
 	render: function() {
 		var loading, content;
 
-		var store = this.props.currentChapterId?this.props.currentChapterId:[];
+		var store = this.props.store?this.props.store:[];
+
 		if (!this.props.chapterlist) {
 			loading = <i className="u-sLoading">目录努力加载中...</i>
 		} else {
@@ -65,7 +67,7 @@ var Chapterlist = React.createClass({
 						var lock;
 						// console.log(this.props.store,chapter.cid)
 						var currentChapterId = this.props.currentChapterId || this.state.currentChapterId;
-						if (chapter.feeType != '0' && (store.indexOf(chapter.cid)<0)) {
+						if (chapter.feeType != '0' && (store.indexOf(chapter.cid)<0) && !this.props.isBuyAll) {
 							lock = <span className="icon-n icon-lock f-fr"></span>;
 						}
 						return (

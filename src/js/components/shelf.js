@@ -361,7 +361,7 @@ var Shelf = React.createClass({
 													notice = '未读';
 													break;
 												default:
-													notice = per*100 + '%';
+													notice = Math.round(per*100) + '%';
 											};
 											return (<li key={i} className={"u-book-2 "+curClass}>
 													<a onClick={this.startReading.bind(this,v)}>
