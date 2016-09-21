@@ -180,14 +180,16 @@ var Login = React.createClass({
 	},
 	//安卓下键盘位移
 	timeoutId:0,
-	handleFocus:function (){
-		if(!GLOBAL.isAndroid) return;
+	handleFocus:function (e){
+		if(!GLOBAL.isAndroid()) return;
+		const target = e.target;
 		clearTimeout(this.timeoutId);
 		this.refs.loginBlock.style.height = '1000px';
 		this.refs.gScroll.scrollTop = 205;
+		target.focus();
 	},
 	handleBlur:function (){
-		if(!GLOBAL.isAndroid) return;
+		if(!GLOBAL.isAndroid()) return;
 		this.timeoutId = setTimeout(()=>{
 			this.refs.loginBlock.style.height = '100%';
 			this.refs.gScroll.scrollTop = 0;				
@@ -203,10 +205,10 @@ var Login = React.createClass({
 			list = (<div className="m-login">
 						<form className="u-registerform u-userform" onSubmit={this.handleSubmit}>
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onClick={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 								<div className="u-inputline-2 f-clearfix">
-										<input className="u-input-2" placeholder="密码" type="password" ref="password" onFocus={this.handleFocus} onBlur={this.handleBlur} />
+										<input className="u-input-2" placeholder="密码" type="password" ref="password" onClick={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 
 								<div className="u-inputline">
@@ -227,17 +229,17 @@ var Login = React.createClass({
 			list=(<div className="m-register">
 						<form className="u-registerform u-userform">
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onClick={this.handleFocus} onBlur={this.handleBlur} />
 									<div className="f-fr">
 										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 									</div>
 								</div>
 								<div className="u-b-pass">
 									<div className="u-inputline-2 f-clearfix u-pass">
-											<input className="u-input-2" placeholder="密码"  type="password" ref="password" onFocus={this.handleFocus} onBlur={this.handleBlur}/>
+											<input className="u-input-2" placeholder="密码"  type="password" ref="password" onClick={this.handleFocus} onBlur={this.handleBlur}/>
 									</div>
 									<div className="u-inputline-2 f-clearfix u-key">
-											<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onFocus={this.handleFocus} onBlur={this.handleBlur}/>
+											<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur}/>
 									</div>
 								</div>
 								<div className="u-inputline">
