@@ -115,6 +115,7 @@ var Login = React.createClass({
 				}else{
 					// that.setState({status: true});
 					GLOBAL.goBack();
+					myEvent.execCallback('login');
 				}
 			}
 			else {
