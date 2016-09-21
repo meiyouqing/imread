@@ -38,9 +38,9 @@ const GLOBAL = {
 		else
 			browserHistory.goBack();
 	},
-	setHref:function(str,context){
+	setHref:function(str,routeLocation){
 		//TODO
-		return location.pathname+'/'+str
+		return routeLocation.pathname+'/'+str
 	},
 	isRouter: function(route){
 		var route_id = null,
@@ -68,7 +68,7 @@ const GLOBAL = {
 		// var path = route.route.path.replace(/:([^\"]*)/,'');
 		// return window.location.pathname.split('/'+path)[0];
 	},
-	typeHref: function(data,spm, route_type){
+	typeHref: function(data, routeLocation){
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
@@ -89,32 +89,16 @@ const GLOBAL = {
 
 		switch(type){
 			case 1://图书详情
-				return setHref('book/introduce.'+bid,route_type);
-			// case 2://广告
-	  //   		switch (data.intercut_type) {
-	  //   			case 1://图书详情
-	  //   				return {url:this.setHref('book/introduce.' + data.source_contentid),target:target};
-	  //   			case 2://内部网页
-	  //   			case 3://外部网页
-	  //   			case 4://apk下载
-	  //   			case 8://app to H5
-	  //   				return {url:data.redirect_url || "javascript:void(0)",target:target};
-	  //   			case 5://素材目录
-	  //   				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
-   //  				case 6: //自搭页面
-   //  					return {url:this.setHref('selfbuild/page.62'),target:target}
-   //  				default:
-   //  					return {url:"javascript:void(0)",target:target}
-	  //   		}
+				return this.setHref('book/introduce.'+bid,routeLocation);
 			case 3://搜索
-				return setHref('search/search.'+data.name);
+				return this.setHref('search/search.'+data.name,routeLocation);
 			case 4://目录
 			case 5://分类
-				return setHref('cat/category.'+bid);
+				return this.setHref('cat/category.'+bid,routeLocation);
 			case 6://书城的子页面
-				return setHref('self/page.'+data.content_id+'.6.1');
+				return this.setHref('mall/page'+data.pgid,routeLocation);
 			case 7://书单
-				return setHref('sheet/bookSheet.'+bid);
+				return this.setHref('sheet/bookSheet.'+bid,routeLocation);
 			case 11://跳h5下载游戏
 	    		case 12://跳下载apk
 	    		case 13://跳内部网页
@@ -123,32 +107,7 @@ const GLOBAL = {
 	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
 	},
-	// setTitle: function(parts){
-	// 	console.log(parts)
-	// 	var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',listTag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
-	// 	parts = parts.split('.');
-	// 	var n=parts[0],
-	// 		id=parts[1];
-	// 	switch(n){
-	// 		case 'block':
-	// 		case 'more':
-	// 		case 'category':
-	// 			this.title = GLOBAL.bookList[id];
-	// 			break;
-	// 		case 'introduce':
-	// 			this.title = GLOBAL.book[id];
-	// 			break;
-	// 		case 'reading':
-	// 			break;
-	// 		default:
-	// 			this.title = title[n];
-	// 			break;
-	// 	}
-	// 	var rTitle = this.title? ('-'+this.title):'';
-	// 	document.title = '艾美阅读' + rTitle;
-	// 	console.log(this.title)
-	// 	return this.title;
-	// },
+
 	setBookName:function(data){
 		if(!data.length||!this.isArray(data)){return}
 		data.forEach(function(v){

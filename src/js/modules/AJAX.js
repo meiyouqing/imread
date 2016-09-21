@@ -283,7 +283,6 @@ var AJAX = {
 		this.API._m = ao.method;
 		this.API._base = ao.base;
 		this.API._param = ao.param;
-		//GLOBAL.setTitle(now);
 	},
 	get: function(callback, onerror){
 		GETJSON(this.API._m,this.API._base,this.API._param,callback,onerror);

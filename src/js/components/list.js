@@ -16,39 +16,7 @@ var List = React.createClass({
 		if(!this.isMounted()) return;
 		var hash = param?param:this.props.params.listId;
 		AJAX.init(hash);
-		AJAX.get(data => {
-			this.isLoading = false;
-			var pathname = location.pathname.split('/');
-			if(/^search./.test(pathname[pathname.length-1])){
-				if (!data.contentlist.length) {
-					this.setState({
-						noMore:true
-					})
-				}
-				this.setState({
-					recommend: data,
-					resultCount: data.result_count,
-					bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
-					scrollUpdate: false
-				})
-				//设置GLOBAL book name
-				GLOBAL.setBookName(data.contentlist);
-			}else{
-				if (!data || !data.content.length) {
-					this.setState({
-						noMore:true
-					})
-				}
-
-				this.setState({
-					recommend: data,
-					bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
-					scrollUpdate: false
-				});				
-				//设置GLOBAL book name
-				GLOBAL.setBookName(data);
-			}
-		}, error => {
+		AJAX.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
 				this.setState({
 					scrollUpdate:false,
@@ -61,6 +29,39 @@ var List = React.createClass({
 			});
 			//console.log(error);
 		});
+	},
+	ajaxHandle:function(data){
+		this.isLoading = false;
+		var pathname = this.props.location.pathname.split('/');
+		if(/^search./.test(pathname[pathname.length-1])){
+			if (!data.contentlist.length) {
+				this.setState({
+					noMore:true
+				})
+			}
+			this.setState({
+				recommend: data,
+				resultCount: data.result_count,
+				bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
+				scrollUpdate: false
+			})
+			//设置GLOBAL book name
+			GLOBAL.setBookName(data.contentlist);
+		}else{
+			if (!data || !data.content.length) {
+				this.setState({
+					noMore:true
+				})
+			}
+
+			this.setState({
+				recommend: data,
+				bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
+				scrollUpdate: false
+			});				
+			//设置GLOBAL book name
+			GLOBAL.setBookName(data);
+		}
 	},
 	goSearch: function(){
 		if(!this.state.scrollUpdate){
@@ -88,14 +89,8 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		if(GLOBAL.isRouter(this.props)) this.getList();
+		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 	},
-	update: function(){
-
-	},
-	// componentWillReceiveProps: function(nextProps){
-	// 	this.getData();
-	// },
 	componentDidUpdate: function(nextProps,nextState) {
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
@@ -117,8 +112,22 @@ var List = React.createClass({
 				|| this.props.children !== nextProps.children
 				|| this.props.params.listId !== nextProps.params.listId;
 	},
+	componentWillMount:function(){
+		const path = this.props.location.pathname.split('/');
+		const param = path[path.length-1];
+		const n = param.replace(/\./g,'_');
+		console.log(n)
+		if(typeof window === 'undefined'){
+			if(global.imdata[n]){
+				this.ajaxHandle(global.imdata[n]);
+			}
+		}else{
+			if(window.__PRELOADED_STATE__[n]){
+				this.ajaxHandle(window.__PRELOADED_STATE__[n]);
+			}
+		}
+	},
 	render:function(){
-
 		var header,noData,content,sLoading,result_count;
 		//定义头部
 		// if(this.state.resultCount){
@@ -139,7 +148,7 @@ var List = React.createClass({
 				content = null;
 				result_count = null;
 			}else{
-				content = <Block7 recommend={this.state.recommend} bookList={this.state.bookList}/>;
+				content = <Block7 recommend={this.state.recommend} bookList={this.state.bookList} location={this.props.location}/>;
 				sLoading = <Loading cls='u-sLoading' />;
 			}							
 		}
@@ -152,11 +161,12 @@ var List = React.createClass({
 			result_count = null;
 			sLoading = null;
 		}
+		//console.log(content)
 		return (
 			<div className="gg-body">
 				{header}
 				<div className="g-main g-main-1 m-list">
-					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
+					<div className="g-scroll" onScrolls={this.scrollHandle} ref="container">
 						{result_count}
 						{content}
 						{sLoading}

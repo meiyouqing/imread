@@ -14,6 +14,7 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { match, RouterContext } from 'react-router'
 
+import AJAX from '../src/js/modules/AJAX'
 
 import routes from '../src/js/components/routes'
 // import { Provider } from 'react-redux'
@@ -42,11 +43,26 @@ app.get('*', (req, res) => {
     } else if (redirect) {
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
-      // hey we made it!
-      const appHtml = renderToString(<RouterContext {...props}/>)
-      // const store = configureStore(preloadedState)
-      // const finalState = store.getState()
-      res.send(renderFullPage(appHtml,{name:'mmm'}))
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+req.url)
+      const path = req.url.split('/');
+      const param = path[path.length-1];
+      const n = param.replace(/\./g,'_');
+      global.imdata = {};
+      AJAX.init(param);
+      AJAX.get(function(data){
+        global.imdata[n] = data;
+        try{
+          const appHtml = renderToString(<RouterContext {...props}/>)
+          console.log(appHtml)
+          res.send(renderFullPage(appHtml,{[n]:data}))
+        }catch(err){
+          console.log(err)
+          console.error(err)
+        }
+        
+        // const store = configureStore(preloadedState)
+        // const finalState = store.getState()
+      })
     } else {
       res.status(404).send('Not Found')
     }

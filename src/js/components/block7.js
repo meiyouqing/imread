@@ -24,7 +24,7 @@ var Block7 = React.createClass({
 				{	
 					this.props.bookList.map(function(v,i){
 						return (
-							<Book1 key={i} data={v} />
+							<Book1 key={i} data={v} location={this.props.location}/>
 						)
 					}.bind(this))
 				}
