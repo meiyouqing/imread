@@ -49,9 +49,9 @@ var Mall = React.createClass({
 		if(obj.action && obj.action==='openapp'){
 
 			if(obj.book_id)
-				browserHistory.push(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
+				browserHistory.replace(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
 			else if(obj.sheet_id){
-				browserHistory.push(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+				browserHistory.replace(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
 			}
 		}
 	},
