@@ -49,6 +49,7 @@ app.get('*', (req, res) => {
       const n = param.replace(/\./g,'_');
       global.imdata = {};
       AJAX.init(param);
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+param)
       AJAX.get(function(data){
         global.imdata[n] = data;
         try{
@@ -56,7 +57,7 @@ app.get('*', (req, res) => {
           console.log(appHtml)
           res.send(renderFullPage(appHtml,{[n]:data}))
         }catch(err){
-          console.log(err)
+          //console.log(err)
           console.error(err)
         }
         

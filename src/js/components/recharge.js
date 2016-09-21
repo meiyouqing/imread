@@ -49,14 +49,9 @@ var Recharge = React.createClass({
 
 			that.loading=false;
 			if(data.code === 200){
-<<<<<<< HEAD
-=======
-				// window.localStorage.recharge = JSON.stringify(that.params);
-				// GLOBAL.orderLIst = that.params;
 				myEvent.setCallback('recharge',function(){
 					browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/,''));	
 				}.bind(this));
->>>>>>> react-router
 				browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 				
 			} else {

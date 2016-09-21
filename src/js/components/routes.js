@@ -30,9 +30,6 @@ import StoreList from './storeList'
 import UserInfo from './userInfo'
 import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
-import MLogin from './mLogin'
-import MBinder from './mBinder'
-import MRecharge from './mRecharge'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -49,9 +46,6 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:readingId" component={Reading}>
-			<Route path="m_login" component={MLogin} />
-			<Route path="m_binder" component={MBinder} />
-			<Route path="m_recharge" component={MRecharge} />
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >

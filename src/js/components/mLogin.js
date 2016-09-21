@@ -1,6 +1,17 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import parseQuery from '../modules/parseQuery'
+import { Link } from 'react-router';
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
-require('../../css/login.css');
+if(false||typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 
 var mLogin = React.createClass({
 	mixins:[Mixins()],
