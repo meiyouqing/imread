@@ -41,7 +41,10 @@ var Order = React.createClass({
 					else {
 						that.disPatch('updateUser');
 						that.props.goBack();
-						that.props.storeBookOrdered(that.props.chapterid);
+						if(that.props.introduce.charge_mode == 2)
+							that.props.storeBookOrdered(that.props.chapterid);
+						else
+							that.props.storeBookOrdered(that.props.chapterid,true);
 					}
 					// var autoPay = that.props.chargeMode==2? true:false;
 					// that.props.paySuccess(data, autoPay);

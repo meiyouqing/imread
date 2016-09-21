@@ -208,7 +208,8 @@ var Reading = React.createClass({
 			adHc: null,	//呼出广告
 			showIntercutXp: false,
 			intercutXp: null,
-			orderedBook: [] //解锁章节本地
+			orderedBook: [], //解锁章节本地
+			isBuyAll: false//是否购买全本 用于解锁
 		}
 	},
 	cacheReadLog: function(readLog) {
@@ -795,7 +796,9 @@ var Reading = React.createClass({
 			}.bind(this),500);
 	},
 	orderedBook: [],
-	storeBookOrdered: function(cid){
+	storeBookOrdered: function(cid,isBuyAll){
+		if(isBuyAll)
+			this.setState({isBuyAll: isBuyAll});
 		this.orderedBook.push(cid)
 		this.setState({orderedBook: this.orderedBook});
 	},
@@ -879,7 +882,7 @@ var Reading = React.createClass({
 			return (<div className="gg-body">
 				<Header path={this.props.route} right={right} title={"确认订单"} />
 				<div className="g-main g-main-1">
-					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]} storeBookOrdered={this.storeBookOrdered} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
+					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]}  storeBookOrdered={this.storeBookOrdered} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
 				</div>
 				{this.props.children}
 				</div>
@@ -1018,7 +1021,7 @@ var Reading = React.createClass({
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()} store={this.state.orderedBook} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()}  isBuyAll={this.state.isBuyAll} store={this.state.orderedBook} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
 
 					</div>
