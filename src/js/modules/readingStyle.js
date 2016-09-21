@@ -3,7 +3,7 @@ var ReadingStyle = {
 	defaultStyle: {
 		style: 0,
 		night: 0,
-		fontSize: 3,
+		fontSize: 2,
 		lineheight: 3,
 		fontFamily: 1
 	},

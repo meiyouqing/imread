@@ -19,7 +19,7 @@ var StoreList = React.createClass({
 			onerror:false,
 			list:null,
 			icon: false,
-			right: < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>,
+			right: null,
 			left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
 		}
 	},
@@ -39,6 +39,7 @@ var StoreList = React.createClass({
 				list = this.state.scrollUpdate? this.state.list.concat(data.success):data.success;
 			this.setState({
 				list: list,
+				right:list.length? < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>:null,
 				scrollUpdate: false
 			});
 		},this.onerror)
@@ -78,6 +79,9 @@ var StoreList = React.createClass({
 	            }
 	            if(that.state.list.length == 0){
 	            	that.initData(true);
+		    	    that.setState({
+		            	left: <a className="f-fl icon-s icon-back" onClick={that.goBack} ></a>
+		        	});
 	            }
 	      }
 	      AJAX.go('collectionDelete', {

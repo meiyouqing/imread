@@ -49,7 +49,16 @@ var Recharge = React.createClass({
 
 			that.loading=false;
 			if(data.code === 200){
+<<<<<<< HEAD
+=======
+				// window.localStorage.recharge = JSON.stringify(that.params);
+				// GLOBAL.orderLIst = that.params;
+				myEvent.setCallback('recharge',function(){
+					browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/,''));	
+				}.bind(this));
+>>>>>>> react-router
 				browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
+				
 			} else {
 				POP._alert(data.reason, function(){
 					that.refs.key.select();
@@ -77,6 +86,10 @@ var Recharge = React.createClass({
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
+		if(/^133|^153|^180|^181|^189|^177/.test(mobile_num)) {
+			POP._alert('暂不支持电信号码');
+			return;
+		}
 		//this.params_init.mobileNum = mobile_num;
 		var countDown = function(){
 			this.setState({
@@ -197,16 +210,29 @@ var Recharge = React.createClass({
 		var phoneNumber = GLOBAL.cookie('payUser');
 		if(phoneNumber){
 			this.refs.mobile_num.value = phoneNumber;
-		}else{
-			this.refs.mobile_num.focus();
 		}
+	},
+	//安卓下键盘位移
+	timeoutId:0,
+	handleFocus:function (){
+		if(!GLOBAL.isAndroid) return;
+		clearTimeout(this.timeoutId);
+		this.refs.registerblock.style.height = '360px';
+		this.refs.gScroll.scrollTop = 120;
+	},
+	handleBlur:function (){
+		if(!GLOBAL.isAndroid || !this.refs.registerblock) return;
+		this.timeoutId = setTimeout(()=>{
+			this.refs.registerblock.style.height = 'auto';
+			this.refs.gScroll.scrollTop = 0;				
+		},100)
 	},
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route} title="艾豆充值"/>
+				<Header right={null} path={this.props.route} title="话费充值"/>
 				<div className="g-main g-main-1">
-					<div className="g-scroll m-balance">
+					<div className="g-scroll m-balance" ref="gScroll">
 						<div className="u-divider"></div>
 						<div className="u-balance-r f-tl">
 							<h5 className="tipTitle f-mb5">充值订单</h5>
@@ -214,16 +240,16 @@ var Recharge = React.createClass({
 							<p className="f-fc-777">支付金额：{this.state.sum}元</p>
 						</div>
 						<div className="u-divider u-p-10"></div>
-						<div className="m-registerblock">
+						<div className="m-registerblock" ref="registerblock">
 							<form className="u-registerform u-userform">
 								<div className="u-inputline-2">
-									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" />
+									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 									<div className="f-fr">
 										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
 									</div>
 								</div>
 								<div className="u-inputline-2 f-clearfix">
-										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
+										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onFocus={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 								<div className="u-inputline u-p-25">
 									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>

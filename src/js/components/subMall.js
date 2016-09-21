@@ -52,7 +52,6 @@ var Mall = React.createClass({
 		},this.onerror);
 	},			
 	componentDidMount: function(){
-
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
@@ -61,7 +60,7 @@ var Mall = React.createClass({
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
-		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList(true);
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	 this.getList(true);
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);
 

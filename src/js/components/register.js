@@ -26,12 +26,16 @@ var Register = React.createClass({
 			password: this.refs.password.value,
 			device_identifier: GLOBAL.getUuid(),
 			channel: 5,
-			promot: that.from.channel?that.from.channel:'H5'
+			promot: 'H5'
 		};
 		if (!GLOBAL.assertNotEmpty(postData.mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.key, '请输入验证码')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
+		if(postData.password.trim().length<6) {
+			POP._alert('密码不能少于6位');
+			return;
+		}
 
 		that.loading = true;
 		AJAX.getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {
@@ -54,10 +58,11 @@ var Register = React.createClass({
 			} else {
 				if(typeof data.error === 'string')
 					POP._alert(data.error);
-				else 
+				else {
 					for(var key in data.error[0]){
 						POP._alert(data.error[0][key])
 					}
+				}
 			}
 
 		}, function(res) {
@@ -71,35 +76,48 @@ var Register = React.createClass({
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 
+		var inter;
+		clearInterval(inter);
 		AJAX.getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
 			type: 'reset'
 		}, function(data) {
-			//console.log(data);
-		}, function(res) {
+			if(data.code == 200){
+				POP._alert('发送成功');
+
+				this.setState({
+					s: 60
+				});	 
+
+				inter = setInterval(function() {
+					if (this.state.s > 0 && this.isMounted()) {
+						this.setState({
+							s: this.state.s - 1
+						});
+					} else {
+						clearInterval(inter);
+					}
+				}.bind(this), 1000);
+			} else {
+				if(typeof data.error === 'string')
+					POP._alert(data.error);
+				else {
+					for(var key in data.error[0]){
+						POP._alert(data.error[0][key])
+					}
+				}
+			}
+		}.bind(this), function(res) {
 			this.setState({
 				s: 0
 			});
 			GLOBAL.defaultOnError(res);
 		}.bind(this));
-
-		this.setState({
-			s: 60
-		});
-		var inter = setInterval(function() {
-			if (this.state.s > 0 && this.isMounted()) {
-				this.setState({
-					s: this.state.s - 1
-				});
-			} else {
-				clearInterval(inter);
-			}
-		}.bind(this), 1000);
 	},
 	componentDidMount: function() {
-		this.refs.mobile_num.focus();
+		//this.refs.mobile_num.focus();
 		//判断来源from
-		this.from = parseQuery(location.search);
+		//this.from = parseQuery(location.search);
 	},
 	render: function() {
 			{/*<div className="gg-body">
@@ -129,7 +147,7 @@ var Register = React.createClass({
 		return (
 
 			<div className="g-ggWraper  gg-body">
-				<Header right={null} title={'修改密码'} path={this.props.route}/>
+				<Header right={null} title={'忘记密码'} path={this.props.route}/>
 				<div className="g-main">
 					<div className="u-userform m-modify m-forget">
 						<div className="u-inputline-2">

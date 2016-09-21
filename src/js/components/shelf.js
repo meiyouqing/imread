@@ -19,6 +19,7 @@ var Shelf = React.createClass({
 		var bid = v.content_id;
 		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
+			this.setState({showModelList:false});
 			if(!this.state.reading) return;
 			var readLog = storage.get('readLogNew')[bid];
 			if (readLog){
@@ -47,6 +48,14 @@ var Shelf = React.createClass({
 		this.setState({showModelList: !this.state.showModelList});
 	},
 	settingClick: function(e){
+		//如果书架是空，返回
+		if(!this.state.shelfList.length){
+			this.setState({
+				showModelList:false
+			})
+			POP._alert('亲，书架还空荡荡的哦');
+			return;
+		}
 		var index = Number(e.target.getAttribute('data-index'));
 		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
@@ -133,8 +142,9 @@ var Shelf = React.createClass({
 		}
 	},
 	gotoDownload: function(){//下载
+		if(!this.state.selected.length) return;
 		this.compClick();
-		window.location.replace("http://readapi.imread.com/api/upgrade/download?channel=imread");
+		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
 	delBtnClick: function(){//删除书架书籍
 		if(!this.state.selected.length) {
@@ -161,7 +171,6 @@ var Shelf = React.createClass({
 		var isReverse = true;
 		if(this.models.order_model !== i)  isReverse = false;
 		if(bool) isReverse = false;
-
 		switch(i){
 			case '1':
 				if(isReverse){
@@ -197,7 +206,7 @@ var Shelf = React.createClass({
 				} else {
 					arr.sort(function(a,b){
 						var x=Number(a.mark_time), y = Number(b.mark_time);
-						return x-y; });
+						return y-x; });
 					if(this.models.recent_order == 1)
 						arr.reverse();
 				}
@@ -235,7 +244,12 @@ var Shelf = React.createClass({
 		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
-		this.models = localStorage.models?JSON.parse(localStorage.models):{};//获取模式和排序
+		this.models = localStorage.models?JSON.parse(localStorage.models):{
+			order_model: '0',
+			book_order: '0',
+			recent_order: '0',
+			reading_order: '0'
+		};//获取模式和排序
 		return {
 			title: '书架',
 			setting:false,
@@ -276,7 +290,11 @@ var Shelf = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextPros,nextState) {
-
+		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 
+			setTimeout(function(){
+				this.getList();
+			}.bind(this),100);
+			
 		if(GLOBAL.isRouter(this.props) && !this.state.shelfList && !!nextState.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
@@ -284,7 +302,7 @@ var Shelf = React.createClass({
 		var header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
-		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="http://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="https://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		// var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
@@ -357,7 +375,7 @@ var Shelf = React.createClass({
 													notice = '未读';
 													break;
 												default:
-													notice = per*100 + '%';
+													notice = Math.round(per*100) + '%';
 											};
 											return (<li key={i} className={"u-book-2 "+curClass}>
 													<a onClick={this.startReading.bind(this,v)}>

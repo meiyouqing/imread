@@ -2,7 +2,6 @@ import AJAX from '../modules/AJAX'
 import React from 'react'
 import {Route, IndexRoute, WithRoute, IndexRedirect, RouterContext} from 'react-router';
 import App from './app'
-import User from './user'
 import Shelf from './shelf'
 import Mall from './mall'
 import SubMall from './subMall'
@@ -31,7 +30,9 @@ import StoreList from './storeList'
 import UserInfo from './userInfo'
 import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
-import MLogin from './m_login'
+import MLogin from './mLogin'
+import MBinder from './mBinder'
+import MRecharge from './mRecharge'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -49,6 +50,8 @@ var loginWrap = (
 var readWrap = (
 		<Route path="reading/:readingId" component={Reading}>
 			<Route path="m_login" component={MLogin} />
+			<Route path="m_binder" component={MBinder} />
+			<Route path="m_recharge" component={MRecharge} />
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >
@@ -101,20 +104,36 @@ var topWrap = (
 					{searchWrap}
 		</Route>
 	)
+var selfWrap = (
+		<Route path="self/:selfId" component={SelfBuild}>
+					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+						{loginWrap}
+						{bookWrap}
+						{searchWrap}
+					</Route>
+					{loginWrap}
+					{bookWrap}
+					{searchWrap}
+		</Route>
+	)
 
-export default (
+module.exports = (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
 		{loginWrap}
-		<Route path="/self/:selfId" component={SelfBuild}>
-			{bookWrap}
-			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
-				{bookWrap}
-				{searchWrap}
-			</Route>
-		</Route>
+		{selfWrap}
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+
+				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
 					{loginWrap}

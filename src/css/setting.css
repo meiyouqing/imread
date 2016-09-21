@@ -5,8 +5,9 @@
 .m-settingblock .u-lines .u-line a{line-height: 44px;height: 44px;font-size: 15px;color: #000}
 .m-settingblock .m-set-footer img{width: 100%;position: absolute; bottom: 0;left: 0;}
 .m-settingblock .m-list{position: relative;z-index: 1;}
+.m-settingblock .u-lines .u-line a span{display: inline-block;line-height: 44px;vertical-align: baseline;}
 
-.u-userform.m-modify{padding: 40px 55px;margin: 0}
+.u-userform.m-modify{padding: 40px 12%;margin: 0}
 
 .m-feedbackblock .u-userform{padding: 0;margin: 0}
 .m-feedbackblock .u-inputline{margin: 0;}
@@ -16,6 +17,7 @@
 .m-feedbackblock .u-userform textarea.u-input{border: 0;background: transparent;font-size: 15px;padding: 20px 15px;height: 200px;}
 
 .u-feed-footer{position: absolute;bottom: 60px;width: 100%;border: solid #eee;border-width: 1px 0;}
-.u-feed-footer  a{display: block;height: 54px;    line-height: 54px;font-size: 15px;color: #777777;margin: 0 15px;border-bottom: 1px solid #eee;}
-.u-feed-footer  a .u-r{float: right;color:#0196aa;font-size: 14px;}
- .u-feed-footer  a input.u-r {background: transparent;line-height: 54px;width: 56px;}
+.u-feed-footer a{display: block;height: 54px;    line-height: 54px;font-size: 15px;color: #777777;margin: 0 15px;border-bottom: 1px solid #eee;}
+.u-feed-footer a:last-child{border-bottom: none;}
+.u-feed-footer a .u-r{float: right;color:#0196aa;font-size: 14px;}
+ .u-feed-footer a input.u-r {background: transparent;line-height: 54px;width: 56px;}

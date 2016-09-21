@@ -15,7 +15,6 @@ var ULine = React.createClass({
 			<li className="u-line">
 				<Link to={src_href} className="f-cb" target={target} data-href={src_href} onClick={this.props.line.requireLogin}>
 					<span className="iconfont icon-arrow-right f-fr"></span>
-					<span className={"iconfont" + ' ' + this.props.line.icon}></span>
 					<span className="title">{this.props.line.title}</span>
 				</Link>
 			</li>
@@ -73,7 +72,7 @@ var Setting = React.createClass({
 				href: 'compact'
 			}, {
 				title: '官方网站',
-				href: 'http://www.imread.com',
+				href: 'https://www.imread.com',
 				target: '_self'
 			}]
 		];
@@ -89,7 +88,7 @@ var Setting = React.createClass({
 							})
 						}
 						<div className="m-set-footer">
-							<img src="http://m.imread.com/src/img/back/bg-@2x.png" />
+							<img src="https://m.imread.com/src/img/back/bg-@2x.jpg" />
 						</div>
 					</div>
 

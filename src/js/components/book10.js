@@ -15,7 +15,7 @@ var Book10 = React.createClass({
 		return (
 			<li  className="u-book-10">
 				<a onClick={this.clickHandle}>
-					<Img newType={true} src={this.props.data.image_url} />
+					<img src="/src/img/icon88/e3e3e3.gif" data-lazyload-src={this.props.data.image_url} className="u-lazyload-img" />
 					<div className="f-b-block">
 						<span className="book-name">{this.props.data.name || this.props.data.sheet_name}</span>
 						<div className="f-fr last">

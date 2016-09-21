@@ -127,7 +127,7 @@ var List = React.createClass({
 		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
 		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
-			header = <Header_s goSearch={this.goSearch} path={this.props.route} keyValue={this.props.location.state} />;
+			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
@@ -135,7 +135,7 @@ var List = React.createClass({
 				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
-				noData = (<div className="g-main g-main-1"><NoData /></div>);
+				noData = (<div className="g-main g-main-1"><NoData type="emptySearch" /></div>);
 				content = null;
 				result_count = null;
 			}else{

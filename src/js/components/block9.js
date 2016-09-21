@@ -1,15 +1,10 @@
-import GLOBAL from '../modules/global'
-import React from 'react'
 import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 
-var Block5 = React.createClass({
+var Block9 = React.createClass({
 	getWidthAndHeight: function() {
-		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
-			width: w,
-			height: w / 3.0,
 			update: 0
 		};
 	},
@@ -36,11 +31,11 @@ var Block5 = React.createClass({
 			var index = index % that.props.data.contentlist.length;
 			if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
 				// 判断是否在书城
-				setTimeout(function() {
-					if (!ele || GLOBAL.isElementVisible(ele)) {
-						that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
-					}
-				}, 50);
+				// setTimeout(function() {
+				// 	if (!ele || GLOBAL.isElementVisible(ele)) {
+				// 		that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
+				// 	}
+				// }, 50);
 			}
 			ele = ele || that.refs['swipe'].querySelector("a");
 			if (ele &&　ele.querySelector("img")) {
@@ -50,7 +45,7 @@ var Block5 = React.createClass({
 					img.setAttribute("data-load-state", 'loading');
 					GLOBAL.loadImage(src, function() {
 						img.src = src;
-						img.style.height = that.props.style !== 11?that.state.height:70 + 'px';
+						img.style.height = "100%";
 						img.setAttribute("data-load-state", 'loaded');
 					});
 				}
@@ -80,13 +75,13 @@ var Block5 = React.createClass({
 		//alert('mount')
 		this.initSwipe();
 		//横竖屏切换 重新计算高度
-		window.addEventListener('resize', this.handleResize, false);
+		// window.addEventListener('resize', this.handleResize, false);
 
-		document.addEventListener('updateMall',this.updateIndex);
+		// document.addEventListener('updateMall',this.updateIndex);
 	},
 	componentWillUnmount: function(){
-		 document.removeEventListener("updateMall", this.updateIndex, false);
-		 window.removeEventListener('resize', this.handleResize, false);
+		 // document.removeEventListener("updateMall", this.updateIndex, false);
+		 // window.removeEventListener('resize', this.handleResize, false);
 	},
 	componentDidUpdate: function() {
 		//alert('update')
@@ -141,7 +136,7 @@ var Block5 = React.createClass({
 			<section className="m-block-top m-block n-padding">
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
-						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:'70px')}}>
+						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: "100%"}}>
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
@@ -149,14 +144,10 @@ var Block5 = React.createClass({
 									var hrefObj = GLOBAL.typeHref(v);
 									var search="?devicetoken="+GLOBAL.cookie('uuid')
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
-								
-									var imger = <img data-src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>;
 
-									if(this.props.data.contentlist.length<2) 
-										imger = <img src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
-			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
-			                				{imger}
+			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: "100%",backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                				<img src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%',height:"100%"}}/>
 			                			</Link>
 			                		);
 			                	}.bind(this))
@@ -171,4 +162,4 @@ var Block5 = React.createClass({
 	}
 });
 
-module.exports = Block5;
+module.exports = Block9;

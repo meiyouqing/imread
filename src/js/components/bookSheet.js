@@ -12,7 +12,7 @@ if(false||typeof window !== 'undefined'){
 	require('../../css/bookSheet.css');
 }
 
-var Module = React.createClass({
+var BookSheet = React.createClass({
 	 mixins: [Mixins()],
 	getList: function(){
 		AJAX.init(this.props.params.sheetId);
@@ -127,7 +127,7 @@ var Module = React.createClass({
 										<span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
 									</div>
 								</div>
-								<div className="u-m-store" onClick={this.addFavaHandle}>
+								<div className="u-m-store" onClick={this.addFavaHandle} >
 									<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
 								</div>
 								<div className="u-sheet-detail">
@@ -172,4 +172,4 @@ var Module = React.createClass({
 	}
 });
 
-module.exports  = Module;
+module.exports  = BookSheet;

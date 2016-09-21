@@ -19,8 +19,8 @@ var readHistory = React.createClass({
 	render: function() {
 		return (
 			<div className="gg-body">
-				<Header right={null} path={this.props.route}/>
-				<iframe src={"http://m.imread.com/iframe/readHistory.html?referer=3&user_id=" + GLOBAL.cookie('userId')} className="g-main" style={{height: this.state.height}}></iframe>
+				<Header right={null} path={this.props.route} title="我的成就"/>
+				<iframe src={"/iframe/readHistory.html?referer=3&user_id=" + GLOBAL.cookie('userId')} className="g-main" style={{height: this.state.height}}></iframe>
 			</div>
 		);
 	}

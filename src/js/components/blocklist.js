@@ -11,10 +11,11 @@ var Book5 = require('./book5');
 var Book6 = require('./book6');
 var Book7 = require('./book7_mallSubject');
 var Book8 = require('./book8_bookSheet');
+var Block5 = require('./block5');
 
 var Recommend = React.createClass({
 	render: function(){
-		 return <p className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span>{this.props.block.short_recommend_words}</p>
+		 return <Link to={this.props.href} className="recommend"><span className="iconWord f-br-3">{this.props.block.icon_word}</span><span>{this.props.block.short_recommend_words}</span></Link>
 	}
 
 });
@@ -203,10 +204,13 @@ var Block7 = React.createClass({
 					{
 						this.state.contentlist.map(function(v,i){
 							if(i > 5) return;
-							var hrefStr = GLOBAL.setHref('searchList/search.'+v.name);
+							const handle = 	function(e){
+								e.preventDefault();
+								browserHistory.push({pathname:GLOBAL.setHref('searchList/search.'+v.name),state:v.name});
+							};
 							return (
 								<li key={i}>
-									<Link to={hrefStr} className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</Link>
+									<a onClick={handle} href="#" className={this.props.data.style==7?("style-"+(i+1)) : "u-btn2"}>{v.name}</a>
 								</li>
 							)
 						}.bind(this))
@@ -247,14 +251,10 @@ var Block12 = React.createClass({
 		return this.props.data !== nextProps.data;
 	},
 	render:function(){
-		var title = this.props.data.style==12?
-					(<div className="title"> <h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2> </div>)
-					:null;
 		return (
 			<section className="m-block">
-				{title}
 				<div className="content">
-					<ul className={"f-clearfix subCat-"+this.props.data.style}>
+					<ul className="f-clearfix subCat-13">
 					{
 						this.props.data.contentlist.slice(0,this.props.data.contentlist.length-(this.props.data.contentlist.length%2)).map(function(v,i){
 							return <Book7 key={i} data={v} style={this.props.data.style} />
@@ -404,18 +404,17 @@ var Blocklist = React.createClass({
 		}
 	},
 	getUpdate: function(blockList){
-	
 		var that = this,hrefStr;
 		var comps = blockList.map(function(block, i) {
 			//console.log('风格' + block.style)
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
-			var recommend = block.icon_word?<Recommend block={block} />:null;
 			hrefStr = GLOBAL.setHref('more/blocks.'+block.id);
 
 			if(that.props.pageId)
 				hrefStr = GLOBAL.setHref('more/blocks.'+block.id+'.'+that.props.pageId);
+			var recommend = block.icon_word?<Recommend block={block} href={hrefStr} />:null;
 
 			switch (block.style) {
 				case 1 :
@@ -428,19 +427,19 @@ var Blocklist = React.createClass({
 					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
 				case 5 : //banner铺满
-					require.ensure(['./block5'],function(require){
-						setTimeout(function() {
-							var Block5 = require('./block5');
-							var block5 = <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
-							that.state.comps.splice(i,1,block5)
-							that.state.block5[i] = block5;
-							that.setState({
-								comps: that.state.comps,
-								block5: that.state.block5
-							});
-						}, 0);
-					});
-					return that.state.block5[i];
+					// require.ensure(['./block5'],function(require){
+					// 	setTimeout(function() {
+					// 		var Block5 = require('./block5');
+					// 		var block5 = <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
+					// 		that.state.comps.splice(i,1,block5)
+					// 		that.state.block5[i] = block5;
+					// 		that.setState({
+					// 			comps: that.state.comps,
+					// 			block5: that.state.block5
+					// 		});
+					// 	}, 0);
+					// });
+					return <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
 				case 6 :
 					return <Block6 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 7 : //7 圆形热词风格

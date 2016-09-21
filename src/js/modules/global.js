@@ -25,7 +25,6 @@ const GLOBAL = {
 	bookList:{},
 	book:{},
 	title:'',
-	name:'',
 	route:[],
 	unRendered:[],
 	orderLIst:{},
@@ -80,9 +79,17 @@ const GLOBAL = {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
 		if(isNaN(type)) return '';
+
+		function setHref(url){
+			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
+			if(link) return location.pathname+'/'+url;
+			// return url;
+			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
+		};
+
 		switch(type){
 			case 1://图书详情
-				return this.setHref('book/introduce.'+bid,route_type);
+				return setHref('book/introduce.'+bid,route_type);
 			// case 2://广告
 	  //   		switch (data.intercut_type) {
 	  //   			case 1://图书详情
@@ -100,14 +107,14 @@ const GLOBAL = {
    //  					return {url:"javascript:void(0)",target:target}
 	  //   		}
 			case 3://搜索
-				return this.setHref('search/search.'+data.name);
+				return setHref('search/search.'+data.name);
 			case 4://目录
 			case 5://分类
-				return this.setHref('cat/category.'+bid);
+				return setHref('cat/category.'+bid);
 			case 6://书城的子页面
-				return this.setHref('mall/page'+data.pgid);
+				return setHref('self/page.'+data.content_id+'.6.1');
 			case 7://书单
-				return this.setHref('sheet/bookSheet.'+bid);
+				return setHref('sheet/bookSheet.'+bid);
 			case 11://跳h5下载游戏
 	    		case 12://跳下载apk
 	    		case 13://跳内部网页
@@ -116,30 +123,32 @@ const GLOBAL = {
 	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
 	},
-	setTitle: function(parts){
-		var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',tag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
-		parts = parts.split('.');
-		var n=parts[0],
-			id=parts[1];
-		switch(n){
-			case 'block':
-			case 'more':
-			case 'category':
-				this.title = GLOBAL.bookList[id];
-				break;
-			case 'introduce':
-				this.title = GLOBAL.book[id];
-				break;
-			case 'reading':
-				break;
-			default:
-				this.title = title[n];
-				break;
-		}
-		var rTitle = this.title? ('-'+this.title):'';
-		document.title = '艾美阅读' + rTitle;
-		return this.title;
-	},
+	// setTitle: function(parts){
+	// 	console.log(parts)
+	// 	var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',listTag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
+	// 	parts = parts.split('.');
+	// 	var n=parts[0],
+	// 		id=parts[1];
+	// 	switch(n){
+	// 		case 'block':
+	// 		case 'more':
+	// 		case 'category':
+	// 			this.title = GLOBAL.bookList[id];
+	// 			break;
+	// 		case 'introduce':
+	// 			this.title = GLOBAL.book[id];
+	// 			break;
+	// 		case 'reading':
+	// 			break;
+	// 		default:
+	// 			this.title = title[n];
+	// 			break;
+	// 	}
+	// 	var rTitle = this.title? ('-'+this.title):'';
+	// 	document.title = '艾美阅读' + rTitle;
+	// 	console.log(this.title)
+	// 	return this.title;
+	// },
 	setBookName:function(data){
 		if(!data.length||!this.isArray(data)){return}
 		data.forEach(function(v){

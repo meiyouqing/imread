@@ -6,11 +6,10 @@ import React from 'react'
 var Header_s = React.createClass({
 	getInitialState: function(){
 		var key = '';
-		if(GLOBAL.name === 'searchList'){
-			key = decodeURIComponent(this.APIParts('searchListId')[1]);
-		} 
+		if(/^searchList/.test(this.props.route.path)){
+			key = this.props.params['listId'].split('.')[1] || '';
+		}
 		return{
-			initialKey: key,
 			key: key,
 			btn: '取消',
 			search: false
@@ -25,14 +24,14 @@ var Header_s = React.createClass({
 	},
 	handleClick: function(e){
 		e.preventDefault();
+		this.refs.searchInput.blur();
 		if(this.state.search){
 			var	key = this.state.key;
 			if(GLOBAL.name==='searchList'){
 				AJAX.init('search.'+key);
 				this.props.goSearch();
 			}else{
-				var tester = /searchList\/search.([^\"]*)/,
-					link = '';
+				var tester = /searchList\/search.([^\"]*)/;
 				if(tester.test(location.pathname))
 					browserHistory.replace(location.pathname.replace(tester,'')+'searchList/search.'+key);
 				else
@@ -40,7 +39,8 @@ var Header_s = React.createClass({
 
 			}			
 			this.setState({
-				initialKey: key
+				search: false,
+				btn: '取消'
 			});
 		}else{
 			GLOBAL.goBack();
@@ -53,14 +53,14 @@ var Header_s = React.createClass({
 		GLOBAL.goBack(this.path);
 	},
 	componentDidMount: function(){
-
-		if(!this.props.keyValue){
-			this.refs.searchInput.focus();
+		// console.log(this.props.keyValue)
+		if(!this.props.keyValue && !this.state.key){
+			//this.refs.searchInput.focus();
 		} else {
 			if(typeof this.props.keyValue === 'string')
 				this.setState({key: this.props.keyValue})
 		}
-		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {

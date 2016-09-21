@@ -1,7 +1,7 @@
-.m-reading{position: absolute;left: 0;right: 0;top: 56px;bottom: 40px;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;overflow-y: auto;-webkit-overflow-scrolling: touch;}
-.u-readingContent{padding: 0 30px;font-size: 19px;line-height: 1.5;text-indent: 2em;}
+.m-reading{position: absolute;left: 0;right: 0;top: 0;bottom: 0;font-family: \5FAE\8F6F\96C5\9ED1, Helvetica;overflow-y: auto;-webkit-overflow-scrolling: touch;}
+.u-readingContent{padding: 0 15px;font-size: 19px;line-height: 1.75;text-indent: 2em;}
 .u-readingContent p{margin-bottom: 20px;text-align:justify;}
-.u-chapterName{margin: 15px 30px 60px 30px;font-size: 21px;}
+.u-chapterName{margin: 71px 15px 60px 15px;font-size: 21px;}
 .u-action-top, .u-action-middle, .u-action-bottom{position: absolute;z-index: 4000;cursor: pointer;}
 .u-action-top, .u-action-bottom{width: 100%;height: 40%;left: 0;top: 0;}
 .u-action-bottom{top: 60%;}
@@ -34,7 +34,7 @@
 .u-chapterlist .chapterlist .chapter .name.lock{color: #777777;}
 .u-chapter-action{position: absolute;bottom: 0;left: 0; right: 0;height: 55px;line-height: 35px;padding: 10px 0;box-sizing:border-box;border-top: 1px solid #eeeeee;text-align: center;color: #444444;cursor: pointer;}
 .u-chapter-page:last-child{border-left: 1px solid #eeeeee;}
-.u-fixTabbar{z-index: 10}
+.u-fixTabbar{z-index: 10; border-bottom: 1px solid #ccc;}
 
 .u-miguLogo {display: block;position: absolute;top: 15px;right: 15px;width: 56px;height: 14px;background-image: url(../img/reading/pic_migulogo.png);background-size: contain;}
 
@@ -70,7 +70,8 @@
 .setting-font-line{height: 50px;line-height: 50px;}
 .setting-font-line .title{width: 40px;line-height: 44px;text-align: center;font-size: 16px;}
 .setting-font-line .item{position:relative;box-sizing: border-box;margin: 0 3%;border-radius: 15px;text-align: center;}
-
+.u-settings.ad{top: 61px!important;}
+.u-settings-top.ad{border-bottom: 0!important}
 .setting-fontfamily .item.active, .setting-line-height .item.active, .setting-fontsize .item.active{background: #444444;}
 .setting-fontsize{margin: 0 5% 5px;}
 .setting-fontsize span{display: inline-block;vertical-align: middle;}
@@ -119,7 +120,9 @@
 .m-reading-fy .fy-detail{margin-top: 40%;text-align: center;}
 .m-reading-fy .fy-title{font-size: 23px;}
 .m-reading-fy .fy-author{font-size: 17px;margin-top: 10px;}
-.m-reading-fy .fy-gw{position: absolute;bottom: 55px;width: 100%;text-align: center;font-size: 15px;color: #777777;}
+.m-reading-fy .fy-gw{position: absolute;bottom: 55px;width: 100%;text-align: center;font-size: 15px;}
+.ad-xp{position: absolute;top:-;left: 0;width: 100%;height: 100%;z-index: 9999;}
+.ad-xp .banner{position: absolute;bottom: 0;height: 40px;color: #fff;text-align: center; width: 100%;line-height: 40px;font-size: 15px;background: rgba(0,0,0,.3);}
 
 #reading-download {position: fixed;bottom: 0;left: 0;width: 90%;height: 30px;padding: 5px 5%;background-color: rgba(0, 0, 0, .5);display: none;z-index: -1;}
 #reading-download.active{display: block;z-index: 1}
@@ -134,6 +137,8 @@
 .m-reading-body .font-list .circle:first-child{background: #0096aa;border: 1px solid #0096aa;opacity: 1}
 .m-reading-body .font-list .active .circle{background: #0096aa;border: 1px solid #0096aa;opacity: 1}
 .m-reading-body .font-list .active .line{opacity: 1;background: #0096aa;}
+.u-readingsetting .m-block{background: transparent;}
+.m-reading-body .m-block-top.m-block{margin-top: 0}
 /*主题*/
 
 /*字体大小*/
@@ -296,9 +301,9 @@
 .m-reading-body .style-4 .u-chapterlist .chapterlist .chapter .name.lock,.m-reading-body .style-4 .u-chapterlist .u-bookname > div,.m-reading-body .style-4,.m-reading-fy{color: #696b7a}
 .m-reading-body .style-4 .font-list .circle{background: #1e1e2a}
 .m-reading-body .style-4 .u-chapterlist,.m-reading-body .style-4 .u-settings{background: #2b2d3c;}
-.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid #414351}
+.m-reading-body .style-4 .u-chapterlist .u-bookname,.m-reading-body .style-4 .u-chapterlist .chapterlist .chapter,.m-reading-body .style-4 .u-settings-top{ border-bottom: 1px solid  rgba(105,107,122,.2)}
 
-.m-reading-body .style-4 .u-settings-font,.m-reading-body .style-4 .u-settings-bottom{border-top: 1px solid #6a6b7a}
+.m-reading-body .style-4 .u-settings-font,.m-reading-body .style-4 .u-settings-bottom{border-top: 1px solid rgba(105,107,122,.2)}
 
 .m-reading-body .style-4 .icon-r.prv,
 .m-reading-body .style-4 .icon-r.next,

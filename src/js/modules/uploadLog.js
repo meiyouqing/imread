@@ -5,8 +5,8 @@ if(typeof window !== 'undefined'){
 }
 
 var config = {
-	intercut: {method:'GET',url:'/api/intercut/log'},
-	read: {method:'POST',url:'/api/upload/log'}
+	intercut: {method:'GET',url:'/api/v1/intercut/log'},
+	read: {method:'POST',url:'/api/v1/upload/log'}
 };
 
 

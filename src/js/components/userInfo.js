@@ -11,7 +11,7 @@ var Header = require('./header');
 if(false||typeof window !== 'undefined'){
 	require('../../css/userinfo.css');
 }
-var tag = React.createClass({
+var UserInfo = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
@@ -127,25 +127,20 @@ var tag = React.createClass({
 		}.bind(this);
 	},
 	selectDate: function(){
-		if(!this.state.isEdit)  return;
-		this.refs.date.click();
+		if(!this.state.isEdit || GLOBAL.isAndroid())  return;
 		this.refs.date.focus();
 	},
-	forAndroid: function(){
-
-		if(!GLOBAL.isAndroid()) return;
-		var time;
-		clearInterval(time);
-		time =  setInterval(function(){
-			if(!this.refs.date) {
-				clearInterval(time);
-				return;
-			}
-			if(this.state.user_birthday != this.refs.date.value && this.refs.date.value){
-				this.setState({user_birthday: this.refs.date.value});
-				clearInterval(time);
-			} else if(this.state.user_birthday == this.refs.date.value){
-				return;
+	updateBirthday:function(){
+		this.setState({user_birthday: this.refs.date.value || '请设置生日'});
+	},
+	forAndroid: function(e){
+		if(!GLOBAL.isAndroid() || !this.refs.date) return;
+		clearInterval(this.time);
+		this.time =  setInterval(function(){
+			//console.log(this.refs.date.value)
+			if(this.state.user_birthday !== this.refs.date.value){
+				this.setState({user_birthday:  this.refs.date.value || '请设置生日'});
+				clearInterval(this.time);
 			}
 		}.bind(this),500); 
 	},
@@ -164,7 +159,7 @@ var tag = React.createClass({
 	},
 	gotoEditname: function(){
 		if(!this.state.isEdit)  return;
-		browserHistory.push(GLOBAL.setHref('editUserame'));
+		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user.user_name}});
 	},
 	getData: function() {
 		AJAX.init('me');
@@ -173,8 +168,8 @@ var tag = React.createClass({
 
 			this.setState({
 				user:data,
-				user_birthday: data.user_birthday,
-				user_name: data.user_name,
+				user_birthday: data.user_birthday || '请设置生日',
+				user_name: data.user_name || data.mobile_num,
 				portraitUrl: data.portraitUrl
 			});
 		}.bind(this));
@@ -183,10 +178,10 @@ var tag = React.createClass({
 		var user_gender;
 		switch(index){
 				case '1':
-					user_gender = '男';
+					user_gender = '男生';
 					break;
 				case '2' :
-					user_gender = '女';
+					user_gender = '女生';
 					break;
 				default:
 					user_gender = "保密"
@@ -203,13 +198,14 @@ var tag = React.createClass({
 
 		if(this.checkLogin(this.props.route)) this.getData();
 	},
-	componentDidUpdate:function(){
-		if(this.refs.date)
-			this.refs.date.oninput = function(){
-				this.setState({user_birthday: this.refs.date.value})
-			}.bind(this);
-	},
+	// componentDidUpdate:function(){
+	// 	if(this.refs.date)
+	// 		this.refs.date.oninput = function(){
+	// 			//this.setState({user_birthday: this.refs.date.value})
+	// 		}.bind(this);
+	// },
 	render: function() {
+
 		var list;
 		if(!this.state.user)
 			list = <Loading />
@@ -220,15 +216,15 @@ var tag = React.createClass({
 						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}
-						<img src={this.state.portraitUrl || "http://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
+						<img src={this.state.portraitUrl || "https://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
 					</section>
 					<section className="m-user-detail">
 						<ul>
-							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user_name}</span></li>
+							<li onClick={this.gotoEditname}><span>昵称</span>{this.state.access}<span>{this.state.user_name || this.state.user.user_name || this.state.user.mobile_num}</span></li>
 							<li onClick={this.selectSex}><span>性别</span>{this.state.access}<span>{this.state.user_gender}</span></li>
 							<li onClick={this.selectDate}><span>生日</span>{this.state.access}<span>{this.state.user_birthday}</span></li>
 						</ul>
-						<input onClick={this.forAndroid}  type="date" ref="date" id="dater" className={'dateInput' + (GLOBAL.isAndroid()?' position':'')}/>
+						<input onChange={this.updateBirthday} onBlur={this.updateBirthday} onInput={this.updateBirthday} type="date" ref="date" id="dater" className={'dateInput' + (GLOBAL.isAndroid()?' position':'')}/>
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
@@ -258,4 +254,4 @@ var tag = React.createClass({
 	}
 });
 
-module.exports = tag;
+module.exports = UserInfo;
