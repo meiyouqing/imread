@@ -172,7 +172,8 @@ var GLOBAL = {
 		})
 	},
 	isAd: function(){
-		return !!window.location.search.match('devicetoken');
+		if(!!window.location.search.match('devicetoken'))
+			GLOBAL.pushLinks[location.pathname] = parseQuery(location.search).comeFrom;
 	},
 	isAndroid: function(){
 		return /linux|android/i.test(navigator.userAgent);

@@ -25,7 +25,7 @@ var Selfbuild = React.createClass({
 		this.from = parseQuery(location.search);
 	},
 	componentDidUpdate: function(){
-		if(GLOBAL.isAd())	GLOBAL.pushLinks[location.pathname] = true;
+		GLOBAL.isAd();
 		this.lazyloadImage(this.refs.container);
 	},
 	shouldComponentUpdate: function(nextProp,nextState){

@@ -208,7 +208,7 @@ var Introduce = React.createClass({
 	},
 	componentDidUpdate: function(){
 
-		if(GLOBAL.isAd())	GLOBAL.pushLinks[location.pathname] = true;
+		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillUpdate: function(nextProps) {
