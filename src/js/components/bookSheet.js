@@ -81,6 +81,7 @@ var BookSheet = React.createClass({
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
 	},
