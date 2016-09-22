@@ -91,6 +91,8 @@ var List = React.createClass({
 	// 	this.getData();
 	// },
 	componentDidUpdate: function(nextProps,nextState) {
+		
+		if(GLOBAL.isAd())	GLOBAL.pushLinks[location.pathname] = true;
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
 		this.lazyloadImage(this.refs.container);

@@ -23,11 +23,14 @@ var GLOBAL = {
 	route:[],
 	unRendered:[],
 	orderLIst:{},
+	pushLinks:{},
 	goBack:function(path){
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
+		//if(window.location.search.match('devicetoken')) {browserHistory.goBack(); return;}
+
 		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
@@ -167,6 +170,9 @@ var GLOBAL = {
 				break;
 			}
 		})
+	},
+	isAd: function(){
+		return !!window.location.search.match('devicetoken');
 	},
 	isAndroid: function(){
 		return /linux|android/i.test(navigator.userAgent);

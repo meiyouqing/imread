@@ -27,6 +27,7 @@ var Search = React.createClass({
 		if(GLOBAL.isRouter(this.props))	this.getDate();
 	},
 	componentDidUpdate: function(){
+		if(GLOBAL.isAd())	GLOBAL.pushLinks[location.pathname] = true;
 		if(GLOBAL.isRouter(this.props) && !this.state.blockList) 	this.getDate();		
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {

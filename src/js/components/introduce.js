@@ -207,7 +207,9 @@ var Introduce = React.createClass({
 		myEvent.setCallback('updateShelfBtn',this.onShelf);
 	},
 	componentDidUpdate: function(){
-		 if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
+
+		if(GLOBAL.isAd())	GLOBAL.pushLinks[location.pathname] = true;
+		if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
 	componentWillUpdate: function(nextProps) {
 		//if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
