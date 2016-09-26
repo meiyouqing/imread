@@ -199,32 +199,25 @@ var Login = React.createClass({
 	componentDidMount: function() {
 		//判断来源from
 		this.from = parseQuery(location.search);
+		console.log(document.getElementById('qqLoginBtn'))
 		QC.Login({
-    btnId: "qqLoginBtn"
-}, function(reqData, opts) { //登录成功
-    var paras = {};
-    console.log(reqData)
-
-    //用JS SDK调用OpenAPI  
-    QC.api("get_user_info", paras)
-        //指定接口访问成功的接收函数，s为成功返回Response对象  
-        .success(function(s) {
-            //成功回调，通过s.data获取OpenAPI的返回数据  
-           // alert("获取用户信息成功！当前用户昵称为：" + s.data.nickname);
-        })
-        //指定接口访问失败的接收函数，f为失败返回Response对象  
-        .error(function(f) {
-            //失败回调  
-            alert("获取用户信息失败！");
-        })
-        //指定接口完成请求后的接收函数，c为完成请求返回Response对象  
-        .complete(function(c) {
-            //完成请求回调  
-          //  alert("获取用户信息完成！");
-        });
-}, function(opts) {
-    alert('注销成功');
-});
+    			btnId: "qqLoginBtn"
+		}, function(reqData, opts) { //登录成功
+		    var paras = {};
+		    console.log(reqData)
+		     QC.Login.getMe(function(openId, accessToken){  
+		        console.log(["当前用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));  
+			        AJAX.go('mOrder',{
+			        	user_identifier:openId,
+			        	promot:'H5',
+			        	channel:'3',
+			        	nick_name:reqData.nickname},function(data){
+					
+				});
+		    });  
+		}, function(opts) {
+		    alert('注销成功');
+		});
 	},
 	render: function() {
 		var list;

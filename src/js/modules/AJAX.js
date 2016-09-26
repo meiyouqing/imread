@@ -54,6 +54,7 @@ var API={
 	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
 	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
+	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 };
 
 //接口缓存机制

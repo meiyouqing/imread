@@ -32,6 +32,9 @@ import MLogin from './mLogin'
 import MBinder from './mBinder'
 import MRecharge from './mRecharge'
 
+import LoginTest from './login_test'
+var loginTest = <Route path="login_test" component={LoginTest} />
+
 var APImemory = {};
 const scrollResetHandle = function(){
 	const p = AJAX.API._param['pages']? 'pages':'page';
@@ -131,7 +134,7 @@ module.exports = (
 		{selfWrap}
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
-
+				{loginTest}
 				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
