@@ -105,7 +105,7 @@ var mixins = function() {
                 }
         },
         isLogin: function() {
-            return !!GLOBAL.cookie('userToken');
+            return !!(GLOBAL.cookie('userToken') || GLOBAL.cookie('token'));
         },
         goLogin: function(callback) {
             var hash = location.pathname + '/login';
