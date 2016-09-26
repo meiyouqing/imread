@@ -410,6 +410,7 @@ var Blocklist = React.createClass({
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
+
 			hrefStr = GLOBAL.setHref('more/blocks.'+block.id);
 
 			if(that.props.pageId)
@@ -426,7 +427,7 @@ var Blocklist = React.createClass({
 				case 4 :
 					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
-				case 5 : //banner铺满
+				case 555 : //banner铺满
 					// require.ensure(['./block5'],function(require){
 					// 	setTimeout(function() {
 					// 		var Block5 = require('./block5');

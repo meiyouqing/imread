@@ -89,6 +89,7 @@ var List = React.createClass({
 		}
 	},
 	componentDidMount: function(){
+		this.lazyloadImage(this.refs.container);
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 	},
 	componentDidUpdate: function(nextProps,nextState) {
@@ -113,27 +114,10 @@ var List = React.createClass({
 				|| this.props.params.listId !== nextProps.params.listId;
 	},
 	componentWillMount:function(){
-		const path = this.props.location.pathname.split('/');
-		const param = path[path.length-1];
-		const n = param.replace(/\./g,'_');
-		console.log(n)
-		if(typeof window === 'undefined'){
-			if(global.imdata[n]){
-				this.ajaxHandle(global.imdata[n]);
-			}
-		}else{
-			if(window.__PRELOADED_STATE__[n]){
-				this.ajaxHandle(window.__PRELOADED_STATE__[n]);
-			}
-		}
+		this.usePreload(this.props.params.listId);
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
-		//定义头部
-		// if(this.state.resultCount){
-		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
-		// }
-		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
 		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
@@ -166,7 +150,7 @@ var List = React.createClass({
 			<div className="gg-body">
 				{header}
 				<div className="g-main g-main-1 m-list">
-					<div className="g-scroll" onScrolls={this.scrollHandle} ref="container">
+					<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
 						{result_count}
 						{content}
 						{sLoading}

@@ -33,6 +33,7 @@ import SelfBuild from './selfbuild'
 
 var APImemory = {};
 const scrollResetHandle = function(){
+	if(!AJAX.API._param) return;
 	const p = AJAX.API._param['pages']? 'pages':'page';
 	AJAX.API._param[p] = 1;	
 }

@@ -9,12 +9,12 @@ var Block5 = React.createClass({
 		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
 			width: w,
-			height: w / 3.0,
+			height: w / 3,
 			update: 0
 		};
 	},
 	getInitialState: function() {
-		return this.getWidthAndHeight();
+		return this.getWidthAndHeight()
 	},
 	logIntercut: function(intercut_id, event) {
 		uploadLog.send('intercut', {
@@ -85,8 +85,12 @@ var Block5 = React.createClass({
 		document.addEventListener('updateMall',this.updateIndex);
 	},
 	componentWillUnmount: function(){
-		 document.removeEventListener("updateMall", this.updateIndex, false);
-		 window.removeEventListener('resize', this.handleResize, false);
+		 // document.removeEventListener("updateMall", this.updateIndex, false);
+		 // window.removeEventListener('resize', this.handleResize, false);
+		//console.log(uploadLog.result)
+		uploadLog.sending('intercut');
+		this.swipe && (this.swipe.kill());
+		window.removeEventListener('resize', this.handleResize, false);
 	},
 	componentDidUpdate: function() {
 		//alert('update')
@@ -103,12 +107,6 @@ var Block5 = React.createClass({
 			}
 			
 		}
-	},
-	componentWillUnmount: function() {
-		//console.log(uploadLog.result)
-		uploadLog.sending('intercut');
-		this.swipe && (this.swipe.kill());
-		window.removeEventListener('resize', this.handleResize, false);
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data.contentlist !== nextProps.data.contentlist

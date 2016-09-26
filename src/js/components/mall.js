@@ -3,21 +3,24 @@ import { browserHistory } from 'react-router'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
+import Mixins from '../modules/mixins'
 var Header = require('./header');
 var MallNav = require('./mallNav');
 var UserList = require('./userList');
 
 var Mall = React.createClass({
+	mixins: [Mixins()],
 	getNav: function(){
 		AJAX.init('group.1');
-		AJAX.get(this.handleGetNav);
+		AJAX.get(this.ajaxHandle);
 	},
-	handleGetNav:function(data){
+	ajaxHandle:function(data){
 		var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
 		this.setState({
 			navList:data.pagelist
 		});
-		browserHistory.replace('/mall/'+subnav);
+		console.log('browserHistory: '+browserHistory)
+		//if(typeof window !== 'undefined') browserHistory.replace('/mall/'+subnav);	
 	},
 	gotoSearch: function(){
 		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
@@ -44,8 +47,11 @@ var Mall = React.createClass({
 		var param = location.pathname.split('/').pop();
 		return param.indexOf('page')>=0;
 	},
+	//for the server rending
+	componentWillMount:function(){
+		this.usePreload('mallNav');
+	},
 	componentDidMount: function(){
-		//console.log(this.props)
 		GLOBAL.isRouter(this.props) && this.getNav();
 	},
 	upApp: function(page){
@@ -63,6 +69,7 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
+		//console.log(this.props)
 		if(!this.props.params.subnav) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
@@ -77,12 +84,12 @@ var Mall = React.createClass({
 				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
 	reload: function(){
+		location.pathname = '/';
 		window.location.reload();
 	},
-	// closeNotice: function(){
-	// 	this.setState({onNotice: false});
-	// },
+
 	render:function(){
+		//console.log(this.props)
 		var mallNav,userList;
 		if(this.state.navList){
 			mallNav = <MallNav navList={this.state.navList} />;

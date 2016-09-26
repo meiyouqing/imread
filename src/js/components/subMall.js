@@ -35,22 +35,27 @@ var Mall = React.createClass({
 
 	getList: function (Update){
 		AJAX.init(this.APIparam);
-		AJAX.get((data)=>{
-			if(!data.blocklist){return}
-			if (!data.blocklist.length) {
-				this.setState({
-					noMore:true
-				})
-			}
+		AJAX.get(this.ajaxHandle ,this.onerror);
+	},
+	ajaxHandle: function(data){
+		if(!data.blocklist){return}
+		if (!data.blocklist.length) {
 			this.setState({
-				list: (this.state.scrollUpdate && !this.navChanged)? this.state.list.concat(data.blocklist):data.blocklist,
-				scrollUpdate: false
-			});
-			this.navChanged = false;
-			//设置GLOBAL.booklist/book
-			GLOBAL.setBlocklist(data.blocklist);
-		},this.onerror);
-	},			
+				noMore:true
+			})
+		}
+		this.setState({
+			list: (this.state.scrollUpdate && !this.navChanged)? this.state.list.concat(data.blocklist):data.blocklist,
+			scrollUpdate: false
+		});
+		this.navChanged = false;
+		//设置GLOBAL.booklist/book
+		GLOBAL.setBlocklist(data.blocklist);
+	},
+	//for the server rending
+	componentWillMount:function(){
+		this.usePreload(this.props.params.subnav);
+	},
 	componentDidMount: function(){
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
@@ -73,7 +78,6 @@ var Mall = React.createClass({
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){
-
 		var list;
 		var scrollLoading = <Loading cls="u-sLoading" />;
 		if(this.state.noMore){
@@ -87,7 +91,7 @@ var Mall = React.createClass({
 				list = (
 					<div className="g-main g-main-1">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<Blocklist blockList={this.state.list} path={this.props.route} pageId={this.page_id}/>
+							<Blocklist blockList={this.state.list} routeLocation={this.props.location} pageId={this.page_id}/>
 							{scrollLoading}
 						</div>
 					</div>

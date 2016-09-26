@@ -385,6 +385,7 @@ var Readlist = React.createClass({
 		return this.props.readlist !== nextProps.readlist;
 	},
 	render: function() {
+		//console.log(this.props)
 		var loading, content;
 		if (!this.props.readlist) {
 			loading = <Loading />
@@ -393,7 +394,7 @@ var Readlist = React.createClass({
 				<ul>
 				{
 					this.props.readlist.map(function(book, i) {
-						return <Book1 key={i} data={book} fromIntroduce="1" />
+						return <Book1 key={i} pathname={typeof window === 'undefined'?global.pathname:location.pathname} data={book} fromIntroduce="1" />
 					})
 				}
 				</ul>

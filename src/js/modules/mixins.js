@@ -12,6 +12,20 @@ var mixins = function() {
             var parts = typeof params === 'string' ? params : params[params.length - 1];
             return parts.split('.');
         },
+        usePreload: function(n){
+            n = n.replace(/\./g,'_');
+            if(typeof window === 'undefined'){
+                if(global.imdata[n]){
+                    //console.log(global.imdata[n])
+                    this.ajaxHandle(global.imdata[n]);
+                }
+            }else{
+                if(window.__PRELOADED_STATE__[n]){
+                    //console.log(window.__PRELOADED_STATE__[n])
+                    this.ajaxHandle(window.__PRELOADED_STATE__[n]);
+                }
+            }            
+        },
         lazyloadImage: function(container) {
             var imgs = container.querySelectorAll('.u-lazyload-img');
             var that = this;
@@ -40,8 +54,8 @@ var mixins = function() {
         },
         scrollHandle: function(e) {
             var list = e.target;
-            if (!this.isMounted()) {
-                return; }
+            //console.log(list)
+            if (!this.isMounted()) return; 
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(function() {
                 this.lazyloadImage(list);
@@ -139,6 +153,7 @@ var mixins = function() {
             return true;
         },
         disPatch: function(event,dom) {
+            console.log('<<<<<<<<<<<<<<<<<<<<<disPatch>>>>>>>>>>>>>>>>>>>')
             dom = dom?dom:document;
             try {
                 // document.dispatchEvent(new Event('updateUser'));
