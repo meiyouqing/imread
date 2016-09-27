@@ -208,10 +208,11 @@ var Login = React.createClass({
 		    console.log(reqData)
 		     QC.Login.getMe(function(openId, accessToken){  
 		        console.log(["当前用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));  
-			        AJAX.go('mOrder',{
+			        AJAX.go('login_qq',{
 			        	user_identifier:openId,
 			        	promot:'H5',
 			        	channel:'3',
+			        	img_url: reqData.figureurl_qq_2,
 			        	nick_name:reqData.nickname},function(data){
 					if(data.code == 200){
 						GLOBAL.cookie('userToken', data.token);
@@ -230,17 +231,24 @@ var Login = React.createClass({
 		}, function(opts) {
 		    alert('注销成功');
 		});
-		console.log(QC)
-		  var obj = new WxLogin({
-                              id:"login_container", 
-                              appid: "101354986", 
-                              scope: "snsapi_login", 
-                              redirect_uri: "https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html",
-                              state: "",
-                              style: "black",
-                              href: ""
-                            });
+		 //  var obj = new WxLogin({
+   //                            id:"login_container", 
+   //                            appid: "wxd64e6afb53e222ca", 
+   //                            scope: "snsapi_login", 
+   //                            redirect_uri: encodeURIComponent(location.href),
+   //                            response_type: 'code',
+   //                            state: "state",
+   //                            style: "black",
+   //                            href: ""
+   //                          },function(res){
+   //                          	console.log(1111)
+   //                          });
+		 // console.log(obj)
+		 //  console.log(encodeURIComponent("https://m.imread.com/iframe/QQ_test16/"))
 	},
+	QQ_login: function(){
+    		return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+  	},
 	render: function() {
 		var list;
 		if(this.state.status)
@@ -307,10 +315,13 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="QQ_Login"></a>
-						<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="WX_Login"></a>
-
-						<div id="login_container"></div>
+						<div className="third-login">
+							<div className="t-title"><span>第三方账号登录</span></div>
+							<div className="t-login">
+								<a onClick={this.QQ_login} className="QQ_Login"></a>
+								<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="WX_Login"></a>
+							</div>
+						</div>
 					</div>
 					{this.props.children}
 				</div>
