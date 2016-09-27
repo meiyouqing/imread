@@ -199,9 +199,10 @@ var Login = React.createClass({
 	componentDidMount: function() {
 		//判断来源from
 		this.from = parseQuery(location.search);
-		console.log(document.getElementById('qqLoginBtn'))
+		var  that = this;
+
 		QC.Login({
-    			btnId: "qqLoginBtn"
+    			// btnId: "qqLoginBtn"
 		}, function(reqData, opts) { //登录成功
 		    var paras = {};
 		    console.log(reqData)
@@ -212,12 +213,33 @@ var Login = React.createClass({
 			        	promot:'H5',
 			        	channel:'3',
 			        	nick_name:reqData.nickname},function(data){
-					
+					if(data.code == 200){
+						GLOBAL.cookie('userToken', data.token);
+						that.disPatch('updateUser');
+						that.disPatch('updateMall');
+						//判断登陆后的跳转
+						if(that.from && that.from.skipurl){
+							window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+						}else{
+							GLOBAL.goBack();
+							myEvent.execCallback('login');
+						}
+					}
 				});
 		    });  
 		}, function(opts) {
 		    alert('注销成功');
 		});
+		console.log(QC)
+		  var obj = new WxLogin({
+                              id:"login_container", 
+                              appid: "101354986", 
+                              scope: "snsapi_login", 
+                              redirect_uri: "https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html",
+                              state: "",
+                              style: "black",
+                              href: ""
+                            });
 	},
 	render: function() {
 		var list;
@@ -285,7 +307,10 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						<div id="qqLoginBtn"></div>
+						<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="QQ_Login"></a>
+						<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="WX_Login"></a>
+
+						<div id="login_container"></div>
 					</div>
 					{this.props.children}
 				</div>
