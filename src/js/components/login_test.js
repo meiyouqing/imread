@@ -199,33 +199,56 @@ var Login = React.createClass({
 	componentDidMount: function() {
 		//判断来源from
 		this.from = parseQuery(location.search);
-		QC.Login({
-    btnId: "qqLoginBtn"
-}, function(reqData, opts) { //登录成功
-    var paras = {};
-    console.log(reqData)
+		var  that = this;
 
-    //用JS SDK调用OpenAPI  
-    QC.api("get_user_info", paras)
-        //指定接口访问成功的接收函数，s为成功返回Response对象  
-        .success(function(s) {
-            //成功回调，通过s.data获取OpenAPI的返回数据  
-           // alert("获取用户信息成功！当前用户昵称为：" + s.data.nickname);
-        })
-        //指定接口访问失败的接收函数，f为失败返回Response对象  
-        .error(function(f) {
-            //失败回调  
-            alert("获取用户信息失败！");
-        })
-        //指定接口完成请求后的接收函数，c为完成请求返回Response对象  
-        .complete(function(c) {
-            //完成请求回调  
-          //  alert("获取用户信息完成！");
-        });
-}, function(opts) {
-    alert('注销成功');
-});
+		QC.Login({
+    			// btnId: "qqLoginBtn"
+		}, function(reqData, opts) { //登录成功
+		    var paras = {};
+		    console.log(reqData)
+		     QC.Login.getMe(function(openId, accessToken){  
+		        console.log(["当前用户的", "openId为："+openId, "accessToken为："+accessToken].join("\n"));  
+			        AJAX.go('login_qq',{
+			        	user_identifier:openId,
+			        	promot:'H5',
+			        	channel:'3',
+			        	img_url: reqData.figureurl_qq_2,
+			        	nick_name:reqData.nickname},function(data){
+					if(data.code == 200){
+						GLOBAL.cookie('userToken', data.token);
+						that.disPatch('updateUser');
+						that.disPatch('updateMall');
+						//判断登陆后的跳转
+						if(that.from && that.from.skipurl){
+							window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+						}else{
+							GLOBAL.goBack();
+							myEvent.execCallback('login');
+						}
+					}
+				});
+		    });  
+		}, function(opts) {
+		    alert('注销成功');
+		});
+		 //  var obj = new WxLogin({
+   //                            id:"login_container", 
+   //                            appid: "wxd64e6afb53e222ca", 
+   //                            scope: "snsapi_login", 
+   //                            redirect_uri: encodeURIComponent(location.href),
+   //                            response_type: 'code',
+   //                            state: "state",
+   //                            style: "black",
+   //                            href: ""
+   //                          },function(res){
+   //                          	console.log(1111)
+   //                          });
+		 // console.log(obj)
+		 //  console.log(encodeURIComponent("https://m.imread.com/iframe/QQ_test16/"))
 	},
+	QQ_login: function(){
+    		return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+  	},
 	render: function() {
 		var list;
 		if(this.state.status)
@@ -292,7 +315,13 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						<div id="qqLoginBtn"></div>
+						<div className="third-login">
+							<div className="t-title"><span>第三方账号登录</span></div>
+							<div className="t-login">
+								<a onClick={this.QQ_login} className="QQ_Login"></a>
+								<a href="https://graph.qq.com/oauth/show?which=ConfirmPage&display=pc&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html" target="_blank" className="WX_Login"></a>
+							</div>
+						</div>
 					</div>
 					{this.props.children}
 				</div>

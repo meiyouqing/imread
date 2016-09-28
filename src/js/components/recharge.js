@@ -202,13 +202,13 @@ var Recharge = React.createClass({
 	//安卓下键盘位移
 	timeoutId:0,
 	handleFocus:function (){
-		if(!GLOBAL.isAndroid) return;
+		if(!GLOBAL.isAndroid()) return;
 		clearTimeout(this.timeoutId);
 		this.refs.registerblock.style.height = '360px';
 		this.refs.gScroll.scrollTop = 120;
 	},
 	handleBlur:function (){
-		if(!GLOBAL.isAndroid || !this.refs.registerblock) return;
+		if(!GLOBAL.isAndroid() || !this.refs.registerblock) return;
 		this.timeoutId = setTimeout(()=>{
 			this.refs.registerblock.style.height = 'auto';
 			this.refs.gScroll.scrollTop = 0;				
