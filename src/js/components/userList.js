@@ -192,12 +192,13 @@ var User = React.createClass({
 		];
 		var logoutBtn;
 		var userName = '',aidou=0;
-
+		var avatarPic = this.state.userInfo.portraitUrl;
+		avatarPic = avatarPic? avatarPic.replace(/^http\:\/\//,'https://'):false;
 		 if (this.isLogin()) {
 			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
 			logoutBtn = (<div>
 				<div className="avatar-wrap" onClick={this.login}>
-					<img src={this.state.userInfo.portraitUrl || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
+					<img src={ avatarPic || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
 				</div>
 				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>

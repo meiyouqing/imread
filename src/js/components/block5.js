@@ -188,12 +188,14 @@ var Block5 = React.createClass({
 			                		
 									var hrefObj = this.typeHref(v);
 									var search="?devicetoken="+GLOBAL.cookie('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									var imgSrc = v.intercut_url || v.image_url;
+									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
-								
-									var imger = <img data-src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>;
+									
+									var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 
 									if(this.props.data.contentlist.length<2) 
-										imger = <img src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%'}}/>;
+										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
 			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 			                				{imger}
