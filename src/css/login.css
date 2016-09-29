@@ -21,9 +21,9 @@
 .u-input-2.phone{width: 50%;}
 .u-inputline.m-25{margin-top: 25px}
 
-.third-login{overflow: hidden;margin-top: 40px;}
+.third-login{overflow: hidden;margin: 40px 0;}
 .third-login .t-title{text-align: center;}
 .third-login .t-title span{display: block;position: relative;color: #777}
 .third-login .t-title span::before{content: ''; position: absolute;width: 30%;height: 1px; background: #eee;top: 10px;left: 5%;}
 .third-login .t-title span::after{content: ''; position: absolute;width: 30%;height: 1px; background: #eee;top: 10px;right: 5%;}
-.third-login .t-login{padding: 40px 80px}
+.third-login .t-login{padding: 40px 80px;overflow: hidden;}
