@@ -6,6 +6,7 @@ import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import Mixins from '../modules/mixins'
+import Loading from './loading'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
@@ -1038,7 +1039,7 @@ var Reading = React.createClass({
 
 					</div>
 				</section>
-				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
+				<div className={"m-reading" + classNames} ref="scrollarea" onScroll={this.handleScroll}>
 					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					

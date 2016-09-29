@@ -10,7 +10,10 @@ if(false||typeof window !== 'undefined'){
 var ULine = React.createClass({
 
 	render: function() {
-		var Src = window.location.pathname.split('/');
+		var Src = typeof window === 'undefined'?
+				global.pathname:
+				location.pathname;
+		Src = Src.split('/');
 		Src = '/'+Src[1]+'/'+Src[2]+'/'+this.props.line.href;
 		return (
 			<li className="u-line">
@@ -43,9 +46,15 @@ var MUblock = React.createClass({
 	}
 });
 
-var User = React.createClass({
+var UserList = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
+		const logoutBtn = (<div onClick={this.login}>
+					<div className="avatar-wrap">
+							<img src='https://m.imread.com/src/img/user/avatar@2x.png' />
+					</div>
+					<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
+				</div>)
 		return {
 			user: GLOBAL.user,
 			needUpdate: 0,
@@ -53,6 +62,7 @@ var User = React.createClass({
 				portraitUrl: 'https://m.imread.com/src/img/user/avatar@2x.png',
 				balance: 0
 			},
+			logoutBtn : logoutBtn
 		};
 	},
 	login: function(e) {
@@ -70,16 +80,23 @@ var User = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
-
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
 		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
-
+		 if (this.isLogin()) {
+			var userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
+			this.setState({
+				logoutBtn : (<div>
+					<div className="avatar-wrap" onClick={this.login}>
+						<img src={this.state.userInfo.portraitUrl || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
+					</div>
+					<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
+				</div>)
+			})
+		}
 	},
 	componentWillUnmount: function(){
 		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,false), false);
 		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,false),false);
-	},
-	componentDidUpdate: function(nextProp){
 	},
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;
@@ -147,7 +164,6 @@ var User = React.createClass({
 	// 	return this.props.noMore !== nextState.noMore;
 	// },
 	render:function() {
-
 		var blockData = [
 			[{
 				title: '书架',
@@ -194,27 +210,7 @@ var User = React.createClass({
 				href: 'setting'
 			}]
 		];
-		var logoutBtn;
-		var userName = '',aidou=0;
 
-		 if (this.isLogin()) {
-			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
-			logoutBtn = (<div>
-				<div className="avatar-wrap" onClick={this.login}>
-					<img src={this.state.userInfo.portraitUrl || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
-				</div>
-				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
-				</div>
-			);
-		} else {
-			logoutBtn = (<div onClick={this.login}>
-				<div className="avatar-wrap">
-						<img src='https://m.imread.com/src/img/user/avatar@2x.png' />
-				</div>
-				<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
-				</div>
-			);
-		}
 		return (
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
@@ -222,7 +218,7 @@ var User = React.createClass({
 						<section className="avatar-block f-pr">
 							<img src="https://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
 						
-								{logoutBtn}
+								{this.state.logoutBtn}
 	
 						</section>
 						{
@@ -239,4 +235,4 @@ var User = React.createClass({
 	}
 });
 
-module.exports  = User;
+module.exports  = UserList;

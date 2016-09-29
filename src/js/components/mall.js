@@ -11,6 +11,7 @@ var UserList = require('./userList');
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	getNav: function(){
+		if(window.__PRELOADED_STATE__)
 		AJAX.init('group.1');
 		AJAX.get(this.ajaxHandle);
 	},
@@ -19,8 +20,7 @@ var Mall = React.createClass({
 		this.setState({
 			navList:data.pagelist
 		});
-		console.log('browserHistory: '+browserHistory)
-		//if(typeof window !== 'undefined') browserHistory.replace('/mall/'+subnav);	
+		if(typeof window !== 'undefined') browserHistory.replace('/mall/'+subnav);	
 	},
 	gotoSearch: function(){
 		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
@@ -52,7 +52,7 @@ var Mall = React.createClass({
 		this.usePreload('mallNav');
 	},
 	componentDidMount: function(){
-		GLOBAL.isRouter(this.props) && this.getNav();
+		//if(GLOBAL.isRouter(this.props) && !this.hasPreload('mallNav')) this.getNav();
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
@@ -66,11 +66,11 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		document.ontouchmove = function(e){
-			e.stopPropagation();
-		};
+		// document.ontouchmove = function(e){
+		// 	e.stopPropagation();
+		// };
 		//console.log(this.props)
-		if(!this.props.params.subnav) this.getNav();
+		if(!this.state.navList) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;

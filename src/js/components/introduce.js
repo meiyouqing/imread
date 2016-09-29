@@ -117,29 +117,30 @@ var Introduce = React.createClass({
 		if(!this.isMounted()){return;}
 		var hash = param?param:this.props.params.introduceId;
 		AJAX.init(hash);
-		AJAX.get(function(data){
-			if(data.code===403){
-				this.setState({
-					noData:true
-				});
-				return;
-			}
-			data.content_id = data.bid = this.APIParts('introduceId')[1];
-			data.name = data.book_name;
-			data.orderList = data.orderList.concat(data.readList);
-			GLOBAL.setBookName([data]);
-			this.isUpdate = true;
-			this.setState({
-				book: data,
-				isOnshelf: !!data.is_self
-			});
-			//this.cacheBook(data);
-		}.bind(this), function(error){
+		AJAX.get(this.ajaxHandle, function(error){
 			this.setState({
 				UFO:true
 			});
 			//console.log(error)
 		}.bind(this));
+	},
+	ajaxHandle:function(data){
+		if(data.code===403){
+			this.setState({
+				noData:true
+			});
+			return;
+		}
+		data.content_id = data.bid = this.APIParts('introduceId')[1];
+		data.name = data.book_name;
+		data.orderList = data.orderList.concat(data.readList);
+		GLOBAL.setBookName([data]);
+		this.isUpdate = true;
+		this.setState({
+			book: data,
+			isOnshelf: !!data.is_self
+		});
+		//this.cacheBook(data);
 	},
 	getChapterlist: function(next) {
 
@@ -205,16 +206,16 @@ var Introduce = React.createClass({
 			page:0
 		})
 	},
+	componentWillMount:function(){
+		this.usePreload(this.props.params.introduceId);
+	},
 	componentDidMount: function() {
 		var obj = parseQuery(location.search);
 	      if(obj.action && obj.action=='openapp'){
-	      	//console.log('imread://detail/[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]')
-	      	//var p = "imread://detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id+'","type":"9"}],"pushcmd":"9"}]');
 	      	var p = "detail/" + encodeURI('[{"detail":[{"bid":"'+ obj.book_id +'","type":"9"}],"pushcmd":"9"}]');
 			window.location.href = 'imread://'+p;
-	      	//window.location.href = p;
 	      }
-	      if(GLOBAL.isRouter(this.props))	this.getBook();
+	    if(GLOBAL.isRouter(this.props)&&!this.state.book) this.getBook();
 		myEvent.setCallback('updateShelfBtn',this.onShelf);
 	},
 	componentDidUpdate: function(){
@@ -350,13 +351,16 @@ var IntroduceTabs = React.createClass({
 		}
 	},
 	render: function() {
+		//console.log(this.props)
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
-
 		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 		const orderIcon = this.state.showOrderIcon?
 				<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span>:
 				null;
+		const path = typeof window === 'undefined'?
+				global.pathname:
+				location.pathname;
 		return (
 				<div className="u-tabs u-bookIntroduce">
 					<div className={fixTabbar}>
@@ -369,7 +373,7 @@ var IntroduceTabs = React.createClass({
 					<div className="contents" ref="contents">
 						<div className={"content content-0" + (this.state.current == 0 ? ' active' : '')}>{this.props.book_brief}</div>
 						<div className={"content content-1" + (this.state.current == 1 ? ' active' : '')}>
-							<Chapterlist hrefBase={location.pathname+'/reading'} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading}/>
+							<Chapterlist hrefBase={path+'/reading'} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading}/>
 						</div>
 						<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
 							<Readlist readlist={this.props.readlist} />

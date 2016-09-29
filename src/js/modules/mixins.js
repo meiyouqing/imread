@@ -26,7 +26,12 @@ var mixins = function() {
                 }
             }            
         },
+        hasPreload:function(n){
+            n = n.replace(/\./g,'_');
+            return !!window.__PRELOADED_STATE__[n];
+        },
         lazyloadImage: function(container) {
+            if(!container) return;
             var imgs = container.querySelectorAll('.u-lazyload-img');
             var that = this;
             for (var i = 0; i < imgs.length; i++) {

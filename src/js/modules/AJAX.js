@@ -116,8 +116,8 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
 	var urlBase = 'https://m.imread.com';
-	//var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'https://192.168.0.34:9090';
+	var urlBase = 'http://readapi.imread.com';
+	var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'https://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
@@ -136,7 +136,9 @@ function GETJSON(method, url, postdata, callback, onError) {
 		}
 	}
 	//GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
-	fetch(getGETUrl(url,postdata))
+	fetch(getGETUrl(url,{
+	  method: method,
+  	},postdata))
     .then(function(response) {
         if (response.status >= 400) {
         	onError &&　onError(false);

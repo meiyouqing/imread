@@ -60,7 +60,8 @@ var Mall = React.createClass({
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
-		if(GLOBAL.isRouter(this.props))	this.getList(true);
+		//if(GLOBAL.isRouter(this.props))	this.getList(true);
+		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];
@@ -91,7 +92,9 @@ var Mall = React.createClass({
 				list = (
 					<div className="g-main g-main-1">
 						<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-							<Blocklist blockList={this.state.list} routeLocation={this.props.location} pageId={this.page_id}/>
+							{
+								<Blocklist blockList={this.state.list} routeLocation={this.props.location} pageId={this.page_id}/>
+							}
 							{scrollLoading}
 						</div>
 					</div>

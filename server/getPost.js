@@ -7,22 +7,23 @@ const getPost =  function(props,req,res){
   global.pathname = req.url;
   global.imdata = {};
   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+req.url)
-  const path = req.url.split('/');
+
+  const path = req.url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
-  if(path.length<4){
+  if(path.length<3){
     AJAX.init('group.1');
-    //console.log(path)
+    //console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
-      param = path.length ===3?param:'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+      param = path.length ===2?param:'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
       global.imdata['mallNav'] = data;
-      //console.log(global.imdata)
+      console.log('param>>>>>>>>>>: '+param)
       goRend();
     });
     return;
   }
   goRend();
   function goRend(){
-    //console.log('param: '+param)   
+    console.log('param: '+param)   
     const n = param.replace(/\./g,'_');
     AJAX.init(param);
     AJAX.get(function(data){
@@ -30,6 +31,7 @@ const getPost =  function(props,req,res){
       //console.log(props)
       try{
         const appHtml = renderToString(<RouterContext {...props}/>)
+        //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>++++++++++++++++++++++'+appHtml)
         res.send(renderFullPage(appHtml,global.imdata))
       }catch(err){
         //console.log(err)

@@ -24,7 +24,7 @@ if(typeof window !== 'undefined'){
 		phone: GLOBAL.cookie('userPhone'),
 		token: GLOBAL.cookie('userToken')
 	});
-	Token.refreshToken();	
+	//Token.refreshToken();	
 }
 
 render(
