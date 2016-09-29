@@ -55,6 +55,7 @@ var API={
 	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
+	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}}
 };
 
 //接口缓存机制
@@ -115,7 +116,7 @@ function GETJSON(method, url, postdata, callback, onError) {
 	var urlBase = 'https://m.imread.com';
 	//var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'https://192.168.0.34:9090';
-	//var urlBase = 'https://192.168.0.252:8080';
+	//var urlBase = 'http://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
