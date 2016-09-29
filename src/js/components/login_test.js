@@ -7,9 +7,7 @@ var Login = React.createClass({
 	getInitialState: function() {
 		return {
 			status: true,
-			s: 0,
-			QQ_loading: false,
-			WX_loading: false
+			s: 0
 		};
 	},
 	handleSubmit: function(e) {
@@ -201,94 +199,9 @@ var Login = React.createClass({
 	componentDidMount: function() {
 		//判断来源from
 		this.from = parseQuery(location.search);
-		var  that = this;
-
-		QC.Login({
-    			// btnId: "qqLoginBtn"
-		}, function(reqData, opts) { //登录成功
-		    var paras = {};
-		     QC.Login.getMe(function(openId, accessToken){  
-			        AJAX.go('login_qq',{
-			        	user_identifier:openId,
-			        	promot:'H5',
-			        	channel:'3',
-			        	img_url: reqData.figureurl_qq_2,
-			        	nick_name:reqData.nickname},function(data){
-					that.do_result(data);
-				});
-		    });  
-		}, function(opts) {
-		    alert('注销成功');
-		});
-
-		if(this.from  && this.from.code) {
-			this.setState({WX_loading: true});
-			   AJAX.go('login_wx',{
-			   	appid:'wxd64e6afb53e222ca',
-        			secret: 'aa53581e0f0ba8a31c32be82c153d8d9',
-        			code: this.from.code,
-        			grant_type: 'authorization_code'
-			   },function(res){
-			   	that.do_result(res);
-			   })
-		}
-		 //  var obj = new WxLogin({
-   //                            id:"login_container", 
-   //                            appid: "wxd64e6afb53e222ca", 
-   //                            scope: "snsapi_login", 
-   //                            redirect_uri: encodeURIComponent(location.href),
-   //                            response_type: 'code',
-   //                            state: "state",
-   //                            style: "black",
-   //                            href: ""
-   //                          },function(res){
-   //                          	console.log(1111)
-   //                          });
-		 // console.log(obj)
-		 //  console.log(encodeURIComponent("https://m.imread.com/iframe/QQ_test16/"))
 	},
-	do_result: function(data){
-		var that = this;
-		if(data.code == 200){
-			GLOBAL.cookie('userToken', data.token);
-			that.disPatch('updateUser');
-			that.disPatch('updateMall');
-			//判断登陆后的跳转
-			if(that.from && that.from.skipurl){
-				window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
-			}else{
-				GLOBAL.goBack();
-				myEvent.execCallback('login');
-			}
-		} else {
-			POP._alert('登录失败');
-		}
-	},
-	QQ_login: function(){
-		this.setState({QQ_loading: true});
-    		return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
-  	},
-  	WX_login: function(){
-  		if(this.is_WX()){
-  			window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_test17&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
-  		}else
-  			alert('no')
-  	},
-  	is_WX: function(){
-  		var ua = window.navigator.userAgent.toLowerCase();
-	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-	        	return true;
-	   	}else{
-	   	      return false;
-	   	}
-  	},
 	render: function() {
 		var list;
-		var loading = <Loading />
-		if(this.state.QQ_loading || this.state.WX_loading)
-			return (<div className="gg-body">
-					{loading}
-					</div>);
 		if(this.state.status)
 			list = (<div className="m-login">
 						<form className="u-registerform u-userform" onSubmit={this.handleSubmit}>
@@ -353,14 +266,45 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						<div className="third-login">
-							<div className="t-title"><span>第三方账号登录</span></div>
-							<div className="t-login">
-								<a onClick={this.QQ_login} className="QQ_Login"></a>
-								<a onClick={this.WX_login} className="WX_Login"></a>
-							</div>
-						</div>
 					</div>
+					{/*<div className="m-loginblock m-userblocks">
+						<form className="u-loginform u-userform" onSubmit={this.handleSubmit}>
+							<div className="u-inputline">
+								<input className="u-input" placeholder="手机号" type="tel" ref="mobile_num" />
+							</div>
+							<div className="u-inputline">
+								<input className="u-input" placeholder="密码" type="password" ref="password" />
+							</div>
+							<div className="u-inputline">
+								<button type="submit" className="u-btn u-btn-full">登录</button>
+							</div>
+
+							<div className="u-inputline f-clearfix">
+								<div className="u-buttonc f-fl">
+
+									<Link className="tip" to={GLOBAL.setHref('register')}>注册新账号</Link>
+								</div>
+								<div className="u-buttonc f-fl">
+									<Link className="tip" to={GLOBAL.setHref('forget')}>忘记密码</Link>
+								</div>
+							</div>
+							<div className="u-otherlogins-tip f-hide">其他方式登录</div>
+							<div className="u-inputline f-clearfix f-hide">
+								<div className="u-buttonc f-fl">
+									<a className="u-otherlogin">
+										<img src="src/img/qq.png" />
+										<span className="title">QQ</span>
+									</a>
+								</div>
+								<div className="u-buttonc f-fl">
+									<a className="u-otherlogin">
+										<img src="src/img/wechat.png" />
+										<span className="title">微信</span>
+									</a>
+								</div>
+							</div>
+						</form>
+					</div>*/}
 					{this.props.children}
 				</div>
 			</div>

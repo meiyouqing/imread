@@ -27,6 +27,8 @@ var UserInfo = React.createClass({
 			GLOBAL.removeCookie('userPhone');
 			GLOBAL.removeCookie('userToken');
 			GLOBAL.removeCookie('uuid');
+			GLOBAL.removeCookie('__qc_wId');
+			GLOBAL.removeCookie('__qc__k');
 
 			GLOBAL.goBack();
 		}.bind(this));

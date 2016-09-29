@@ -31,9 +31,12 @@ import SelfBuild from './selfbuild'
 import MLogin from './mLogin'
 import MBinder from './mBinder'
 import MRecharge from './mRecharge'
+import WxGuide from './wx_guide'
 
 import LoginTest from './login_test'
-var loginTest = <Route path="login_test" component={LoginTest} />
+var loginTest = <Route path="login_test" component={LoginTest} >
+		<Route path="wx_guide" component={WxGuide} />
+	</Route>
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -46,6 +49,7 @@ var loginWrap = (
 		<Route path="compact" component={Compact} />
 		<Route path="register" component={Register}/>
 		<Route path="forget" component={Register}/>
+		<Route path="wx_guide" component={WxGuide} />
 	</Route>
 	)
 var readWrap = (
