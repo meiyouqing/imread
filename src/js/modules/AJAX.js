@@ -25,7 +25,7 @@ var API={
 	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
 	key:{method:'GET', base:'/api/v1/auth/key', param:{phone:'',type:''}},
 	password:{method:'POST', base:'/api/v1/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
-	me:{method:'GET', base:'/api/v1/me?date='+Date.now(), param:{}},
+	me:{method:'GET', base:'/api/v1/me', param:{}},
 	upToken:{method:'GET', base:'/api/v1/upToken', param:{oldToken:''}},
 	advice:{method:'POST', base:'/api/v1/person/advice', param:{message:'',contact:'', type: 'unEncode'}},
 	addBook:{method:'POST', base:'/api/v1/shelf/add', param:{param:''}},
@@ -114,9 +114,9 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata, callback, onError) {
-	var urlBase = 'https://m.imread.com';
-	//var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'https://192.168.0.34:9090';
+	//var urlBase = 'https://m.imread.com';
+	var urlBase = 'https://readapi.imread.com';
+	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {

@@ -27,13 +27,14 @@ var UserInfo = React.createClass({
 				GLOBAL.removeCookie('userToken');
 				GLOBAL.removeCookie('uuid');
 
-				if(GLOBAL.cookie('__qc_wId')) {
+				console.log(GLOBAL.cookie('__qc__k'))
+				if(GLOBAL.cookie('__qc__k')) {
 					GLOBAL.removeCookie('__qc_wId');
 					GLOBAL.removeCookie('__qc__k');
 					window.location.reload();
+				} else {
+					GLOBAL.goBack();
 				}
-
-				GLOBAL.goBack();
 			}.bind(this));
 		}.bind(this));
 	},
