@@ -72,6 +72,7 @@ var Header = React.createClass({
 					(this.props.left?this.props.left:<a className="f-fl icon-back icon-s" onClick={this.goBack}></a>)
 				}
 				{this.props.right}
+				{this.props.middle}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);

@@ -37,6 +37,7 @@ app.use(compression())
 
 // send all requests to index.html so browserHistory works
 app.get('*', (req, res) => {
+  if(/undefined$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message)

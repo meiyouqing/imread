@@ -19,7 +19,16 @@ module.exports = {
 	// },
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
+			// {test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'babel',
+				query:{
+				    presets: ['react', 'es2015'],
+				    plugins: ["transform-object-rest-spread"]
+				    }				
+			},
 			{test: /\.css$/, loader: "style!css" },
 			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
 		]

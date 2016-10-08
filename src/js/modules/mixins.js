@@ -14,6 +14,7 @@ var mixins = function() {
         },
         usePreload: function(n){
             n = n.replace(/\./g,'_');
+            n = encodeURIComponent(n);
             if(typeof window === 'undefined'){
                 if(global.imdata[n]){
                     //console.log(global.imdata[n])
@@ -26,10 +27,10 @@ var mixins = function() {
                 }
             }            
         },
-        hasPreload:function(n){
-            n = n.replace(/\./g,'_');
-            return !!window.__PRELOADED_STATE__[n];
-        },
+        // hasPreload:function(n){
+        //     n = n.replace(/\./g,'_');
+        //     return !!window.__PRELOADED_STATE__[n];
+        // },
         lazyloadImage: function(container) {
             if(!container) return;
             var imgs = container.querySelectorAll('.u-lazyload-img');
@@ -131,7 +132,7 @@ var mixins = function() {
                 }
         },
         isLogin: function() {
-            return !!GLOBAL.cookie('userToken');
+            return !!GLOBAL.cookie('token') || !!GLOBAL.cookie('userToken');
         },
         goLogin: function(callback) {
             var hash = location.pathname + '/login';

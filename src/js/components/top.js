@@ -18,7 +18,7 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
-							var hrefStr =window.location.pathname.replace(/top\/([^\"]*)/,"") +'top/block.'+i;
+							var hrefStr = GLOBAL.setHref('top/block.'+i);
 							return (
 								<MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
@@ -50,32 +50,38 @@ var Top = React.createClass({
 	},
 	getLists: function (){
 		AJAX.init(this.params);
-		AJAX.get((data)=>{
-			if(!data.blocklist){return}
-			if (!data.blocklist.length) {
-				this.setState({
-					noMore:true
-				})
-			}
+		AJAX.get(this.ajaxHandle,this.onerror);
+	},
+	ajaxHandle: function(data){
+		if(!data.blocklist){return}
+		if (!data.blocklist.length) {
 			this.setState({
-				list: this.state.scrollUpdate? this.state.list.concat(data.blocklist):data.blocklist,
-				scrollUpdate: false
-			});
-			//设置GLOBAL.booklist/book
-			GLOBAL.setBlocklist(data.blocklist);
-		},this.onerror);
+				noMore:true
+			})
+		}
+		this.setState({
+			list: this.state.scrollUpdate? this.state.list.concat(data.blocklist):data.blocklist,
+			scrollUpdate: false
+		});
+		//设置GLOBAL.booklist/book
+		GLOBAL.setBlocklist(data.blocklist);
 	},			
+	componentWillMount:function(){
+		if(typeof window === 'undefined') return;
+		if(window.__PRELOADED_STATE__ && window.__PRELOADED_STATE__.topNav){
+			const data = window.__PRELOADED_STATE__.topNav;
+			const n = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1';
+			this.usePreload(n);
+		}
+	},
 	componentDidMount: function(){
-		if(GLOBAL.isRouter(this.props))	this.getData();
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getData();
 		// myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
-		if(GLOBAL.isRouter(this.props) &&!this.state.list) this.getData();
+		if(GLOBAL.isRouter(this.props) && !this.state.list) this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
-		//setTimeout(function(){
-		this.lazyloadImage(this.refs.container);
-		//}.bind(this),300);
-		
+		this.lazyloadImage(this.refs.container);		
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.noMore !== nextState.noMore

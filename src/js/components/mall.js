@@ -16,11 +16,13 @@ var Mall = React.createClass({
 		AJAX.get(this.ajaxHandle);
 	},
 	ajaxHandle:function(data){
-		var subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+		this.subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
 		this.setState({
 			navList:data.pagelist
 		});
-		if(typeof window !== 'undefined') browserHistory.replace('/mall/'+subnav);	
+		if(typeof window === 'undefined') return;
+		if(!(location.pathname==='/mall'|| location.pathname==='/mall/')) return;
+		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	gotoSearch: function(){
 		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
@@ -51,9 +53,9 @@ var Mall = React.createClass({
 	componentWillMount:function(){
 		this.usePreload('mallNav');
 	},
-	componentDidMount: function(){
+	// componentDidMount: function(){
 		//if(GLOBAL.isRouter(this.props) && !this.hasPreload('mallNav')) this.getNav();
-	},
+	// },
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
@@ -74,6 +76,9 @@ var Mall = React.createClass({
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
+		}
+		if(!/page/.test(location.pathname) && !!this.state.navList && this.subnav){
+			browserHistory.replace('/mall/'+this.subnav);	
 		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){

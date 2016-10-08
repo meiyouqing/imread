@@ -33,6 +33,7 @@ const GLOBAL = {
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
+			// console.log(path)
 		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
@@ -171,6 +172,7 @@ const GLOBAL = {
 		return true;
 	},
 	cookie: function(key, value, options) {
+		//console.log(222222222222222222222222);return;
 		// write
         if (value !== undefined) {
                 options = options || {};

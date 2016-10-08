@@ -244,12 +244,15 @@ var Shelf = React.createClass({
 		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
-		this.models = localStorage.models?JSON.parse(localStorage.models):{
+		this.models = {
 			order_model: '0',
 			book_order: '0',
 			recent_order: '0',
 			reading_order: '0'
 		};//获取模式和排序
+		if(typeof window !== 'undefined' && localStorage.models){
+			this.models = JSON.parse(localStorage.models)
+		}
 		return {
 			title: '书架',
 			setting:false,
@@ -272,22 +275,28 @@ var Shelf = React.createClass({
 		}
 	},
 	getList: function (){
-		AJAX.init('block.156.100.1');
+		// AJAX.init('block.156.100.1');
+		AJAX.init('shelf');
+		
+		AJAX.get(this.ajaxHandle,this.onerror);
+	},
+	ajaxHandle:	function(data){
 		var order_model = this.models.order_model?this.models.order_model:0;
-		AJAX.get((data)=>{
-			this.setState({
-				
-				shelfList: this.sortBook(order_model,data.content,true)
-			});
-			//设置GLOBAL.booklist/book
-			GLOBAL.setBlocklist(data);
-		},this.onerror);
-	},			
+		this.setState({			
+			shelfList: this.sortBook(order_model,data.content,true)
+		});
+		//设置GLOBAL.booklist/book
+		//GLOBAL.setBlocklist(data);
+	},	
+	componentWillMount:function(){
+		this.usePreload('shelf');
+	},
 	componentDidMount: function(){
 		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
-		if(this.checkLogin(this.props.route)) {
+		if(this.checkLogin(this.props.route) && !this.state.shelfList) {
 			this.getList()
 		}
+		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextPros,nextState) {
 		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 

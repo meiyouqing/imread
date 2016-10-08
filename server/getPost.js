@@ -16,14 +16,21 @@ const getPost =  function(props,req,res){
     AJAX.get(data=>{
       param = path.length ===2?param:'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
       global.imdata['mallNav'] = data;
-      console.log('param>>>>>>>>>>: '+param)
+      goRend();
+    });
+    return;
+  }else if(/top\/block\.\d[\/]?$/.test(req.url)){
+    AJAX.init('group.6');
+    AJAX.get(data=>{
+      param = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1';
+      global.imdata['topNav'] = data;
       goRend();
     });
     return;
   }
   goRend();
   function goRend(){
-    console.log('param: '+param)   
+    console.log('param>>>>>>>>>>: '+param);
     const n = param.replace(/\./g,'_');
     AJAX.init(param);
     AJAX.get(function(data){

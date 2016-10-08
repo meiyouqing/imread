@@ -64,6 +64,7 @@ var List = React.createClass({
 		}
 	},
 	goSearch: function(){
+		if(!this.isMounted()) return;
 		if(!this.state.scrollUpdate){
 			this.refs.container.scrollTop = 0;
 			this.setState({
@@ -73,9 +74,6 @@ var List = React.createClass({
 			})
 		}
 		this.getList();
-	},
-	gotoSearch: function(){
-		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 	},
 	getInitialState: function(){
 		return {
@@ -87,6 +85,9 @@ var List = React.createClass({
 			UFO:false,
 			title: '艾美阅读'
 		}
+	},
+	componentWillMount:function(){
+		this.usePreload(this.props.params.listId);
 	},
 	componentDidMount: function(){
 		this.lazyloadImage(this.refs.container);
@@ -112,9 +113,6 @@ var List = React.createClass({
 				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProps.children
 				|| this.props.params.listId !== nextProps.params.listId;
-	},
-	componentWillMount:function(){
-		this.usePreload(this.props.params.listId);
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;

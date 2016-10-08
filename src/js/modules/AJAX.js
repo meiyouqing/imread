@@ -8,6 +8,7 @@ var Config = {
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
 var API={
+	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
 	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
@@ -61,60 +62,60 @@ var API={
 };
 
 //接口缓存机制
-var imCache = (function() {
-	var config = {
-		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
-		needCache: false
-	};
+// var imCache = (function() {
+// 	var config = {
+// 		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
+// 		needCache: false
+// 	};
 
-	var needCache = function(url) {
-		if (!config.needCache) {
-			return false;
-		}
-		for (var i = 0; i < config.cacheUrl.length; i++) {
-			if (new RegExp(config.cacheUrl[i]).test(url)) {
-				return true;
-			}
-		}
-		return false;
-	};
+// 	var needCache = function(url) {
+// 		if (!config.needCache) {
+// 			return false;
+// 		}
+// 		for (var i = 0; i < config.cacheUrl.length; i++) {
+// 			if (new RegExp(config.cacheUrl[i]).test(url)) {
+// 				return true;
+// 			}
+// 		}
+// 		return false;
+// 	};
 
-	var getCacheKey = function(url) {
-		return 'ImCache-' + url;
-	};
+// 	var getCacheKey = function(url) {
+// 		return 'ImCache-' + url;
+// 	};
 
-	var getFromCache = function(url) {
-		var key = getCacheKey(url);
-		var cacheStr = localStorage.getItem(key);
-		var result = false;
-		try {
-			if (cacheStr) {
-				result = JSON.parse(cacheStr);
-			}
-		} catch(e) {
+// 	var getFromCache = function(url) {
+// 		var key = getCacheKey(url);
+// 		var cacheStr = localStorage.getItem(key);
+// 		var result = false;
+// 		try {
+// 			if (cacheStr) {
+// 				result = JSON.parse(cacheStr);
+// 			}
+// 		} catch(e) {
 
-		}
-		return result;
-	};
+// 		}
+// 		return result;
+// 	};
 
-	var setCache = function(url, data) {
-		storage.set(getCacheKey(url), data);
-		return true;
-	};
+// 	var setCache = function(url, data) {
+// 		storage.set(getCacheKey(url), data);
+// 		return true;
+// 	};
 
-	return {
-		needCache: needCache,
-		getFromCache: getFromCache,
-		setCache: setCache
-	};
-})();
+// 	return {
+// 		needCache: needCache,
+// 		getFromCache: getFromCache,
+// 		setCache: setCache
+// 	};
+// })();
 
 
 function getGETUrl(url, postdata) {
 	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
 }
 //getJSON接口
-function GETJSON(method, url, postdata, callback, onError) {
+function GETJSON(method, url, postdata={}, callback, onError) {
 	var urlBase = 'https://m.imread.com';
 	var urlBase = 'http://readapi.imread.com';
 	var urlBase = 'http://192.168.0.34:9090';
@@ -123,32 +124,65 @@ function GETJSON(method, url, postdata, callback, onError) {
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
+	// let headers = {};
+	// if(typeof window !== 'undefined'){
+		// headers={
+		// 	'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
+		// 	'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
+		// 	'Info-Version': '2.3.1',
+		// 	'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
+		// 	'Info-Vcode': '101',
+		// 	'Info-Userid': GLOBAL.cookie('userId') || '',
+		// 	'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
+		// 	'Info-Resolution': window.screen.width + '*' +  window.screen.height,
+		// 	'Curtime': new Date().Format('yyyyMMddhhmmss'),
+		// 	'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
+		// };
+	// 	if(method === 'POST'&&postdata.formdata){
+	// 		headers = {
+	// 			//...headers,
+	// 			'Content-Type':'application/x-www-form-urlencoded'
+	// 		}
+	// 	}
+	// }
 
-	var cacheUrl = getGETUrl(method + '-' + url, postdata);
-	var cacheResponse = false;
-	if (imCache.needCache(cacheUrl)) {
-		cacheResponse = imCache.getFromCache(cacheUrl);
-		if (cacheResponse) {
-			// console.log('getFromCache-' + cacheUrl)
-			setTimeout(function(){
-				callback(cacheResponse)
-			},0);
-		}
-	}
+	// var cacheUrl = getGETUrl(method + '-' + url, postdata);
+	// var cacheResponse = false;
+	// if (imCache.needCache(cacheUrl)) {
+	// 	cacheResponse = imCache.getFromCache(cacheUrl);
+	// 	if (cacheResponse) {
+	// 		// console.log('getFromCache-' + cacheUrl)
+	// 		setTimeout(function(){
+	// 			callback(cacheResponse)
+	// 		},0);
+	// 	}
+	// }
 	//GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
-	fetch(getGETUrl(url,{
-	  method: method,
-  	},postdata))
-    .then(function(response) {
-        if (response.status >= 400) {
-        	onError &&　onError(false);
-            throw new Error("Bad response from server");
-        }
-        return response.json();
-    })
-    .then(function(stories) {
-        callback(stories)
-    })
+	//console.log(headers)
+	//console.log(method)
+	const promise = method === 'GET'?
+				fetch(getGETUrl(url,postdata),{credentials: 'include'}):
+				fetch(url,{
+					method,
+					credentials: 'include',
+					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+				});
+	promise.then(function(response) {
+		if (response.status >= 200 && response.status < 300) {
+		    return response.json();
+		  } else {
+		    const error = new Error(response.statusText)
+		    error.response = response
+		    throw error
+		  }
+	})
+	.then(function(stories) {
+	    callback(stories)
+	})
+	.catch(function(error) {
+    	console.log('request failed', error)
+    	onError && onError(error)
+  	})
 }
 function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse) {
 	method = method || 'POST';
@@ -203,10 +237,10 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 				}
 
 				//需要缓存，缓存ajax结果
-				var cacheUrl = getGETUrl(method + '-' + url, postdata);
-				if (imCache.needCache(cacheUrl)) {
-					imCache.setCache(cacheUrl, res);
-				}
+				// var cacheUrl = getGETUrl(method + '-' + url, postdata);
+				// if (imCache.needCache(cacheUrl)) {
+				// 	imCache.setCache(cacheUrl, res);
+				// }
 			// }
 		}
 	};
@@ -242,8 +276,8 @@ function setRequestHeaders(request) {
 		//'Referer': 'readapi.imread.com',
 		'Info-Imsi': '',
 		'Info-Imei': '',
-		'Info-Channel': GLOBAL.header.channel? GLOBAL.header.channel:'ImreadH5',
-		'Info-appid' : GLOBAL.header.appid? GLOBAL.header.appid:'ImreadH5',
+		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
+		'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
 		'Info-Version': '1.0.1',
 		'Info-Model': '',
 		'Info-Os': '',

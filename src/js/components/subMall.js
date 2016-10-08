@@ -60,7 +60,7 @@ var Mall = React.createClass({
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
-		//if(GLOBAL.isRouter(this.props))	this.getList(true);
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList(true);
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProp) {
