@@ -117,7 +117,7 @@ var User = React.createClass({
 				myEvent.setCallback('login', login_c);
 				return false;
 			}
-			this.goLogin(login_c);
+			this.goLogin(login_c,href);
 			e.preventDefault();
 			return false;
 		}

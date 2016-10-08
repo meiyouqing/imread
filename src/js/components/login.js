@@ -345,13 +345,13 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						<div className="third-login">
+						{/*<div className="third-login">
 							<div className="t-title"><span>第三方账号登录</span></div>
 							<div className="t-login">
 								<a onClick={this.QQ_login} className="QQ_Login"></a>
 								<a onClick={this.WX_login} className="WX_Login"></a>
 							</div>
-						</div>
+						</div>*/}
 					</div>
 				</div>
 				{this.props.children}

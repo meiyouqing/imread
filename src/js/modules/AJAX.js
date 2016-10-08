@@ -25,7 +25,7 @@ var API={
 	register:{method:'POST', base:'/api/v1/auth/register', param:{mobile_num:'',password:'',key:'',device_identifier:'',promot:'',channel:5 }},
 	key:{method:'GET', base:'/api/v1/auth/key', param:{phone:'',type:''}},
 	password:{method:'POST', base:'/api/v1/auth/reset/password', param:{mobile_num:'',password:'',key:''}},
-	me:{method:'GET', base:'/api/v1/me', param:{}},
+	me:{method:'GET', base:'/api/v1/me?date='+Date.now(), param:{}},
 	upToken:{method:'GET', base:'/api/v1/upToken', param:{oldToken:''}},
 	advice:{method:'POST', base:'/api/v1/person/advice', param:{message:'',contact:'', type: 'unEncode'}},
 	addBook:{method:'POST', base:'/api/v1/shelf/add', param:{param:''}},
@@ -39,6 +39,7 @@ var API={
 	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
+	wxPay:{method:'POST', base:'/api/v1/cert/pay', param:{productId:0}},
 	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
 	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
@@ -215,7 +216,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 			isYulan |= new RegExp(yulanUrls[i]).test(url);
 		}
 		isYulan = isYulan && /yulan=1/.test(window.location.search);
-		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
+		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1": ''));
 		request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);

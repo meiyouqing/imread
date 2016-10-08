@@ -34,6 +34,11 @@ module.exports = {
 		    inject: 'body', // Inject all scripts into the body 
 		    hash: !debug
 		  }),
+		new webpack.DefinePlugin({
+		      'process.env':{
+		        'NODE_ENV': JSON.stringify('production')
+		      }
+		 }),
 		new webpack.ProvidePlugin({
 			React: 'react',
 			GLOBAL: '../modules/global',
