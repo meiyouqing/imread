@@ -65,6 +65,48 @@ var Block9 = React.createClass({
 		this.toggleSwipeNav(0);
 		
 	},
+	typeHref: function(data){
+		var bid = data.content_id || data.book_id || data.sheet_id || 0;
+		var type = +data.type || +data.content_type;
+		var target = '_self';
+		if(/2|3|4/.test(data.intercut_type)){
+			target = '_blank';
+			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
+				target = 'download';
+			}
+		}
+		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
+			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
+		}
+		if(isNaN(type)) return '';
+
+		function setHref(url){
+			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
+			if(link) return location.pathname+'/'+url;
+			// return url;
+			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
+		};
+
+		switch(type){
+			case 1://图书详情
+				return setHref('book/introduce.'+bid);
+			case 3://搜索
+				return setHref('search/search.'+data.name);
+			case 4://目录
+			case 5://分类
+				return setHref('cat/category.'+bid);
+			case 6://书城的子页面
+				return setHref('self/page.'+data.content_id+'.6.1');
+			case 7://书单
+				return setHref('sheet/bookSheet.'+bid);
+			case 11://跳h5下载游戏
+	    		case 12://跳下载apk
+	    		case 13://跳内部网页
+	    		case 14: //跳外部网页
+	    		case 15://app to H5
+	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
+		}
+	},
 	handleResize: function(e) {
 		this.setState(this.getWidthAndHeight());
 	},
@@ -141,8 +183,8 @@ var Block9 = React.createClass({
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
 			                		
-									var hrefObj = GLOBAL.typeHref(v);
-									var search="?devicetoken="+GLOBAL.cookie('uuid')
+									var hrefObj = this.typeHref(v);
+									var search="?devicetoken="+GLOBAL.cookie('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
 
 			                		return (

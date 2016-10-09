@@ -10,7 +10,7 @@ var Subject = React.createClass({
 	render: function() { 
 		var cls = this.props.style==12? 'u-book-8 u-book-8-small':'u-book-8';
 		var height = this.props.style==12? 
-					(document.body.offsetWidth-30)/2*0.38 
+					(document.body.offsetWidth)/2*0.38 
 					: (document.body.offsetWidth-27)/2;
 		var hrefStr = GLOBAL.typeHref(this.props.data);
 		var target = '_self';

@@ -51,7 +51,7 @@ var UserList = React.createClass({
 	getInitialState: function() {
 		const logoutBtn = (<div onClick={this.login}>
 					<div className="avatar-wrap">
-							<img src='https://m.imread.com/src/img/user/avatar@2x.png' />
+							<img src='/src/img/user/avatar@2x.png' />
 					</div>
 					<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
 				</div>)
@@ -59,7 +59,7 @@ var UserList = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: {
-				portraitUrl: 'https://m.imread.com/src/img/user/avatar@2x.png',
+				portraitUrl: '/src/img/user/avatar@2x.png',
 				balance: 0
 			},
 			logoutBtn : logoutBtn
@@ -87,7 +87,7 @@ var UserList = React.createClass({
 			this.setState({
 				logoutBtn : (<div>
 					<div className="avatar-wrap" onClick={this.login}>
-						<img src={this.state.userInfo.portraitUrl || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
+						<img src={this.state.userInfo.portraitUrl || '/src/img/user/avatar@2x.png'} />
 					</div>
 					<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 				</div>)
@@ -138,7 +138,7 @@ var UserList = React.createClass({
 				myEvent.setCallback('login', login_c);
 				return false;
 			}
-			this.goLogin(login_c);
+			this.goLogin(login_c,href);
 			e.preventDefault();
 			return false;
 		}
@@ -210,13 +210,34 @@ var UserList = React.createClass({
 				href: 'setting'
 			}]
 		];
-
+		var logoutBtn;
+		var userName = '',aidou=0;
+		var avatarPic = this.state.userInfo.portraitUrl;
+		avatarPic = avatarPic? avatarPic.replace(/^http\:\/\//,'https://'):false;
+		 if (this.isLogin()) {
+			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
+			logoutBtn = (<div>
+				<div className="avatar-wrap" onClick={this.login}>
+					<img src={ avatarPic || '/src/img/user/avatar@2x.png'} />
+				</div>
+				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
+				</div>
+			);
+		} else {
+			logoutBtn = (<div onClick={this.login}>
+				<div className="avatar-wrap">
+						<img src='/src/img/user/avatar@2x.png' />
+				</div>
+				<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
+				</div>
+			);
+		}
 		return (
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
-							<img src="https://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
+							<img src="/src/img/user/bg@2x.png" className="bg"/>
 						
 								{this.state.logoutBtn}
 	

@@ -32,12 +32,19 @@ var UserInfo = React.createClass({
 		POP.confirm('确定退出登录?',function() {
 			AJAX.init('loginout');
 			AJAX.get(function(res){
-			}.bind(this));
-			GLOBAL.removeCookie('userPhone');
-			GLOBAL.removeCookie('userToken');
-			GLOBAL.removeCookie('uuid');
+				GLOBAL.removeCookie('userPhone');
+				GLOBAL.removeCookie('userToken');
+				GLOBAL.removeCookie('uuid');
 
-			GLOBAL.goBack();
+				console.log(GLOBAL.cookie('__qc__k'))
+				if(GLOBAL.cookie('__qc__k')) {
+					GLOBAL.removeCookie('__qc_wId');
+					GLOBAL.removeCookie('__qc__k');
+					window.location.reload();
+				} else {
+					GLOBAL.goBack();
+				}
+			}.bind(this));
 		}.bind(this));
 	},
 	changeEdit: function(){

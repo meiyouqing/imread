@@ -28,12 +28,12 @@ const GLOBAL = {
 	route:[],
 	unRendered:[],
 	orderLIst:{},
+	pushLinks:{},
 	goBack:function(path){
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
-			// console.log(path)
 		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
@@ -84,13 +84,6 @@ const GLOBAL = {
 		}
 		if(isNaN(type)) return '';
 
-		function setHref(url){
-			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
-			if(link) return location.pathname+'/'+url;
-			// return url;
-			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
-		};
-
 		switch(type){
 			case 1://图书详情
 				return this.setHref('book/introduce.'+bid);
@@ -100,7 +93,7 @@ const GLOBAL = {
 			case 5://分类
 				return this.setHref('cat/category.'+bid);
 			case 6://书城的子页面
-				return this.setHref('mall/page'+data.pgid);
+				return this.setHref('self/page.'+data.content_id+'.6.1');
 			case 7://书单
 				return this.setHref('sheet/bookSheet.'+bid);
 			case 11://跳h5下载游戏
@@ -143,6 +136,10 @@ const GLOBAL = {
 				break;
 			}
 		})
+	},
+	isAd: function(){
+		if(!!window.location.search.match('devicetoken'))
+			GLOBAL.pushLinks[location.pathname] = parseQuery(location.search).comeFrom;
 	},
 	isAndroid: function(){
 		if(typeof window !== 'undefined'){

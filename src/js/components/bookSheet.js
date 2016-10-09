@@ -89,6 +89,7 @@ var BookSheet = React.createClass({
 		if(GLOBAL.isRouter(this.props))	this.getList();
 	},
 	componentDidUpdate: function() {
+		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
 	},
@@ -126,9 +127,9 @@ var BookSheet = React.createClass({
 										<span className="u-sc">{this.state.data.collect_uv || 0}</span>
 										<span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
 									</div>
-								</div>
-								<div className="u-m-store" onClick={this.addFavaHandle} >
-									<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
+									<div className="u-m-store" onClick={this.addFavaHandle} >
+										<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
+									</div>
 								</div>
 								<div className="u-sheet-detail">
 									<h2 className="f-ellipsis">{this.state.data.sheet_name}</h2>

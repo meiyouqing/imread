@@ -44,6 +44,7 @@ var API={
 	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
+	wxPay:{method:'POST', base:'/api/v1/cert/pay', param:{productId:0}},
 	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
 	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
@@ -59,6 +60,8 @@ var API={
 	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
 	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
+	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
+	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}}
 };
 
 //接口缓存机制
@@ -116,10 +119,9 @@ function getGETUrl(url, postdata) {
 }
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError) {
-	var urlBase = 'https://m.imread.com';
-	var urlBase = 'http://readapi.imread.com';
+	var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'http://192.168.0.34:9090';
-	//var urlBase = 'https://192.168.0.252:8080';
+	//var urlBase = 'http://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;

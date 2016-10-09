@@ -48,9 +48,6 @@
   "scripts": {
     "start": "node ./server/index.js",
     "start:prod": "npm run build && node serverside/app/main.bundle.js",
-    "build:client": "webpack",
-    "build:server": "webpack --config webpack.server.config.js",
-    "build": "npm run build:client && npm run build:server"
   },
   "author": "May & Ljy & Wxg",
   "license": "ISC"

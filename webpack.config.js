@@ -46,6 +46,7 @@ module.exports = {
 		 //    inject: 'body', // Inject all scripts into the body 
 		 //    hash: !debug
 		 //  }),
+
 		new webpack.ProvidePlugin({
 			React: 'react',
 			AJAX: '../modules/AJAX',

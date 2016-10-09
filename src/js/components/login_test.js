@@ -1,17 +1,7 @@
-if(typeof window !== 'undefined'){
-	var POP = require('../modules/confirm')
-}
-import parseQuery from '../modules/parseQuery'
-import { Link } from 'react-router';
-import AJAX from '../modules/AJAX'
-import GLOBAL from '../modules/global'
-import Mixins from '../modules/mixins'
-import React from 'react'
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
-if(false||typeof window !== 'undefined'){
-	require('../../css/login.css');
-}
+require('../../css/login.css');
+
 var Login = React.createClass({
 	mixins:[Mixins()],
 	getInitialState: function() {
@@ -48,9 +38,10 @@ var Login = React.createClass({
 				phone: postData.phone,
 				token: postData.token
 			});
+
 			if(data.code == 200){
 				GLOBAL.cookie('userToken', data.token, options);
-				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);				
+				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				//判断登陆后的跳转
@@ -211,7 +202,6 @@ var Login = React.createClass({
 		//判断来源from
 		this.from = parseQuery(location.search);
 		var  that = this;
-
 		//if(GLOBAL.cookie('__qc__k')){
 			QC.Login({
 	    			// btnId: "qqLoginBtn"
@@ -258,7 +248,7 @@ var Login = React.createClass({
 			}else{
 				// GLOBAL.goBack();
 				// myEvent.execCallback('login');
-				window.location.href =location.href.replace('/login','');
+				window.location.href =location.href.replace('/login_test','');
 			}
 		} else {
 			this.setState({WX_loading: false,QQ_loading: false});
@@ -354,13 +344,13 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						{/*<div className="third-login">
+						<div className="third-login">
 							<div className="t-title"><span>第三方账号登录</span></div>
 							<div className="t-login">
 								<a onClick={this.QQ_login} className="QQ_Login"></a>
 								<a onClick={this.WX_login} className="WX_Login"></a>
 							</div>
-						</div>*/}
+						</div>
 					</div>
 				</div>
 				{this.props.children}

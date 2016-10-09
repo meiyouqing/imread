@@ -34,6 +34,12 @@ var Header = React.createClass({
 		};
 	},
 	goBack: function(){
+		var current = GLOBAL.pushLinks[location.pathname];
+		if(current) {
+			GLOBAL.pushLinks[location.pathname] = null;
+			browserHistory.push(current);
+			return;
+		}
 		GLOBAL.goBack(this.path);
 		if(this.props.page==='tag'){
 			myEvent.execCallback('updateGuess');

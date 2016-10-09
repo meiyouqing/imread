@@ -38,7 +38,7 @@ var Search = React.createClass({
 		if(GLOBAL.isRouter(this.props) && !this.state.blockList) this.getDate();
 	},
 	componentDidUpdate: function(){
-		//console.log(location.pathname,GLOBAL.isRouter(this.props))
+		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.blockList) this.getDate();		
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {

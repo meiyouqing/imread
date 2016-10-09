@@ -137,7 +137,12 @@ var mixins = function() {
         isLogin: function() {
             return !!GLOBAL.cookie('token') || !!GLOBAL.cookie('userToken');
         },
-        goLogin: function(callback) {
+        goLogin: function(callback,href) {
+            var ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger' && href){
+                window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent('https://m.imread.com/mall/page.9.3/login?skipurl=https://m.imread.com'+(href?href:''))+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+                return;
+            }
             var hash = location.pathname + '/login';
             browserHistory.push(hash);
             POP._alert('请先登录');

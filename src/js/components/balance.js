@@ -47,6 +47,18 @@ var Balance = React.createClass({
 		var ordered = this.state.list[this.state.active];
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
+	WxOrder: function(){
+		AJAX.go('wxPay',{
+				productId: this.state.list[this.state.active].productId	
+			},function(data){
+				console.log(data)
+				if(data.code == 403)
+					POP._alert('支付失败');
+				else {
+					
+				}
+			});
+	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.balance != this.state.balance
 			    || nextState.list != this.state.list
@@ -83,6 +95,7 @@ var Balance = React.createClass({
 					</ul>
 					<div className="u-userform">
 						<a className="u-btn u-btn-full" onClick={this.orderHandle} >话费充值</a>
+						{/*<a className="u-btn u-btn-full f-mt-20" onClick={this.WxOrder} >微信充值</a>*/}
 					</div>
 				</div>
 			);

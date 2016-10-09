@@ -94,6 +94,8 @@ var List = React.createClass({
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 	},
 	componentDidUpdate: function(nextProps,nextState) {
+		
+		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
 
 		this.lazyloadImage(this.refs.container);
