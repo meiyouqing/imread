@@ -51,9 +51,12 @@ var mixins = function() {
                             //container.dispatchEvent(new Event('scroll'));//该句存在兼容问题，低版本报错
                             //img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
                         }
+                        function onerror(){
+                            img.setAttribute('data-lazyload-src', "error");
+                        }
                         img.setAttribute('data-lazyload-src', "loading");
                         //GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'https://m.imread.com/src/img/defaultCover.png'));
-                        GLOBAL.loadImage(src, callback.bind(null, src));
+                        GLOBAL.loadImage(src, callback.bind(null, src),onerror);
                     }
                 })(i);
             }

@@ -118,14 +118,16 @@ function getGETUrl(url, postdata) {
 function GETJSON(method, url, postdata={}, callback, onError) {
 	var urlBase = 'https://m.imread.com';
 	var urlBase = 'http://readapi.imread.com';
-	var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'https://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
-	// let headers = {};
-	// if(typeof window !== 'undefined'){
+	let headers = {};
+	if(typeof window !== 'undefined'){
+		GETJSONWITHAJAX(method, url, postdata, callback, onError);
+		return;
 		// headers={
 		// 	'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
 		// 	'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
@@ -137,14 +139,15 @@ function GETJSON(method, url, postdata={}, callback, onError) {
 		// 	'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		// 	'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		// 	'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
+		// 	'Content-Type':'application/x-www-form-urlencoded, multipart/form-data'
 		// };
-	// 	if(method === 'POST'&&postdata.formdata){
-	// 		headers = {
-	// 			//...headers,
-	// 			'Content-Type':'application/x-www-form-urlencoded'
-	// 		}
-	// 	}
-	// }
+		// if(method === 'POST'&&postdata.formdata){
+		// 	headers = {
+		// 		...headers,
+		// 		'Content-Type':'application/x-www-form-urlencoded'
+		// 	}
+		// }
+	}
 
 	// var cacheUrl = getGETUrl(method + '-' + url, postdata);
 	// var cacheResponse = false;
@@ -157,14 +160,13 @@ function GETJSON(method, url, postdata={}, callback, onError) {
 	// 		},0);
 	// 	}
 	// }
-	//GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
-	//console.log(headers)
-	//console.log(method)
+	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
+	// console.log(headers)
+	// console.log(method)
 	const promise = method === 'GET'?
-				fetch(getGETUrl(url,postdata),{credentials: 'include'}):
+				fetch(getGETUrl(url,postdata)):
 				fetch(url,{
 					method,
-					credentials: 'include',
 					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
 				});
 	promise.then(function(response) {
@@ -184,7 +186,7 @@ function GETJSON(method, url, postdata={}, callback, onError) {
     	onError && onError(error)
   	})
 }
-function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse) {
+function GETJSONWITHAJAX(method, url, postdata, callback, onError) {
 	method = method || 'POST';
 	var time = 15000;
 	var request = null;
@@ -228,13 +230,13 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 
 				//如果缓存中没有结果则触发callback
 				//TODO 比较新的结果和缓存结果，如果不同则重新触发callback
-				if (!cacheResponse) {
+				// if (!cacheResponse) {
 					if(!res) {
 						onError(new Error('服务器返回为空'));
 						return;
 					}
 					callback(res);
-				}
+				// }
 
 				//需要缓存，缓存ajax结果
 				// var cacheUrl = getGETUrl(method + '-' + url, postdata);
@@ -258,13 +260,13 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		}
 		request.send(postdata);
 	} else {
-		var isYulan = false;
-		var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
-		for (var i = 0; i < yulanUrls.length; i++) {
-			isYulan |= new RegExp(yulanUrls[i]).test(url);
-		}
-		isYulan = isYulan && /yulan=1/.test(window.location.search);
-		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1&date"+Date.now() : '&date='+Date.now()));
+		// var isYulan = false;
+		// var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
+		// for (var i = 0; i < yulanUrls.length; i++) {
+		// 	isYulan |= new RegExp(yulanUrls[i]).test(url);
+		// }
+		// isYulan = isYulan && /yulan=1/.test(window.location.search);
+		request.open(method, getGETUrl(url, postdata));
 		request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);

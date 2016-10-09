@@ -30,12 +30,19 @@ const getPost =  function(props,req,res){
   }
   goRend();
   function goRend(){
+    if(!/[\.]/.test(param)) {
+      goSend();
+      return;
+    }
     console.log('param>>>>>>>>>>: '+param);
     const n = param.replace(/\./g,'_');
     AJAX.init(param);
     AJAX.get(function(data){
       global.imdata[n] = data;
-      //console.log(props)
+      goSend();
+    })
+  }
+  function goSend(){
       try{
         const appHtml = renderToString(<RouterContext {...props}/>)
         //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>++++++++++++++++++++++'+appHtml)
@@ -44,8 +51,7 @@ const getPost =  function(props,req,res){
         //console.log(err)
         console.error(err)
       }
-    })
-  }     
+  }    
 }
 
 function renderFullPage(html, preloadedState) {

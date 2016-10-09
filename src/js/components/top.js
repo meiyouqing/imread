@@ -18,7 +18,10 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
-							var hrefStr = GLOBAL.setHref('top/block.'+i);
+							var path = typeof window === 'undefined'?
+										global.pathname:
+										location.pathname;
+							var hrefStr = path.replace(/top\/block\.\d/,'top/block.'+i);
 							return (
 								<MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
@@ -75,7 +78,11 @@ var Top = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getData();
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	{
+			this.getData();
+		}else{
+			this.lazyloadImage(this.refs.container);		
+		}
 		// myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
@@ -113,25 +120,6 @@ var Top = React.createClass({
 			list = (<div className="g-main"><NoData type="UFO" /></div>);
 		}
 
-		// var list;
-		// if(!this.state.list){
-		// 	list = <Loading />
-		// }else{
-		// 	if(this.state.list.length){
-		// 		list = (
-		// 			<div className="g-main g-main-3">
-		// 				<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-		// 					<Blocklist blockList={this.state.list} />
-		// 				</div>
-		// 			</div>
-		// 			);
-		// 	}else{
-		// 		list = (<div className="g-main"><NoData /></div>);
-		// 	}
-		// }
-		// if(this.state.onerror){
-		// 	list = (<div className="g-main"><NoData type="UFO" /></div>);
-		// }
 		return (
 			<div  className="gg-body">
 				<Header title="发现"  path={this.props.route} />

@@ -95,8 +95,8 @@ var UserList = React.createClass({
 		}
 	},
 	componentWillUnmount: function(){
-		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,false), false);
-		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,false),false);
+		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,null), false);
+		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,null),false);
 	},
 	getUserInfo: function(callback) { //获取个人信息
 		var that = this;

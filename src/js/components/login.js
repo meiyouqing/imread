@@ -46,10 +46,9 @@ var Login = React.createClass({
 				phone: postData.phone,
 				token: postData.token
 			});
-
 			if(data.code == 200){
 				GLOBAL.cookie('userToken', data.token, options);
-				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
+				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);				
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				//判断登陆后的跳转

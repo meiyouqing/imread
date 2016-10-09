@@ -23,7 +23,7 @@ import routes from '../src/js/components/routes'
 // import App from '../src/js/containers/App'
 
 const app = express()
-const port = 8080
+const port = 80
 
 // Use this middleware to set up hot module reloading via webpack.
 const compiler = webpack(webpackConfig)
