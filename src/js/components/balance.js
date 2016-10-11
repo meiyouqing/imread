@@ -7,28 +7,40 @@ var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		AJAX.init(this.props.route.path)
-		AJAX.get(function(data) {
+		// AJAX.init(this.props.route.path)
+		// AJAX.get(function(data) {
+		// 	this.setState({
+		// 		loading: false,
+		// 		balance: data.success.balance,
+		// 		list: !this.state.isWX?data.success.list:this.state.list
+		// 	});
+		// }.bind(this));
+		
+		AJAX.go('balance',{
+			payType: this.state.isWX?2:1
+		},function(data){
 			this.setState({
 				loading: false,
 				balance: data.success.balance,
 				list: data.success.list
 			});
-		}.bind(this));
+		}.bind(this))
 	},
 	getInitialState: function() {
 		return {
 			loading: true,
 			list: [],
 			balance: 0,
-			active: 0
+			active: 0,
+			isWX: false//this.isWx()
 		};
 	},
 	componentDidMount: function() {
 		if(this.checkLogin(this.props.route)) this.getBalance();
-		document.addEventListener('rechargeSuccess',function(){//触发登录时更新个人信息
-			this.getBalance();
-		}.bind(this));
+		document.addEventListener('rechargeSuccess',this.getBalance);
+	},
+	componentWillUnmount: function(){
+		 document.removeEventListener('rechargeSuccess',this.getBalance,false);
 	},
 	handleClick: function(e) {
 		this.setState({
@@ -40,16 +52,16 @@ var Balance = React.createClass({
 		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
 	},
 	WxOrder: function(){
-		AJAX.go('wxPay',{
-				productId: this.state.list[this.state.active].productId	
-			},function(data){
-				console.log(data)
-				if(data.code == 403)
-					POP._alert('支付失败');
-				else {
-					
-				}
-			});
+		AJAX.go('pay',{
+			productId:this.state.list[this.state.active].productId,
+			payType: '2'
+		},function(data){
+			if(data.code == 200){
+				window.location.href = data.success.pay_info;
+			} else {
+				POP._alert('充值失败');
+			}
+		});
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.balance != this.state.balance
@@ -72,22 +84,32 @@ var Balance = React.createClass({
 					<div className="u-divider"></div>
 					<ul className="pay-list f-clearfix">
 					{	
-						(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
-							var active = i == this.state.active;
-							var activeClass = active ? ' active' : '';
-							//var activeImg = active ? 'https://m.imread.com/src/img/balance_select.png' : 'https://m.imread.com/src/img/balance.png';
-							return (
-								<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
-									<span className={"icon-n icon-black-aidou " + activeClass}></span>
-									<span className="count">{item.productPrice / 100+'艾豆'}</span>
-								</li>
-							);
-						}.bind(this))
+							(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
+								var active = i == this.state.active;
+								var activeClass = active ? ' active' : '';
+								if(!this.state.isWX)
+									return (
+										<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
+											<span className={"icon-n icon-black-aidou " + activeClass}></span>
+											<span className="count">{item.productPrice / 100+'艾豆'}</span>
+										</li>
+									);
+								else 
+									return (
+										<li key={i} className={"f-fl f-wx" + activeClass} onClick={this.handleClick} data-index={i}>
+											<span className="count">{item.fee / 100+'艾豆'}</span>
+											<p>获得{item.fee / 100}艾豆，再送{(item.productPrice - item.fee) / 100}艾豆</p>
+										</li>
+									);
+							}.bind(this))
 					}
 					</ul>
 					<div className="u-userform">
-						<a className="u-btn u-btn-full" onClick={this.orderHandle} >话费充值</a>
-						{/*<a className="u-btn u-btn-full f-mt-20" onClick={this.WxOrder} >微信充值</a>*/}
+						<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full u-btn-2" + ((!this.isWx() && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
+						{/*<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
+						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxOrder} >确认充值</a>*/}
 					</div>
 				</div>
 			);

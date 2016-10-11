@@ -3,6 +3,17 @@ var MallNav = require('./mallNav');
 var UserList = require('./userList');
 
 var Mall = React.createClass({
+	is_WX: function(){
+  		var ua = window.navigator.userAgent.toLowerCase();
+	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+	        	return true;
+	   	}else{
+	   	      return false;
+	   	}
+  	},
+  	WX_skip: function(){
+  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+  	},
 	getNav: function(){
 		AJAX.init('group.1');
 		AJAX.get((data)=>{
@@ -42,16 +53,49 @@ var Mall = React.createClass({
 		return param.indexOf('page')>=0;
 	},
 	componentDidMount: function(){
-		this.getNav();
+
+		var that = this;
+		this.from = parseQuery(location.search);
+
+		if(this.is_WX() && !this.from.code  && !GLOBAL.cookie('userToken')){
+  			this.WX_skip();
+  		}
+
+
+		if(this.is_WX() && GLOBAL.cookie('userToken'))
+			this.getNav();
+
+
+		//微信登录
+		if(this.is_WX() && this.from  && this.from.code) {
+			   AJAX.go('login_wx',{
+        			code: this.from.code,
+        			grant_type: 'authorization_code'
+			   },function(res){
+			   	that.do_result(res);
+			   	that.getNav();
+			   })
+		}
+
+		if(!this.is_WX())
+			this.getNav();
+	},
+	do_result: function(data){
+		var that = this;
+		if(data.code == 200){
+			GLOBAL.cookie('userToken', 'loaded');
+		} else {
+			POP._alert('登录失败');
+		}
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
-
+			var url = 'https://m.imread.com/mall/';
 			if(obj.book_id)
-				browserHistory.replace(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
+				browserHistory.replace(url+(page+'/book/introduce.'+obj.book_id+location.search));
 			else if(obj.sheet_id){
-				browserHistory.replace(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+				browserHistory.replace(url+(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
 			}
 		}
 	},

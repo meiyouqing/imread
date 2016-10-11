@@ -27,8 +27,7 @@ var UserInfo = React.createClass({
 				GLOBAL.removeCookie('userToken');
 				GLOBAL.removeCookie('uuid');
 
-				console.log(GLOBAL.cookie('__qc__k'))
-				if(GLOBAL.cookie('__qc__k')) {
+				if(GLOBAL.cookie('__qc__k') || GLOBAL.cookie('__qc_wId')) {
 					GLOBAL.removeCookie('__qc_wId');
 					GLOBAL.removeCookie('__qc__k');
 					window.location.reload();
@@ -226,7 +225,7 @@ var UserInfo = React.createClass({
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
-						<a className="u-btn u-btn-full" onClick={this.logout}>退出登录</a>
+						<a className={"u-btn u-btn-full" + (this.isWx()?' f-hide':'')} onClick={this.logout}>退出登录</a>
 					</section>
 
 				</div>)

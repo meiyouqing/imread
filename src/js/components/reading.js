@@ -402,7 +402,7 @@ var Reading = React.createClass({
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
 			if(location.pathname.slice(-5) == 'login')	return;
-			this.goLogin(this.getContent);
+			this.goLogin(this.getContent,location.pathname);
 			return;
 		}
 
