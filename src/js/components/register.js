@@ -1,8 +1,10 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
+import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import GLOBAL from '../modules/global'
+import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
 
@@ -43,8 +45,8 @@ var Register = React.createClass({
 			var options = {
 				expires: 1000
 			};
-			GLOBAL.cookie('userPhone', postData.mobile_num,options);
-			GLOBAL.cookie('userToken', data.token, options);
+			//GLOBAL.cookie('userPhone', postData.mobile_num,options);
+			storage.set('userToken', data.token, options);
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
 				token: postData.token

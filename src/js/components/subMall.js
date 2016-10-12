@@ -24,14 +24,6 @@ var Mall = React.createClass({
 			list:null
 		}
 	},
-	componentWillReceiveProps: function(nextProp){
-		//console.log(nextProp.params.subnav !== this.props.params.subnav)
-		if(nextProp.params.subnav !== this.props.params.subnav){
-			this.reset();
-			this.APIparam = nextProp.params.subnav;
-			this.getList();
-		}
-	},
 
 	getList: function (Update){
 		AJAX.init(this.APIparam);
@@ -56,26 +48,37 @@ var Mall = React.createClass({
 	componentWillMount:function(){
 		this.usePreload(this.props.params.subnav);
 	},
+	componentWillReceiveProps: function(nextProp){
+		//console.log(nextProp.params.subnav !== this.props.params.subnav)
+		if(nextProp.params.subnav !== this.props.params.subnav){
+			this.reset();
+			this.APIparam = nextProp.params.subnav;
+			this.getList();
+		}
+	},
 	componentDidMount: function(){
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
-		if(GLOBAL.isRouter(this.props) && !this.state.list)	this.getList(true);
+		if(GLOBAL.isRouter(this.props) && !(this.state.list && this.state.list.length))	this.getList(true);
 		this.lazyloadImage(this.refs.container);
+		this.disPatch('scroll',this.refs.container)
 	},
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
-		if(GLOBAL.isRouter(this.props) && !this.state.list)	 this.getList(true);
+		if(nextProp.params.subnav === this.props.params.subnav){
+			if(GLOBAL.isRouter(this.props) && !(this.state.list && this.state.list.length))	 this.getList(true);
+		}
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);
-
-
+		this.disPatch('scroll',this.refs.container)
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		//console.log(this.props,nextProp)
 		return this.state.noMore !== nextState.noMore
 				|| this.state.list !== nextState.list
+				|| this.state.onerror !== nextState.onerror
 				|| this.props.children !== nextProp.children;
 	},
 	render:function(){

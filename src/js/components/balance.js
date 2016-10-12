@@ -7,7 +7,7 @@ import Mixins from '../modules/mixins'
 var Header = require('./header');
 var Recharge = require('./recharge');
 
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/pay.css')
 }
 

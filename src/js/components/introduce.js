@@ -11,7 +11,7 @@ var Header = require('./header');
 var Book1 = require('./book1');
 var Chapterlist = require('./chapterlist');
 var parseQuery = require('../modules/parseQuery');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/introduce.css')
 }
 
@@ -39,6 +39,7 @@ var Detail = React.createClass({
 		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
 	startReading: function(){
+		console.log(this.props)
 		var readLog = storage.get('readLogNew');
 		var chapterid = this.props.book.current_chapter_id,
 			sourcebid = this.props.book.source_bid,

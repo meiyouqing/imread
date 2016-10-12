@@ -4,7 +4,7 @@ import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
 var myEvent = require('../modules/myEvent');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/user.css');
 }
 var ULine = React.createClass({
@@ -49,20 +49,10 @@ var MUblock = React.createClass({
 var UserList = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
-		const logoutBtn = (<div onClick={this.login}>
-					<div className="avatar-wrap">
-							<img src='/src/img/user/avatar@2x.png' />
-					</div>
-					<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
-				</div>)
 		return {
 			user: GLOBAL.user,
 			needUpdate: 0,
-			userInfo: {
-				portraitUrl: '/src/img/user/avatar@2x.png',
-				balance: 0
-			},
-			logoutBtn : logoutBtn
+			userInfo: null,
 		};
 	},
 	login: function(e) {
@@ -72,27 +62,10 @@ var UserList = React.createClass({
 			browserHistory.push(GLOBAL.setHref('userInfo'));
 		}
 	},
-	shouldComponentUpdate: function(nextProp, nextState) {
-		return this.state.user.phone !== nextState.user.phone 
-		    || this.state.needUpdate !== nextState.needUpdate
-		    || this.props.children !== nextProp.children
-		    || this.state.userInfo !== nextState.userInfo;
-	},
 	componentDidMount: function() {
 		this.getUserInfo();
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
 		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
-		 if (this.isLogin()) {
-			var userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
-			this.setState({
-				logoutBtn : (<div>
-					<div className="avatar-wrap" onClick={this.login}>
-						<img src={this.state.userInfo.portraitUrl || '/src/img/user/avatar@2x.png'} />
-					</div>
-					<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
-				</div>)
-			})
-		}
 	},
 	componentWillUnmount: function(){
 		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,null), false);
@@ -103,29 +76,26 @@ var UserList = React.createClass({
 		if (this.isLogin()) {
 			AJAX.init('me');
 			AJAX.get(function(data) {
-				var newPortraitUrl = data.portraitUrl;
-				data.portraitUrl = that.state.userInfo.portraitUrl;
+				if(data.code != 200) return;
 				that.setState({
 					userInfo: data,
-					needUpdate: that.needUpdate + 1
 				});
-				GLOBAL.cookie('userId', data.user_id, {
-					expires: 1000
-				});
-
 				callback && (callback());
-
-				if (!/\/face\/null$/.test(newPortraitUrl)) {
-					GLOBAL.loadImage(newPortraitUrl, function() {
-						data.portraitUrl = newPortraitUrl;
-						that.setState({
-							userInfo: data,
-							needUpdate: that.needUpdate + 1
-						});
-					});
-				}
+				// if (!/\/face\/null$/.test(newPortraitUrl)) {
+				// 	GLOBAL.loadImage(newPortraitUrl, function() {
+				// 		data.portraitUrl = newPortraitUrl;
+				// 		that.setState({
+				// 			userInfo: data,
+				// 			needUpdate: that.needUpdate + 1
+				// 		});
+				// 	});
+				// }
 			}, GLOBAL.noop);
-		} 
+		}else{
+			that.setState({
+				userInfo: null,
+			});
+		}
 	},
 	requireLogin:function(e) {
 		var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
@@ -159,11 +129,14 @@ var UserList = React.createClass({
 	gotoBalance:function(){
 		browserHistory.push(GLOBAL.setHref('balance'))
 	},
-	// shouldComponentUpdate: function(nextProp,nextState){
-	// 	//console.log(this.props,nextProp)
-	// 	return this.props.noMore !== nextState.noMore;
-	// },
+	shouldComponentUpdate: function(nextProp, nextState) {
+		return this.state.user.phone !== nextState.user.phone 
+		    || this.state.needUpdate !== nextState.needUpdate
+		    || this.props.children !== nextProp.children
+		    || this.state.userInfo !== nextState.userInfo;
+	},
 	render:function() {
+
 		var blockData = [
 			[{
 				title: '书架',
@@ -210,37 +183,31 @@ var UserList = React.createClass({
 				href: 'setting'
 			}]
 		];
-		var logoutBtn;
-		var userName = '',aidou=0;
-		var avatarPic = this.state.userInfo.portraitUrl;
-		avatarPic = avatarPic? avatarPic.replace(/^http\:\/\//,'https://'):false;
-		 if (this.isLogin()) {
-			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
-			logoutBtn = (<div>
-				<div className="avatar-wrap" onClick={this.login}>
-					<img src={ avatarPic || '/src/img/user/avatar@2x.png'} />
-				</div>
-				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
-				</div>
-			);
-		} else {
-			logoutBtn = (<div onClick={this.login}>
-				<div className="avatar-wrap">
-						<img src='/src/img/user/avatar@2x.png' />
-				</div>
-				<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
-				</div>
-			);
+
+		let userCard;
+		if(!this.state.userInfo){
+			userCard = (<div onClick={this.login}>
+							<div className="avatar-wrap">
+									<img src='/src/img/user/avatar@2x.png' />
+							</div>
+							<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
+						</div>)
+		}else{
+			userCard = (<div>
+						<div className="avatar-wrap" onClick={this.login}>
+							<img src={ this.state.userInfo.portraitUrl || '/src/img/user/avatar@2x.png'} />
+						</div>
+						<div className="username"><p className="f-ellipsis" onClick={this.login}>{this.state.userInfo.user_name || this.state.userInfo.mobile_num}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
+					</div>)
 		}
+
 		return (
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
 							<img src="/src/img/user/bg@2x.png" className="bg"/>
-						
-								{this.state.logoutBtn}
-	
+								{userCard}
 						</section>
 						{
 							blockData.map(function(lines, i) {

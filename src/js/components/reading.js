@@ -12,7 +12,7 @@ if(typeof window !== 'undefined'){
 	var Hammer = require('../modules/hammer');
 	var isHidden = require('../modules/isHidden');
 }
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/reading.css');
 }
 
@@ -433,7 +433,7 @@ var Reading = React.createClass({
 			return;
 		}
 		if(data.pageType==='order'){
-			if(GLOBAL.cookie(that.bid)==='autoPay'){
+			if(storage.get(that.bid)==='autoPay'){
 				that.autoPay(data);
 				return;
 			}
@@ -677,13 +677,11 @@ var Reading = React.createClass({
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
 		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
 
-		if (GLOBAL.cookie('showGuide') != '1') {
+		if (storage.get('showGuide') != '1') {
 			this.setState({
 				showGuide: true
 			});
-			GLOBAL.cookie('showGuide', '1', {
-				expires: 1000
-			});
+			storage.set('showGuide', '1');
 		}
 		//扉页信息
 		this.states = this.props.location.state;
@@ -848,15 +846,15 @@ var Reading = React.createClass({
 			AJAX.init('loginout');
 			AJAX.get(function(res){
 			}.bind(this));
-			GLOBAL.removeCookie('userPhone');
-			GLOBAL.removeCookie('userToken');
-			GLOBAL.removeCookie('uuid');
+			//GLOBAL.removeCookie('userPhone');
+			storage.rm('userToken');
+			//GLOBAL.removeCookie('uuid');
 
 			this.getContent();
 		}.bind(this));
 	},
 	goBack: function(){
-		GLOBAL.cookie(this.bid,'autoPay',7)
+		storage.set(this.bid,'autoPay',7)
 		this.getContent();
 		this.setState({order: false});
 	},

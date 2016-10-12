@@ -6,7 +6,7 @@ import React from 'react'
 var Header = require('./header');
 var PayTips = require('./payTips');
 var Recharge_result = require('./recharge_result');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
 if(typeof window !== 'undefined'){
@@ -112,7 +112,7 @@ var Recharge = React.createClass({
 		// var gotInit = function(data,again){
 		// 	this.initData = data;
 		// 	this.refs.key.focus();
-		// 	GLOBAL.cookie('payUser',this.params_init.mobileNum);
+		// 	storage.set('payUser',this.params_init.mobileNum);
 		// 	if(again){
 		// 		var postData = {
 		// 			mobileNum: this.params_init.mobileNum,
@@ -127,7 +127,7 @@ var Recharge = React.createClass({
 
 		this.prv_num = mobile_num;
 		countDown();
-		// if(!this.initData||GLOBAL.cookie('payUser')!==mobile_num){
+		// if(!this.initData||storage.get('payUser')!==mobile_num){
 		// 	AJAX.go('paySign', this.params_init, function(data) {
 		// 		// console.log(data)
 		// 		this.params_init.sign = data.content;
@@ -201,12 +201,12 @@ var Recharge = React.createClass({
 		//this.getPay();
 		 this.getFee();
 	},
-	componentDidMount: function() {
-		var phoneNumber = GLOBAL.cookie('payUser');
-		if(phoneNumber){
-			this.refs.mobile_num.value = phoneNumber;
-		}
-	},
+	// componentDidMount: function() {
+	// 	var phoneNumber = storage.get('payUser');
+	// 	if(phoneNumber){
+	// 		this.refs.mobile_num.value = phoneNumber;
+	// 	}
+	// },
 	//安卓下键盘位移
 	timeoutId:0,
 	handleFocus:function (){

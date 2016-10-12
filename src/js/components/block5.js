@@ -1,5 +1,6 @@
 import GLOBAL from '../modules/global'
 import React from 'react'
+import storage from '../modules/storage'
 import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
@@ -136,7 +137,7 @@ var Block5 = React.createClass({
 			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
 			if(link) return location.pathname+'/'+url;
 			// return url;
-			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
+			return location.pathname.match(/\/mall\/page.\d+/)[0] +'/'+url;
 		};
 
 		switch(type){
@@ -187,7 +188,7 @@ var Block5 = React.createClass({
 			                	this.props.data.contentlist.map(function(v, i) {
 			                		
 									var hrefObj = this.typeHref(v);
-									var search="?devicetoken="+GLOBAL.cookie('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									var search="?devicetoken="+storage.get('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
 									var imgSrc = v.intercut_url || v.image_url;
 									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};

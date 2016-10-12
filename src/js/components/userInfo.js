@@ -6,9 +6,10 @@ import { browserHistory } from 'react-router'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
+import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/userinfo.css');
 }
 var UserInfo = React.createClass({
@@ -32,16 +33,14 @@ var UserInfo = React.createClass({
 		POP.confirm('确定退出登录?',function() {
 			AJAX.init('loginout');
 			AJAX.get(function(res){
-				GLOBAL.removeCookie('userPhone');
-				GLOBAL.removeCookie('userToken');
-				GLOBAL.removeCookie('uuid');
-
-				console.log(GLOBAL.cookie('__qc__k'))
+				console.log(storage.rm('userToken'));
+				//GLOBAL.removeCookie('uuid');
 				if(GLOBAL.cookie('__qc__k')) {
 					GLOBAL.removeCookie('__qc_wId');
 					GLOBAL.removeCookie('__qc__k');
 					window.location.reload();
 				} else {
+					this.disPatch('updateUser');
 					GLOBAL.goBack();
 				}
 			}.bind(this));
@@ -223,7 +222,7 @@ var UserInfo = React.createClass({
 						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}
-						<img src={this.state.portraitUrl || "https://m.imread.com/src/img/icons/ic_avatar@2x.png"}  />
+						<img src={this.state.portraitUrl || "/src/img/icons/ic_avatar@2x.png"}  />
 					</section>
 					<section className="m-user-detail">
 						<ul>

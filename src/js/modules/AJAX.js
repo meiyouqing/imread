@@ -121,34 +121,14 @@ function getGETUrl(url, postdata) {
 function GETJSON(method, url, postdata={}, callback, onError) {
 	var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'http://192.168.0.34:9090';
-	//var urlBase = 'http://192.168.0.252:8080';
+	//var urlBase = 'http://m.imread.com/nonono';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
-	let headers = {};
 	if(typeof window !== 'undefined'){
 		GETJSONWITHAJAX(method, url, postdata, callback, onError);
 		return;
-		// headers={
-		// 	'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
-		// 	'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
-		// 	'Info-Version': '2.3.1',
-		// 	'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
-		// 	'Info-Vcode': '101',
-		// 	'Info-Userid': GLOBAL.cookie('userId') || '',
-		// 	'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
-		// 	'Info-Resolution': window.screen.width + '*' +  window.screen.height,
-		// 	'Curtime': new Date().Format('yyyyMMddhhmmss'),
-		// 	'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
-		// 	'Content-Type':'application/x-www-form-urlencoded, multipart/form-data'
-		// };
-		// if(method === 'POST'&&postdata.formdata){
-		// 	headers = {
-		// 		...headers,
-		// 		'Content-Type':'application/x-www-form-urlencoded'
-		// 	}
-		// }
 	}
 
 	// var cacheUrl = getGETUrl(method + '-' + url, postdata);
@@ -165,32 +145,45 @@ function GETJSON(method, url, postdata={}, callback, onError) {
 	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
 	// console.log(headers)
 	// console.log(method)
+
 	const promise = method === 'GET'?
 				fetch(getGETUrl(url,postdata)):
 				fetch(url,{
 					method,
 					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
 				});
-	promise.then(function(response) {
+	let timeoutId = 0;
+	const timeout = (ms,promise) => {
+		return new Promise((resolve,reject)=>{
+			timeoutId = setTimeout(()=>{
+				reject(new Error('链接超时'));
+			},ms)
+			promise.then(resolve,reject);
+		})
+	};	
+	timeout(5000,promise).then(function(response) {
+		clearTimeout(timeoutId);
 		if (response.status >= 200 && response.status < 300) {
 		    return response.json();
 		  } else {
 		    const error = new Error(response.statusText)
-		    error.response = response
+		    error.response = response;
 		    throw error
+			//onError(error)
 		  }
 	})
 	.then(function(stories) {
 	    callback(stories)
 	})
 	.catch(function(error) {
-    	console.log('request failed', error)
-    	onError && onError(error)
+    	//console.log('request failed', error)
+    	onError(error)
   	})
 }
 function GETJSONWITHAJAX(method, url, postdata, callback, onError) {
 	method = method || 'POST';
-	var time = 15000;
+	var time = 10000;
+	var timeout = false;
 	var request = null;
 	try {
 		if (window.XMLHttpRequest) {
@@ -204,7 +197,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError) {
 	if (!request) {
 		return;
 	}
-	var timeout = false;
+
 	var timer = setTimeout(function() {
 		timeout = true;
 		request.abort();
@@ -222,30 +215,17 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError) {
 			var res = false;
 			try {
 				res = JSON.parse(request.responseText);
+				if(!res) {
+					onError(new Error('服务器返回为空'));
+					return;
+				}
+				callback(res);
 			} catch (e) {
 				//res = '连接超时！';
-				onError(res);
+				onError(e);
 			}
-			// if (res.code !== 200) {
-			// 	onError(res);
-			// } else {
-
-				//如果缓存中没有结果则触发callback
-				//TODO 比较新的结果和缓存结果，如果不同则重新触发callback
-				// if (!cacheResponse) {
-					if(!res) {
-						onError(new Error('服务器返回为空'));
-						return;
-					}
-					callback(res);
-				// }
-
-				//需要缓存，缓存ajax结果
-				// var cacheUrl = getGETUrl(method + '-' + url, postdata);
-				// if (imCache.needCache(cacheUrl)) {
-				// 	imCache.setCache(cacheUrl, res);
-				// }
-			// }
+		}else {
+			onError(request.status+' '+request.responseText)
 		}
 	};
 
@@ -287,9 +267,8 @@ function setRequestHeaders(request) {
 		'Info-Os': '',
 		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
 		'Info-Vcode': '101',
-		'Info-Userid': GLOBAL.cookie('userId') || '',
-		'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
-		//'Info-Token': GLOBAL.cookie('userToken') || '',
+		'Info-Userid': GLOBAL.header.userId || '',
+		'Info-Uuid': GLOBAL.header.uuid || GLOBAL.getUuid(),
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),

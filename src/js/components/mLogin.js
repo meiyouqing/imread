@@ -1,15 +1,18 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
+import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import { Link } from 'react-router';
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
+import storage from '../modules/storage'
+import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
-var myEvent = require('../modules/myEvent');
-if(false||typeof window !== 'undefined'){
+var myEvent = require('../modules/myEvent'); 
+if(typeof window !== 'undefined'){
 	require('../../css/login.css');
 }
 
@@ -45,8 +48,8 @@ var mLogin = React.createClass({
 				expires: 1000
 			};
 			//GLOBAL.cookie('userPhone', postData.phone, options);
-			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('userId', data.userInfo.user_id, options);
+			storage.set('userToken', data.token, options);
+			GLOBAL.header['userId'] = data.userInfo.user_id;
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
@@ -104,7 +107,7 @@ var mLogin = React.createClass({
 					POP._alert('登录成功');
 					this.setState({onlogin: false});
 					clearInterval(times);
-					GLOBAL.cookie('userToken', "loaded", {expires: 1000});
+					storage.set('userToken', "loaded", {expires: 1000});
 					this.disPatch('updateUser');
 					this.disPatch('telBind');
 					GLOBAL.goBack();

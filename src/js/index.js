@@ -1,11 +1,11 @@
-//"use strict"
+
 import browserHistory from './modules/history'
 import { Router, Route} from 'react-router'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import routes from './components/routes'
 import GLOBAL from './modules/global';
-import Token from './modules/token';
+// import Token from './modules/token';
 import { render } from 'react-dom';
 require('./modules/readConfig');
 
@@ -20,11 +20,10 @@ if(typeof window !== 'undefined'){
 		var channel = window.location.search.match(/channel=(\w+)&?/)[1];
 		GLOBAL.header.channel = channel;
 	}
-	GLOBAL.setUser({
-		phone: GLOBAL.cookie('userPhone'),
-		token: GLOBAL.cookie('userToken')
-	});
-	//Token.refreshToken();	
+	// 处理服务端渲染失败
+	if(window.__PRELOADED_STATE__ === null){
+		browserHistory.replace('/');
+	}
 }
 
 render(

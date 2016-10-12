@@ -1,6 +1,20 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import NoData from './noData'
+import Loading from './loading'
+import parseQuery from '../modules/parseQuery'
+import { Link } from 'react-router';
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import storage from '../modules/storage'
+import React from 'react'
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
-require('../../css/login.css');
+if(typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 
 var Login = React.createClass({
 	mixins:[Mixins()],
@@ -40,7 +54,7 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-				GLOBAL.cookie('userToken', data.token, options);
+				storage.set('userToken', data.token, options);
 				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
@@ -103,8 +117,8 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-				GLOBAL.cookie('userPhone', postData.mobile_num,options);
-				GLOBAL.cookie('userToken', data.token, options);
+				//GLOBAL.cookie('userPhone', postData.mobile_num,options);
+				storage.set('userToken', data.token, options);
 				// GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
@@ -239,7 +253,7 @@ var Login = React.createClass({
 	do_result: function(data){
 		var that = this;
 		if(data.code == 200){
-			GLOBAL.cookie('userToken', 'loaded');
+			storage.set('userToken', 'loaded');
 			that.disPatch('updateUser');
 			that.disPatch('updateMall');
 			//判断登陆后的跳转

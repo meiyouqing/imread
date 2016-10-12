@@ -5,7 +5,7 @@ import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
 var Header = require('./header');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { browserHistory } from 'react-router'
 var Header = require('./header');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/about.css')
 }
 var About = React.createClass({

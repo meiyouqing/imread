@@ -16,7 +16,6 @@ Date.prototype.Format = function (fmt) {
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
-
 const GLOBAL = {
 	// state:1,
 	// historyPath: null,
@@ -169,7 +168,7 @@ const GLOBAL = {
 		return true;
 	},
 	cookie: function(key, value, options) {
-		//console.log(222222222222222222222222);return;
+		console.log('>>>>>>>>>>>>>>>>>'+key);
 		// write
         if (value !== undefined) {
                 options = options || {};
@@ -182,7 +181,7 @@ const GLOBAL = {
                         '=',
                         encodeURIComponent(value),
                         options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                        options.path?'; path='+options.path:'; path=/',
+                        options.path ? '; path='+options.path:'; path=/',
                         options.domain ? '; domain=' + options.domain :'',
                         options.secure ? '; secure=' + options.secure :''
                 ].join(''));
@@ -198,9 +197,7 @@ const GLOBAL = {
                 if (key && key === name) {
                         result = cookie;
                         break;
-                }
-
-                if (!key) {
+                }else if (!key) {
                         result[name] = cookie;
                 }
         }
@@ -278,12 +275,10 @@ const GLOBAL = {
 	},
 	noop: function() {},
 	getUuid: function () {
-		var uuid = GLOBAL.cookie('InfoUuid') || storage.get('InfoUuid', 'string');
+		var uuid = storage.get('InfoUuid', 'string');
 		if (!uuid) {
 			uuid = '' + (+new Date) + Math.random();
-			GLOBAL.cookie('InfoUuid', uuid, {
-	  				expires: 1000
-	  		});
+			GLOBAL.header['InfoUuid'] = uuid;
 			storage.set('InfoUuid', uuid);
 		}
 		return uuid;

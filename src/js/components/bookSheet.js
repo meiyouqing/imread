@@ -8,7 +8,7 @@ import React from 'react'
 var Header = require('./header');
 //var Block7 = require('./block7');
 var Book1 = require('./book1');
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/bookSheet.css');
 }
 

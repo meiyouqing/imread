@@ -1,3 +1,5 @@
+import NoData from './noData'
+import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import { browserHistory } from 'react-router'
 import AJAX from '../modules/AJAX'
@@ -11,18 +13,21 @@ var UserList = require('./userList');
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	getNav: function(){
-		if(window.__PRELOADED_STATE__)
 		AJAX.init('group.1');
-		AJAX.get(this.ajaxHandle);
+		AJAX.get(this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
-		this.subnav = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks;
+		this.subnav = 'page.'+data.pagelist[0].pgid;
 		this.setState({
 			navList:data.pagelist
 		});
 		if(typeof window === 'undefined') return;
-		if(!(location.pathname==='/mall'|| location.pathname==='/mall/')) return;
+		if(!/mall\/?$/.test(location.pathname)) return;
 		browserHistory.replace('/mall/'+this.subnav);	
+	},
+	getNavFaile: function(){
+		console.log('getInitialState')
+		this.setState({onerror:true})
 	},
 	gotoSearch: function(){
 		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
@@ -31,7 +36,7 @@ var Mall = React.createClass({
 		return {
 			navList: null,
 			showUser:false,
-			// onNotice: true
+			onerror:false
 		}
 	},
 	hideUser: function(){
@@ -45,21 +50,19 @@ var Mall = React.createClass({
 			showUser:true
 		})
 	},
-	getLastparam: function(){
-		var param = location.pathname.split('/').pop();
-		return param.indexOf('page')>=0;
-	},
 	//for the server rending
 	componentWillMount:function(){
 		this.usePreload('mallNav');
 	},
-	// componentDidMount: function(){
-		//if(GLOBAL.isRouter(this.props) && !this.hasPreload('mallNav')) this.getNav();
-	// },
+	componentDidMount: function(){
+		document.ontouchmove = function(e){
+			e.stopPropagation();
+		};
+		if(!this.state.navList) this.getNav();
+	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
-
 			if(obj.book_id)
 				browserHistory.replace(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
 			else if(obj.sheet_id){
@@ -68,23 +71,19 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		// document.ontouchmove = function(e){
-		// 	e.stopPropagation();
-		// };
-		//console.log(this.props)
 		if(!this.state.navList) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
 		}
-		if(!/page/.test(location.pathname) && !!this.state.navList && this.subnav){
+		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){
 			browserHistory.replace('/mall/'+this.subnav);	
 		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
 				|| this.state.showUser !== nextState.showUser
-				|| this.state.onNotice !== nextState.onNotice
+				|| this.state.onerror !== nextState.onerror
 				|| this.props.children !== nextProp.children
 				|| this.props.params.subnav !== nextProp.params.subnav;
 	},
@@ -95,31 +94,32 @@ var Mall = React.createClass({
 
 	render:function(){
 		//console.log(this.props)
-		var mallNav,userList;
-		if(this.state.navList){
-			mallNav = <MallNav navList={this.state.navList} />;
-			userList = <UserList route={this.props.route} />;
-		}
-
 		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
-		// var notice = (<section className="safari">
-						
-		// 				<div className="notice-safari" onClick={this.closeNotice}></div><span>为确保最佳体验，请在"设置-Safari-阻止Cookie"中选择"始终允许"</span>
-		// 			</section>)
+		var main;
+		if(this.state.navList){
+			main = (
+				<div className="g-mall" style={{top:0}}>
+					<MallNav navList={this.state.navList} />
+					<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
+					<section className={"m-user-list"+(this.state.showUser? ' show':'')}>
+						<UserList route={this.props.route} />
+					</section>
+					{this.props.children}
+				</div>
+			)
+		}else if(this.state.onerror){									
+			main = <div className="g-main"><NoData type="UFO" /></div>;
+		}else{
+			main = <div className="g-main"><Loading /></div>;
+		}
 
-		return (<div>
-
-			<div className={"g-mall hide"}>
+		return (
+			<div>
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
-				{mallNav}
-				<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
-				<section className={"m-user-list"+(this.state.showUser? ' show':'')}>
-					{userList}
-				</section>
-				{this.props.children}
-			</div></div>
+				{main}
+			</div>
 			)
 	}
 })

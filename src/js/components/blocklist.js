@@ -395,7 +395,21 @@ var Block15 = React.createClass({
 		}
 	}
 });
-
+var AdWrap = React.createClass({
+	getInitialState:function(){
+		return {show:false}
+	},
+	componentDidMount: function(){
+		this.setState({show:true})
+	},
+	render:function(){
+		if(this.state.show){
+			return <Block5 data={this.props.data} style={this.props.style} />
+		}else{
+			return <section></section>
+		}
+	}
+})
 var Blocklist = React.createClass({
 	getInitialState: function(){
 		return {
@@ -427,20 +441,8 @@ var Blocklist = React.createClass({
 				case 4 :
 					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
-				case 555 : //banner铺满
-					// require.ensure(['./block5'],function(require){
-					// 	setTimeout(function() {
-					// 		var Block5 = require('./block5');
-					// 		var block5 = <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
-					// 		that.state.comps.splice(i,1,block5)
-					// 		that.state.block5[i] = block5;
-					// 		that.setState({
-					// 			comps: that.state.comps,
-					// 			block5: that.state.block5
-					// 		});
-					// 	}, 0);
-					// });
-					return <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
+				case 5 : //banner铺满
+					return <AdWrap key={i} data={block} style={block.style} />;
 				case 6 :
 					return <Block6 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 7 : //7 圆形热词风格

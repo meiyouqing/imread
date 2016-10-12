@@ -8,7 +8,7 @@ var Header = require('./header');
 var Book9 = require('./book9_recentRead');
 var NoData = require('./noData');
 
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/recentRead.css');
 }
 if(typeof window !== 'undefined'){

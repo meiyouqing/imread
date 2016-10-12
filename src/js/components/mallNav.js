@@ -12,7 +12,7 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
-							var href = 'page.'+v.pgid+'.'+v.blocks;
+							var href = 'page.'+v.pgid;
 							return (
 								<MallNavLink to={'/mall/'+href} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)

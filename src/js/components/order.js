@@ -9,7 +9,7 @@ if(typeof window !== 'undefined'){
 }
 var Header = require('./header');
 
-if(false||typeof window !== 'undefined'){
+if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
 

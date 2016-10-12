@@ -1,4 +1,5 @@
 import myEvent from '../modules/myEvent'
+import storage from '../modules/storage'
 import { browserHistory } from 'react-router'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
@@ -13,6 +14,7 @@ var mixins = function() {
             return parts.split('.');
         },
         usePreload: function(n){
+            if(typeof window !== 'undefined' &&　!window.__PRELOADED_STATE__) return;
             n = n.replace(/\./g,'_');
             n = encodeURIComponent(n);
             if(typeof window === 'undefined'){
@@ -47,7 +49,7 @@ var mixins = function() {
                                 img.src = _src;
                             }
                             img.setAttribute('data-lazyload-src', "loaded");
-                            that.disPatch('scroll',container);
+                            //that.disPatch('scroll',container);
                             //container.dispatchEvent(new Event('scroll'));//该句存在兼容问题，低版本报错
                             //img.style.height = img.offsetWidth * 4.0 / 3.0 + 'px';
                         }
@@ -135,7 +137,7 @@ var mixins = function() {
                 }
         },
         isLogin: function() {
-            return !!GLOBAL.cookie('token') || !!GLOBAL.cookie('userToken');
+            return !!storage.get('userToken','string');
         },
         goLogin: function(callback,href) {
             var ua = window.navigator.userAgent.toLowerCase();
@@ -167,7 +169,7 @@ var mixins = function() {
             return true;
         },
         disPatch: function(event,dom) {
-            console.log('<<<<<<<<<<<<<<<<<<<<<disPatch>>>>>>>>>>>>>>>>>>>')
+            console.log('<<<<<<<<<<<<<<<<<<<<<'+event+'>>>>>>>>>>>>>>>>>>>')
             dom = dom?dom:document;
             try {
                 // document.dispatchEvent(new Event('updateUser'));
