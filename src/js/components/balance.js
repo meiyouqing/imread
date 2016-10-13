@@ -7,14 +7,6 @@ var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		// AJAX.init(this.props.route.path)
-		// AJAX.get(function(data) {
-		// 	this.setState({
-		// 		loading: false,
-		// 		balance: data.success.balance,
-		// 		list: !this.state.isWX?data.success.list:this.state.list
-		// 	});
-		// }.bind(this));
 		
 		AJAX.go('balance',{
 			payType: this.state.isWX?2:1

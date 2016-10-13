@@ -19,7 +19,6 @@ var Login = React.createClass({
 		var postData = {
 			phone: this.refs.mobile_num.value,
 			password: this.refs.password.value//,
-			//'param': [{'bookId': 1, 'type': 2}, {'bookId': 2, 'type': 3}]
 		};
 		if (!GLOBAL.assertNotEmpty(postData.phone, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
@@ -32,7 +31,6 @@ var Login = React.createClass({
 				expires: 1000
 			};
 			that.loading = false;
-			//GLOBAL.cookie('userPhone', postData.phone, options);
 			
 			GLOBAL.setUser({
 				phone: postData.phone,
@@ -41,7 +39,6 @@ var Login = React.createClass({
 
 			if(data.code == 200){
 				GLOBAL.cookie('userToken', data.token, options);
-				// GLOBAL.cookie('uuid', data.userInfo.uuid || GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				//判断登陆后的跳转
@@ -203,10 +200,6 @@ var Login = React.createClass({
 		//判断来源from
 		this.from = parseQuery(location.search);
 
-		// if(this.is_WX() && !this.from.code){
-  // 			this.WX_skip();
-  // 		}
-
 		var  that = this;
 		//if(GLOBAL.cookie('__qc__k')){
 			QC.Login({
@@ -222,7 +215,7 @@ var Login = React.createClass({
 				        	img_url: reqData.figureurl_qq_2,
 				        	nick_name:reqData.nickname},function(data){
 
-						that.do_result(data);
+						that.do_result(data,'qq');
 					});
 			    });  
 			}, function(opts) {
@@ -238,22 +231,23 @@ var Login = React.createClass({
         			grant_type: 'authorization_code',
         			redirect_uri: encodeURIComponent(location.origin+location.pathname)
 			   },function(res){
-			   	that.do_result(res);
+			   	that.do_result(res,'wb');
 			   })
 		}
 	},
-	do_result: function(data){
+	do_result: function(data,type){
 		var that = this;
 		if(data.code == 200){
 			GLOBAL.cookie('userToken', 'loaded');
 			that.disPatch('updateUser');
 			that.disPatch('updateMall');
+
+			GLOBAL.cookie('loadingType', type);
+
 			//判断登陆后的跳转
 			if(that.from && that.from.skipurl){
 				window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
 			}else{
-				// GLOBAL.goBack();
-				// myEvent.execCallback('login');
 				window.location.href =location.href.replace('/login','');
 			}
 		} else {
@@ -262,7 +256,6 @@ var Login = React.createClass({
 		}
 	},
 	QQ_login: function(){
-		// this.setState({QQ_loading: true});
 		if(navigator.userAgent.indexOf('QQ')>-1)
     			return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri='+encodeURIComponent(location.href), 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
   		else 
@@ -272,17 +265,6 @@ var Login = React.createClass({
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri="+encodeURIComponent(location.origin+location.pathname);
 
   	},
-  	// WX_skip: function(){
-  	// 	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
-  	// },
-  	// is_WX: function(){
-  	// 	var ua = window.navigator.userAgent.toLowerCase();
-	  //   	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-	  //       	return true;
-	  //  	}else{
-	  //  	      return false;
-	  //  	}
-  	// },
 	render: function() {
 		var list;
 		var loading = <Loading />
