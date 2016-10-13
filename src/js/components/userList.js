@@ -4,12 +4,26 @@ var Mixins = require('../modules/mixins');
 require('../../css/user.css');
 
 var ULine = React.createClass({
-
+	mixins: [Mixins()],
 	render: function() {
 		var Src = window.location.pathname.split('/');
 		Src = '/'+Src[1]+'/'+Src[2]+'/'+this.props.line.href;
 
-		if(this.props.line.href.indexOf('pay')>-1) Src = '/'+this.props.line.href+'?backUrl='+encodeURIComponent(location.href);
+		if(this.props.line.href.indexOf('pay')>-1) {
+			Src = 'https://m.imread.com/'+this.props.line.href+'?backUrl='+encodeURIComponent(location.href);
+		}
+
+		if(this.isWx() && this.props.line.href.indexOf('pay')>-1) {
+			return (
+			<li className="u-line">
+				<a href={Src} className="f-cb">
+					<span className={"icon-u" + ' ' + this.props.line.icon}></span>
+					<span className="title">{this.props.line.title}</span>
+					<span className='s-title'>{this.props.line.s_title}</span>
+				</a>
+			</li>
+		)
+		}
 
 		return (
 			<li className="u-line">

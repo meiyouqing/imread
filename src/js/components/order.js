@@ -9,11 +9,11 @@ var Order = React.createClass({
 			browserHistory.push(GLOBAL.setHref('m_recharge'));
 		} else {
 		 	var hash = location.pathname;
-			browserHistory.push('/pay?backUrl='+encodeURIComponent(location.href));
-			myEvent.setCallback('recharge',function(){
-				browserHistory.push(hash);
-				//this.getBalance();
-			}.bind(this));
+			location.href = '/pay?backUrl='+encodeURIComponent(location.href);
+			// myEvent.setCallback('recharge',function(){
+			// 	browserHistory.push(hash);
+			// 	//this.getBalance();
+			// }.bind(this));
 		}
  	},
 	payHandle: function(count) {
