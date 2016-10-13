@@ -8,6 +8,9 @@ var ULine = React.createClass({
 	render: function() {
 		var Src = window.location.pathname.split('/');
 		Src = '/'+Src[1]+'/'+Src[2]+'/'+this.props.line.href;
+
+		if(this.props.line.href.indexOf('pay')>-1) Src = '/'+this.props.line.href+'?backUrl='+encodeURIComponent(location.href);
+
 		return (
 			<li className="u-line">
 				<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
@@ -129,6 +132,7 @@ var User = React.createClass({
 			}, 0);
 			setTimeout(function() {
 				that.getUserInfo(function() {
+					if(href.indexOf('pay')>-1) href="/pay"
 					browserHistory.push(href || location.pathname);
 				});
 			}, 10);
@@ -167,7 +171,7 @@ var User = React.createClass({
 			}, {
 				title: '艾豆充值',
 				icon: 'icon-aidou',
-				href: 'balance',
+				href: 'pay',
 				requireLogin: this.requireLogin
 			},{
 				title: '已购书籍',

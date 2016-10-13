@@ -27,7 +27,7 @@ var UserInfo = React.createClass({
 				GLOBAL.removeCookie('userToken');
 				GLOBAL.removeCookie('uuid');
 
-				if(GLOBAL.cookie('__qc__k') || GLOBAL.cookie('__qc_wId')) {
+				if(GLOBAL.cookie('__qc__k')) {
 					GLOBAL.removeCookie('__qc_wId');
 					GLOBAL.removeCookie('__qc__k');
 					window.location.reload();

@@ -31,12 +31,6 @@ import SelfBuild from './selfbuild'
 import MLogin from './mLogin'
 import MBinder from './mBinder'
 import MRecharge from './mRecharge'
-import WxGuide from './wx_guide'
-
-import LoginTest from './login_test'
-var loginTest = <Route path="login_test" component={LoginTest} >
-		<Route path="wx_guide" component={WxGuide} />
-	</Route>
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -49,7 +43,6 @@ var loginWrap = (
 		<Route path="compact" component={Compact} />
 		<Route path="register" component={Register}/>
 		<Route path="forget" component={Register}/>
-		<Route path="wx_guide" component={WxGuide} />
 	</Route>
 	)
 var readWrap = (
@@ -110,6 +103,14 @@ var topWrap = (
 		</Route>
 	)
 
+var payWrap = (
+		<Route path="pay" component={Balance} >
+			<Route path="recharge/:rechargeId" component={Recharge} >
+				<Route path="recharge_result" component={RechargeResult} />
+			</Route>
+		</Route>
+	)
+
 var selfWrap = (
 		<Route path="self/:selfId" component={SelfBuild}>
 					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
@@ -136,9 +137,9 @@ module.exports = (
 		<IndexRedirect to="/mall" />
 		{loginWrap}
 		{selfWrap}
+		{payWrap}
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
-				{loginTest}
 				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
@@ -177,6 +178,7 @@ module.exports = (
 						<Route path="recharge_result" component={RechargeResult} />
 					</Route>
 				</Route>
+
 				<Route path="recentRead" onLeave={scrollResetHandle} component={RecentRead}>
 					{readWrap}
 				</Route>

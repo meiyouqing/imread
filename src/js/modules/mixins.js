@@ -140,7 +140,8 @@ var mixins = function() {
         },
         checkLogin: function(path) {
             if (!this.isLogin()) {
-                this.goBackUrl(path);
+                if(!this.isWx())
+                    this.goBackUrl(path);
                 return false;
             }
             return true;

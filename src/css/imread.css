@@ -540,4 +540,5 @@ progress::-webkit-progress-value  { background: #17d671; }
 
 
 .QQ_Login{width: 50px;height: 50px;background: url(../img/icons/icon_QQ@2x.png) no-repeat;display: inline-block;background-size: cover;float: left;}
-.WX_Login{width: 50px;height: 50px;background: url(../img/icons/icon_wechat@2x.png) no-repeat;display: inline-block;background-size: cover;float: right;}
+.WX_Login,.WB_Login{width: 50px;height: 50px;background: url(../img/icons/icon_wechat@2x.png) no-repeat;display: inline-block;background-size: cover;float: right;}
+.WB_Login{background: url(../img/icons/icon_weibo@2x.png) no-repeat;background-size: cover;}

@@ -231,17 +231,16 @@ var Login = React.createClass({
 		//}
 
 		//微信登录
-		// if(this.from  && this.from.code) {
-		// 	this.setState({WX_loading: true});
-		// 	   AJAX.go('login_wx',{
-		// 	   	appid:'wxd64e6afb53e222ca',
-  //       			secret: 'aa53581e0f0ba8a31c32be82c153d8d9',
-  //       			code: this.from.code,
-  //       			grant_type: 'authorization_code'
-		// 	   },function(res){
-		// 	   	that.do_result(res);
-		// 	   })
-		// }
+		if(this.from  && this.from.code) {
+			this.setState({WX_loading: true});
+			   AJAX.go('login_wb',{
+        			code: this.from.code,
+        			grant_type: 'authorization_code',
+        			redirect_uri: encodeURIComponent(location.origin+location.pathname)
+			   },function(res){
+			   	that.do_result(res);
+			   })
+		}
 	},
 	do_result: function(data){
 		var that = this;
@@ -269,11 +268,9 @@ var Login = React.createClass({
   		else 
   			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
   	},
-  	WX_login: function(){
-  		// if(this.is_WX()){
-  		// 	this.WX_skip();
-  		// }else
-  			browserHistory.push(GLOBAL.setHref('wx_guide'));
+  	WB_login: function(){
+  		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri="+encodeURIComponent(location.origin+location.pathname);
+
   	},
   	// WX_skip: function(){
   	// 	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
@@ -361,7 +358,7 @@ var Login = React.createClass({
 							<div className="t-title"><span>第三方账号登录</span></div>
 							<div className="t-login">
 								<a onClick={this.QQ_login} className="QQ_Login"></a>
-								<a onClick={this.WX_login} className="WX_Login"></a>
+								<a onClick={this.WB_login} className="WB_Login"></a>
 							</div>
 						</div>
 					</div>

@@ -27,12 +27,21 @@ var Balance = React.createClass({
 		}.bind(this))
 	},
 	getInitialState: function() {
+		var back;
+		var from = parseQuery(location.search);
+		if(from && from.backUrl)
+			back = from.backUrl;
+		else 
+			back = location.origin;
+
 		return {
+			back:  <a className="f-fl icon-s icon-back" href={back} ></a>,
 			loading: true,
 			list: [],
 			balance: 0,
 			active: 0,
-			isWX: false//this.isWx()
+			isWX: this.isWx(),
+			payLoading: false
 		};
 	},
 	componentDidMount: function() {
@@ -63,20 +72,76 @@ var Balance = React.createClass({
 			}
 		});
 	},
+	WxInsideOrder: function(){
+		var that = this;
+		this.setState({payLoading: true});
+		AJAX.go('pay',{
+			productId:this.state.list[this.state.active].productId,
+			payType: '3'
+		},function(data){
+			if(data.code == 200){
+
+				if (typeof WeixinJSBridge == "undefined"){
+				   if( document.addEventListener ){
+				   	 document.removeEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+				       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+				   }else if (document.attachEvent){
+				   	 document.detachEvent('WeixinJSBridgeReady', onBridgeReady); 
+				       document.detachEvent('onWeixinJSBridgeReady', onBridgeReady);
+				       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+				       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+				   }
+				}else{
+				   onBridgeReady();
+				}
+
+				function onBridgeReady(){
+					WeixinJSBridge.invoke(
+					       'getBrandWCPayRequest', {
+					           "appId" : data.success.appid,     //公众号名称，由商户传入     
+					           "timeStamp": data.success.timestamp,         //时间戳，自1970年以来的秒数     
+					           "nonceStr" : data.success.noncestr, //随机串     
+					           "package" : data.success.package_,     
+					           "signType" : data.success.signType,         //微信签名方式：     
+					           "paySign" : data.success.paySign //微信签名 
+					       },
+					       function(res){
+					           that.setState({payLoading: false});     
+					           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+					           		that.getBalance();
+					           		// that.disPatch('updateUser');
+					           		// that.disPatch('rechargeSuccess');
+					           		POP._alert('支付完成');
+					           } else if(res.err_msg == "get_brand_wcpay_request:fail" ){
+					           		POP._alert('支付失败');
+					           }
+					       }
+					   ); 
+				}
+			} else {
+				that.setState({payLoading: false}); 
+				POP._alert('获取信息失败');
+			}
+		});
+	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.balance != this.state.balance
 			    || nextState.list != this.state.list
 			    || nextState.active != this.state.active
-			    || this.props.children != nextPros.children;
+			    || this.props.children != nextPros.children
+			    || nextState.payLoading != this.state.payLoading;
 	},
 	render: function () {
 		
-		var content;
+		var content,wxPayLoading=null;
+		if(this.state.payLoading)	wxPayLoading = <Loading />;
+
 		if (this.state.loading) {
 			content = <Loading />
 		} else {
 			content = (
 				<div>
+					{wxPayLoading}
 					<div className="u-balance">
 						<div className="i-icon-large"></div>
 						<div className="count"><span>{(this.state.balance/100).toFixed(2)}</span></div>
@@ -105,11 +170,12 @@ var Balance = React.createClass({
 					}
 					</ul>
 					<div className="u-userform">
-						<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
+						{/*<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.isWx() && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
-						{/*<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full u-btn-3"}  onClick={this.WxInsideOrder} >确认充值</a>*/}
+						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
-						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxOrder} >确认充值</a>*/}
+						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
 					</div>
 				</div>
 			);
@@ -117,7 +183,7 @@ var Balance = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header right={false} title={'艾豆充值'} path={this.props.route}/>
+				<Header right={false} left={this.state.back} title={'艾豆充值'} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

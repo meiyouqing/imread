@@ -109,8 +109,9 @@ var BookContent = (function() {
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
 			//var totalUrl = 'https://192.168.0.34:9090' + sourceConfig.chapter_content;
-			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
-							 .replace(/\?*/, '')
+			var url = totalUrl.replace('http://','https://')
+							.replace('/api/chapter','/api/v1/chapter')
+							.replace(/\?*/, '')
 						      .replace('$bid', options.book_id)
 						      .replace('$cid', options.cid)
 						      .replace('$cm', sourceConfig.cm);
