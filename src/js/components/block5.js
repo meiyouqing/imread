@@ -72,9 +72,11 @@ var Block5 = React.createClass({
 		
 	},
 	handleResize: function(e) {
+		if(!this.isMounted()) return;
 		this.setState(this.getWidthAndHeight());
 	},
 	updateIndex: function(){
+		if(!this.isMounted()) return;
 		this.setState({update: this.state.update+1});
 	},
 	componentDidMount: function() {
@@ -122,6 +124,7 @@ var Block5 = React.createClass({
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
+		var nothing = {url:'',target:'_self'};
 		if(/2|3|4/.test(data.intercut_type)){
 			target = '_blank';
 			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
@@ -131,7 +134,7 @@ var Block5 = React.createClass({
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
-		if(isNaN(type)) return '';
+		if(isNaN(type)) return nothing;
 
 		function setHref(url){
 			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
@@ -139,25 +142,26 @@ var Block5 = React.createClass({
 			// return url;
 			return location.pathname.match(/\/mall\/page.\d+/)[0] +'/'+url;
 		};
-
+		// console.log(type)
 		switch(type){
 			case 1://图书详情
-				return setHref('book/introduce.'+bid);
+				return {url:setHref('book/introduce.'+bid),target}
 			case 3://搜索
-				return setHref('search/search.'+data.name);
+				return {url:setHref('search/search.'+data.name),target}
 			case 4://目录
 			case 5://分类
-				return setHref('cat/category.'+bid);
+				return {url:setHref('cat/category.'+bid),target}
 			case 6://书城的子页面
-				return setHref('self/page.'+data.content_id+'.6.1');
+				return {url:setHref('self/page.'+data.content_id+'.6.1'),target}
 			case 7://书单
-				return setHref('sheet/bookSheet.'+bid);
+				return {url:setHref('sheet/bookSheet.'+bid),target}
 			case 11://跳h5下载游戏
-	    		case 12://跳下载apk
-	    		case 13://跳内部网页
-	    		case 14: //跳外部网页
-	    		case 15://app to H5
-	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
+			case 12://跳下载apk
+			case 13://跳内部网页
+			case 14: //跳外部网页
+			case 15://app to H5
+				return {url:data.redirect_url || "javascript:void(0)",target};
+			default: return nothing;
 		}
 	},
 	render: function() {
@@ -190,15 +194,13 @@ var Block5 = React.createClass({
 									var hrefObj = this.typeHref(v);
 									var search="?devicetoken="+storage.get('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
 									var imgSrc = v.intercut_url || v.image_url;
-									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
-									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
-									
+									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');									
 									var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 
 									if(this.props.data.contentlist.length<2) 
 										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
-			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                			<Link style={{backgroundImage: 'url(/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id=		{v.content_id}>
 			                				{imger}
 			                			</Link>
 			                		);

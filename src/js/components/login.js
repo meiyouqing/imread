@@ -1,6 +1,7 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
+import { browserHistory } from 'react-router'
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import { Link } from 'react-router';
@@ -210,10 +211,15 @@ var Login = React.createClass({
 		},100)
 	},
 	componentDidMount: function() {
+
 		//判断来源from
 		this.from = parseQuery(location.search);
-		var  that = this;
 
+		// if(this.is_WX() && !this.from.code){
+  // 			this.WX_skip();
+  // 		}
+
+		var  that = this;
 		//if(GLOBAL.cookie('__qc__k')){
 			QC.Login({
 	    			// btnId: "qqLoginBtn"
@@ -236,17 +242,18 @@ var Login = React.createClass({
 			});
 		//}
 
-		if(this.from  && this.from.code) {
-			this.setState({WX_loading: true});
-			   AJAX.go('login_wx',{
-			   	appid:'wxd64e6afb53e222ca',
-        			secret: 'aa53581e0f0ba8a31c32be82c153d8d9',
-        			code: this.from.code,
-        			grant_type: 'authorization_code'
-			   },function(res){
-			   	that.do_result(res);
-			   })
-		}
+		//微信登录
+		// if(this.from  && this.from.code) {
+		// 	this.setState({WX_loading: true});
+		// 	   AJAX.go('login_wx',{
+		// 	   	appid:'wxd64e6afb53e222ca',
+  //       			secret: 'aa53581e0f0ba8a31c32be82c153d8d9',
+  //       			code: this.from.code,
+  //       			grant_type: 'authorization_code'
+		// 	   },function(res){
+		// 	   	that.do_result(res);
+		// 	   })
+		// }
 	},
 	do_result: function(data){
 		var that = this;
@@ -269,22 +276,28 @@ var Login = React.createClass({
 	},
 	QQ_login: function(){
 		// this.setState({QQ_loading: true});
-    		return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fiframe%2FQQ_Url%2Findex.html', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+		if(navigator.userAgent.indexOf('QQ')>-1)
+    			return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri='+encodeURIComponent(location.href), 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+  		else 
+  			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
   	},
   	WX_login: function(){
-  		if(this.is_WX()){
-  			window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
-  		}else
+  		// if(this.is_WX()){
+  		// 	this.WX_skip();
+  		// }else
   			browserHistory.push(GLOBAL.setHref('wx_guide'));
   	},
-  	is_WX: function(){
-  		var ua = window.navigator.userAgent.toLowerCase();
-	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-	        	return true;
-	   	}else{
-	   	      return false;
-	   	}
-  	},
+  	// WX_skip: function(){
+  	// 	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+  	// },
+  	// is_WX: function(){
+  	// 	var ua = window.navigator.userAgent.toLowerCase();
+	  //   	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+	  //       	return true;
+	  //  	}else{
+	  //  	      return false;
+	  //  	}
+  	// },
 	render: function() {
 		var list;
 		var loading = <Loading />
@@ -356,13 +369,13 @@ var Login = React.createClass({
 							</div>
 						</div>
 						{list}
-						{/*<div className="third-login">
+						<div className="third-login">
 							<div className="t-title"><span>第三方账号登录</span></div>
 							<div className="t-login">
 								<a onClick={this.QQ_login} className="QQ_Login"></a>
 								<a onClick={this.WX_login} className="WX_Login"></a>
 							</div>
-						</div>*/}
+						</div>
 					</div>
 				</div>
 				{this.props.children}

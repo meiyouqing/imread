@@ -55,7 +55,7 @@ var Search = React.createClass({
 				content = <NoData />;
 			}
 		}else{
-			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+			//if(GLOBAL.isRouter(this.props))	//兼容低端安卓
 				content = <Loading />;
 		}
 		if(this.state.UFO){

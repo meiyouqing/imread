@@ -28,7 +28,7 @@ var NoData = React.createClass({
 	},
 
 	render: function(){
-		var src = 'https://m.imread.com/src/img/pic1@2x.png',
+		var src = '/src/img/pic1@2x.png',
 			text = '抱歉!没有找到相关数据..',
 			btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
 		switch(this.props.type){
@@ -36,7 +36,7 @@ var NoData = React.createClass({
 				text = '亲，书架还空空荡荡哦';
 			break;
 			case 'UFO':
-				src = 'https://m.imread.com/src/img/no@2x.png';
+				src = '/src/img/no@2x.png';
 				text = '网络遇到问题,请重试';
 				btn = <a className="u-btn" onClick={this.reload}>重新加载</a>;
 			break;

@@ -168,7 +168,7 @@ const GLOBAL = {
 		return true;
 	},
 	cookie: function(key, value, options) {
-		console.log('>>>>>>>>>>>>>>>>>'+key);
+		//console.log('>>>>>>>>>>>>>>>>>'+key);
 		// write
         if (value !== undefined) {
                 options = options || {};

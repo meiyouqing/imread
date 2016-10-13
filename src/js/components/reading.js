@@ -415,7 +415,7 @@ var Reading = React.createClass({
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
 			if(location.pathname.slice(-5) == 'login')	return;
-			this.goLogin(this.getContent);
+			this.goLogin(this.getContent,location.pathname);
 			return;
 		}
 
@@ -1078,7 +1078,7 @@ var Reading = React.createClass({
 					</div>
 					<div className="reading-guide-item guide-middle f-clearfix">
 						<div className="guide-icon f-fl">
-							<img src="https://m.imread.com/src/img/reading-guide.png" />
+							<img src="/src/img/reading-guide.png" />
 						</div>
 						<div className="guide-content f-fl">
 							<div className="guide-tip">

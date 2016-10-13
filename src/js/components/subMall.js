@@ -35,6 +35,7 @@ var Mall = React.createClass({
 			this.setState({
 				noMore:true
 			})
+			return;
 		}
 		this.setState({
 			list: (this.state.scrollUpdate && !this.navChanged)? this.state.list.concat(data.blocklist):data.blocklist,
@@ -66,9 +67,10 @@ var Mall = React.createClass({
 	},
 	componentDidUpdate: function(nextProp) {
 		this.page_id = this.props.params.subnav.split('.')[1];
-		if(this.props.params.subnav !== nextProp.params.subnav)	this.navChanged = true;//重置数据,修正nav切换bug
 		if(nextProp.params.subnav === this.props.params.subnav){
 			if(GLOBAL.isRouter(this.props) && !(this.state.list && this.state.list.length))	 this.getList(true);
+		}else{
+			this.navChanged = true;//重置数据,修正nav切换bug
 		}
 		if(!this.state.list || !this.state.list.length){return;}
 		this.lazyloadImage(this.refs.container);

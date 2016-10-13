@@ -1,6 +1,7 @@
 import { browserHistory, Link } from 'react-router'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
+import storage from '../modules/storage'
 import Mixins from '../modules/mixins'
 import React from 'react'
 var myEvent = require('../modules/myEvent');
@@ -59,7 +60,7 @@ var UserList = React.createClass({
 		if (!this.isLogin()) {
 			this.requireLogin(e);
 		} else{
-			browserHistory.push(GLOBAL.setHref('userInfo'));
+			browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
 		}
 	},
 	componentDidMount: function() {
@@ -71,59 +72,53 @@ var UserList = React.createClass({
 		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,null), false);
 		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,null),false);
 	},
-	getUserInfo: function(callback) { //获取个人信息
+	getUserInfo: function() { //获取个人信息		
 		var that = this;
 		if (this.isLogin()) {
 			AJAX.init('me');
 			AJAX.get(function(data) {
-				if(data.code != 200) return;
+				if(data.code != 200) {
+					storage.rm('userToken');
+					return;
+				}
 				that.setState({
 					userInfo: data,
 				});
-				callback && (callback());
-				// if (!/\/face\/null$/.test(newPortraitUrl)) {
-				// 	GLOBAL.loadImage(newPortraitUrl, function() {
-				// 		data.portraitUrl = newPortraitUrl;
-				// 		that.setState({
-				// 			userInfo: data,
-				// 			needUpdate: that.needUpdate + 1
-				// 		});
-				// 	});
-				// }
 			}, GLOBAL.noop);
 		}else{
 			that.setState({
-				userInfo: null,
+				userInfo: null
 			});
 		}
 	},
 	requireLogin:function(e) {
-		var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
-		var that = this;
 		if (!this.isLogin()) {
+			e.preventDefault();
+			var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
 			var href = target.getAttribute('data-href');
+			// console.log(target);
+			// console.log(href);
 			if (!href) {
 				var hash = location.pathname+'/login';
 				browserHistory.push(hash);
-				myEvent.setCallback('login', login_c);
+				//myEvent.setCallback('login', login_c);
 				return false;
 			}
-			this.goLogin(login_c,href);
-			e.preventDefault();
+			this.goLogin(function(){browserHistory.push(href)});
 			return false;
 		}
-		function login_c() {
-			setTimeout(function() {
-				that.setState({
-					needUpdate: that.state.needUpdate + 1
-				});
-			}, 0);
-			setTimeout(function() {
-				that.getUserInfo(function() {
-					browserHistory.push(href || location.pathname);
-				});
-			}, 10);
-		}
+		// function login_c() {
+		// 	setTimeout(function() {
+		// 		that.setState({
+		// 			needUpdate: that.state.needUpdate + 1
+		// 		});
+		// 	}, 0);
+		// 	setTimeout(function() {
+		// 		that.getUserInfo(function() {
+		// 			href && browserHistory.push(href);
+		// 		});
+		// 	}, 10);
+		// }
 		return true;
 	},
 	gotoBalance:function(){
@@ -136,7 +131,6 @@ var UserList = React.createClass({
 		    || this.state.userInfo !== nextState.userInfo;
 	},
 	render:function() {
-
 		var blockData = [
 			[{
 				title: '书架',

@@ -10,7 +10,7 @@ const getPost =  function(props,req,res){
 
   const path = req.url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
-  if(path.length<3){
+  if(path.length<3 && !/pay$/.test(req.url)){
     AJAX.init('group.1');
     //console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{

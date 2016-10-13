@@ -25,13 +25,18 @@
 /*.pay-list li:nth-child(2n+1) {padding: 0 7px 0 15px;}
 .pay-list li:nth-child(2n) {padding: 0 15px 0 7px;}*/
 .pay-list li img {display: block;max-width: 100%;}
-.pay-list li .count{line-height: 85px;font-size: 20px;text-align: center;color: #000;font-weight: normal;display: inline-block;}
+.pay-list li{line-height: 85px;font-size: 20px;text-align: center;color: #000;font-weight: normal;display: inline-block;}
 .pay-list li > span{vertical-align: middle;}
 .pay-list li:nth-child(2n){border: solid #eee;border-width: 0 0 1px 1px; }
 .pay-list li:nth-child(2n+1){border-bottom:1px solid #eee; }
 .pay-list li:nth-child(2n) .count{left: 7px}
 .pay-list li:nth-child(2n+1) .count{left: 15px}
-.pay-list li.active .count{color: #ff4081;}
+.pay-list li.active{color: #ff4081;}
+
+.pay-list .f-wx{line-height: 30px;padding-top: 10px}
+.pay-list .f-wx p{font-size: 12px;color: #777;}
+.pay-list .f-wx.active{color: #09bb07;}
+.pay-list .f-wx.active p{color: #000000;}
 
 .m-balance .u-userform{padding-top: 25px;letter-spacing: 0.1em;}
 .m-balance .formTitle{margin-top: -10px;margin-bottom: 10px;}

@@ -16,6 +16,7 @@ var Img = require('./img');
 var Shelf = React.createClass({
 	mixins:[Mixins()],
 	startReading: function(v){
+		if(!this.isMounted()) return;
 		var bid = v.content_id;
 		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
@@ -45,9 +46,11 @@ var Shelf = React.createClass({
 		}
 	},
 	showModels: function(){
+		if(!this.isMounted()) return;
 		this.setState({showModelList: !this.state.showModelList});
 	},
 	settingClick: function(e){
+		if(!this.isMounted()) return;
 		//如果书架是空，返回
 		if(!this.state.shelfList.length){
 			this.setState({
@@ -57,7 +60,6 @@ var Shelf = React.createClass({
 			return;
 		}
 		var index = Number(e.target.getAttribute('data-index'));
-		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
 		var setting = false,selected=[],icon=null,left=null,middle=null,reading=false;
 
@@ -84,7 +86,8 @@ var Shelf = React.createClass({
 			right:completion,
 			model: index,
 			title: '',
-			reading: reading
+			reading: reading,
+			showModelList:false
 		});
 
 
@@ -109,6 +112,7 @@ var Shelf = React.createClass({
 		})
 	},
 	seAllClick :function(){
+		if(!this.isMounted()) return;
 		var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
@@ -120,6 +124,7 @@ var Shelf = React.createClass({
 	},
 	seNoneClick: function(){
 		var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
+		if(!this.isMounted()) return;
 		this.setState({
 			left:seAll,
 			selected:[]
@@ -231,6 +236,7 @@ var Shelf = React.createClass({
 			 this.models[key] = '1';
 	},
 	changeShow: function(e){
+		if(!this.isMounted()) return;		
 		var a = e.target.tagName == 'A'?e.target:e.target.parentNode;
 		var i = a.getAttribute('data-cls');
 
@@ -281,6 +287,7 @@ var Shelf = React.createClass({
 		AJAX.get(this.ajaxHandle,this.onerror);
 	},
 	ajaxHandle:	function(data){
+		if(!this.isMounted()) return;
 		var order_model = this.models.order_model?this.models.order_model:0;
 		this.setState({			
 			shelfList: this.sortBook(order_model,data.content,true)
@@ -311,7 +318,7 @@ var Shelf = React.createClass({
 		var header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
-		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="https://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		// var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和

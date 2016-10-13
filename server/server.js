@@ -38,7 +38,8 @@ app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}
 // send all requests to index.html so browserHistory works
 app.get('/nonono',()=>{});
 app.get('*', (req, res) => {
-  //if(/undefined$/.test(req.url)) return;  //TODO resolve this
+  console.log('oooooooooooooooooooooooooo'+req.url)
+  if(/(error|undefined)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message)

@@ -134,7 +134,6 @@ var Introduce = React.createClass({
 		}
 		data.content_id = data.bid = this.APIParts('introduceId')[1];
 		data.name = data.book_name;
-		data.orderList = data.orderList.concat(data.readList);
 		GLOBAL.setBookName([data]);
 		this.isUpdate = true;
 		this.setState({
@@ -263,7 +262,7 @@ var Introduce = React.createClass({
 			header = <Header title='书籍详情' right={right}  path={this.props.route} />
 
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" book={this.state.book} troggleChapterlist={this.troggleChapterlist} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.orderList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
+			introduceTabs = <IntroduceTabs key="3" book={this.state.book} troggleChapterlist={this.troggleChapterlist} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.readList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
 			<div className="gg-body">
@@ -291,9 +290,6 @@ var IntroduceTabs = React.createClass({
 			orderSeq: true,
 			list:[]
 		};
-	},
-	shouldComponentUpdate: function(nextProps, netxtState) {
-		return true;
 	},
 	toggleTab: function(index) {
 		this.setState({

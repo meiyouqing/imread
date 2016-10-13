@@ -15,16 +15,19 @@ if(typeof window !== 'undefined'){
 var UserInfo = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
+		const data = this.props.location.state.data;
 		return {
-			user_gender: null,
-			user: null,
+				user:data,
+				user_birthday: data.user_birthday || '请设置生日',
+				user_name: data.user_name || data.mobile_num,
+				portraitUrl: data.portraitUrl,		
+			user_gender: this.switchSex(data.user_gender),
 			right:<span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>,
 			isEdit: false,
 			finishButton: true,
 			access: <span className="icon-h icon-return-black"></span>,
 			sex: false,
 			sexId: 0,
-			portraitUrl: null,
 			formdata: null
 		};
 	},
@@ -33,10 +36,10 @@ var UserInfo = React.createClass({
 		POP.confirm('确定退出登录?',function() {
 			AJAX.init('loginout');
 			AJAX.get(function(res){
-				console.log(storage.rm('userToken'));
-				//GLOBAL.removeCookie('uuid');
+				storage.rm('userToken');
+
 				if(GLOBAL.cookie('__qc__k')) {
-					GLOBAL.removeCookie('__qc_wId');
+					//GLOBAL.removeCookie('__qc_wId');
 					GLOBAL.removeCookie('__qc__k');
 					window.location.reload();
 				} else {
@@ -79,18 +82,6 @@ var UserInfo = React.createClass({
 			}
 		}.bind(this));
 		this.setState({right: right,isEdit: false,finishButton: true,access: access});
-
-		// if(!this.state.formdata) 	{return;}
-		// AJAX.go('upload',{formdata: this.state.formdata},function(res){
-		// 			//this.getData();
-		// 			if(res.code !== 200)
-		// 				POP._alert('头像上传失败');
-		// 			else{
-		// 				this.setState({formdata: null})
-		// 				POP._alert('头像上传成功');
-		// 			}
-		// }.bind(this));
-		
 	},
 	selectHeader: function(){
 		
@@ -115,21 +106,6 @@ var UserInfo = React.createClass({
 				else
 					POP._alert('头像上传成功');
 			}.bind(this));
-
-			 // var reader = new FileReader();  
-			 // //将文件以Data URL形式读入页面  
-			 // reader.readAsDataURL(file);  
-			 // reader.onload=function(e){  
-			 // 	console.log(this.result)
-			 // 	AJAX.go('upload',{formdata: this.result},function(res){
-				// //this.getData();
-				// 	if(res.code !== 200)
-				// 		POP._alert('头像上传失败');
-				// 	else
-				// 		POP._alert('头像上传成功');
-				// }.bind(this));
-			 // } 
-			
 		}.bind(this);
 	},
 	selectDate: function(){
@@ -156,8 +132,10 @@ var UserInfo = React.createClass({
 	},
 	selectedSex: function(e){
 		var a  = e.target.getAttribute('data-index');
-		this.switchSex(a);
-		this.setState({sexId: a});
+		this.setState({
+			user_gender: this.switchSex(a),
+			sexId:a
+		});
 		this.closeSex();
 	},
 	closeSex: function(){
@@ -167,19 +145,19 @@ var UserInfo = React.createClass({
 		if(!this.state.isEdit)  return;
 		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user.user_name}});
 	},
-	getData: function() {
-		AJAX.init('me');
-		AJAX.get(function(data) {
-			this.switchSex(data.user_gender);
-
-			this.setState({
-				user:data,
-				user_birthday: data.user_birthday || '请设置生日',
-				user_name: data.user_name || data.mobile_num,
-				portraitUrl: data.portraitUrl
-			});
-		}.bind(this));
-	},
+	// getData: function() {
+	// 	AJAX.init('me');
+	// 	AJAX.get(function(data) {
+	// 		console.log('ooooooooooooo')
+	// 		this.switchSex(data.user_gender);
+	// 		this.setState({
+	// 			user:data,
+	// 			user_birthday: data.user_birthday || '请设置生日',
+	// 			user_name: data.user_name || data.mobile_num,
+	// 			portraitUrl: data.portraitUrl
+	// 		});
+	// 	}.bind(this));
+	// },
 	switchSex: function(index){
 		var user_gender;
 		switch(index){
@@ -192,17 +170,14 @@ var UserInfo = React.createClass({
 				default:
 					user_gender = "保密"
 		}
-		this.setState({
-			user_gender: user_gender
-		});
+		return user_gender;
 	},
 	componentWillReceiveProps: function(nextProps){
 		if(nextProps.location.state)
 			this.setState({user_name: nextProps.location.state.user_name});
 	},
 	componentDidMount: function() {
-
-		if(this.checkLogin(this.props.route)) this.getData();
+		this.checkLogin(this.props.route)
 	},
 	// componentDidUpdate:function(){
 	// 	if(this.refs.date)
@@ -234,7 +209,7 @@ var UserInfo = React.createClass({
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
-						<a className="u-btn u-btn-full" onClick={this.logout}>退出登录</a>
+						<a className={"u-btn u-btn-full" + (this.isWx()?' f-hide':'')} onClick={this.logout}>退出登录</a>
 					</section>
 
 				</div>)

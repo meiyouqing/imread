@@ -12,12 +12,24 @@ var UserList = require('./userList');
 
 var Mall = React.createClass({
 	mixins: [Mixins()],
+	is_WX: function(){
+  		var ua = window.navigator.userAgent.toLowerCase();
+	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+	        	return true;
+	   	}else{
+	   	      return false;
+	   	}
+  	},
+  	WX_skip: function(){
+  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+  	},
 	getNav: function(){
 		AJAX.init('group.1');
 		AJAX.get(this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
 		this.subnav = 'page.'+data.pagelist[0].pgid;
+		typeof window!=='undefined' && this.upApp(this.subnav);
 		this.setState({
 			navList:data.pagelist
 		});
@@ -26,7 +38,6 @@ var Mall = React.createClass({
 		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	getNavFaile: function(){
-		console.log('getInitialState')
 		this.setState({onerror:true})
 	},
 	gotoSearch: function(){
@@ -58,15 +69,42 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(!this.state.navList) this.getNav();
+		if(/(mall\/?|page\.\d\/?)$/.test(location.pathname)){
+			if(!this.state.navList) this.getNav();
+		}
+
+		//微信登录
+		var that = this;
+		this.from = parseQuery(location.search);
+
+		if(this.is_WX() && !this.from.code  && !this.isLogin()){
+  			this.WX_skip();
+  		}
+		if(this.is_WX() && this.from  && this.from.code) {
+			   AJAX.go('login_wx',{
+        			code: this.from.code,
+        			grant_type: 'authorization_code'
+			   },function(res){
+			   	that.do_result(res);
+			   })
+		}
+	},
+	do_result: function(data){
+		var that = this;
+		if(data.code == 200){
+			storage.set('userToken', 'loaded');
+		} else {
+			POP._alert('登录失败');
+		}
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
+			var url = '/mall/';
 			if(obj.book_id)
-				browserHistory.replace(GLOBAL.setHref(page+'/book/introduce.'+obj.book_id+location.search));
+				browserHistory.replace(url+(page+'/book/introduce.'+obj.book_id+location.search));
 			else if(obj.sheet_id){
-				browserHistory.replace(GLOBAL.setHref(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+				browserHistory.replace(url+(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
 			}
 		}
 	},
@@ -94,14 +132,12 @@ var Mall = React.createClass({
 
 	render:function(){
 		//console.log(this.props)
-		var right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
+		const right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
-		var main;
-		if(this.state.navList){
-			main = (
+		let main = (
 				<div className="g-mall" style={{top:0}}>
-					<MallNav navList={this.state.navList} />
+					<MallNav navList={this.state.navList || []} />
 					<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
 					<section className={"m-user-list"+(this.state.showUser? ' show':'')}>
 						<UserList route={this.props.route} />
@@ -109,10 +145,8 @@ var Mall = React.createClass({
 					{this.props.children}
 				</div>
 			)
-		}else if(this.state.onerror){									
+		if(this.state.onerror){									
 			main = <div className="g-main"><NoData type="UFO" /></div>;
-		}else{
-			main = <div className="g-main"><Loading /></div>;
 		}
 
 		return (

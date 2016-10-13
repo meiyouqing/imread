@@ -12,7 +12,6 @@ var Book9 = React.createClass({
 		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
 			return '昨天';
 		}
-
 		if (deltaSecond < 15 * 60) {
 			return '刚刚';
 		}
@@ -22,7 +21,7 @@ var Book9 = React.createClass({
 		if (deltaSecond < 24 * 60 * 60) {
 			return Math.floor(deltaSecond / 60 / 60) + '小时前';
 		}
-		return date.substr(5,5);
+		return d.Format('MM-dd');
 	},
 	clickHandle: function(){
 		if(this.props.icon)	return;

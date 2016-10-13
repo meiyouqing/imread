@@ -139,22 +139,31 @@ var mixins = function() {
         isLogin: function() {
             return !!storage.get('userToken','string');
         },
-        goLogin: function(callback,href) {
-            var ua = window.navigator.userAgent.toLowerCase();
-            if(ua.match(/MicroMessenger/i) == 'micromessenger' && href){
-                window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent('https://m.imread.com/mall/page.9.3/login?skipurl=https://m.imread.com'+(href?href:''))+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
-                return;
-            }
+        goLogin: function(callback) {
+            // var ua = window.navigator.userAgent.toLowerCase();
+            // if(ua.match(/MicroMessenger/i) == 'micromessenger' && href){
+            //     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent('https://m.imread.com/mall/page.9.3/login?skipurl=https://m.imread.com'+(href?href:''))+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+            //     return;
+            // }
+            //skipurl=https://m.imread.com'+(href?href:'')
             var hash = location.pathname + '/login';
             browserHistory.push(hash);
             POP._alert('请先登录');
             myEvent.setCallback('login', callback);
         },
+        isWx: function(){
+             var ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger')     return true;
+            else return false;
+        },
+        isMoblie: function(){
+            return document.body.offsetWidth < 1024;
+        },
         getBackUrl: function(path) {
             var path = path.path.replace(/:([^\"]*)/, '');
             path = location.pathname.split('/' + path)[0];
             path = path.replace(/\/reading([^\"]*)/,'');
-            return path;
+            return path; 
         },
         goBackUrl: function(path) {
 
