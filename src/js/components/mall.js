@@ -21,7 +21,7 @@ var Mall = React.createClass({
 	   	}
   	},
   	WX_skip: function(){
-  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent(location.href)+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+encodeURIComponent(location.origin+'?callback='+location.href)+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
   	},
 	getNav: function(){
 		AJAX.init('group.1');
@@ -93,6 +93,8 @@ var Mall = React.createClass({
 		var that = this;
 		if(data.code == 200){
 			storage.set('userToken', 'loaded');
+			if(this.from.callback && this.from.callback != (location.origin+'/mall'))
+				location.href = this.from.callback;
 		} else {
 			POP._alert('登录失败');
 		}

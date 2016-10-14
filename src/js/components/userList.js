@@ -16,6 +16,10 @@ var ULine = React.createClass({
 				location.pathname;
 		Src = Src.split('/');
 		Src = '/'+Src[1]+'/'+Src[2]+'/'+this.props.line.href;
+
+		if(this.props.line.href === 'pay') Src = this.props.line.href;
+		// if(this.props.line.href.indexOf('pay')>-1) Src = '/'+this.props.line.href+'?backUrl='+encodeURIComponent(location.href);
+
 		return (
 			<li className="u-line">
 				<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
@@ -107,18 +111,6 @@ var UserList = React.createClass({
 			this.goLogin(function(){browserHistory.push(href)});
 			return false;
 		}
-		// function login_c() {
-		// 	setTimeout(function() {
-		// 		that.setState({
-		// 			needUpdate: that.state.needUpdate + 1
-		// 		});
-		// 	}, 0);
-		// 	setTimeout(function() {
-		// 		that.getUserInfo(function() {
-		// 			href && browserHistory.push(href);
-		// 		});
-		// 	}, 10);
-		// }
 		return true;
 	},
 	gotoBalance:function(){
@@ -154,7 +146,7 @@ var UserList = React.createClass({
 			}, {
 				title: '艾豆充值',
 				icon: 'icon-aidou',
-				href: 'balance',
+				href: 'pay',
 				requireLogin: this.requireLogin
 			},{
 				title: '已购书籍',

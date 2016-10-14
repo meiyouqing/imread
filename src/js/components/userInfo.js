@@ -38,14 +38,10 @@ var UserInfo = React.createClass({
 			AJAX.get(function(res){
 				storage.rm('userToken');
 
-				if(GLOBAL.cookie('__qc__k')) {
-					//GLOBAL.removeCookie('__qc_wId');
-					GLOBAL.removeCookie('__qc__k');
-					window.location.reload();
-				} else {
-					this.disPatch('updateUser');
-					GLOBAL.goBack();
+				if(GLOBAL.cookie('loadingType') === 'qq') {
+					QC.Login.signOut();
 				}
+				GLOBAL.goBack();
 			}.bind(this));
 		}.bind(this));
 	},

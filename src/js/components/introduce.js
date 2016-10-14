@@ -134,7 +134,6 @@ var Introduce = React.createClass({
 		}
 		data.content_id = data.bid = this.APIParts('introduceId')[1];
 		data.name = data.book_name;
-		GLOBAL.setBookName([data]);
 		this.isUpdate = true;
 		this.setState({
 			book: data,

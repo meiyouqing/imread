@@ -157,6 +157,7 @@ var mixins = function() {
             else return false;
         },
         isMoblie: function(){
+            return true;
             return document.body.offsetWidth < 1024;
         },
         getBackUrl: function(path) {
@@ -172,7 +173,8 @@ var mixins = function() {
         },
         checkLogin: function(path) {
             if (!this.isLogin()) {
-                this.goBackUrl(path);
+                if(!this.isWx())
+                    this.goBackUrl(path);
                 return false;
             }
             return true;

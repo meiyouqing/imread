@@ -46,7 +46,6 @@ var List = React.createClass({
 				scrollUpdate: false
 			})
 			//设置GLOBAL book name
-			GLOBAL.setBookName(data.contentlist);
 		}else{
 			if (!data || !data.content.length) {
 				this.setState({
@@ -60,7 +59,6 @@ var List = React.createClass({
 				scrollUpdate: false
 			});				
 			//设置GLOBAL book name
-			GLOBAL.setBookName(data);
 		}
 	},
 	goSearch: function(){
@@ -124,7 +122,7 @@ var List = React.createClass({
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
-			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+			//if(GLOBAL.isRouter(this.props))	//兼容低端安卓
 				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){

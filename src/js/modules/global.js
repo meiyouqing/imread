@@ -103,14 +103,6 @@ const GLOBAL = {
 	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
 	},
-
-	setBookName:function(data){
-		if(!data.length||!this.isArray(data)){return}
-		data.forEach(function(v){
-			this.book[v.source_bid]=v.name;
-			this.book[v.content_id]=v.name;
-		}.bind(this))
-	},
 	setBlocklist:function(data){
 		if(!data.length||!this.isArray(data)){return}
 		data.forEach(function(v,i){

@@ -34,7 +34,6 @@ var BookSheet = React.createClass({
 				scrollUpdate: false
 			});	
 			//设置GLOBAL book name
-			GLOBAL.setBookName(data.content);
 		}.bind(this), function(error){
 			if(this.state.scrollUpdate){
 				this.setState({

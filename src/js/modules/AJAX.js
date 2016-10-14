@@ -61,7 +61,8 @@ var API={
 	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
-	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}}
+	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
+	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}}
 };
 
 //接口缓存机制
