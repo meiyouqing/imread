@@ -13,9 +13,9 @@ module.exports = {
         filename: 'bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
-	// resolve:{
-	// 	extensions: ['','.js','.jsx'] 
-	// },
+	resolve:{
+		extensions: ['','.js','.jsx'] 
+	},
 	module: {
 		loaders:[
 			// {test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
