@@ -4,6 +4,7 @@ if(typeof window !== 'undefined'){
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import GLOBAL from '../modules/global'
+import AJAX from '../modules/AJAX'
 import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');

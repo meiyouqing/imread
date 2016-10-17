@@ -39,8 +39,8 @@ module.exports = {
 				[
 		new ExtractTextPlugin("style.css"),
 	    new webpack.optimize.DedupePlugin(),
-	    new webpack.optimize.OccurrenceOrderPlugin(),
-	    new webpack.HotModuleReplacementPlugin()
+	    new webpack.optimize.OccurrenceOrderPlugin()//,
+	    // new webpack.HotModuleReplacementPlugin()
    //  		new HtmlWebpackPlugin({
 			// filename: '../index.html',
 		 //    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 

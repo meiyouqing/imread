@@ -28,6 +28,9 @@ const GLOBAL = {
 	unRendered:[],
 	orderLIst:{},
 	pushLinks:{},
+	getLocation: function(){
+		return (typeof window === 'undefined'? global.pathname:location.pathname);
+	},
 	goBack:function(path){
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);

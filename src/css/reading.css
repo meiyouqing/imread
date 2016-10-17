@@ -153,7 +153,7 @@
 .m-reading-body .style-0 .icon-r.menu{background: url(../img/reading/white/mulu.png) no-repeat;}
 .m-reading-body .style-0 .icon-r.setting{background: url(../img/reading/white/setting.png) no-repeat;}
 .m-reading-body .style{position:absolute;top:0;left:0;width:100%;height:100%;z-index: 999;}
-.m-reading-body .style.style-0,.m-reading-fy.style-0{background: url(../img/reading/white/back.png);}
+.m-reading-body .style.style-0,.m-reading-fy.style-0{background: #f5f5f5;}
 .m-reading-body .style-0 .icon-font{background: url(../img/reading/white/font.png) no-repeat;}
 
 .m-reading-body .style-0 .icon-r.prv,

@@ -47,7 +47,8 @@ var Mall = React.createClass({
 		return {
 			navList: null,
 			showUser:false,
-			onerror:false
+			onerror:false,
+			path:'/'
 		}
 	},
 	hideUser: function(){
@@ -58,7 +59,8 @@ var Mall = React.createClass({
 	showUser: function(){
 		this.userFlag = true;
 		this.setState({
-			showUser:true
+			showUser:true,
+			path:location.pathname
 		})
 	},
 	//for the server rending
@@ -69,7 +71,7 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(/(mall\/?|page\.\d\/?)$/.test(location.pathname)){
+		if(/(mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
 
@@ -133,7 +135,6 @@ var Mall = React.createClass({
 	},
 
 	render:function(){
-		//console.log(this.props)
 		const right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
 			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
@@ -142,7 +143,7 @@ var Mall = React.createClass({
 					<MallNav navList={this.state.navList || []} />
 					<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
 					<section className={"m-user-list"+(this.state.showUser? ' show':'')}>
-						<UserList route={this.props.route} />
+						<UserList route={this.props.route} path={this.state.path} />
 					</section>
 					{this.props.children}
 				</div>

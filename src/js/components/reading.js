@@ -288,7 +288,7 @@ var Reading = React.createClass({
 				chapter_offset: 0
 			}];
 			this.shelfAdding(param,function(){
-				myEvent.execCallback('updateShelfBtn');
+				myEvent.execCallback('updateShelfBtn');console.log(this.path)
 				GLOBAL.goBack(this.path);
 			}.bind(this));
 		}.bind(this);

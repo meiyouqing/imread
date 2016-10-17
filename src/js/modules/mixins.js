@@ -29,10 +29,6 @@ var mixins = function() {
                 }
             }            
         },
-        // hasPreload:function(n){
-        //     n = n.replace(/\./g,'_');
-        //     return !!window.__PRELOADED_STATE__[n];
-        // },
         lazyloadImage: function(container) {
             if(!container) return;
             var imgs = container.querySelectorAll('.u-lazyload-img');
@@ -137,6 +133,7 @@ var mixins = function() {
                 }
         },
         isLogin: function() {
+            // return !!GLOBAL.cookie('userToken')
             return !!storage.get('userToken','string');
         },
         goLogin: function(callback) {
@@ -147,18 +144,15 @@ var mixins = function() {
             // }
             //skipurl=https://m.imread.com'+(href?href:'')
             var hash = location.pathname + '/login';
+            console.log(hash)
             browserHistory.push(hash);
             POP._alert('请先登录');
             myEvent.setCallback('login', callback);
         },
         isWx: function(){
              var ua = window.navigator.userAgent.toLowerCase();
-            if(ua.match(/MicroMessenger/i) == 'micromessenger')     return true;
+            if(ua.match(/MicroMessenger/i) == 'micromessenger')  return true;
             else return false;
-        },
-        isMoblie: function(){
-            return true;
-            return document.body.offsetWidth < 1024;
         },
         getBackUrl: function(path) {
             var path = path.path.replace(/:([^\"]*)/, '');

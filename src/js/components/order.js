@@ -19,12 +19,15 @@ var Order = React.createClass({
 		if(this.props.isMigu){
 			browserHistory.push(GLOBAL.setHref('m_recharge'));
 		} else {
-		 	var hash = location.pathname;
-			browserHistory.push('/pay?backUrl='+encodeURIComponent(location.href));
-			myEvent.setCallback('recharge',function(){
-				browserHistory.push(hash);
-				//this.getBalance();
-			}.bind(this));
+			if(this.isWx()){
+				location.href = '/pay?backUrl='+encodeURIComponent(location.pathname);
+			}else{
+				browserHistory.push('/pay?backUrl='+encodeURIComponent(location.pathname));
+				myEvent.setCallback('recharge',function(){
+					browserHistory.push('/pay?backUrl='+encodeURIComponent(location.pathname));
+					this.getBalance();
+				}.bind(this));
+			}
 		}
  	},
 	payHandle: function(count) {

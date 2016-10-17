@@ -28,7 +28,8 @@ var UserInfo = React.createClass({
 			access: <span className="icon-h icon-return-black"></span>,
 			sex: false,
 			sexId: 0,
-			formdata: null
+			formdata: null,
+			isWx:false
 		};
 	},
 	logout: function(e) {
@@ -37,7 +38,7 @@ var UserInfo = React.createClass({
 			AJAX.init('loginout');
 			AJAX.get(function(res){
 				storage.rm('userToken');
-
+				this.disPatch('updateUser');
 				if(GLOBAL.cookie('loadingType') === 'qq') {
 					QC.Login.signOut();
 				}
@@ -173,7 +174,10 @@ var UserInfo = React.createClass({
 			this.setState({user_name: nextProps.location.state.user_name});
 	},
 	componentDidMount: function() {
-		this.checkLogin(this.props.route)
+		this.checkLogin(this.props.route);
+		if(this.isWx()){
+			this.setState({isWx:true})
+		}
 	},
 	// componentDidUpdate:function(){
 	// 	if(this.refs.date)
@@ -205,7 +209,7 @@ var UserInfo = React.createClass({
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
-						<a className={"u-btn u-btn-full" + (this.isWx()?' f-hide':'')} onClick={this.logout}>退出登录</a>
+						<a className={"u-btn u-btn-full" + (this.state.isWx?' f-hide':'')} onClick={this.logout}>退出登录</a>
 					</section>
 
 				</div>)

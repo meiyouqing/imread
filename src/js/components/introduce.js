@@ -39,7 +39,6 @@ var Detail = React.createClass({
 		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
 	startReading: function(){
-		console.log(this.props)
 		var readLog = storage.get('readLogNew');
 		var chapterid = this.props.book.current_chapter_id,
 			sourcebid = this.props.book.source_bid,
