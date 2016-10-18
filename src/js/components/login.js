@@ -278,6 +278,9 @@ var Login = React.createClass({
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri="+encodeURIComponent(location.origin+location.pathname);
 
   	},
+	  gowinLogin:function(){
+		  this.disPatch('winLogin');
+	  },
 	render: function() {
 		var list;
 		var loading = <Loading />
@@ -357,6 +360,8 @@ var Login = React.createClass({
 							</div>
 						</div>
 					</div>
+								<p>						<a onClick={this.gowinLogin}>微信登录</a></p>
+
 				</div>
 				{this.props.children}
 			</div>

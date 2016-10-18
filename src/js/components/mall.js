@@ -79,20 +79,26 @@ var Mall = React.createClass({
 			if(!this.state.navList) this.getNav();
 		}
 		//微信登录
+		document.addEventListener('winLogin',this.weixinLOGIN,false)
+
 		var that = this;
 		this.from = parseQuery(location.search);
 		POP._alert('code: '+this.from.code)
-		if(this.is_WX() && !this.from.code  && !this.isLogin()){
-  			this.WX_skip(); POP._alert('skip')
-  		}
-		if(this.is_WX() && this.from  && this.from.code && this.from.state == '123') {alert('ajax')
+		// if(this.is_WX() && !this.from.code  && !this.isLogin() && false){
+  		// 	this.WX_skip(); //POP._alert('skip')
+  		// }
+		if(this.is_WX() && this.from  && this.from.code && this.from.state == '123') {//POP._alert('ajax')
 			   AJAX.go('login_wx',{
         			code: this.from.code,
         			grant_type: 'authorization_code'
 			   },function(res){
 			   	that.do_result(res);
 			   })
-		}
+		}		
+
+	},
+	weixinLOGIN:function(){
+		this.WX_skip()
 	},
 	do_result: function(data){
 		var that = this;
