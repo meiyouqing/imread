@@ -107,7 +107,7 @@ function renderFullPage(html, preloadedState) {
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
         <script type="text/javascript" src="https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js" data-appid="101354986" data-redirecturi="https://m.imread.com/mall/page.9/login" charset="utf-8" data-callback="true"></script>      </body>
-        <script src="/public/bundle.js"></script>
+        <script src="/public/bundle1.js"></script>
     </html>
     `
 }

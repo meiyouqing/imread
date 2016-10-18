@@ -139,7 +139,7 @@ var mixins = function() {
         goLogin: function(callback) {
             // var ua = window.navigator.userAgent.toLowerCase();
             // if(ua.match(/MicroMessenger/i) == 'micromessenger' && href){
-            //     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent('https://m.imread.com/mall/page.9.3/login?skipurl=https://m.imread.com'+(href?href:''))+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
+            //     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd64e6afb53e222ca&redirect_uri='+encodeURIComponent('https://m.imread.com/mall/page.9/login?skipurl=https://m.imread.com'+(href?href:''))+'&response_type=code&scope=snsapi_login&state=123&connect_redirect=1#wechat_redirect';
             //     return;
             // }
             //skipurl=https://m.imread.com'+(href?href:'')

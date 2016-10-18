@@ -35,7 +35,7 @@ var mLogin = React.createClass({
 			nick_name: this.refs.user_id.value,
 			password: this.refs.password.value,
 			channel: 6,
-			//redirect_uri: "https://192.168.0.249:8080/mall/page.9.3/book/introduce.26601/reading/crossDomain.371742137.371742177.26601.1"
+			//redirect_uri: "https://192.168.0.249:8080/mall/page.9/book/introduce.26601/reading/crossDomain.371742137.371742177.26601.1"
 		};
 		if (!GLOBAL.assertNotEmpty(postData.user_identifier, '请输入手机号')) {return ;}
 		//if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}

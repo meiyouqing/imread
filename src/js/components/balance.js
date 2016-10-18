@@ -11,14 +11,17 @@ var Recharge = require('./recharge');
 if(typeof window !== 'undefined'){
 	require('../../css/pay.css')
 }
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		
+		POP._alert(this.state.isWx)
 		AJAX.go('balance',{
-			payType: this.state.isWX?2:1
+			payType: this.state.isWx?2:1
 		},function(data){
 			this.setState({
 				loading: false,
@@ -41,11 +44,12 @@ var Balance = React.createClass({
 			list: [],
 			balance: 0,
 			active: 0,
-			isWX: this.isWx(),
+			isWx: false,
 			payLoading: false
 		};
 	},
 	componentDidMount: function() {
+		this.setState({isWx: this.isWx()})
 		if(this.checkLogin(this.props.route)) this.getBalance();
 		document.addEventListener('rechargeSuccess',this.getBalance);
 	},
@@ -107,7 +111,7 @@ var Balance = React.createClass({
 					           "paySign" : data.success.paySign //微信签名 
 					       },
 					       function(res){
-					           that.setState({payLoading: false});     
+					           that.setState({payLoading: false});   alert('done')  
 					           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 					           		that.getBalance();
 					           		// that.disPatch('updateUser');
@@ -120,7 +124,7 @@ var Balance = React.createClass({
 					   ); 
 				}
 			} else {
-				that.setState({payLoading: false}); 
+				that.setState({payLoading: false});
 				POP._alert('获取信息失败');
 			}
 		});
@@ -129,6 +133,7 @@ var Balance = React.createClass({
 		return nextState.balance != this.state.balance
 			    || nextState.list != this.state.list
 			    || nextState.active != this.state.active
+				|| nextState.isWx != this.state.isWx
 			    || this.props.children != nextPros.children
 			    || nextState.payLoading != this.state.payLoading;
 	},
@@ -153,7 +158,7 @@ var Balance = React.createClass({
 							(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
 								var active = i == this.state.active;
 								var activeClass = active ? ' active' : '';
-								if(!this.state.isWX)
+								if(!this.state.isWx)
 									return (
 										<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
 											<span className={"icon-n icon-black-aidou " + activeClass}></span>
@@ -174,9 +179,9 @@ var Balance = React.createClass({
 						{/*<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.isWx() && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
 						<a className={"u-btn u-btn-full u-btn-3"}  onClick={this.WxInsideOrder} >确认充值</a>*/}
-						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
-						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX)?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
-						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
+						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWx?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWx)?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
+						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWx?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
 					</div>
 				</div>
 			);

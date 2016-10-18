@@ -10,7 +10,7 @@ const getPost =  function(url,callback,onError){
   let param = path[path.length-1];
   if(path.length<3 && !/pay$/.test(url)){
     AJAX.init('group.1');
-    //console.log('pathpathpathpathpath>>> '+path)
+    // console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
       param = path.length ===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;

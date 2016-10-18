@@ -34,6 +34,11 @@ var UserInfo = React.createClass({
 	},
 	logout: function(e) {
 		e.preventDefault && (e.preventDefault());
+		//goback path
+		var path = location.pathname.split('/');
+		path.pop();
+		path = path.join('/')
+
 		POP.confirm('确定退出登录?',function() {
 			AJAX.init('loginout');
 			AJAX.get(function(res){
@@ -42,7 +47,7 @@ var UserInfo = React.createClass({
 				if(GLOBAL.cookie('loadingType') === 'qq') {
 					QC.Login.signOut();
 				}
-				GLOBAL.goBack();
+				GLOBAL.goBack(path);
 			}.bind(this));
 		}.bind(this));
 	},

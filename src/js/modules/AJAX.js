@@ -1,5 +1,5 @@
-import storage from '../modules/storage'
-import GLOBAL from '../modules/global'
+import storage from './storage'
+import GLOBAL from './global'
 import transformRequest from './transformRequest';
 import 'babel-polyfill'
 import fatch from 'isomorphic-fetch'

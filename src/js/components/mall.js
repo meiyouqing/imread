@@ -9,13 +9,17 @@ import Mixins from '../modules/mixins'
 var Header = require('./header');
 var MallNav = require('./mallNav');
 var UserList = require('./userList');
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	is_WX: function(){
+		// return true;
   		var ua = window.navigator.userAgent.toLowerCase();
 	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-	        	return true;
+				return true;
 	   	}else{
 	   	      return false;
 	   	}
@@ -74,15 +78,14 @@ var Mall = React.createClass({
 		if(/(mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
-
 		//微信登录
 		var that = this;
 		this.from = parseQuery(location.search);
-
+		POP._alert('code: '+this.from.code)
 		if(this.is_WX() && !this.from.code  && !this.isLogin()){
-  			this.WX_skip();
+  			this.WX_skip(); POP._alert('skip')
   		}
-		if(this.is_WX() && this.from  && this.from.code) {
+		if(this.is_WX() && this.from  && this.from.code && this.from.state == '123') {alert('ajax')
 			   AJAX.go('login_wx',{
         			code: this.from.code,
         			grant_type: 'authorization_code'

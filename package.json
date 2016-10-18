@@ -1,6 +1,6 @@
 {
   "name": "imread",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "description": "imread for html5",
   "main": "index.js",
   "dependencies": {
@@ -10,11 +10,9 @@
     "css-loader": "^0.23.1",
     "express": "^4.13.3",
     "file-loader": "^0.8.5",
-    "if-env": "^1.0.0",
     "isomorphic-fetch": "^2.1.1",
     "jsx-loader": "^0.13.2",
     "lodash": "^4.0.0",
-    "md5": "^2.0.0",
     "normalizr": "^2.0.0",
     "path": "^0.12.7",
     "qs": "^4.0.0",
@@ -35,8 +33,7 @@
     "babel-runtime": "^6.3.13"
   },
   "scripts": {
-    "start": "node ./server/index.js",
-    "start:prod": "npm run build && node serverside/app/main.bundle.js"
+    "start": "node ./server/index.js"
   },
   "author": "May & Ljy & Wxg",
   "license": "ISC"

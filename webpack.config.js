@@ -10,7 +10,7 @@ module.exports = {
 	output: {
         path: path.join(__dirname,'public/p'),
         publicPath: '/public/',
-        filename: 'bundle.js',
+        filename: 'bundle1.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
 	resolve:{

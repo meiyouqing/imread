@@ -22,7 +22,7 @@ if(typeof window !== 'undefined'){
 	}
 	// 处理服务端渲染失败
 	if(window.__PRELOADED_STATE__ === null){
-		browserHistory.replace('/');
+		//browserHistory.replace('/');
 	}
 }
 
