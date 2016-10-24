@@ -58,23 +58,29 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidMount: function(){
+		const isRouter = GLOBAL.isRouter(this.props);
 		this.APIparam = this.props.params.subnav;
 		//AJAX.init(this.APIparam+'.1');
 		this.page_id = this.props.params.subnav.split('.')[1];
-		if(GLOBAL.isRouter(this.props) && !(this.state.list && this.state.list.length))	this.getList(true);
-		this.lazyloadImage(this.refs.container);
-		this.disPatch('scroll',this.refs.container)
+		if(isRouter && !(this.state.list && this.state.list.length))	this.getList(true);
+		if(isRouter){
+			this.lazyloadImage(this.refs.container);
+			this.disPatch('scroll',this.refs.container);
+		}
 	},
 	componentDidUpdate: function(nextProp) {
+		const isRouter = GLOBAL.isRouter(this.props);
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(nextProp.params.subnav === this.props.params.subnav){
-			if(GLOBAL.isRouter(this.props) && !(this.state.list && this.state.list.length))	 this.getList(true);
+			if(isRouter && !(this.state.list && this.state.list.length))	 this.getList(true);
 		}else{
 			this.navChanged = true;//重置数据,修正nav切换bug
 		}
 		if(!this.state.list || !this.state.list.length){return;}
-		this.lazyloadImage(this.refs.container);
-		this.disPatch('scroll',this.refs.container)
+		if(isRouter){
+			this.lazyloadImage(this.refs.container);
+			this.disPatch('scroll',this.refs.container);
+		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		//console.log(this.props,nextProp)
@@ -89,8 +95,9 @@ var Mall = React.createClass({
 		if(this.state.noMore){
 			scrollLoading = null;
 		}
+		// console.log(this.state.list)
 		if(!this.state.list){
-			//if(GLOBAL.isRouter(this.props))
+			if(GLOBAL.isRouter(this.props))
 				list = <Loading />
 		}else{
 			if(this.state.list.length){

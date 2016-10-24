@@ -5,8 +5,12 @@ import storage from '../modules/storage'
 import Mixins from '../modules/mixins'
 import React from 'react'
 var myEvent = require('../modules/myEvent');
+
 if(typeof window !== 'undefined'){
 	require('../../css/user.css');
+}
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
 }
 var ULine = React.createClass({
 	mixins: [Mixins()],
@@ -26,7 +30,7 @@ var ULine = React.createClass({
 			Src = '/pay?backUrl=' + encodeURIComponent(this.props.path);
 		}
 
-		if(this.state.isWx && this.props.line.href !== 'pay'){
+		if(this.state.isWx && this.props.line.href === 'pay'){
 			return (
 				<li className="u-line">
 					<a href={Src} data-href={Src} className="f-cb">
@@ -105,7 +109,9 @@ var UserList = React.createClass({
 				that.setState({
 					userInfo: data,
 				});
-			}, GLOBAL.noop);
+			}, ()=>{
+					storage.rm('userToken');
+			});
 		}else{
 			that.setState({
 				userInfo: null
@@ -119,6 +125,7 @@ var UserList = React.createClass({
 			var href = target.getAttribute('data-href');
 			// console.log(target);
 			// console.log(href);
+			
 			if (!href) {
 				var hash = location.pathname+'/login';
 				browserHistory.push(hash);

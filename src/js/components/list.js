@@ -36,8 +36,10 @@ var List = React.createClass({
 		if(/^search./.test(pathname[pathname.length-1])){
 			if (!data.contentlist.length) {
 				this.setState({
+					scrollUpdate:false,
 					noMore:true
-				})
+				});
+				return;
 			}
 			this.setState({
 				recommend: data,
@@ -88,15 +90,20 @@ var List = React.createClass({
 		this.usePreload(this.props.params.listId);
 	},
 	componentDidMount: function(){
-		this.lazyloadImage(this.refs.container);
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
+		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProps,nextState) {
 		
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
-
-		this.lazyloadImage(this.refs.container);
+		if(GLOBAL.isRouter(this.props))  {
+			if(!this.state.bookList){
+				this.getList();
+			}else{
+				this.lazyloadImage(this.refs.container);
+				this.disPatch('scroll',this.refs.container)
+			}
+		}
 	},
 	componentWillReceiveProps: function(nextProps){
 		var isSearch = /searchList/.test(this.props.route.path);

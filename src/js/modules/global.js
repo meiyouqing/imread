@@ -1,5 +1,7 @@
 import storage from '../modules/storage'
 import { browserHistory } from 'react-router'
+import parseQuery from '../modules/parseQuery'
+
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }

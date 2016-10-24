@@ -31,7 +31,8 @@ import UserInfo from './userInfo'
 import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
 // import MLogin from './mLogin'
-import MRecharge from './mRecharge'
+//import MRecharge from './mRecharge'
+import WxLogin from './wxLogin'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -133,6 +134,7 @@ var selfWrap = (
 module.exports = (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
+		<Route path="/wxlogin" component={WxLogin}/>
 		{loginWrap}
 		{selfWrap}
 		{payWrap}

@@ -7,6 +7,7 @@ import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
+import Order from '../modules/order'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
@@ -278,6 +279,7 @@ var Shelf = React.createClass({
 			recent_order: this.models.recent_order?this.models.recent_order:'0',
 			reading_order: this.models.reading_order?this.models.reading_order:'0',
 			book_order: this.models.book_order?this.models.book_order:'0',
+			boxHeight:'auto'
 		}
 	},
 	getList: function (){
@@ -304,6 +306,10 @@ var Shelf = React.createClass({
 			this.getList()
 		}
 		this.refs.container && this.lazyloadImage(this.refs.container);
+		//reset img box size
+		const width = (document.body.offsetWidth-60)/3;
+		const height = width * 1.346;
+		this.setState({boxHeight:height});
 	},
 	componentDidUpdate: function(nextPros,nextState) {
 		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 
@@ -367,9 +373,9 @@ var Shelf = React.createClass({
 											return(
 												<li key={i} className={"u-book-2 "+curClass}>
 													<a onClick={this.startReading.bind(this,v)}>
-														<div className="pro-box">
+														<div className="pro-box f-oh" style={{height:this.state.boxHeight}}>
 															{icon}
-															<Img src={v.image_url} />
+															<Img  src={v.image_url} />
 															<div className="progress p-div">
 																<div style={{width: v.playorder/v.count*100+'%'}}>
 																</div>

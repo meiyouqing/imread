@@ -66,11 +66,12 @@ var mixins = function() {
             clearTimeout(this.timeoutId);
             this.timeoutId = setTimeout(function() {
                 this.lazyloadImage(list);
-                //console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
+                // console.log(list.offsetHeight , list.scrollTop, list.scrollHeight)
+                // console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
                 if (!this.state.noMore && !this.state.scrollUpdate && ((list.offsetHeight + list.scrollTop + 50 > list.scrollHeight) || list.offsetHeight >= list.scrollHeight)) {
                     this.scrollHandleCallback();
                 }
-            }.bind(this), 100);
+            }.bind(this), 300);
         },
         scrollHandleCallback: function() {
             var n;
@@ -144,7 +145,7 @@ var mixins = function() {
             // }
             //skipurl=https://m.imread.com'+(href?href:'')
             var hash = location.pathname + '/login';
-            console.log(hash)
+            //console.log(hash)
             browserHistory.push(hash);
             POP._alert('请先登录');
             myEvent.setCallback('login', callback);
@@ -161,7 +162,6 @@ var mixins = function() {
             return path; 
         },
         goBackUrl: function(path) {
-
             var url = this.getBackUrl(path);
             browserHistory.push(url);
         },
@@ -174,7 +174,7 @@ var mixins = function() {
             return true;
         },
         disPatch: function(event,dom) {
-            console.log('<<<<<<<<<<<<<<<<<<<<<'+event+'>>>>>>>>>>>>>>>>>>>')
+            // console.log('<<<<<<<<<<<<<<<<<<<<<'+event+'>>>>>>>>>>>>>>>>>>>')
             dom = dom?dom:document;
             try {
                 // document.dispatchEvent(new Event('updateUser'));

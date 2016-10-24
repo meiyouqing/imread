@@ -19,4 +19,8 @@ indexTemplate.html
 index.html
 p
 npm-debug.log
+package.json
+test.js
+webpack.config.js
+.gitlab-ci.yml
 

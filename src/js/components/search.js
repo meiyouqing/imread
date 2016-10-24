@@ -36,10 +36,11 @@ var Search = React.createClass({
 	},
 	componentDidMount:function(){
 		if(GLOBAL.isRouter(this.props) && !this.state.blockList) this.getDate();
+
 	},
 	componentDidUpdate: function(){
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props) && !this.state.blockList) this.getDate();		
+		if(GLOBAL.isRouter(this.props) && !this.state.blockList) this.getDate();
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return this.state.blockList !== nextState.blockList
@@ -63,7 +64,7 @@ var Search = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header_s  route={this.props.route}  />
+				<Header_s  route={this.props.route} from='search' />
 				<div  className="g-main g-main-1">
 					<div className="g-scroll">
 						{content}

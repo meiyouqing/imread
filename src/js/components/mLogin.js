@@ -44,11 +44,11 @@ var mLogin = React.createClass({
 		that.loading = true;
 		AJAX.go('mLogin',postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			//GLOBAL.cookie('userPhone', postData.phone, options);
-			storage.set('userToken', data.token, options);
+			storage.set('userToken', data.token);
 			GLOBAL.header['userId'] = data.userInfo.user_id;
 			GLOBAL.setUser({
 				phone: postData.phone,
@@ -107,7 +107,7 @@ var mLogin = React.createClass({
 					POP._alert('登录成功');
 					this.setState({onlogin: false});
 					clearInterval(times);
-					storage.set('userToken', "loaded", {expires: 1000});
+					storage.set('userToken', "loaded");
 					this.disPatch('updateUser');
 					this.disPatch('telBind');
 					GLOBAL.goBack();

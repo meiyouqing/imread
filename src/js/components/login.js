@@ -41,9 +41,9 @@ var Login = React.createClass({
 		that.loading = true;
 		AJAX.go('login',postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			that.loading = false;
 			
 			GLOBAL.setUser({
@@ -51,9 +51,10 @@ var Login = React.createClass({
 				token: postData.token
 			});
 			if(data.code == 200){
-				storage.set('userToken', data.token, options);
+				storage.set('userToken', data.token);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
+				GLOBAL.header.userId = data.userInfo.user_id;
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
@@ -103,9 +104,9 @@ var Login = React.createClass({
 		that.loading = true;
 		AJAX.getJSON('POST', '/api/v1/auth/register', postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
@@ -114,10 +115,11 @@ var Login = React.createClass({
 
 			if(data.code == 200){
 				//GLOBAL.cookie('userPhone', postData.mobile_num,options);
-				storage.set('userToken', data.token, options);
+				storage.set('userToken', data.token);
 				// GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
+				GLOBAL.header.userId = data.userInfo.user_id;
 				POP._alert('注册成功');
 				//判断登陆后的跳转
 				//var isneed = false;
@@ -360,8 +362,9 @@ var Login = React.createClass({
 							</div>
 						</div>
 					</div>
-								<p>						<a onClick={this.gowinLogin}>微信登录</a></p>
-
+					{
+								//<p className="f-clearfix" style={{marginTop:'150px',lineHeight:'50px',textAlign:'center'}}>						<a onClick={this.gowinLogin}>微信登录</a></p>
+					}
 				</div>
 				{this.props.children}
 			</div>

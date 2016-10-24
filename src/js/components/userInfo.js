@@ -28,8 +28,7 @@ var UserInfo = React.createClass({
 			access: <span className="icon-h icon-return-black"></span>,
 			sex: false,
 			sexId: 0,
-			formdata: null,
-			isWx:false
+			formdata: null
 		};
 	},
 	logout: function(e) {
@@ -180,9 +179,6 @@ var UserInfo = React.createClass({
 	},
 	componentDidMount: function() {
 		this.checkLogin(this.props.route);
-		if(this.isWx()){
-			this.setState({isWx:true})
-		}
 	},
 	// componentDidUpdate:function(){
 	// 	if(this.refs.date)
@@ -214,7 +210,7 @@ var UserInfo = React.createClass({
 					</section>
 
 					<section className="m-user-b" style={{display:this.state.finishButton?"block":"none"}}>
-						<a className={"u-btn u-btn-full" + (this.state.isWx?' f-hide':'')} onClick={this.logout}>退出登录</a>
+						<a className={"u-btn u-btn-full" + (this.isWx()? ' f-hide':'')} onClick={this.logout}>退出登录</a>
 					</section>
 
 				</div>)

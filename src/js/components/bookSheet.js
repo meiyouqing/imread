@@ -91,6 +91,9 @@ var BookSheet = React.createClass({
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
+		if(!this.isLogin()){
+			this.setState({collected:false})
+		}
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.data !== nextState.data 
@@ -131,7 +134,7 @@ var BookSheet = React.createClass({
 									</div>
 								</div>
 								<div className="u-sheet-detail">
-									<h2 className="f-ellipsis">{this.state.data.sheet_name}</h2>
+									<h2>{this.state.data.sheet_name}</h2>
 									<div className="brief">{this.state.data.sheet_brief}</div>
 								</div>
 							</div>

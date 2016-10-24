@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
+import storage from '../modules/storage'
 
 var Block9 = React.createClass({
 	getWidthAndHeight: function() {

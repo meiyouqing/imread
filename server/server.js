@@ -3,16 +3,14 @@
 import path from 'path'
 import express from 'express'
 // import qs from 'qs'
-
 import compression from 'compression'
-
 import React from 'react'
 import { match } from 'react-router'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 
 import getPost from './getPost'
-
+import { loadingHTML, renderFullPage } from './htmlContent'
 
 import routes from '../src/js/components/routes'
 // import { Provider } from 'react-redux'
@@ -30,12 +28,12 @@ app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHead
 
 // route the pay rout
 app.get('/pay',(req, res)=>{
-    res.send(renderFullPage('',{}));
+    res.send(renderFullPage(loadingHTML,{}));
 });
 app.get('*', (req, res) => {
     //resolve reading page
   if(/\/reading\//.test(req.url)) {
-    res.send(renderFullPage('',{}));
+    res.send(renderFullPage(loadingHTML,{}));
     return;
   }
 
@@ -73,36 +71,9 @@ function goSend(res,props){
     }
 }
 function onError(res,err){
-  res.send(renderFullPage('',null));
+  res.send(renderFullPage(loadingHTML,null));
   console.log('request faile: '+err);
 }    
-function renderFullPage(html, preloadedState) {
-  return `
-    <!doctype html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-       <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" /> -->
-        <meta name="keywords" content="小说,小说网,言情小说,玄幻小说,武侠小说,都市小说,历史小说,网络小说,原创网络文学,出版书,正版小说,正版电子小说,艾美阅读,免费小说,好看的小说,小说下载,免费小说下载,下载,艾美阅读手机站" />
-        <meta name="description" content="小说在线阅读、下载，精彩小说尽在艾美阅读。艾美阅读提供小说，小说网，言情小说，玄幻小说，武侠小说，都市小说，历史小说，出版书，正版小说，正版电子小说，网络小说，原创网络文学。" />
-        <title>艾美阅读-发现阅读之美</title>
-        <link href="/p/style.css" rel="stylesheet" type="text/css"></link>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/src/img/logo.png">
-        <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
-      </head>
-      <body>
-        <div id="appContainer">${html}</div>
-        <script>
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
-        </script>
-        <script type="text/javascript" src="https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js" data-appid="101354986" data-redirecturi="https://m.imread.com/mall/page.9/login" charset="utf-8" data-callback="true"></script>      </body>
-        <script src="/public/bundle1.js"></script>
-    </html>
-    `
-}
-
 
 function setHeader(res,url,stat){	
 	if(/\.js$/.test(path.resolve(url))){

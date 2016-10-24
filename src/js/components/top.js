@@ -9,6 +9,9 @@ var Blocklist = require('./blocklist');
 var Header = require('./header');
 var BookStore = require('./bookStore');
 import MallNavLink from './mallNavLink'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var MallNav = React.createClass({
 	render: function() {
@@ -48,6 +51,7 @@ var Top = React.createClass({
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
 			this.params = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1'
+			// POP._alert(this.params)
 			this.getLists();			
 		},this.onerror)
 	},
@@ -108,7 +112,7 @@ var Top = React.createClass({
 				list = (
 					<div className="g-main g-main-3 m-top">
 						<div ref="container">
-							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} updateGuess={this.getLists}/>
+							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} />
 						</div>
 					</div>
 					);

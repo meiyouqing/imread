@@ -20,7 +20,7 @@ var API={
 	collectionDelete:{method:'POST', base:'/api/v1/bookSheet/collection/delete', param:{sheet_id:1}},
 	introduce:{method:'GET', base:'/api/v1/book/introduce', param:{bid:1 }},
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
-	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
+	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:'0',pages:1}},
 	mLogin:{method:'POST', base:'/api/v1/auth/login/sso', param:{user_identifier:'',nick_name:'',password:'',channel:6}},
 	mOrder:{method:'GET', base:'/api/v1/migu/order', param:{book_id:0,chapter_id:0,cm:0,firmnum:'',count:1}},
 	mBind:{method:'GET', base:'/api/v1/migu/check/bind', param:{cm:0}},
@@ -62,7 +62,8 @@ var API={
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
-	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}}
+	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
+	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1}}
 };
 
 //接口缓存机制
@@ -116,13 +117,14 @@ var API={
 
 
 function getGETUrl(url, postdata) {
+	// return 'http://192.168.0.251:8080/nonono';
 	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
 }
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError) {
 	var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'http://192.168.0.34:9090';
-	//var urlBase = 'http://m.imread.com/nonono';
+	//var urlBase = 'http://192.168.0.251:8080/nono';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -146,7 +148,7 @@ function GETJSON(method, url, postdata={}, callback, onError) {
 	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
 	// console.log(headers)
 	// console.log(method)
-
+		
 	const promise = method === 'GET'?
 				fetch(getGETUrl(url,postdata)):
 				fetch(url,{
@@ -174,7 +176,11 @@ function GETJSON(method, url, postdata={}, callback, onError) {
 		  }
 	})
 	.then(function(stories) {
-	    callback(stories)
+		if(stories.error){
+			onError("服务器错误")
+		}else{
+	    	callback(stories)
+		}
 	})
 	.catch(function(error) {
     	//console.log('request failed', error)
@@ -218,6 +224,9 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError) {
 				res = JSON.parse(request.responseText);
 				if(!res) {
 					onError(new Error('服务器返回为空'));
+					return;
+				}else if(res.error){
+					onError(res.error);
 					return;
 				}
 				callback(res);

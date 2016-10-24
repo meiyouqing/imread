@@ -37,11 +37,19 @@ var Header_s = React.createClass({
 				else
 					browserHistory.push({pathname:GLOBAL.setHref('searchList/search.'+key),state:this.state.key});
 
-			}			
-			this.setState({
-				search: false,
-				btn: '取消'
-			});
+			}
+			if(this.props.from === 'search'){
+				this.setState({
+					key: '',
+					search: true,
+					btn: '搜索'
+				});
+			}else{	
+				this.setState({
+					search: false,
+					btn: '取消'
+				});
+			}
 		}else{
 			GLOBAL.goBack();
 		}

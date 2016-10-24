@@ -2,10 +2,10 @@ import AJAX from '../src/js/modules/AJAX'
 import React from 'react'
 
 const getPost =  function(url,callback,onError){
-  
+  url = url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
-  // console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
+//  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
   if(path.length<3 && !/pay$/.test(url)){

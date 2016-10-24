@@ -15,18 +15,6 @@ if(typeof window !== 'undefined'){
 
 var Mall = React.createClass({
 	mixins: [Mixins()],
-	is_WX: function(){
-		// return true;
-  		var ua = window.navigator.userAgent.toLowerCase();
-	    	if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-				return true;
-	   	}else{
-	   	      return false;
-	   	}
-  	},
-  	WX_skip: function(){
-  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+encodeURIComponent(location.origin+'?callback='+location.href)+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
-  	},
 	getNav: function(){
 		AJAX.init('group.1');
 		AJAX.get(this.ajaxHandle, this.getNavFaile);
@@ -78,38 +66,39 @@ var Mall = React.createClass({
 		if(/(mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
-		//微信登录
-		document.addEventListener('winLogin',this.weixinLOGIN,false)
 
-		var that = this;
-		this.from = parseQuery(location.search);
-		POP._alert('code: '+this.from.code)
-		// if(this.is_WX() && !this.from.code  && !this.isLogin() && false){
-  		// 	this.WX_skip(); //POP._alert('skip')
-  		// }
-		if(this.is_WX() && this.from  && this.from.code && this.from.state == '123') {//POP._alert('ajax')
-			   AJAX.go('login_wx',{
-        			code: this.from.code,
-        			grant_type: 'authorization_code'
-			   },function(res){
-			   	that.do_result(res);
-			   })
-		}		
-
+// 		//wx login
+		// if(this.isWx()){
+		// 	this.from = parseQuery(location.search);       
+		// 	// if(!this.from.code){
+		// 	// 	var url = encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))
+		// 	// 	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
+		// 	// }
+			
+		// 	if(!this.from.code && !this.isLogin){
+		// 		POP._alert(this.from.code+' 登录失败');
+		// 		return;
+		// 	}
+		// 	if(this.from  && this.from.code && this.from.state == '123') {
+		// 		AJAX.go('login_wx',{
+		// 			code: this.from.code,
+		// 			grant_type: 'authorization_code'
+		// 		},res => {
+		// 			this.do_result(res);
+		// 		})
+		// 	}
+		// }
 	},
-	weixinLOGIN:function(){
-		this.WX_skip()
-	},
-	do_result: function(data){
-		var that = this;
-		if(data.code == 200){
-			storage.set('userToken', 'loaded');
-			if(this.from.callback && this.from.callback != (location.origin+'/mall'))
-				location.href = this.from.callback;
-		} else {
-			POP._alert('登录失败');
-		}
-	},
+	// do_result: function(data){
+	// 	var that = this;
+	// 	if(data.code == 200){
+	// 		storage.set('userToken', 'loaded hello world');
+	// 		that.disPatch('updateUser');
+	// 		that.disPatch('updateMall');
+	// 	} else {
+	// 		POP._alert('登录失败');
+	// 	}
+	// },	
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){

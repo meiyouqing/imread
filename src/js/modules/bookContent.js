@@ -68,6 +68,10 @@ var BookContent = (function() {
 		}
 
 		var gotoMigu = function(sourceConfig){
+			//跳转之前先回到书籍详情，不然会循环跳转
+			var path = location.pathname;
+			path = path.replace(/\/reading.*$/,'');
+			GLOBAL.goBack(path);
 			//去掉referrer
 			var meta = document.createElement('meta');
 				meta.name = "referrer";

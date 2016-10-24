@@ -406,7 +406,8 @@ var AdWrap = React.createClass({
 		if(this.state.show){
 			return <Block5 data={this.props.data} style={this.props.style} />
 		}else{
-			return <section></section>
+			return <section className="m-block-top m-block n-padding" style={{width:'100%',paddingTop:'33.333333%',
+    backgroundImage: 'url(/src/img/back/ad_default_back.jpg)'}}></section>
 		}
 	}
 })

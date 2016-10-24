@@ -6,6 +6,7 @@ var Img = require('./img');
 var Book9 = React.createClass({
 	prettyDate: function(date) {
 		var d = new Date(date);
+		if(d.toString() === "Invalid Date") return date;
 		var current = new Date();
 		var deltaSecond = (current.getTime() - d.getTime()) / 1000;
 

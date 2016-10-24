@@ -43,11 +43,11 @@ var Register = React.createClass({
 		that.loading = true;
 		AJAX.getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			//GLOBAL.cookie('userPhone', postData.mobile_num,options);
-			storage.set('userToken', data.token, options);
+			storage.set('userToken', data.token);
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
 				token: postData.token

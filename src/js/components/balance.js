@@ -19,7 +19,6 @@ var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		POP._alert(this.state.isWx)
 		AJAX.go('balance',{
 			payType: this.state.isWx?2:1
 		},function(data){
@@ -28,7 +27,7 @@ var Balance = React.createClass({
 				balance: data.success.balance,
 				list: data.success.list
 			});
-		}.bind(this))
+		}.bind(this),function(err){POP._alert(err)})
 	},
 	getInitialState: function() {
 		var back;
@@ -49,9 +48,11 @@ var Balance = React.createClass({
 		};
 	},
 	componentDidMount: function() {
-		this.setState({isWx: this.isWx()})
-		if(this.checkLogin(this.props.route)) this.getBalance();
-		document.addEventListener('rechargeSuccess',this.getBalance);
+		this.setState({isWx: this.isWx()},()=>{
+			this.getBalance();
+			document.addEventListener('rechargeSuccess',this.getBalance);	
+		})
+		
 	},
 	componentWillUnmount: function(){
 		 document.removeEventListener('rechargeSuccess',this.getBalance,false);
@@ -125,7 +126,7 @@ var Balance = React.createClass({
 				}
 			} else {
 				that.setState({payLoading: false});
-				POP._alert('获取信息失败');
+				POP._alert(data.code + ' 获取信息失败');
 			}
 		});
 	},
@@ -134,6 +135,7 @@ var Balance = React.createClass({
 			    || nextState.list != this.state.list
 			    || nextState.active != this.state.active
 				|| nextState.isWx != this.state.isWx
+			    || nextState.loading != this.state.loading
 			    || this.props.children != nextPros.children
 			    || nextState.payLoading != this.state.payLoading;
 	},
@@ -141,7 +143,7 @@ var Balance = React.createClass({
 		
 		var content,wxPayLoading=null;
 		if(this.state.payLoading)	wxPayLoading = <Loading />;
-
+// console.log(this.state.loading)
 		if (this.state.loading) {
 			content = <Loading />
 		} else {

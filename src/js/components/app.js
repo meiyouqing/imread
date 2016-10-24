@@ -1,6 +1,4 @@
 import React from 'react'
-import route from 'react-router'
-import Nav from './nav'
 
 if(typeof window !== 'undefined'){
 	require('../../css/iconfont1.css');
@@ -12,7 +10,6 @@ export default React.createClass({
 		return (
 			<div className="g-wraper">
 				{this.props.children}
-				
 			</div>
 		);				
 	}

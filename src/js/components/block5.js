@@ -15,6 +15,12 @@ var Block5 = React.createClass({
 		};
 	},
 	getInitialState: function() {
+		//筛除不支持的广告类型
+		this.adlist = this.props.data.contentlist.filter((v)=>{
+			var hrefObj = this.typeHref(v);
+			if (!hrefObj) return false;
+			return true;
+		})
 		return this.getWidthAndHeight()
 	},
 	logIntercut: function(intercut_id, event) {
@@ -112,8 +118,7 @@ var Block5 = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		return this.props.data.contentlist !== nextProps.data.contentlist
-				|| this.state.height !== nextState.height
+		return this.state.height !== nextState.height
 				|| this.state.update !== nextState.update;
 	},
 	componentWillReceiveProps: function(nextProps) {
@@ -121,10 +126,11 @@ var Block5 = React.createClass({
 		//this.swipe && (this.swipe.kill());
 	},
 	typeHref: function(data){
+		if(!data) return null;
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
-		var nothing = {url:'',target:'_self'};
+		// var nothing = {url:'',target:'_self'};
 		if(/2|3|4/.test(data.intercut_type)){
 			target = '_blank';
 			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
@@ -134,7 +140,7 @@ var Block5 = React.createClass({
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
-		if(isNaN(type)) return nothing;
+		if(isNaN(type)) return null;
 
 		function setHref(url){
 			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
@@ -161,17 +167,17 @@ var Block5 = React.createClass({
 			case 14: //跳外部网页
 			case 15://app to H5
 				return {url:data.redirect_url || "javascript:void(0)",target};
-			default: return nothing;
+			default: return null;
 		}
 	},
 	render: function() {
 		var swipeNav
-		if (this.props.data.contentlist.length > 1) {
+		if (this.adlist.length > 1) {
 			swipeNav = (
 				<div className="swipe-nav">
                 	<div className="swipe-nav-wrap f-clearfix" ref="swipe-nav">
                 	{
-                		this.props.data.contentlist.map(function(v, i) {
+                		this.adlist.map(function(v, i) {
 	                		return (
 	                			<a key={i} className="f-fl swipe-nav-item"></a>
 	                		);
@@ -181,7 +187,7 @@ var Block5 = React.createClass({
                 </div>
 			);
 		}
-		var visibility = this.props.data.contentlist.length > 1 ? 'hidden' : 'visible';
+		var visibility = this.adlist.length > 1 ? 'hidden' : 'visible';
 		return (
 			<section className="m-block-top m-block n-padding">
 				<div className="content">
@@ -189,15 +195,14 @@ var Block5 = React.createClass({
 						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:'70px')}}>
 							<div className="swipe-wrap">
 			                {
-			                	this.props.data.contentlist.map(function(v, i) {
-			                		
+			                	this.adlist.map(function(v, i) {
 									var hrefObj = this.typeHref(v);
 									var search="?devicetoken="+storage.get('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
 									var imgSrc = v.intercut_url || v.image_url;
 									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');									
 									var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 
-									if(this.props.data.contentlist.length<2) 
+									if(this.adlist.length<2) 
 										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
 			                			<Link style={{backgroundImage: 'url(/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id=		{v.content_id}>
