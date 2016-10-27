@@ -33,7 +33,8 @@ var Mall = React.createClass({
 		if(!data.blocklist){return}
 		if (!data.blocklist.length) {
 			this.setState({
-				noMore:true
+				noMore:true,
+				list: (this.state.scrollUpdate && !this.navChanged)? this.state.list.concat(data.blocklist):data.blocklist
 			})
 			return;
 		}
@@ -72,7 +73,7 @@ var Mall = React.createClass({
 		const isRouter = GLOBAL.isRouter(this.props);
 		this.page_id = this.props.params.subnav.split('.')[1];
 		if(nextProp.params.subnav === this.props.params.subnav){
-			if(isRouter && !(this.state.list && this.state.list.length))	 this.getList(true);
+			if(isRouter && !this.state.list)	 this.getList(true);
 		}else{
 			this.navChanged = true;//重置数据,修正nav切换bug
 		}

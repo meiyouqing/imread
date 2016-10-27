@@ -8,7 +8,7 @@ if(typeof window !== 'undefined'){
 export default React.createClass({
 	render:function(){
 		return (
-			<div className="g-wraper">
+			<div>
 				{this.props.children}
 			</div>
 		);				

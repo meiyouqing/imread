@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web sdk test</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+    <div id="style5"><h3>banner铺满</h3></div>
+    <div id="style11"><h3>banner不铺满</h3></div>
+    <div id="style1"><h3>横排六图</h3></div>
+    <!--<div id="style2"><h3>瀑布六图</h3></div>-->
+    <div id="style3"><h3>三图两文</h3></div>
+    <div id="style4"><h3>一图三文</h3></div>
+    <!--<div id="style6"><h3>两图目录</h3></div>
+    <div id="style7"><h3>热词方形</h3></div>
+    <div id="style8"><h3>热词椭圆</h3></div>
+    <div id="style9"><h3>瀑布文字</h3></div>-->
+
+    <div>
+        <script src="http://192.168.0.251:8080/src/js/imreadsdk.js"></script>
+        <script>
+            _open_imread_SDK_(5,'#style5')
+            _open_imread_SDK_(11,'#style11')
+            _open_imread_SDK_(1,'#style1')
+            //_open_imread_SDK_(2,'#style2')
+            _open_imread_SDK_(3,'#style3')
+            _open_imread_SDK_(4,'#style4')
+            //_open_imread_SDK_(6,'#style6')
+            //_open_imread_SDK_(7,'#style7')
+            //_open_imread_SDK_(8,'#style8')
+            //_open_imread_SDK_(9,'#style9')
+        </script>
+    </div>
+</body>
+</html>

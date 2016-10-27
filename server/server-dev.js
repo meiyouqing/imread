@@ -16,6 +16,7 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 
 import getPost from './getPost'
+import sdkPost from './sdkPost'
 
 import routes from '../src/js/components/routes'
 // import { Provider } from 'react-redux'
@@ -36,19 +37,26 @@ app.use(webpackHotMiddleware(compiler))
 
 app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
 
-app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
-// route the pay rout
-app.get('/pay',(req, res)=>{
+// app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
+// route the pay rout resolve reading page
+app.get(/\/pay.*|\/reading\/.*/,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
+app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
+  match({ routes, location: req.url }, (err, redirect, props) => {
+    if (err) {
+      res.status(500).send(err.message)
+    } else if (redirect) {
+      res.redirect(redirect.pathname + redirect.search)
+    } else if (props) {
+      res.setHeader('cache-control','private,max-age=600')
+      sdkPost(req.url,res,props)
+    } else {
+      res.status(404).send('Not Found')
+    }
+  })
+});
 app.get('*', (req, res) => {
-    //resolve reading page
-  if(/\/reading\//.test(req.url)) {
-    res.send(renderFullPage('',{}));
-    return;
-  }
-
-  // console.log('oooooooooooooooooooooooooo'+req.url)
   if(/(error|undefined|favicon\.ico)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
@@ -113,24 +121,18 @@ function renderFullPage (html, preloadedState){
         <link rel="shortcut icon" href="/src/img/logo.png">
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
         <script>
-(function () {   
-    var ua = window.navigator.userAgent.toLowerCase();
-    if(/MicroMessenger/i.test(ua) && !localStorage.getItem('userToken')) {
-        var match = location.search.match(/code=([^\&]*)/);
-        var code = match && match[1];
-        if(code){
-            localStorage.setItem('userToken','wxLogined');
-            return;
-        }
-        var url;
-        if(/(mall|page\.\d+)$/.test(location.pathname) || location.pathname === '/'){
-            url = encodeURIComponent(location.href);
-        }else{
-            url = encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))
-        }
-  		window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
-    }
-})()
+            (function () {   
+                var ua = window.navigator.userAgent.toLowerCase();
+                if(ua.match(/MicroMessenger/i) == 'micromessenger' && !localStorage.getItem('userToken')) {
+                    var match = location.search.match(/code=([^\&]*)/);
+                    var code = match && match[1];
+                    if(code){
+                        localStorage.setItem('userToken','wxLogined');
+                        return;
+                    }       
+                    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
+                }
+            })()
         </script>
       </head>
       <body>

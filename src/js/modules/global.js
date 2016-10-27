@@ -45,6 +45,10 @@ const GLOBAL = {
 	},
 	setHref:function(str){
 		if(typeof window === 'undefined'){
+			//sdk need to full url
+			if(/sdk\/sdk\.\d+$/.test(global.pathname)){
+				return 'https://m.imread.com/mall/page.9.3/'+str;
+			}
 			return global.pathname+'/'+str
 		}else{
 			return location.pathname+'/'+str

@@ -185,7 +185,9 @@ var Block9 = React.createClass({
 			                	this.props.data.contentlist.map(function(v, i) {
 			                		
 									var hrefObj = this.typeHref(v);
-									var search="?devicetoken="+storage.get('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									var search=this.props.fromReading?
+										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname):
+										'';
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
 
 			                		return (

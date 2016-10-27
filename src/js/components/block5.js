@@ -10,8 +10,7 @@ var Block5 = React.createClass({
 		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
 			width: w,
-			height: w / 3,
-			update: 0
+			height: w / 3
 		};
 	},
 	getInitialState: function() {
@@ -21,7 +20,7 @@ var Block5 = React.createClass({
 			if (!hrefObj) return false;
 			return true;
 		})
-		return this.getWidthAndHeight()
+		return {update: 0,width:'100%',height:'auto'}
 	},
 	logIntercut: function(intercut_id, event) {
 		uploadLog.send('intercut', {
@@ -88,6 +87,7 @@ var Block5 = React.createClass({
 	componentDidMount: function() {
 		//alert('mount')
 		this.initSwipe();
+		this.setState(this.getWidthAndHeight());
 		//横竖屏切换 重新计算高度
 		window.addEventListener('resize', this.handleResize, false);
 
@@ -121,10 +121,6 @@ var Block5 = React.createClass({
 		return this.state.height !== nextState.height
 				|| this.state.update !== nextState.update;
 	},
-	componentWillReceiveProps: function(nextProps) {
-		//alert('rece')
-		//this.swipe && (this.swipe.kill());
-	},
 	typeHref: function(data){
 		if(!data) return null;
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
@@ -141,12 +137,14 @@ var Block5 = React.createClass({
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
 		}
 		if(isNaN(type)) return null;
-
 		function setHref(url){
-			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
-			if(link) return location.pathname+'/'+url;
+			var pathname = GLOBAL.getLocation();
+			var link = pathname.match(/self\/page.\d+\.\d+\.\d/);
+			if(link) return pathname+'/'+url;
 			// return url;
-			return location.pathname.match(/\/mall\/page.\d+/)[0] +'/'+url;
+			var match = pathname.match(/\/mall\/page\.\d+/);
+			var base = match? match[0] : 'https://m.imread.com/mall/page.9'
+			return base +'/'+url;
 		};
 		// console.log(type)
 		switch(type){
@@ -167,6 +165,10 @@ var Block5 = React.createClass({
 			case 14: //跳外部网页
 			case 15://app to H5
 				return {url:data.redirect_url || "javascript:void(0)",target};
+			case 16: //to home
+				return {url:'https://m.imread.com',target}
+			case 17: //to shelf
+				return {url:'https://m.imread.com/mall/page.9/shelf',target}
 			default: return null;
 		}
 	},
@@ -188,6 +190,7 @@ var Block5 = React.createClass({
 			);
 		}
 		var visibility = this.adlist.length > 1 ? 'hidden' : 'visible';
+		var pathname = GLOBAL.getLocation();
 		return (
 			<section className="m-block-top m-block n-padding">
 				<div className="content">
@@ -197,10 +200,18 @@ var Block5 = React.createClass({
 			                {
 			                	this.adlist.map(function(v, i) {
 									var hrefObj = this.typeHref(v);
-									var search="?devicetoken="+storage.get('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									if(this.props.fromReading)
+									var search=this.props.fromReading?
+										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname):
+										'';
 									var imgSrc = v.intercut_url || v.image_url;
-									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');									
-									var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
+									if(typeof window === 'undefined' && /sdk\/sdk\.\d+$/.test(pathname)){
+										var imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
+									}else{
+										imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
+										var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
+									}								
+									
 
 									if(this.adlist.length<2) 
 										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;

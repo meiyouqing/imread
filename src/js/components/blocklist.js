@@ -443,7 +443,8 @@ var Blocklist = React.createClass({
 					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
 				case 5 : //banner铺满
-					return <AdWrap key={i} data={block} style={block.style} />;
+					return <Block5 key={i} data={block} style={block.style}/>;
+					// return <AdWrap key={i} data={block} style={block.style} />;
 				case 6 :
 					return <Block6 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 7 : //7 圆形热词风格

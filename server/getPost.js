@@ -5,12 +5,24 @@ const getPost =  function(url,callback,onError){
   url = url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
-//  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
+ console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
+
+  //sdk
+  if(/sdk\/sdk\.\d+$/.test(url)){
+    console.log('sdk param >>>>>>> '+param)
+    AJAX.init(param);
+    AJAX.get(function(data){
+      global.imdata.sdk = data;
+      callback(true,param);
+    },(err)=>{onError(err,true)})
+    return;
+  }
+
   if(path.length<3 && !/pay$/.test(url)){
     AJAX.init('group.1');
-    // console.log('pathpathpathpathpath>>> '+path)
+    console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
       param = path.length ===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
@@ -33,7 +45,7 @@ const getPost =  function(url,callback,onError){
       callback();
       return;
     }
-    // console.log('param>>>>>>>>>>: '+param);
+    console.log('param>>>>>>>>>>: '+param);
     const n = param.replace(/\./g,'_');
     AJAX.init(param);
     AJAX.get(function(data){
