@@ -140,8 +140,10 @@ var mixins = function() {
         },
         checkLogin: function(path) {
             if (!this.isLogin()) {
-                if(!this.isWx())
+                if(!this.isWx()){
                     this.goBackUrl(path);
+                }
+                    // browserHistory.push('/mall/page.9.3/login?skipurl='+encodeURIComponent(location.href));
                 return false;
             }
             return true;

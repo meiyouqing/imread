@@ -2,11 +2,11 @@ var Img = require('./img');
 
 var Book9 = React.createClass({
 	prettyDate: function(date) {
-		var d = new Date(date);
+		// var d = new Date(date);
 		var current = new Date();
-		var deltaSecond = (current.getTime() - d.getTime()) / 1000;
+		var deltaSecond = (current.getTime() - date) / 1000;
 
-		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
+		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
 			return '昨天';
 		}
 
@@ -18,8 +18,11 @@ var Book9 = React.createClass({
 		}
 		if (deltaSecond < 24 * 60 * 60) {
 			return Math.floor(deltaSecond / 60 / 60) + '小时前';
+		} else {
+			var time = new Date(date).Format('yyyyMd');
+			return (time.substr(4,2)+'-'+time.substr(6,2))
 		}
-		return date.substr(5,5);
+		//return date.substr(5,5);
 	},
 	clickHandle: function(){
 		if(this.props.icon)	return;
