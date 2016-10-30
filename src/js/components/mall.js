@@ -103,10 +103,11 @@ var Mall = React.createClass({
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
 			var url = '/mall/';
+			var search = this.isWx()? '':location.search;
 			if(obj.book_id)
-				browserHistory.replace(url+(page+'/book/introduce.'+obj.book_id+location.search));
+				browserHistory.replace(url+(page+'/book/introduce.'+obj.book_id + search));
 			else if(obj.sheet_id){
-				browserHistory.replace(url+(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+location.search));
+				browserHistory.replace(url+(page+'/top/block.0/sheet/bookSheet.'+obj.sheet_id+search));
 			}
 		}
 	},

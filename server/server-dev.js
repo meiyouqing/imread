@@ -39,7 +39,10 @@ app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}
 
 // app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
 // route the pay rout resolve reading page
-app.get(/\/pay.*|\/reading\/.*/,(req, res)=>{
+app.get('/pay',(req, res)=>{
+    res.send(renderFullPage('',{}));
+});
+app.get(/\/reading\//,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
 app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
@@ -50,7 +53,7 @@ app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
       res.setHeader('cache-control','private,max-age=600')
-      sdkPost(req.url,res,props)
+      sdkPost(req.url,res,props,req.query)
     } else {
       res.status(404).send('Not Found')
     }

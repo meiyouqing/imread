@@ -10,6 +10,8 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 
 import getPost from './getPost'
+import sdkPost from './sdkPost'
+
 import { loadingHTML, renderFullPage } from './htmlContent'
 
 import routes from '../src/js/components/routes'
@@ -26,18 +28,28 @@ app.disable('x-powered-by');
 
 app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHeader}))
 
-// route the pay rout
+// route the pay rout resolve reading page
 app.get('/pay',(req, res)=>{
-    res.send(renderFullPage(loadingHTML,{}));
+    res.send(renderFullPage('',{}));
+});
+app.get(/\/reading\//,(req, res)=>{
+    res.send(renderFullPage('',{}));
+});
+app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
+  match({ routes, location: req.url }, (err, redirect, props) => {
+    if (err) {
+      res.status(500).send(err.message)
+    } else if (redirect) {
+      res.redirect(redirect.pathname + redirect.search)
+    } else if (props) {
+      res.setHeader('cache-control','private,max-age=600')
+      sdkPost(req.url,res,props)
+    } else {
+      res.status(404).send('Not Found')
+    }
+  })
 });
 app.get('*', (req, res) => {
-    //resolve reading page
-  if(/\/reading\//.test(req.url)) {
-    res.send(renderFullPage(loadingHTML,{}));
-    return;
-  }
-
-  // console.log('oooooooooooooooooooooooooo'+req.url)
   if(/(error|undefined|favicon\.ico)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
@@ -53,7 +65,7 @@ app.get('*', (req, res) => {
   })
 })
 
-const port = process.argv[2] || 9099
+const port = process.argv[2] || 9097
 app.listen(port, (error) => {
   if (error) {
     console.error(error)
@@ -62,6 +74,7 @@ app.listen(port, (error) => {
   }
 })
 
+//fetch handle
 function goSend(res,props){
     try{
       const appHtml = renderToString(<RouterContext {...props}/>)
@@ -71,10 +84,11 @@ function goSend(res,props){
     }
 }
 function onError(res,err){
-  res.send(renderFullPage(loadingHTML,null));
+  res.send(renderFullPage('',null));
   console.log('request faile: '+err);
 }    
 
+//set static acesse header
 function setHeader(res,url,stat){	
 	if(/\.js$/.test(path.resolve(url))){
 		res.setHeader('cache-control','private,max-age=31536000')

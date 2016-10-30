@@ -434,6 +434,8 @@ var Blocklist = React.createClass({
 
 			switch (block.style) {
 				case 1 :
+					// return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
+				case 24 : //24 横排三图
 					return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 2 :
 					return <Block2 key={i} data={block} href={hrefStr} recommend={recommend} />;

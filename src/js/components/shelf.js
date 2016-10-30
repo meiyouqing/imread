@@ -302,7 +302,13 @@ var Shelf = React.createClass({
 	},
 	componentDidMount: function(){
 		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
-		if(this.checkLogin(this.props.route) && !this.state.shelfList) {
+		if(!this.isLogin()){
+			this.goLogin(function(){
+				browserHistory.push(location.pathname);
+			})
+			return;
+		}
+		if(!this.state.shelfList) {
 			this.getList()
 		}
 		this.refs.container && this.lazyloadImage(this.refs.container);
@@ -312,12 +318,16 @@ var Shelf = React.createClass({
 		this.setState({boxHeight:height});
 	},
 	componentDidUpdate: function(nextPros,nextState) {
-		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 
+		const isRouter = GLOBAL.isRouter(this.props);
+		if(isRouter && !this.isLogin()){
+			browserHistory.replace('/');
+		}
+		if(isRouter && this.props.children!==nextPros.children) 
 			setTimeout(function(){
 				this.getList();
 			}.bind(this),100);
 			
-		if(GLOBAL.isRouter(this.props) && !this.state.shelfList && !!nextState.shelfList)	this.getList();
+		if(isRouter && !this.state.shelfList && !!nextState.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){

@@ -10,7 +10,8 @@ var Block5 = React.createClass({
 		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
 			width: w,
-			height: w / 3
+			height: w / 3,
+			height11: w/5
 		};
 	},
 	getInitialState: function() {
@@ -20,7 +21,7 @@ var Block5 = React.createClass({
 			if (!hrefObj) return false;
 			return true;
 		})
-		return {update: 0,width:'100%',height:'auto'}
+		return {update: 0,width:'100%',height:'auto',height11:'auto'}
 	},
 	logIntercut: function(intercut_id, event) {
 		uploadLog.send('intercut', {
@@ -143,7 +144,7 @@ var Block5 = React.createClass({
 			if(link) return pathname+'/'+url;
 			// return url;
 			var match = pathname.match(/\/mall\/page\.\d+/);
-			var base = match? match[0] : 'https://m.imread.com/mall/page.9'
+			var base = match? match[0] : '//192.168.0.251:8080/mall/page.9.3'
 			return base +'/'+url;
 		};
 		// console.log(type)
@@ -166,9 +167,9 @@ var Block5 = React.createClass({
 			case 15://app to H5
 				return {url:data.redirect_url || "javascript:void(0)",target};
 			case 16: //to home
-				return {url:'https://m.imread.com',target}
+				return {url:'//192.168.0.251:8080',target}
 			case 17: //to shelf
-				return {url:'https://m.imread.com/mall/page.9/shelf',target}
+				return {url:'//192.168.0.251:8080/mall/page.9.3/shelf',target}
 			default: return null;
 		}
 	},
@@ -192,17 +193,16 @@ var Block5 = React.createClass({
 		var visibility = this.adlist.length > 1 ? 'hidden' : 'visible';
 		var pathname = GLOBAL.getLocation();
 		return (
-			<section className="m-block-top m-block n-padding">
+			<section className="m-block-top m-block n-padding" style={{border:'none'}}>
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
-						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:'70px')}}>
+						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:this.state.height11)}}>
 							<div className="swipe-wrap">
 			                {
 			                	this.adlist.map(function(v, i) {
 									var hrefObj = this.typeHref(v);
-									if(this.props.fromReading)
-									var search=this.props.fromReading?
-										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname):
+									var search = this.props.fromReading?
+										("?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname)):
 										'';
 									var imgSrc = v.intercut_url || v.image_url;
 									if(typeof window === 'undefined' && /sdk\/sdk\.\d+$/.test(pathname)){
