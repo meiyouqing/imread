@@ -1,7 +1,7 @@
 before_script:
 build:
   only:
-   - master
+   - production
   script:
    - cd /opt/ci_www/imread
    - git stash
