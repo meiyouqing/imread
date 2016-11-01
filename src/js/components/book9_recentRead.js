@@ -8,9 +8,9 @@ var Book9 = React.createClass({
 		var d = new Date(date);
 		if(d.toString() === "Invalid Date") return date;
 		var current = new Date();
-		var deltaSecond = (current.getTime() - d.getTime()) / 1000;
+		var deltaSecond = (current.getTime() - date) / 1000;
 
-		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
+		if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
 			return '昨天';
 		}
 		if (deltaSecond < 15 * 60) {

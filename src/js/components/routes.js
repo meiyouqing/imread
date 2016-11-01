@@ -34,6 +34,8 @@ import SelfBuild from './selfbuild'
 //import MRecharge from './mRecharge'
 import WxLogin from './wxLogin'
 import SDK from './sdk'
+import MBinder from './mBinder'
+import AlyPay from './alyPay'
 
 var APImemory = {};
 const scrollResetHandle = function(){
@@ -105,6 +107,7 @@ var topWrap = (
 	)
 var payWrap = (
 		<Route path="pay" component={Balance} >
+			<Route path="alyPay" component={AlyPay} />
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />
 			</Route>

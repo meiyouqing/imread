@@ -48,11 +48,11 @@ var Balance = React.createClass({
 		};
 	},
 	componentDidMount: function() {
+		this.search = parseQuery(location.search);
 		this.setState({isWx: this.isWx()},()=>{
 			this.getBalance();
 			document.addEventListener('rechargeSuccess',this.getBalance);	
-		})
-		
+		})		
 	},
 	componentWillUnmount: function(){
 		 document.removeEventListener('rechargeSuccess',this.getBalance,false);
@@ -69,7 +69,8 @@ var Balance = React.createClass({
 	WxOrder: function(){
 		AJAX.go('pay',{
 			productId:this.state.list[this.state.active].productId,
-			payType: '2'
+			payType: '2',
+			callback: location.href
 		},function(data){
 			if(data.code == 200){
 				window.location.href = data.success.pay_info;
@@ -77,6 +78,10 @@ var Balance = React.createClass({
 				POP._alert('充值失败');
 			}
 		});
+	},
+	zfbPay: function(){
+		//this.refs.zfb_form.submit();
+		browserHistory.push('/pay/alyPay?callback='+encodeURIComponent('https://m.imread.com/pay'+(this.search.backUrl?('?backUrl='+this.search.backUrl):''))+'&productId='+this.state.list[this.state.active].productId)
 	},
 	WxInsideOrder: function(){
 		var that = this;
@@ -181,9 +186,10 @@ var Balance = React.createClass({
 						{/*<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.isWx() && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
 						<a className={"u-btn u-btn-full u-btn-3"}  onClick={this.WxInsideOrder} >确认充值</a>*/}
-						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWx?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
-						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWx)?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
-						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWx?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
+						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX)?'':' f-hide')} onClick={this.zfbPay} >支付宝充值</a>
+						{/*<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>*/}
+						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
 					</div>
 				</div>
 			);
