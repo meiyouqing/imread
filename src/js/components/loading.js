@@ -17,7 +17,7 @@ var Loading = React.createClass({
 		}
 		return (
 			<div className={this.props.cls}>
-				<div className={cls1}><i className="ball-1"></i><i className="ball-2"></i></div>
+				<div className={cls1}>{/*<i className="ball-1"></i>*/}<i className="ball-2"></i></div>
 				<i>{this.props.text}</i>
 			</div>
 			);

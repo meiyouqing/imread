@@ -6,15 +6,14 @@ var confirm = function() {
 	var template_confirm = '\
 		<div class="confirm-block confirm-block-2">\
 			<div class="content">\
-				<div class="title"><h3>提示</h3></div>\
 				<div class="text">$content</div>\
-				<div class="btns">\
-					<button class="no cancelBtn" />取消</button>\
-					<button class="yes confirmBtn" />确定</button>\
+				<div class="btns f-flexbox">\
+					<button class="no cancelBtn f-flex1" />取消</button>\
+					<button class="yes confirmBtn f-flex1" />确定</button>\
 				</div>\
 			</div>\
 		</div>';
-	var template_alert = template_confirm.replace('<button class="no cancelBtn" />取消</button>','')
+	var template_alert = template_confirm.replace('<button class="no cancelBtn f-flex1" />取消</button>','')
 	var template__alert = '<div class="content">$content</div>';
 	var template__confirm = '\
 		<div class="confirm-block">\
@@ -72,6 +71,7 @@ var confirm = function() {
 	};
 	this.onCancelBtn = function(cancelBtn,callback){
 		cancelBtn.onclick = function(e) {
+			
 			if(typeof callback==='function'){callback()}
 			//callback();
 			e.stopPropagation && (e.stopPropagation)();

@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 
@@ -6,7 +7,8 @@ var Block5 = React.createClass({
 		var w = document.body.offsetWidth - (this.props.style == 11 ? 8 : 0);
 		return {
 			width: w,
-			height: w / 3.0
+			height: w / 3.0,
+			update: 0
 		};
 	},
 	getInitialState: function() {
@@ -30,7 +32,7 @@ var Block5 = React.createClass({
 		
 		var swipeCallback = function(index, ele) {
 			var index = index % that.props.data.contentlist.length;
-			if (Router.name === 'mall' || Router.name == 'reading' && that.props.fromReading) {
+			if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
 				// 判断是否在书城
 				setTimeout(function() {
 					if (!ele || GLOBAL.isElementVisible(ele)) {
@@ -46,7 +48,7 @@ var Block5 = React.createClass({
 					img.setAttribute("data-load-state", 'loading');
 					GLOBAL.loadImage(src, function() {
 						img.src = src;
-						img.style.height = that.state.height + 'px';
+						img.style.height = that.props.style !== 11?that.state.height:70 + 'px';
 						img.setAttribute("data-load-state", 'loaded');
 					});
 				}
@@ -69,11 +71,20 @@ var Block5 = React.createClass({
 	handleResize: function(e) {
 		this.setState(this.getWidthAndHeight());
 	},
+	updateIndex: function(){
+		this.setState({update: this.state.update+1});
+	},
 	componentDidMount: function() {
 		//alert('mount')
 		this.initSwipe();
 		//横竖屏切换 重新计算高度
 		window.addEventListener('resize', this.handleResize, false);
+
+		document.addEventListener('updateMall',this.updateIndex);
+	},
+	componentWillUnmount: function(){
+		 document.removeEventListener("updateMall", this.updateIndex, false);
+		 window.removeEventListener('resize', this.handleResize, false);
 	},
 	componentDidUpdate: function() {
 		//alert('update')
@@ -99,11 +110,54 @@ var Block5 = React.createClass({
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data.contentlist !== nextProps.data.contentlist
-				|| this.state.height !== nextState.height;
+				|| this.state.height !== nextState.height
+				|| this.state.update !== nextState.update;
 	},
 	componentWillReceiveProps: function(nextProps) {
 		//alert('rece')
 		//this.swipe && (this.swipe.kill());
+	},
+	typeHref: function(data){
+		var bid = data.content_id || data.book_id || data.sheet_id || 0;
+		var type = +data.type || +data.content_type;
+		var target = '_self';
+		if(/2|3|4/.test(data.intercut_type)){
+			target = '_blank';
+			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
+				target = 'download';
+			}
+		}
+		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
+			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
+		}
+		if(isNaN(type)) return '';
+
+		function setHref(url){
+			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
+			if(link) return location.pathname+'/'+url;
+			// return url;
+			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
+		};
+
+		switch(type){
+			case 1://图书详情
+				return setHref('book/introduce.'+bid);
+			case 3://搜索
+				return setHref('search/search.'+data.name);
+			case 4://目录
+			case 5://分类
+				return setHref('cat/category.'+bid);
+			case 6://书城的子页面
+				return setHref('self/page.'+data.content_id+'.6.1');
+			case 7://书单
+				return setHref('sheet/bookSheet.'+bid);
+			case 11://跳h5下载游戏
+	    		case 12://跳下载apk
+	    		case 13://跳内部网页
+	    		case 14: //跳外部网页
+	    		case 15://app to H5
+	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
+		}
 	},
 	render: function() {
 		var swipeNav
@@ -124,25 +178,28 @@ var Block5 = React.createClass({
 		}
 		var visibility = this.props.data.contentlist.length > 1 ? 'hidden' : 'visible';
 		return (
-			<section className="m-block-top m-block">
+			<section className="m-block-top m-block n-padding">
 				<div className="content">
 					<div className={"subCat-5" + (this.props.style == 11 ? ' subCat-11' : '')}>
-						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: this.state.height}}>
+						<div className="swipe" ref="swipe" style={{'visibility': visibility, height: (this.props.style !== 11?this.state.height:'70px')}}>
 							<div className="swipe-wrap">
 			                {
 			                	this.props.data.contentlist.map(function(v, i) {
+			                		
+									var hrefObj = this.typeHref(v);
+									var search="?devicetoken="+GLOBAL.cookie('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									var imgSrc = v.intercut_url || v.image_url;
+									imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
+									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
+									
+									var imger = <img data-src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 
-			                		var urlflag = false;
-			                		if(v.redirect_url && v.redirect_url.indexOf('lottery')>=0)
-			                			urlflag = true;
-
-			                		var spm = this.props.spm.slice(0);
-                					spm.splice(-1,1,i+1);
-									var hrefObj = Router.typeHref(v,spm);
+									if(this.props.data.contentlist.length<2) 
+										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
-			                			<a style={{backgroundImage: 'url(src/img/defaultBanner.png)',height: this.state.height, backgroundSize: "cover"}} href={urlflag?v.redirect_url:hrefObj.url} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
-			                				<img data-src={v.intercut_url} className="u-adimg" style={{width: '100%'}}/>
-			                			</a>
+			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                				{imger}
+			                			</Link>
 			                		);
 			                	}.bind(this))
 			                }

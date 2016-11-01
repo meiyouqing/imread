@@ -9,8 +9,9 @@ var Search = React.createClass({
 			UFO:false
 		}
 	},
-	componentDidMount:function(){
-		Router.get(function(data){
+	getDate: function(){
+		AJAX.init(this.props.params.searchId);
+		AJAX.get(function(data){
 			this.setState({
 				blockList:data.blocklist
 			})
@@ -18,12 +19,21 @@ var Search = React.createClass({
 			this.setState({
 				UFO:true
 			});
-			//console.log(error);
+				//console.log(error);
 		}.bind(this))
+	},
+	componentDidMount:function(){
+
+		if(GLOBAL.isRouter(this.props))	this.getDate();
+	},
+	componentDidUpdate: function(){
+		GLOBAL.isAd();
+		if(GLOBAL.isRouter(this.props) && !this.state.blockList) 	this.getDate();		
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return this.state.blockList !== nextState.blockList
-				|| this.state.UFO !== nextState.UFO;
+				|| this.state.UFO !== nextState.UFO
+				|| this.props.children !== nextPros.children;
 	},
 	render: function(){
 		var content;
@@ -34,19 +44,21 @@ var Search = React.createClass({
 				content = <NoData />;
 			}
 		}else{
-			content = <Loading />;
+			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+				content = <Loading />;
 		}
 		if(this.state.UFO){
 			content = <NoData type="UFO" />;
 		}
 		return (
-			<div>
-				<Header_s />
+			<div className="gg-body">
+				<Header_s  route={this.props.route}  />
 				<div  className="g-main g-main-1">
 					<div className="g-scroll">
 						{content}
 					</div>
 				</div>
+				{this.props.children}
 			</div>
 			);
 	}

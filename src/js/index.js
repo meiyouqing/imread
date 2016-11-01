@@ -1,10 +1,11 @@
 //"use strict"
-
-//var ReactDOM = require('react-dom');
-var Frame = require('./components/frame');
-var GLOBAL = require('./modules/global');
-var Token = require('./modules/token');
-
+import browserHistory from './modules/history'
+import { Router, Route} from 'react-router'
+import ReactDOM from 'react-dom'
+import routes from './components/routes'
+import GLOBAL from './modules/global'
+import Token from './modules/token'
+//force to https
 if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
 	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
 	GLOBAL.header.appid = appid;
@@ -23,17 +24,15 @@ if(/plg_nld=\d+\&/.test(location.hash)){
 
 require('./modules/readConfig');
 
-GLOBAL.setUser({
-	phone: GLOBAL.cookie('userPhone'),
-	token: GLOBAL.cookie('userToken')
-});
+// GLOBAL.setUser({
+// 	phone: GLOBAL.cookie('userPhone'),
+// 	token: GLOBAL.cookie('userToken')
+// });
 
 Token.refreshToken();
-window.headerIndex = 0;
 
-ReactDOM.render(<Frame />, document.getElementById('app-container'));
+ReactDOM.render(
+	<Router routes={routes} history={browserHistory}/>, 
+	document.getElementById('app-container')
+);
 
-// setTimeout(Router.visitMiGu, 3000);
-
-//var Balance = require('./balance');
-//ReactDOM.render(<Balance />, document.getElementById('app-container'));

@@ -9,10 +9,11 @@ Desktop.ini
 .idea
 tmp
 public
-serverside
+server
 node_modules
 webpack.config.js
 route.js
+server.bundle.js
 webpack-dev-server.js
 indexTemplate.html
 index.html

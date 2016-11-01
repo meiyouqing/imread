@@ -1,21 +1,22 @@
+import { Link } from 'react-router';
 
 var Book5 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data;
 	},
 	render: function() {
-		var hrefStr = Router.typeHref(this.props.data,this.props.spm);
+		var hrefStr = GLOBAL.typeHref(this.props.data);
 		var topCls = '';
-		var topNum = this.props.data.locate;
+		var topNum = this.props.num+1;
 		switch(topNum){
 			case 1:
-				topCls=" NO1";
+				topCls=" NO1 hot";
 				break;
 			case 2:
-				topCls=" NO2";
+				topCls=" NO2 hot";
 				break;
 			case 3:
-				topCls=" NO3";
+				topCls=" NO3 hot";
 				break;	
 			default:
 				topNum='';
@@ -23,10 +24,11 @@ var Book5 = React.createClass({
 		}
 		return (
 			<li className="u-book-5">
-				<a href={hrefStr}>
-					<span className={"topNb"+topCls}>{topNum}</span>
-					<span className="f-ellipsis f-ellipsis-ib">{this.props.data.name}</span>
-				</a>
+				<Link to={hrefStr}>
+					{/*<span className={"topNb"+topCls}>{topNum}</span>*/}
+					<span className="f-ellipsis f-ellipsis-ib f-auto-width">{this.props.data.name}</span>
+					<span className={topCls}>{topCls?'热':''}</span>
+				</Link>
 			</li>
 		);
 	}

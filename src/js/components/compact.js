@@ -7,9 +7,9 @@ var Conpact = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
-				<Header title="用户协议" right={null} />
-				<iframe src="iframe/compact.html" className="g-main" style={{height: this.props.height}}></iframe>
+			<div className="gg-body">
+				<Header title="用户协议" right={null} path={this.props.route}/>
+				<iframe src="https://m.imread.com/iframe/compact.html" className="g-main" style={{height: this.props.height}}></iframe>
 			</div>
 		);
 	}

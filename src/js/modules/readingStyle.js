@@ -1,8 +1,8 @@
 var ReadingStyle = {
 	defaultStyle: {
-		bg: 1,
+		style: 0,
 		night: 0,
-		fontSize: 3,
+		fontSize: 2,
 		lineheight: 3,
 		fontFamily: 1
 	},

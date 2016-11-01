@@ -2,11 +2,10 @@
 var Header_s = React.createClass({
 	getInitialState: function(){
 		var key = '';
-		if(Router.name === 'searchList'){
-			key = decodeURIComponent(Router.parts[1]);
-		} 
+		if(/^searchList/.test(this.props.route.path)){
+			key = this.props.params['listId'].split('.')[1] || '';
+		}
 		return{
-			initialKey: key,
 			key: key,
 			btn: '取消',
 			search: false
@@ -21,31 +20,44 @@ var Header_s = React.createClass({
 	},
 	handleClick: function(e){
 		e.preventDefault();
+		this.refs.searchInput.blur();
 		if(this.state.search){
 			var	key = this.state.key;
-			if(Router.name==='searchList'){
-				Router.init('searchList&search.'+key+'.1.0.0.0.0');
+			if(GLOBAL.name==='searchList'){
+				AJAX.init('search.'+key);
 				this.props.goSearch();
 			}else{
-				window.location.replace(Router.setHref('searchList&search.'+key+'.1.0.0.0.0'));
+				var tester = /searchList\/search.([^\"]*)/;
+				if(tester.test(location.pathname))
+					browserHistory.replace(location.pathname.replace(tester,'')+'searchList/search.'+key);
+				else
+					browserHistory.push({pathname:GLOBAL.setHref('searchList/search.'+key),state:this.state.key});
+
 			}			
 			this.setState({
-				initialKey: key
+				search: false,
+				btn: '取消'
 			});
 		}else{
-			Router.goBack();
+			GLOBAL.goBack();
 		}
 	},
 	backClick: function(){
 		this.setState({
 			key: ''
 		});
-		Router.goBack();
+		GLOBAL.goBack(this.path);
 	},
 	componentDidMount: function(){
-		if(!this.state.key.length){
-			this.refs.searchInput.focus();
+		// console.log(this.props.keyValue)
+		if(!this.props.keyValue && !this.state.key){
+			//this.refs.searchInput.focus();
+		} else {
+			if(typeof this.props.keyValue === 'string')
+				this.setState({key: this.props.keyValue})
 		}
+		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.key !== nextState.key || this.state.btn !== nextState.btn;
@@ -53,9 +65,10 @@ var Header_s = React.createClass({
 	render: function(){
 		return (
 			<header className="m-bar m-bar-head">
-				<a className="f-fl icon-back iconfont" onClick={this.backClick} ></a>
+				<a className="f-fl icon-s icon-back" onClick={this.backClick} ></a>
 				<form className="u-search f-cb">
-					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名/作者/关键字" onChange={this.handleChange} />
+					<span className="i-put"></span>
+					<input className="searchInput" ref="searchInput" type="search" value={this.state.key} placeholder="书名/作者" onChange={this.handleChange} />
 					<button className="searchBtn f-fr" type="submit" onClick={this.handleClick} >{this.state.btn}</button>
 				</form>
 			</header>

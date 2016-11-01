@@ -1,11 +1,10 @@
 var isHidden = require('./isHidden');
 
 var config = {
-	intercut: {method:'GET',url:'/api/intercut/log'},
-	read: {method:'POST',url:'/api/upload/log'}
+	intercut: {method:'GET',url:'/api/v1/intercut/log'},
+	read: {method:'POST',url:'/api/v1/upload/log'}
 };
 
-var getJSON = require('./getJSON').getJSON;
 
 var uploadLog = {
 	result : {},
@@ -23,11 +22,11 @@ var uploadLog = {
 	},
 	sending: function(page) {
 		if(Object.getOwnPropertyNames && Object.getOwnPropertyNames(this.result).length==0) return;
-		getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
+		AJAX.getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
 		this.result = {};
 	},
 	readlog: function (page, params) {
-		getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
+		AJAX.getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
 	}
 };
 

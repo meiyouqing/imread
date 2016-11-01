@@ -1,6 +1,7 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin'),
-	OpenBrowserPlugin = require('open-browser-webpack-plugin'),
+	//HtmlWebpackPlugin = require('html-webpack-plugin'),
+	// OpenBrowserPlugin = require('open-browser-webpack-plugin'),
 	//webpackDevMiddleware = require("webpack-dev-middleware"),
+    var HtmlWebpackPlugin = require('html-webpack-plugin'),
     webpack = require('webpack'),
 	path    = require('path'),
 	debug   = process.argv.indexOf('-p')===-1;
@@ -11,8 +12,8 @@ module.exports = {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, (debug? 'tmp/':'p/tmp/')),
-        publicPath: 'tmp/',
+        path: path.join(__dirname, (debug? 'tmp':'p/tmp')),
+        publicPath: '/',
         filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
@@ -21,7 +22,7 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
+			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
 			{test: /\.css$/, loader: "style!css" },
 			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
 		]
@@ -33,19 +34,27 @@ module.exports = {
 		    inject: 'body', // Inject all scripts into the body 
 		    hash: !debug
 		  }),
+		new webpack.DefinePlugin({
+		      'process.env':{
+		        'NODE_ENV': JSON.stringify('production')
+		      }
+		 }),
 		new webpack.ProvidePlugin({
-			//React: 'react',
-			storage: '../modules/storage',
+			React: 'react',
 			GLOBAL: '../modules/global',
+			AJAX: '../modules/AJAX',
+			Link: '../modules/link',
+			browserHistory: '../modules/history',
+			storage: '../modules/storage',
 			Loading: './loading',
 			NoData: './noData',
-			Router: '../modules/router',
 			Token: '../modules/token',
 			Mixins: '../modules/mixins',
 			myEvent: '../modules/myEvent',
+			Hammer: '../modules/hammer',
 			POP: '../modules/confirm',
+			Order: '../modules/order',
 			parseQuery: '../modules/parseQuery'
 		}),
-		// new OpenBrowserPlugin({ url: 'http://192.168.0.249:8080'}),
 	] 
 };
