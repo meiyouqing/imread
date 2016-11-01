@@ -1,4 +1,12 @@
-var ReadConfig = require('../modules/readConfig');
+import myEvent from '../modules/myEvent'
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+if(typeof window !== 'undefined'){
+	var ReadConfig = require('../modules/readConfig');	
+	var POP = require('../modules/confirm');
+}
 
 var goto_mlogin = function(options,callback){
 	var hash = location.pathname + '/m_login';
@@ -60,6 +68,10 @@ var BookContent = (function() {
 		}
 
 		var gotoMigu = function(sourceConfig){
+			//跳转之前先回到书籍详情，不然会循环跳转
+			var path = location.pathname;
+			path = path.replace(/\/reading.*$/,'');
+			GLOBAL.goBack(path);
 			//去掉referrer
 			var meta = document.createElement('meta');
 				meta.name = "referrer";

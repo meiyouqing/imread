@@ -1,5 +1,13 @@
+import myEvent from '../modules/myEvent'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var RechageRes = React.createClass({
 	times: 0,

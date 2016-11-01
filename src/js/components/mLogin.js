@@ -1,6 +1,20 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import Loading from './loading'
+import parseQuery from '../modules/parseQuery'
+import { Link } from 'react-router';
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import storage from '../modules/storage'
+import storage from '../modules/storage'
+import React from 'react'
 var Header = require('./header');
-var myEvent = require('../modules/myEvent');
-require('../../css/login.css');
+var myEvent = require('../modules/myEvent'); 
+if(typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 
 var mLogin = React.createClass({
 	mixins:[Mixins()],
@@ -21,7 +35,7 @@ var mLogin = React.createClass({
 			nick_name: this.refs.user_id.value,
 			password: this.refs.password.value,
 			channel: 6,
-			//redirect_uri: "https://192.168.0.249:8080/mall/page.9.3/book/introduce.26601/reading/crossDomain.371742137.371742177.26601.1"
+			//redirect_uri: "https://192.168.0.249:8080/mall/page.9/book/introduce.26601/reading/crossDomain.371742137.371742177.26601.1"
 		};
 		if (!GLOBAL.assertNotEmpty(postData.user_identifier, '请输入手机号')) {return ;}
 		//if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
@@ -30,12 +44,12 @@ var mLogin = React.createClass({
 		that.loading = true;
 		AJAX.go('mLogin',postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			//GLOBAL.cookie('userPhone', postData.phone, options);
-			GLOBAL.cookie('userToken', data.token, options);
-			GLOBAL.cookie('userId', data.userInfo.user_id, options);
+			storage.set('userToken', data.token);
+			GLOBAL.header['userId'] = data.userInfo.user_id;
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
@@ -93,7 +107,7 @@ var mLogin = React.createClass({
 					POP._alert('登录成功');
 					this.setState({onlogin: false});
 					clearInterval(times);
-					GLOBAL.cookie('userToken', "loaded", {expires: 1000});
+					storage.set('userToken', "loaded");
 					this.disPatch('updateUser');
 					this.disPatch('telBind');
 					GLOBAL.goBack();

@@ -1,3 +1,5 @@
+import { browserHistory } from 'react-router'
+import React from 'react'
 var Img = require('./img');
 var Book10 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -15,7 +17,7 @@ var Book10 = React.createClass({
 				<a onClick={this.clickHandle}>
 					<img src="/src/img/icon88/e3e3e3.gif" data-lazyload-src={this.props.data.image_url} className="u-lazyload-img" />
 					<div className="f-b-block">
-						<span className="book-name">{this.props.data.name || this.props.data.sheet_name}</span>
+						<span className="book-name f-ellipsis">{this.props.data.name || this.props.data.sheet_name}</span>
 						<div className="f-fr last">
 							<span className="icon-l icon-book"></span>
 							<span >{(this.props.data.count || this.props.data.content_cnt)+'本'}</span>

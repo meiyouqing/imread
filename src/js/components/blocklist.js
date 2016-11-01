@@ -1,3 +1,9 @@
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import myEvent from '../modules/myEvent'
+import React from 'react'
 var Book1 = require('./book1');
 var Book2 = require('./book2');
 var Book3 = require('./book3');
@@ -389,7 +395,22 @@ var Block15 = React.createClass({
 		}
 	}
 });
-
+var AdWrap = React.createClass({
+	getInitialState:function(){
+		return {show:false}
+	},
+	componentDidMount: function(){
+		this.setState({show:true})
+	},
+	render:function(){
+		if(this.state.show){
+			return <Block5 data={this.props.data} style={this.props.style} />
+		}else{
+			return <section className="m-block-top m-block n-padding" style={{width:'100%',paddingTop:'33.333333%',
+    backgroundImage: 'url(/src/img/back/ad_default_back.jpg)'}}></section>
+		}
+	}
+})
 var Blocklist = React.createClass({
 	getInitialState: function(){
 		return {
@@ -404,6 +425,7 @@ var Blocklist = React.createClass({
 			if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
 				return ;
 			}
+
 			hrefStr = GLOBAL.setHref('more/blocks.'+block.id);
 
 			if(that.props.pageId)
@@ -412,6 +434,8 @@ var Blocklist = React.createClass({
 
 			switch (block.style) {
 				case 1 :
+					// return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
+				case 24 : //24 横排三图
 					return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 2 :
 					return <Block2 key={i} data={block} href={hrefStr} recommend={recommend} />;
@@ -421,19 +445,8 @@ var Blocklist = React.createClass({
 					return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 11: //banner不铺满
 				case 5 : //banner铺满
-					// require.ensure(['./block5'],function(require){
-					// 	setTimeout(function() {
-					// 		var Block5 = require('./block5');
-					// 		var block5 = <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
-					// 		that.state.comps.splice(i,1,block5)
-					// 		that.state.block5[i] = block5;
-					// 		that.setState({
-					// 			comps: that.state.comps,
-					// 			block5: that.state.block5
-					// 		});
-					// 	}, 0);
-					// });
-					return <Block5 key={i} data={block} href={hrefStr} style={block.style} />;
+					return <Block5 key={i} data={block} style={block.style}/>;
+					// return <AdWrap key={i} data={block} style={block.style} />;
 				case 6 :
 					return <Block6 key={i} data={block} href={hrefStr} recommend={recommend} />;
 				case 7 : //7 圆形热词风格

@@ -1,9 +1,15 @@
+import NoData from './noData'
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
+import React from 'react'
 import { Link } from 'react-router';
 var Img = require('./img');
 var Book10 = require('./book10');
 var Block7 = require('./block7');
 var Loading = require('./loading');
 var Book7 = require('./book7_mallSubject');
+import GLOBAL from '../modules/global'
+
 
 var List = React.createClass({
 	mixins: [Mixins()],
@@ -71,27 +77,27 @@ var Guess = React.createClass({
 			noMore:false,
 			scrollUpdate:false,
 			onerror:false,
-			list:[]
+			list:null
 		}
 	},
 	componentDidMount: function(){
-		if(this.props.data.contentlist.length){
-			AJAX.init('block.'+this.props.data.id+'.10.1');
 			this.getList();
-		}
 	},
 	componentDidUpdate: function(nextProp) {
 		this.lazyloadImage(this.refs.contain,true);
-		if(this.props.data.contentlist.length !== nextProp.data.contentlist.length){
-			AJAX.init('block.'+this.props.data.id+'.10.1');
-			this.getList();
-		}
+		// if(this.props.data.contentlist.length !== nextProp.data.contentlist.length){
+		// 	AJAX.init('block.'+this.props.data.id+'.10.1');
+		// 	this.getList();
+		// }
 	},
 	getList: function(){
-		
+		AJAX.init('block.'+this.props.data.id+'.10.1');	
 		AJAX.get((data)=>{
 			if(data.content.length<1)	{
-				this.setState({noMore: true});
+				this.setState({
+					noMore: true,
+					list: this.state.scrollUpdate? this.state.list.concat(data.content):data.content
+				});
 				return;
 			}
 			this.setState({
@@ -102,9 +108,10 @@ var Guess = React.createClass({
 	},
 	render: function(){
 		var sLoading = null,list=null;
-		
-		if(!this.props.data.contentlist.length){
-			list = <NoData type="emptyTag" updateGuess={this.props.updateGuess} />
+		if(!this.state.list){
+			list = <Loading />
+		}else if(!this.state.list.length){
+			list = <NoData type="emptyTag" updateGuess={this.getList} />
 		} else {
 			list  = <Block7 bookList={this.state.list} />;
 			if(this.state.list.length)
@@ -142,6 +149,10 @@ var Paihang = React.createClass({
 	}
 });
 
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+
 var BookStore = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data
@@ -163,8 +174,6 @@ var BookStore = React.createClass({
 						list = <Paihang data={v} />
 						break;
 					case 15: 
-						list = <Guess data={v} updateGuess={this.props.updateGuess} />
-						break;
 					case 3: 
 						list = <Guess data={v} />
 						break;

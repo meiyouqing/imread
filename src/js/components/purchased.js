@@ -1,9 +1,15 @@
+import NoData from './noData'
+import Loading from './loading'
+import storage from '../modules/storage'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
 var Book1 = require('./book1');
-var Hammer = require('../modules/hammer');
-var NoData = require('./noData');
-
+if(typeof window !== 'undefined'){
+	var Hammer = require('../modules/hammer');
+}
 
 var Purchased = React.createClass({
 	mixins: [Mixins()],

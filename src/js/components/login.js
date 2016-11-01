@@ -1,6 +1,20 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import { browserHistory } from 'react-router'
+import Loading from './loading'
+import parseQuery from '../modules/parseQuery'
+import { Link } from 'react-router';
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import storage from '../modules/storage'
+import React from 'react'
 var Header = require('./header');
 var myEvent = require('../modules/myEvent');
-require('../../css/login.css');
+if(typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 
 var Login = React.createClass({
 	mixins:[Mixins()],
@@ -27,20 +41,20 @@ var Login = React.createClass({
 		that.loading = true;
 		AJAX.go('login',postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			that.loading = false;
 			
 			GLOBAL.setUser({
 				phone: postData.phone,
 				token: postData.token
 			});
-
 			if(data.code == 200){
-				GLOBAL.cookie('userToken', data.token, options);
+				storage.set('userToken', data.token);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
+				GLOBAL.header.userId = data.userInfo.user_id;
 				//判断登陆后的跳转
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
@@ -90,9 +104,9 @@ var Login = React.createClass({
 		that.loading = true;
 		AJAX.getJSON('POST', '/api/v1/auth/register', postData, function(data) {
 			that.loading = false;
-			var options = {
-				expires: 1000
-			};
+			// var options = {
+			// 	expires: 1000
+			// };
 			
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
@@ -100,11 +114,12 @@ var Login = React.createClass({
 			});
 
 			if(data.code == 200){
-				GLOBAL.cookie('userPhone', postData.mobile_num,options);
-				GLOBAL.cookie('userToken', data.token, options);
+				//GLOBAL.cookie('userPhone', postData.mobile_num,options);
+				storage.set('userToken', data.token);
 				// GLOBAL.cookie('uuid', GLOBAL.getUuid(), options);
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
+				GLOBAL.header.userId = data.userInfo.user_id;
 				POP._alert('注册成功');
 				//判断登陆后的跳转
 				//var isneed = false;
@@ -229,7 +244,7 @@ var Login = React.createClass({
 			   AJAX.go('login_wb',{
         			code: this.from.code,
         			grant_type: 'authorization_code',
-        			redirect_uri: 'https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin'
+        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9/login')
 			   },function(res){
 			   	that.do_result(res,'wb');
 			   })
@@ -238,7 +253,7 @@ var Login = React.createClass({
 	do_result: function(data,type){
 		var that = this;
 		if(data.code == 200){
-			GLOBAL.cookie('userToken', 'loaded');
+			storage.set('userToken', 'loaded');
 			that.disPatch('updateUser');
 			that.disPatch('updateMall');
 
@@ -259,12 +274,15 @@ var Login = React.createClass({
 		if(navigator.userAgent.indexOf('QQ')>-1)
     			return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
   		else 
-  			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
+  			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";
   	},
   	WB_login: function(){
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
 
   	},
+	  gowinLogin:function(){
+		  this.disPatch('winLogin');
+	  },
 	render: function() {
 		var list;
 		var loading = <Loading />
@@ -344,6 +362,9 @@ var Login = React.createClass({
 							</div>
 						</div>
 					</div>
+					{
+								//<p className="f-clearfix" style={{marginTop:'150px',lineHeight:'50px',textAlign:'center'}}>						<a onClick={this.gowinLogin}>微信登录</a></p>
+					}
 				</div>
 				{this.props.children}
 			</div>

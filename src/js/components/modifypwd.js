@@ -1,5 +1,11 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
 var Modifypwd = React.createClass({
 	mixins: [Mixins()],
 	clickHandle: function(){

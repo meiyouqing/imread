@@ -1,38 +1,33 @@
-//"use strict"
+
 import browserHistory from './modules/history'
 import { Router, Route} from 'react-router'
 import ReactDOM from 'react-dom'
+import React from 'react'
 import routes from './components/routes'
-import GLOBAL from './modules/global'
-import Token from './modules/token'
-//force to https
-if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
-	var appid = window.location.search.match(/appid=(\w+)&?/)[1];
-	GLOBAL.header.appid = appid;
-}
-if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
-	var channel = window.location.search.match(/channel=(\w+)&?/)[1];
-	GLOBAL.header.channel = channel;
-}
-
-if(/plg_nld=\d+\&/.test(location.hash)){
-	var hash = location.hash.replace(/plg_nld=\d+\&/, '');
-	hash = hash.replace(/\?[\s\S]+$/,'');
-	window.location.replace(hash);
-	console.log(hash);
-}
-
+import GLOBAL from './modules/global';
+// import Token from './modules/token';
+import { render } from 'react-dom';
 require('./modules/readConfig');
 
-// GLOBAL.setUser({
-// 	phone: GLOBAL.cookie('userPhone'),
-// 	token: GLOBAL.cookie('userToken')
-// });
 
-Token.refreshToken();
 
-ReactDOM.render(
+if(typeof window !== 'undefined'){
+	if(/appid=\w+/.test(window.location.search) && !GLOBAL.appid){
+		var appid = window.location.search.match(/appid=(\w+)&?/)[1];
+		GLOBAL.header.appid = appid;
+	}
+	if(/channel=\w+/.test(window.location.search) && !GLOBAL.channel){
+		var channel = window.location.search.match(/channel=(\w+)&?/)[1];
+		GLOBAL.header.channel = channel;
+	}
+	// 处理服务端渲染失败
+	if(window.__PRELOADED_STATE__ === null){
+		browserHistory.replace('/');
+	}
+}
+
+render(
 	<Router routes={routes} history={browserHistory}/>, 
-	document.getElementById('app-container')
+	document.getElementById('appContainer')
 );
 

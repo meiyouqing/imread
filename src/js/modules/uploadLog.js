@@ -1,4 +1,8 @@
-var isHidden = require('./isHidden');
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+if(typeof window !== 'undefined'){
+	var isHidden = require('./isHidden');
+}
 
 var config = {
 	intercut: {method:'GET',url:'/api/v1/intercut/log'},

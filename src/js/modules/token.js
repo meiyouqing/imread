@@ -1,3 +1,6 @@
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import storage from '../modules/storage'
 
 
 var Token = {
@@ -11,17 +14,17 @@ var Token = {
 					// GLOBAL.cookie('token', data.token, {
 					// 	expires: 1000
 					// });
-					GLOBAL.cookie('uuid', data.uuid,{expires: 1000});
+					//GLOBAL.cookie('uuid', data.uuid,{expires: 1000});
 				}else{
 					//GLOBAL.removeCookie('userPhone');
-					GLOBAL.removeCookie('userToken');
-					GLOBAL.removeCookie('userId');
+					storage.rm('userToken');
+					//GLOBAL.removeCookie('userId');
 					//GLOBAL.removeCookie('uuid');
 				}
 			}, function(res) {
 				//GLOBAL.removeCookie('userPhone');
-				GLOBAL.removeCookie('userToken');
-				GLOBAL.removeCookie('userId');
+				storage.rm('userToken');
+				//GLOBAL.removeCookie('userId');
 				//GLOBAL.removeCookie('uuid');
 			});
 		//}

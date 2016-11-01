@@ -1,7 +1,13 @@
+import NoData from './noData'
+import Loading from './loading'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
 var Header_s = require('./header_s');
 var Block7 = require('./block7');
-var Mixins = require('../modules/mixins');
 
 var List = React.createClass({
 	mixins: [Mixins()],
@@ -10,39 +16,7 @@ var List = React.createClass({
 		if(!this.isMounted()) return;
 		var hash = param?param:this.props.params.listId;
 		AJAX.init(hash);
-		AJAX.get(data => {
-			this.isLoading = false;
-			var pathname = location.pathname.split('/');
-			if(/^search./.test(pathname[pathname.length-1])){
-				if (!data.contentlist.length) {
-					this.setState({
-						noMore:true
-					})
-				}
-				this.setState({
-					recommend: data,
-					resultCount: data.result_count,
-					bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
-					scrollUpdate: false
-				})
-				//设置GLOBAL book name
-				GLOBAL.setBookName(data.contentlist);
-			}else{
-				if (!data || !data.content.length) {
-					this.setState({
-						noMore:true
-					})
-				}
-
-				this.setState({
-					recommend: data,
-					bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
-					scrollUpdate: false
-				});				
-				//设置GLOBAL book name
-				GLOBAL.setBookName(data);
-			}
-		}, error => {
+		AJAX.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
 				this.setState({
 					scrollUpdate:false,
@@ -56,7 +30,41 @@ var List = React.createClass({
 			//console.log(error);
 		});
 	},
+	ajaxHandle:function(data){
+		this.isLoading = false;
+		var pathname = this.props.location.pathname.split('/');
+		if(/^search./.test(pathname[pathname.length-1])){
+			if (!data.contentlist.length) {
+				this.setState({
+					scrollUpdate:false,
+					noMore:true
+				});
+				return;
+			}
+			this.setState({
+				recommend: data,
+				resultCount: data.result_count,
+				bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
+				scrollUpdate: false
+			})
+			//设置GLOBAL book name
+		}else{
+			if (!data || !data.content.length) {
+				this.setState({
+					noMore:true
+				})
+			}
+
+			this.setState({
+				recommend: data,
+				bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
+				scrollUpdate: false
+			});				
+			//设置GLOBAL book name
+		}
+	},
 	goSearch: function(){
+		if(!this.isMounted()) return;
 		if(!this.state.scrollUpdate){
 			this.refs.container.scrollTop = 0;
 			this.setState({
@@ -66,9 +74,6 @@ var List = React.createClass({
 			})
 		}
 		this.getList();
-	},
-	gotoSearch: function(){
-		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 	},
 	getInitialState: function(){
 		return {
@@ -81,21 +86,24 @@ var List = React.createClass({
 			title: '艾美阅读'
 		}
 	},
+	componentWillMount:function(){
+		this.usePreload(this.props.params.listId);
+	},
 	componentDidMount: function(){
-		if(GLOBAL.isRouter(this.props)) this.getList();
+		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
+		this.lazyloadImage(this.refs.container);
 	},
-	update: function(){
-
-	},
-	// componentWillReceiveProps: function(nextProps){
-	// 	this.getData();
-	// },
 	componentDidUpdate: function(nextProps,nextState) {
 		
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props) && !this.state.bookList)  this.getList();
-
-		this.lazyloadImage(this.refs.container);
+		if(GLOBAL.isRouter(this.props))  {
+			if(!this.state.bookList){
+				this.getList();
+			}else{
+				this.lazyloadImage(this.refs.container);
+				this.disPatch('scroll',this.refs.container)
+			}
+		}
 	},
 	componentWillReceiveProps: function(nextProps){
 		var isSearch = /searchList/.test(this.props.route.path);
@@ -114,20 +122,14 @@ var List = React.createClass({
 				|| this.props.params.listId !== nextProps.params.listId;
 	},
 	render:function(){
-
 		var header,noData,content,sLoading,result_count;
-		//定义头部
-		// if(this.state.resultCount){
-		// 	result_count = <p className="u-noteText">为您找到相关图书{this.state.resultCount}本</p>;
-		// }
-		//var right = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>;
 		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;				
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
 		}
 		//定义content
 		if(!this.state.bookList || this.isLoading){
-			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+			//if(GLOBAL.isRouter(this.props))	//兼容低端安卓
 				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){
@@ -135,7 +137,7 @@ var List = React.createClass({
 				content = null;
 				result_count = null;
 			}else{
-				content = <Block7 recommend={this.state.recommend} bookList={this.state.bookList}/>;
+				content = <Block7 recommend={this.state.recommend} bookList={this.state.bookList} location={this.props.location}/>;
 				sLoading = <Loading cls='u-sLoading' />;
 			}							
 		}
@@ -148,6 +150,7 @@ var List = React.createClass({
 			result_count = null;
 			sLoading = null;
 		}
+		//console.log(content)
 		return (
 			<div className="gg-body">
 				{header}

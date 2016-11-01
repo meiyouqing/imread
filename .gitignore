@@ -8,8 +8,6 @@ Desktop.ini
 .svn
 .idea
 tmp
-public
-server
 node_modules
 webpack.config.js
 route.js
@@ -19,3 +17,8 @@ indexTemplate.html
 index.html
 p
 npm-debug.log
+package.json
+test.js
+webpack.config.js
+.gitlab-ci.yml
+

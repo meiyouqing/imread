@@ -1,3 +1,4 @@
+import React from 'react'
 var PayTips = React.createClass({
 	render: function() {
 		return (

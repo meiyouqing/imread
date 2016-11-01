@@ -1,9 +1,23 @@
-var Header = require('./header');
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import Loading from './loading'
+import storage from '../modules/storage'
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
+import Order from '../modules/order'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+var Header = require('./header_f');
 var Img = require('./img');
 
 var Shelf = React.createClass({
 	mixins:[Mixins()],
 	startReading: function(v){
+		if(!this.isMounted()) return;
 		var bid = v.content_id;
 		var cid = v.chapter_id;
 		if(!this.state.setting){ //开始阅读
@@ -33,9 +47,11 @@ var Shelf = React.createClass({
 		}
 	},
 	showModels: function(){
+		if(!this.isMounted()) return;
 		this.setState({showModelList: !this.state.showModelList});
 	},
 	settingClick: function(e){
+		if(!this.isMounted()) return;
 		//如果书架是空，返回
 		if(!this.state.shelfList.length){
 			this.setState({
@@ -45,7 +61,6 @@ var Shelf = React.createClass({
 			return;
 		}
 		var index = Number(e.target.getAttribute('data-index'));
-		this.setState({showModelList: false});
 		var completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
 		var setting = false,selected=[],icon=null,left=null,middle=null,reading=false;
 
@@ -72,7 +87,8 @@ var Shelf = React.createClass({
 			right:completion,
 			model: index,
 			title: '',
-			reading: reading
+			reading: reading,
+			showModelList:false
 		});
 
 
@@ -97,6 +113,7 @@ var Shelf = React.createClass({
 		})
 	},
 	seAllClick :function(){
+		if(!this.isMounted()) return;
 		var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 		this.state.shelfList.forEach(function(v){
 			this.state.selected.push(v.content_id);
@@ -108,6 +125,7 @@ var Shelf = React.createClass({
 	},
 	seNoneClick: function(){
 		var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
+		if(!this.isMounted()) return;
 		this.setState({
 			left:seAll,
 			selected:[]
@@ -219,6 +237,7 @@ var Shelf = React.createClass({
 			 this.models[key] = '1';
 	},
 	changeShow: function(e){
+		if(!this.isMounted()) return;		
 		var a = e.target.tagName == 'A'?e.target:e.target.parentNode;
 		var i = a.getAttribute('data-cls');
 
@@ -226,17 +245,21 @@ var Shelf = React.createClass({
 		this.setState({show_model: i});
 		localStorage.models = JSON.stringify(this.models);
 	},
+	models:{},
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
 		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
 		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
 		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
-		this.models = localStorage.models?JSON.parse(localStorage.models):{
+		this.models = {
 			order_model: '0',
 			book_order: '0',
 			recent_order: '0',
 			reading_order: '0'
 		};//获取模式和排序
+		if(typeof window !== 'undefined' && localStorage.models){
+			this.models = JSON.parse(localStorage.models)
+		}
 		return {
 			title: '书架',
 			setting:false,
@@ -256,39 +279,62 @@ var Shelf = React.createClass({
 			recent_order: this.models.recent_order?this.models.recent_order:'0',
 			reading_order: this.models.reading_order?this.models.reading_order:'0',
 			book_order: this.models.book_order?this.models.book_order:'0',
+			boxHeight:'auto'
 		}
 	},
 	getList: function (){
-		AJAX.init('block.156.100.1');
+		// AJAX.init('block.156.100.1');
+		AJAX.init('shelf');
+		
+		AJAX.get(this.ajaxHandle,this.onerror);
+	},
+	ajaxHandle:	function(data){
+		if(!this.isMounted()) return;
 		var order_model = this.models.order_model?this.models.order_model:0;
-		AJAX.get((data)=>{
-			this.setState({
-				
-				shelfList: this.sortBook(order_model,data.content,true)
-			});
-			//设置GLOBAL.booklist/book
-			GLOBAL.setBlocklist(data);
-		},this.onerror);
-	},			
+		this.setState({			
+			shelfList: this.sortBook(order_model,data.content,true)
+		});
+		//设置GLOBAL.booklist/book
+		//GLOBAL.setBlocklist(data);
+	},	
+	componentWillMount:function(){
+		this.usePreload('shelf');
+	},
 	componentDidMount: function(){
-		if(this.checkLogin(this.props.route)) {
+		this.models = localStorage.models?JSON.parse(localStorage.models):{}//获取模式和排序
+		if(!this.isLogin()){
+			this.goLogin(function(){
+				browserHistory.push(location.pathname);
+			})
+			return;
+		}
+		if(!this.state.shelfList) {
 			this.getList()
 		}
+		this.refs.container && this.lazyloadImage(this.refs.container);
+		//reset img box size
+		const width = (document.body.offsetWidth-60)/3;
+		const height = width * 1.346;
+		this.setState({boxHeight:height});
 	},
 	componentDidUpdate: function(nextPros,nextState) {
-		if(GLOBAL.isRouter(this.props) && this.props.children!==nextPros.children) 
+		const isRouter = GLOBAL.isRouter(this.props);
+		if(isRouter && !this.isLogin()){
+			browserHistory.replace('/');
+		}
+		if(isRouter && this.props.children!==nextPros.children) 
 			setTimeout(function(){
 				this.getList();
 			}.bind(this),100);
 			
-		if(GLOBAL.isRouter(this.props) && !this.state.shelfList && !!nextState.shelfList)	this.getList();
+		if(isRouter && !this.state.shelfList && !!nextState.shelfList)	this.getList();
 		this.refs.container && this.lazyloadImage(this.refs.container);
 	},
 	render:function(){
 		var header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle}  path={this.props.route}  />;
 		var icon,content;
 		var curClass = '';
-		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="https://m.imread.com/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
+		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		// var addBook = this.state.setting? null:add;
 		
 		//获取最近阅读的时间和
@@ -337,9 +383,9 @@ var Shelf = React.createClass({
 											return(
 												<li key={i} className={"u-book-2 "+curClass}>
 													<a onClick={this.startReading.bind(this,v)}>
-														<div className="pro-box">
+														<div className="pro-box f-oh" style={{height:this.state.boxHeight}}>
 															{icon}
-															<Img src={v.image_url} />
+															<Img  src={v.image_url} />
 															<div className="progress p-div">
 																<div style={{width: v.playorder/v.count*100+'%'}}>
 																</div>

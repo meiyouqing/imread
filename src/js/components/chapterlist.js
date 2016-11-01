@@ -1,3 +1,7 @@
+import Loading from './loading'
+import { browserHistory } from 'react-router'
+import React from 'react'
+import storage from '../modules/storage'
 var myEvent = require('../modules/myEvent');
 
 var Chapterlist = React.createClass({

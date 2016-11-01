@@ -1,20 +1,16 @@
-	//HtmlWebpackPlugin = require('html-webpack-plugin'),
-	// OpenBrowserPlugin = require('open-browser-webpack-plugin'),
-	//webpackDevMiddleware = require("webpack-dev-middleware"),
-    var HtmlWebpackPlugin = require('html-webpack-plugin'),
-    webpack = require('webpack'),
+var webpack = require('webpack'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
 	path    = require('path'),
-	debug   = process.argv.indexOf('-p')===-1;
-	//console.log(process.argv)
+	debug   = false;
 	
 module.exports = {
 	entry: {
 		app:['./src/js/index.js']
 	},
 	output: {
-        path: path.join(__dirname, (debug? 'tmp':'p/tmp')),
-        publicPath: '/',
-        filename: debug?'app/[name].bundle.js':'app/[hash].bundle.js',
+        path: path.join(__dirname,'public/p'),
+        publicPath: '/public/',
+        filename: 'bundle1.js',
         chunkFilename: debug?'modules/[name].bundle.js':'modules/[chunkhash].bundle.js'
 	},
 	resolve:{
@@ -22,39 +18,49 @@ module.exports = {
 	},
 	module: {
 		loaders:[
-			{test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015&presets[]=react' },
-			{test: /\.css$/, loader: "style!css" },
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=20092'}
+			// {test: /\.js[x]?$/, loader: 'babel-loader?presets[]=es2015&presets[]=react'},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'babel',
+				query:{
+				    presets: ['react', 'es2015'],
+				    plugins: ["transform-object-rest-spread"]
+				    }				
+			},
+			{ 
+				test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") 
+			},
+			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=10092'}
 		]
 	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			filename: '../index.html',
-		    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
-		    inject: 'body', // Inject all scripts into the body 
-		    hash: !debug
-		  }),
-		new webpack.DefinePlugin({
-		      'process.env':{
-		        'NODE_ENV': JSON.stringify('production')
-		      }
-		 }),
-		new webpack.ProvidePlugin({
-			React: 'react',
-			GLOBAL: '../modules/global',
-			AJAX: '../modules/AJAX',
-			Link: '../modules/link',
-			browserHistory: '../modules/history',
-			storage: '../modules/storage',
-			Loading: './loading',
-			NoData: './noData',
-			Token: '../modules/token',
-			Mixins: '../modules/mixins',
-			myEvent: '../modules/myEvent',
-			Hammer: '../modules/hammer',
-			POP: '../modules/confirm',
-			Order: '../modules/order',
-			parseQuery: '../modules/parseQuery'
-		}),
+	plugins: debug?
+				[new ExtractTextPlugin("style.css")]:
+				[
+		new ExtractTextPlugin("style.css"),
+	    new webpack.optimize.DedupePlugin(),
+	    new webpack.optimize.OccurrenceOrderPlugin()//,
+	    // new webpack.HotModuleReplacementPlugin()
+   //  		new HtmlWebpackPlugin({
+			// filename: '../index.html',
+		 //    template: debug? 'indexTemplate.html' :'indexTemplate-p.html', // Load a custom template 
+		 //    inject: 'body', // Inject all scripts into the body 
+		 //    hash: !debug
+		 //  }),
+
+		// new webpack.ProvidePlugin({
+		// 	React: 'react',
+		// 	AJAX: '../modules/AJAX',
+		// 	GLOBAL: '../modules/global',
+		// 	Link: '../modules/link',
+		// 	browserHistory: '../modules/history',
+		// 	storage: '../modules/storage',
+		// 	Loading: './loading',
+		// 	NoData: './noData',
+		// 	Token: '../modules/token',
+		// 	Mixins: '../modules/mixins',
+		// 	myEvent: '../modules/myEvent',
+		// 	parseQuery: '../modules/parseQuery'
+		// })
 	] 
 };

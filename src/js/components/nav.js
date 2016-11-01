@@ -1,6 +1,7 @@
+import Mixins from '../modules/mixins'
 import NavLink from './navLink'
-
-var Nav = React.createClass({
+import React from 'react'
+const Nav = React.createClass({
 	mixins: [Mixins()],
 	// shouldComponentUpdate: function(nextProp,nextState){
 	// 	// console.log(this.state.navUpdate,nextState.navUpdate)
@@ -36,4 +37,4 @@ var Nav = React.createClass({
 	}
 });
 
-module.exports  = Nav;
+export default Nav;

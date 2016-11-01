@@ -1,3 +1,7 @@
+import myEvent from '../modules/myEvent'
+import { browserHistory } from 'react-router'
+import GLOBAL from '../modules/global'
+import React from 'react'
 import parseQuery from '../modules/parseQuery';
 
 var Header = React.createClass({
@@ -41,29 +45,38 @@ var Header = React.createClass({
 			myEvent.execCallback('updateGuess');
 		}
 	},
-	componentDidMount: function(){
-		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
-		this.path = window.location.pathname.split('/'+this.path)[0];
-
-		if(this.props.path.path.split('/')[1] == 'self')
-			this.path = '/mall';
-	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.title !== nextProps.title 
 				|| this.props.left !== nextProps.left 
 				|| this.props.right !== nextProps.right;
 	},
-	render: function(){
+	getInitialState:function(){
+		return {
+			skipurl:''
+		}
+	},
+	componentDidMount:function(){
+		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
+
+		if(this.props.path.path.split('/')[1] == 'self')
+			this.path = '/mall';
+
 		var from = parseQuery(location.search);
-		var isskip = false;
-		var defaultLeft = this.props.left === undefined?<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>:this.props.left;
-
-		if(this.props.skipurl && from.skipurl)
-			isskip = true;
-
+		if(this.props.skipurl && from.skipurl){
+			this.setState({
+				skipurl:from.skipurl
+			})
+		}			
+	},
+	render: function(){
 		return (
 			<header className="m-bar m-bar-head">
-				{isskip?<a className="f-fl icon-s icon-back" href={from.skipurl}></a>:defaultLeft}
+				{
+					this.state.isskip?
+					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
+					(this.props.left?this.props.left:<a className="f-fl icon-back icon-s" onClick={this.goBack}></a>)
+				}
 				{this.props.right}
 				{this.props.middle}
 				<h1 className="title">{this.props.title}</h1>

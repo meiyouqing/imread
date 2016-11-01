@@ -1,38 +1,40 @@
 {
   "name": "imread",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "description": "imread for html5",
   "main": "index.js",
   "dependencies": {
-    "babel-core": "^6.13.2",
-    "babel-loader": "^6.2.4",
+    "babel-polyfill": "^6.3.14",
+    "babel-register": "^6.4.3",
+    "compression": "^1.6.2",
     "css-loader": "^0.23.1",
-    "file-loader": "^0.9.0",
+    "express": "^4.13.3",
+    "file-loader": "^0.8.5",
+    "isomorphic-fetch": "^2.1.1",
     "jsx-loader": "^0.13.2",
-    "md5": "^2.0.0",
-    "object-assign": "^4.0.1",
-    "open-browser-webpack-plugin": "0.0.2",
+    "lodash": "^4.0.0",
+    "normalizr": "^2.0.0",
     "path": "^0.12.7",
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0",
+    "qs": "^4.0.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
     "react-router": "^2.5.2",
-    "style-loader": "^0.13.0",
-    "url-loader": "^0.5.7",
-    "webpack": "^1.12.2"
+    "react-router-redux": "^4.0.0-rc.1",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7"
   },
   "devDependencies": {
-    "compression": "^1.6.2",
-    "express": "^4.14.0",
-    "html-webpack-plugin": "^1.7.0",
-    "open-browser-webpack-plugin": "0.0.2",
-    "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.12.2"
+    "babel-core": "^6.5.1",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-object-rest-spread": "^6.16.0",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-react-hmre": "^1.1.1",
+    "babel-runtime": "^6.3.13"
   },
   "scripts": {
-    "start": "node server.js",
-    "start-dev": "node server-dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/index.js"
   },
-  "author": "Min & Ljy",
+  "author": "May & Ljy & Wxg",
   "license": "ISC"
 }

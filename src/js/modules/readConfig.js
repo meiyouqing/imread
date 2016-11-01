@@ -1,6 +1,8 @@
+import storage from '../modules/storage'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
 
 var parseQuery = require('../modules/parseQuery');
-
 
 // var ReadConfig = (function(callback) {
 // 	var _config = storage.get('readConfig');

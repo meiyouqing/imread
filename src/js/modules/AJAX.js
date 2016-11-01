@@ -1,9 +1,14 @@
+import storage from './storage'
+import GLOBAL from './global'
 import transformRequest from './transformRequest';
+import 'babel-polyfill'
+import fatch from 'isomorphic-fetch'
 var Config = {
 	payURLBase: 'https://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
 var API={
+	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
 	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
@@ -15,7 +20,7 @@ var API={
 	collectionDelete:{method:'POST', base:'/api/v1/bookSheet/collection/delete', param:{sheet_id:1}},
 	introduce:{method:'GET', base:'/api/v1/book/introduce', param:{bid:1 }},
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
-	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:8,pages:1}},
+	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:'0',pages:1}},
 	mLogin:{method:'POST', base:'/api/v1/auth/login/sso', param:{user_identifier:'',nick_name:'',password:'',channel:6}},
 	mOrder:{method:'GET', base:'/api/v1/migu/order', param:{book_id:0,chapter_id:0,cm:0,firmnum:'',count:1}},
 	mBind:{method:'GET', base:'/api/v1/migu/check/bind', param:{cm:0}},
@@ -58,89 +63,135 @@ var API={
 	edituser: {method: 'POST', base: '/api/v1/auth/edit/info', param:{user_gender:0,user_birthday:null,user_name:null}},
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
-	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}}
+	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
+	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1}}
 };
 
 //接口缓存机制
-var imCache = (function() {
-	var config = {
-		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
-		needCache: false
-	};
+// var imCache = (function() {
+// 	var config = {
+// 		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
+// 		needCache: false
+// 	};
 
-	var needCache = function(url) {
-		if (!config.needCache) {
-			return false;
-		}
-		for (var i = 0; i < config.cacheUrl.length; i++) {
-			if (new RegExp(config.cacheUrl[i]).test(url)) {
-				return true;
-			}
-		}
-		return false;
-	};
+// 	var needCache = function(url) {
+// 		if (!config.needCache) {
+// 			return false;
+// 		}
+// 		for (var i = 0; i < config.cacheUrl.length; i++) {
+// 			if (new RegExp(config.cacheUrl[i]).test(url)) {
+// 				return true;
+// 			}
+// 		}
+// 		return false;
+// 	};
 
-	var getCacheKey = function(url) {
-		return 'ImCache-' + url;
-	};
+// 	var getCacheKey = function(url) {
+// 		return 'ImCache-' + url;
+// 	};
 
-	var getFromCache = function(url) {
-		var key = getCacheKey(url);
-		var cacheStr = localStorage.getItem(key);
-		var result = false;
-		try {
-			if (cacheStr) {
-				result = JSON.parse(cacheStr);
-			}
-		} catch(e) {
+// 	var getFromCache = function(url) {
+// 		var key = getCacheKey(url);
+// 		var cacheStr = localStorage.getItem(key);
+// 		var result = false;
+// 		try {
+// 			if (cacheStr) {
+// 				result = JSON.parse(cacheStr);
+// 			}
+// 		} catch(e) {
 
-		}
-		return result;
-	};
+// 		}
+// 		return result;
+// 	};
 
-	var setCache = function(url, data) {
-		storage.set(getCacheKey(url), data);
-		return true;
-	};
+// 	var setCache = function(url, data) {
+// 		storage.set(getCacheKey(url), data);
+// 		return true;
+// 	};
 
-	return {
-		needCache: needCache,
-		getFromCache: getFromCache,
-		setCache: setCache
-	};
-})();
+// 	return {
+// 		needCache: needCache,
+// 		getFromCache: getFromCache,
+// 		setCache: setCache
+// 	};
+// })();
 
 
 function getGETUrl(url, postdata) {
+	// return 'http://192.168.0.251:8080/nonono';
 	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
 }
 //getJSON接口
-function GETJSON(method, url, postdata, callback, onError,isJson) {
-	//var urlBase = 'https://m.imread.com';
+function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'http://192.168.0.34:9090';
-	//var urlBase = 'http://192.168.0.252:8080';
+	//var urlBase = 'http://192.168.0.251:8080/nono';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
-
-	var cacheUrl = getGETUrl(method + '-' + url, postdata);
-	var cacheResponse = false;
-	if (imCache.needCache(cacheUrl)) {
-		cacheResponse = imCache.getFromCache(cacheUrl);
-		if (cacheResponse) {
-			// console.log('getFromCache-' + cacheUrl)
-			setTimeout(function(){
-				callback(cacheResponse)
-			},0);
-		}
+	if(typeof window !== 'undefined'){
+		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson);
+		return;
 	}
-	GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse,isJson);
+
+	// var cacheUrl = getGETUrl(method + '-' + url, postdata);
+	// var cacheResponse = false;
+	// if (imCache.needCache(cacheUrl)) {
+	// 	cacheResponse = imCache.getFromCache(cacheUrl);
+	// 	if (cacheResponse) {
+	// 		// console.log('getFromCache-' + cacheUrl)
+	// 		setTimeout(function(){
+	// 			callback(cacheResponse)
+	// 		},0);
+	// 	}
+	// }
+	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
+	// console.log(headers)
+	// console.log(method)
+		
+	const promise = method === 'GET'?
+				fetch(getGETUrl(url,postdata)):
+				fetch(url,{
+					method,
+					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+				});
+	let timeoutId = 0;
+	const timeout = (ms,promise) => {
+		return new Promise((resolve,reject)=>{
+			timeoutId = setTimeout(()=>{
+				reject(new Error('链接超时'));
+			},ms)
+			promise.then(resolve,reject);
+		})
+	};	
+	timeout(5000,promise).then(function(response) {
+		clearTimeout(timeoutId);
+		if (response.status >= 200 && response.status < 300) {
+		    return response.json();
+		  } else {
+		    const error = new Error(response.statusText)
+		    error.response = response;
+		    throw error
+			//onError(error)
+		  }
+	})
+	.then(function(stories) {
+		if(stories.error){
+			onError("服务器错误")
+		}else{
+	    	callback(stories)
+		}
+	})
+	.catch(function(error) {
+    	//console.log('request failed', error)
+    	onError(error)
+  	})
 }
-function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse,isJson) {
+function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 	method = method || 'POST';
-	var time = 15000;
+	var time = 10000;
+	var timeout = false;
 	var request = null;
 	try {
 		if (window.XMLHttpRequest) {
@@ -154,7 +205,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 	if (!request) {
 		return;
 	}
-	var timeout = false;
+
 	var timer = setTimeout(function() {
 		timeout = true;
 		request.abort();
@@ -171,34 +222,22 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		if (request.status === 200) {
 			var res = false;
 			try {
-				if(!isJson)
-					res = JSON.parse(request.responseText);
-				else
-					res = request.responseText;
+				res = !isJson?
+					JSON.parse(request.responseText):
+					request.responseText;
+				if(!res) {
+					onError(new Error('服务器返回为空'));
+				}else if(res.error){
+					onError(res.error);
+				}else{
+					callback(res);
+				}			
 			} catch (e) {
 				//res = '连接超时！';
-				onError(res);
+				onError(e);
 			}
-			// if (res.code !== 200) {
-			// 	onError(res);
-			// } else {
-
-				//如果缓存中没有结果则触发callback
-				//TODO 比较新的结果和缓存结果，如果不同则重新触发callback
-				if (!cacheResponse) {
-					if(!res) {
-						onError(new Error('服务器返回为空'));
-						return;
-					}
-					callback(res);
-				}
-
-				//需要缓存，缓存ajax结果
-				var cacheUrl = getGETUrl(method + '-' + url, postdata);
-				if (imCache.needCache(cacheUrl)) {
-					imCache.setCache(cacheUrl, res);
-				}
-			// }
+		}else {
+			onError(request.status+' '+request.responseText)
 		}
 	};
 
@@ -215,13 +254,13 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		}
 		request.send(postdata);
 	} else {
-		var isYulan = false;
-		var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
-		for (var i = 0; i < yulanUrls.length; i++) {
-			isYulan |= new RegExp(yulanUrls[i]).test(url);
-		}
-		isYulan = isYulan && /yulan=1/.test(window.location.search);
-		request.open(method, getGETUrl(url, postdata) + (isYulan ? "&yulan=1": ''));
+		// var isYulan = false;
+		// var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
+		// for (var i = 0; i < yulanUrls.length; i++) {
+		// 	isYulan |= new RegExp(yulanUrls[i]).test(url);
+		// }
+		// isYulan = isYulan && /yulan=1/.test(window.location.search);
+		request.open(method, getGETUrl(url, postdata));
 		request.withCredentials = true;
 		setRequestHeaders(request);
 		request.send(null);
@@ -233,17 +272,15 @@ function setRequestHeaders(request) {
 		//'Referer': 'readapi.imread.com',
 		'Info-Imsi': '',
 		'Info-Imei': '',
-		'Info-Channel': GLOBAL.header.channel? GLOBAL.header.channel:'ImreadH5',
-		'Info-appid' : GLOBAL.header.appid? GLOBAL.header.appid:'ImreadH5',
+		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
+		'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
 		'Info-Version': '1.0.1',
 		'Info-Model': '',
 		'Info-Os': '',
 		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
 		'Info-Vcode': '101',
-		'Info-Userid': GLOBAL.cookie('userId') || '',
-		'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
-		//'Info-Token': GLOBAL.cookie('userToken') || '',
-		// "Cache-Control": "no-cache",
+		'Info-Userid': GLOBAL.header.userId || '',
+		'Info-Uuid': GLOBAL.header.uuid || GLOBAL.getUuid(),
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
@@ -261,6 +298,7 @@ var AJAX = {
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
 		}
+
 		var parts = now.split('.');
 		this.API.now = parts[0];
 		var ao = API[parts[0]];
@@ -276,7 +314,6 @@ var AJAX = {
 		this.API._m = ao.method;
 		this.API._base = ao.base;
 		this.API._param = ao.param;
-		//GLOBAL.setTitle(now);
 	},
 	get: function(callback, onerror){
 		GETJSON(this.API._m,this.API._base,this.API._param,callback,onerror);

@@ -1,5 +1,10 @@
+import React from 'react'
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
 var Header = require('./header');
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css')
+}
 
 var mRecharge = React.createClass({
 	mixins: [Mixins()],

@@ -1,11 +1,15 @@
+import { browserHistory, Link } from 'react-router'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-require('../../css/setting.css');
-
+if(typeof window !== 'undefined'){
+	require('../../css/setting.css');
+}
 var ULine = React.createClass({
 	render: function() {
 		var src_href = !this.props.line.target?GLOBAL.setHref(this.props.line.href):this.props.line.href,
 			target = this.props.line.target?this.props.line.target:null;
-
 		return (
 			<li className="u-line">
 				<Link to={src_href} className="f-cb" target={target} data-href={src_href} onClick={this.props.line.requireLogin}>
@@ -17,26 +21,29 @@ var ULine = React.createClass({
 	}
 });
 
-var MUblock = React.createClass({
-	render: function() {
-		return (
-			<section className="m-list">
-				<div className="content">
-					<ul className="u-lines">
-						{
-							this.props.lines.map(function(line, i) {
-								return <ULine key={i} line={line} />
-							})
-						}
-					</ul>
-				</div>
-			</section>
-		);
-	}
-});
+// var MUblock = React.createClass({
+// 	render: function() {
+// 		return (
+// 			<section className="m-list">
+// 				<div className="content">
+// 					<ul className="u-lines">
+// 						{
+// 							this.props.lines.map(function(line, i) {
+// 								return <ULine key={i} line={line} />
+// 							})
+// 						}
+// 					</ul>
+// 				</div>
+// 			</section>
+// 		);
+// 	}
+// });
 
 var Setting = React.createClass({
 	mixins: [Mixins()],
+	getInitialState: function(){
+		return {isWx:false}
+	},
 	requireLogin: function(e){
 
 		if (!this.isLogin()) {
@@ -53,9 +60,12 @@ var Setting = React.createClass({
 		}
 		return true;
 	},
+	componentDidMount: function(){
+		this.setState({isWx:true})
+	},
 	render:function() {
 		var blockData = [
-			[{
+			{
 				title: '修改密码',
 				href: 'modifypwd',
 				requireLogin: this.requireLogin
@@ -69,21 +79,28 @@ var Setting = React.createClass({
 				title: '官方网站',
 				href: 'https://www.imread.com',
 				target: '_self'
-			}]
+			}
 		];
-
+		//微信不需要 ‘修改密码’
+		if(this.state.isWx) blockData.shift();
 		return (
 			<div className="g-ggWraper gg-body">
 				<Header right={false} title={'设置'} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="m-settingblock g-scroll">
-						{
-							blockData.map(function(lines, i) {
-								return (<MUblock key={i} lines={lines} />);
-							})
-						}
+					<section className="m-list">
+						<div className="content">
+							<ul className="u-lines">
+								{
+									blockData.map(function(line, i) {
+										return <ULine key={i} line={line} />
+									})
+								}
+							</ul>
+						</div>
+					</section>
 						<div className="m-set-footer">
-							<img src="https://m.imread.com/src/img/back/bg-@2x.jpg" />
+							<img src="/src/img/back/bg-@2x.jpg" />
 						</div>
 					</div>
 

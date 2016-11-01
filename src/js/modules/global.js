@@ -1,3 +1,10 @@
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
+import parseQuery from '../modules/parseQuery'
+
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1,
@@ -11,8 +18,7 @@ Date.prototype.Format = function (fmt) {
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 };
-
-var GLOBAL = {
+const GLOBAL = {
 	// state:1,
 	// historyPath: null,
 	header:{},
@@ -24,21 +30,29 @@ var GLOBAL = {
 	unRendered:[],
 	orderLIst:{},
 	pushLinks:{},
+	getLocation: function(){
+		return (typeof window === 'undefined'? global.pathname:location.pathname);
+	},
 	goBack:function(path){
 		// if(!GLOBAL.state)
 		// 	browserHistory.replace(GLOBAL.historyPath);
 		// else
 		// 	browserHistory.goBack();
-		//if(window.location.search.match('devicetoken')) {browserHistory.goBack(); return;}
-
 		if(typeof path == 'string')
 			browserHistory.push(path);
 		else
 			browserHistory.goBack();
 	},
 	setHref:function(str){
-		//TODO
-		return location.pathname+'/'+str
+		if(typeof window === 'undefined'){
+			//sdk need to full url
+			if(/sdk\/sdk\.\d+$/.test(global.pathname)){
+				return '//192.168.0.251:8080/mall/page.9.3/'+str;
+			}
+			return global.pathname+'/'+str
+		}else{
+			return location.pathname+'/'+str
+		}
 	},
 	isRouter: function(route){
 		var route_id = null,
@@ -53,24 +67,25 @@ var GLOBAL = {
 		}
 		else 
 			route_id = route_key;
-
-		var route_path = window.location.pathname.split('/');
-
+		var route_path;
+		if(typeof window === 'undefined') {
+			return true;
+			route_path = global.requestURL.split('/');
+		}else{			
+			route_path = window.location.pathname.split('/');
+		}
 		if(route_path[route_path.length-1] == route_id)	return true;
-		else return false;
+		else return false;			
 
 		// var path = route.route.path.replace(/:([^\"]*)/,'');
 		// return window.location.pathname.split('/'+path)[0];
 	},
-	typeHref: function(data,isAd){
+	typeHref: function(data){
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
 		var type = +data.type || +data.content_type;
 		var target = '_self';
 		if(/2|3|4/.test(data.intercut_type)){
 			target = '_blank';
-			if(GLOBAL.isAndroid() && (+data.intercut_type)===4){
-				target = 'download';
-			}
 		}
 		if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
 			data.redirect_url = data.redirect_url.replace(/referer=\d/, "");
@@ -80,22 +95,6 @@ var GLOBAL = {
 		switch(type){
 			case 1://图书详情
 				return this.setHref('book/introduce.'+bid);
-			// case 2://广告
-	  //   		switch (data.intercut_type) {
-	  //   			case 1://图书详情
-	  //   				return {url:this.setHref('book/introduce.' + data.source_contentid),target:target};
-	  //   			case 2://内部网页
-	  //   			case 3://外部网页
-	  //   			case 4://apk下载
-	  //   			case 8://app to H5
-	  //   				return {url:data.redirect_url || "javascript:void(0)",target:target};
-	  //   			case 5://素材目录
-	  //   				return {url:this.setHref('cat/category.' + data.source_contentid ),target:target};
-   //  				case 6: //自搭页面
-   //  					return {url:this.setHref('selfbuild/page.62'),target:target}
-   //  				default:
-   //  					return {url:"javascript:void(0)",target:target}
-	  //   		}
 			case 3://搜索
 				return this.setHref('search/search.'+data.name);
 			case 4://目录
@@ -112,39 +111,6 @@ var GLOBAL = {
 	    		case 15://app to H5
 	    			return {url:data.redirect_url || "javascript:void(0)",target:target};
 		}
-	},
-	// setTitle: function(parts){
-	// 	console.log(parts)
-	// 	var title = {login:'用户登录',forget:'重置密码',regiter:'新用户注册',confirmOrder:'确认订单',balance:'艾豆充值',recharge:'话费充值',recharge_result:'充值结果',recentRead:'最近阅读',listTag:'我的标签',readHistory:'我的成就',feedback:'意见反馈',about:'关于艾美阅读'};
-	// 	parts = parts.split('.');
-	// 	var n=parts[0],
-	// 		id=parts[1];
-	// 	switch(n){
-	// 		case 'block':
-	// 		case 'more':
-	// 		case 'category':
-	// 			this.title = GLOBAL.bookList[id];
-	// 			break;
-	// 		case 'introduce':
-	// 			this.title = GLOBAL.book[id];
-	// 			break;
-	// 		case 'reading':
-	// 			break;
-	// 		default:
-	// 			this.title = title[n];
-	// 			break;
-	// 	}
-	// 	var rTitle = this.title? ('-'+this.title):'';
-	// 	document.title = '艾美阅读' + rTitle;
-	// 	console.log(this.title)
-	// 	return this.title;
-	// },
-	setBookName:function(data){
-		if(!data.length||!this.isArray(data)){return}
-		data.forEach(function(v){
-			this.book[v.source_bid]=v.name;
-			this.book[v.content_id]=v.name;
-		}.bind(this))
 	},
 	setBlocklist:function(data){
 		if(!data.length||!this.isArray(data)){return}
@@ -176,7 +142,11 @@ var GLOBAL = {
 			GLOBAL.pushLinks[location.pathname] = parseQuery(location.search).comeFrom;
 	},
 	isAndroid: function(){
-		return /linux|android/i.test(navigator.userAgent);
+		if(typeof window !== 'undefined'){
+			return /linux|android/i.test(navigator.userAgent);
+		}else{
+			return true;
+		}
 	},
 	isArray:function(obj) {
 		return Object.prototype.toString.call(obj) === '[object Array]';
@@ -199,6 +169,7 @@ var GLOBAL = {
 		return true;
 	},
 	cookie: function(key, value, options) {
+		//console.log('>>>>>>>>>>>>>>>>>'+key);
 		// write
         if (value !== undefined) {
                 options = options || {};
@@ -211,7 +182,7 @@ var GLOBAL = {
                         '=',
                         encodeURIComponent(value),
                         options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-                        options.path?'; path='+options.path:'; path=/',
+                        options.path ? '; path='+options.path:'; path=/',
                         options.domain ? '; domain=' + options.domain :'',
                         options.secure ? '; secure=' + options.secure :''
                 ].join(''));
@@ -227,9 +198,7 @@ var GLOBAL = {
                 if (key && key === name) {
                         result = cookie;
                         break;
-                }
-
-                if (!key) {
+                }else if (!key) {
                         result[name] = cookie;
                 }
         }
@@ -307,12 +276,10 @@ var GLOBAL = {
 	},
 	noop: function() {},
 	getUuid: function () {
-		var uuid = GLOBAL.cookie('InfoUuid') || storage.get('InfoUuid', 'string');
+		var uuid = storage.get('InfoUuid', 'string');
 		if (!uuid) {
 			uuid = '' + (+new Date) + Math.random();
-			GLOBAL.cookie('InfoUuid', uuid, {
-	  				expires: 1000
-	  		});
+			GLOBAL.header['InfoUuid'] = uuid;
 			storage.set('InfoUuid', uuid);
 		}
 		return uuid;
@@ -340,7 +307,7 @@ var GLOBAL = {
 		}
 		else
 			return day;
-	},
+	}
 }
 
 module.exports = GLOBAL;

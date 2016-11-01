@@ -1,3 +1,4 @@
+import React from 'react'
 var Book1 = require('./book1');
 
 var Recommend = React.createClass({
@@ -23,7 +24,7 @@ var Block7 = React.createClass({
 				{	
 					this.props.bookList.map(function(v,i){
 						return (
-							<Book1 key={i} data={v} />
+							<Book1 key={i} data={v} location={this.props.location}/>
 						)
 					}.bind(this))
 				}

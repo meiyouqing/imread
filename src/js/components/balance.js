@@ -1,22 +1,33 @@
+import { browserHistory, Link } from 'react-router'
+import React from 'react'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import parseQuery from '../modules/parseQuery'
 var Header = require('./header');
 var Recharge = require('./recharge');
 
-require('../../css/pay.css')
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css')
+}
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		
 		AJAX.go('balance',{
-			payType: this.state.isWX?2:1
+			payType: this.state.isWx?2:1
 		},function(data){
 			this.setState({
 				loading: false,
 				balance: data.success.balance,
 				list: data.success.list
 			});
-		}.bind(this));
+		}.bind(this),function(err){POP._alert(err)})
 	},
 	getInitialState: function() {
 		var back;
@@ -24,22 +35,24 @@ var Balance = React.createClass({
 		if(from && from.backUrl)
 			back = from.backUrl;
 		else 
-			back = location.origin;
+			back = '/';
 
 		return {
-			back:  <a className="f-fl icon-s icon-back" href={back} ></a>,
+			back:  <Link className="f-fl icon-s icon-back" to={back} ></Link>,
 			loading: true,
 			list: [],
 			balance: 0,
 			active: 0,
-			isWX: this.isWx(),
+			isWx: false,
 			payLoading: false
 		};
 	},
 	componentDidMount: function() {
 		this.search = parseQuery(location.search);
-		if(this.checkLogin(this.props.route)) this.getBalance();
-		document.addEventListener('rechargeSuccess',this.getBalance);
+		this.setState({isWx: this.isWx()},()=>{
+			this.getBalance();
+			document.addEventListener('rechargeSuccess',this.getBalance);	
+		})		
 	},
 	componentWillUnmount: function(){
 		 document.removeEventListener('rechargeSuccess',this.getBalance,false);
@@ -104,7 +117,7 @@ var Balance = React.createClass({
 					           "paySign" : data.success.paySign //微信签名 
 					       },
 					       function(res){
-					           that.setState({payLoading: false});     
+					           that.setState({payLoading: false});   alert('done')  
 					           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 					           		that.getBalance();
 					           		// that.disPatch('updateUser');
@@ -117,8 +130,8 @@ var Balance = React.createClass({
 					   ); 
 				}
 			} else {
-				that.setState({payLoading: false}); 
-				POP._alert('获取信息失败');
+				that.setState({payLoading: false});
+				POP._alert(data.code + ' 获取信息失败');
 			}
 		});
 	},
@@ -126,6 +139,8 @@ var Balance = React.createClass({
 		return nextState.balance != this.state.balance
 			    || nextState.list != this.state.list
 			    || nextState.active != this.state.active
+				|| nextState.isWx != this.state.isWx
+			    || nextState.loading != this.state.loading
 			    || this.props.children != nextPros.children
 			    || nextState.payLoading != this.state.payLoading;
 	},
@@ -133,7 +148,7 @@ var Balance = React.createClass({
 		
 		var content,wxPayLoading=null;
 		if(this.state.payLoading)	wxPayLoading = <Loading />;
-
+// console.log(this.state.loading)
 		if (this.state.loading) {
 			content = <Loading />
 		} else {
@@ -150,7 +165,7 @@ var Balance = React.createClass({
 							(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
 								var active = i == this.state.active;
 								var activeClass = active ? ' active' : '';
-								if(!this.state.isWX)
+								if(!this.state.isWx)
 									return (
 										<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
 											<span className={"icon-n icon-black-aidou " + activeClass}></span>

@@ -1,3 +1,10 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Img = require('./img');
 var Book10 = require('./book10');
 var Header = require('./header');
@@ -17,6 +24,7 @@ var StoreList = React.createClass({
 		}
 	},
 	getList: function(bool){
+		if(!this.isMounted()) return;
 		if(this.state.noMore === true && !bool) return;
 		AJAX.get((data)=>{
 			var list;
@@ -32,7 +40,7 @@ var StoreList = React.createClass({
 				list = this.state.scrollUpdate? this.state.list.concat(data.success):data.success;
 			this.setState({
 				list: list,
-				right:list.length? < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>:null,
+				right:list.length? <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>:null,
 				scrollUpdate: false
 			});
 		},this.onerror)
@@ -41,23 +49,26 @@ var StoreList = React.createClass({
         this.goBackUrl(this.props.route);
     	},
 	troggle: function() {
-        var right = < button className = "f-fr textBtn" onClick = { this.compClick } > 完成 < /button>;
+		if(!this.isMounted()) return;
+        var right = <button className = "f-fr textBtn" onClick = { this.compClick } > 完成 </button>;
         this.setState({
             right: right,
             icon: true,
             left: null
         });
     	},
-    	compClick: function(){
-    	  var right = < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>;
-    	  this.setState({
-            right: right,
-            icon: false,
-            left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
-        });
-    	},
-    	deleteSheet: function(e){
-    		var bid = e.target.getAttribute('data-bid');
+	compClick: function(){
+		if(!this.isMounted()) return;
+		var right = <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>;
+			this.setState({
+			right: right,
+			icon: false,
+			left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+		});
+	},
+	deleteSheet: function(e){
+ 		if(!this.isMounted()) return;
+   		var bid = e.target.getAttribute('data-bid');
         	if (!bid) {return; }
         	var that =  this;
 	      var ui_callback = function() {
@@ -81,7 +92,7 @@ var StoreList = React.createClass({
 	           sheet_id: bid
 	      }, ui_callback);
     	},
-    	scrollData: function(e){
+	scrollData: function(e){
 		AJAX.init('bookstore');
 		this.scrollHandle(e);
 	},

@@ -1,7 +1,15 @@
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
-require('../../css/userinfo.css');
-
+if(typeof window !== 'undefined'){
+	require('../../css/userinfo.css');
+}
 var EditUsername = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {

@@ -1,8 +1,16 @@
+import parseQuery from '../modules/parseQuery'
+import Loading from './loading'
+import NoData from './noData'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
 //var Block7 = require('./block7');
 var Book1 = require('./book1');
-var Mixins = require('../modules/mixins');
-require('../../css/bookSheet.css');
+if(typeof window !== 'undefined'){
+	require('../../css/bookSheet.css');
+}
 
 var BookSheet = React.createClass({
 	 mixins: [Mixins()],
@@ -26,7 +34,6 @@ var BookSheet = React.createClass({
 				scrollUpdate: false
 			});	
 			//设置GLOBAL book name
-			GLOBAL.setBookName(data.content);
 		}.bind(this), function(error){
 			if(this.state.scrollUpdate){
 				this.setState({
@@ -84,6 +91,9 @@ var BookSheet = React.createClass({
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
 		this.lazyloadImage(this.refs.container);
+		if(!this.isLogin()){
+			this.setState({collected:false})
+		}
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.data !== nextState.data 
@@ -124,7 +134,7 @@ var BookSheet = React.createClass({
 									</div>
 								</div>
 								<div className="u-sheet-detail">
-									<h2 className="f-ellipsis">{this.state.data.sheet_name}</h2>
+									<h2>{this.state.data.sheet_name}</h2>
 									<div className="brief">{this.state.data.sheet_brief}</div>
 								</div>
 							</div>

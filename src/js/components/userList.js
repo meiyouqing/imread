@@ -1,40 +1,56 @@
+import { browserHistory, Link } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import storage from '../modules/storage'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var myEvent = require('../modules/myEvent');
-var Mixins = require('../modules/mixins');
 
-require('../../css/user.css');
-
+if(typeof window !== 'undefined'){
+	require('../../css/user.css');
+}
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 var ULine = React.createClass({
 	mixins: [Mixins()],
+	getInitialState:function(){
+		return {isWx:false}
+	},
+	componentDidMount: function(){
+		if(this.isWx()){
+			this.setState({isWx:true})
+		}
+	},
 	render: function() {
-		var Src = window.location.pathname.split('/');
-		Src = '/'+Src[1]+'/'+Src[2]+'/'+this.props.line.href;
+		const arr = GLOBAL.getLocation().split('/');
+		let Src = '/'+arr[1]+'/'+arr[2]+'/'+this.props.line.href;
 
-		if(this.props.line.href.indexOf('pay')>-1) {
-			Src = 'https://m.imread.com/'+this.props.line.href+'?backUrl='+encodeURIComponent(location.href);
+		if(this.props.line.href === 'pay'){
+			Src = '/pay?backUrl=' + encodeURIComponent(this.props.path);
 		}
 
-		if(this.isWx() && this.props.line.href.indexOf('pay')>-1) {
+		if(this.state.isWx && this.props.line.href === 'pay'){
 			return (
-			<li className="u-line">
-				<a href={Src} className="f-cb">
-					<span className={"icon-u" + ' ' + this.props.line.icon}></span>
-					<span className="title">{this.props.line.title}</span>
-					<span className='s-title'>{this.props.line.s_title}</span>
-				</a>
-			</li>
-		)
+				<li className="u-line">
+					<a href={Src} data-href={Src} className="f-cb">
+						<span className={"icon-u" + ' ' + this.props.line.icon}></span>
+						<span className="title">{this.props.line.title}</span>
+						<span className='s-title'>{this.props.line.s_title}</span>
+					</a>
+				</li>
+			)
+		}else{
+			return (
+				<li className="u-line">
+					<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
+						<span className={"icon-u" + ' ' + this.props.line.icon}></span>
+						<span className="title">{this.props.line.title}</span>
+						<span className='s-title'>{this.props.line.s_title}</span>
+					</Link>
+				</li>
+			);
 		}
-
-		return (
-			<li className="u-line">
-				<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
-					{/*<span className="iconfont icon-arrow-right f-fr"></span>*/}
-					<span className={"icon-u" + ' ' + this.props.line.icon}></span>
-					<span className="title">{this.props.line.title}</span>
-					<span className='s-title'>{this.props.line.s_title}</span>
-				</Link>
-			</li>
-		);
 	}
 });
 
@@ -45,9 +61,9 @@ var MUblock = React.createClass({
 				<div className="content">
 					<ul className={"u-lines active"+this.props.index}>
 						{
-							this.props.lines.map(function(line, i) {
-								return <ULine key={i} line={line} />
-							})
+							this.props.lines.map(function(line, i){
+								return <ULine key={i} line={line} path={this.props.path}/>
+							}.bind(this))
 						}
 					</ul>
 				</div>
@@ -56,112 +72,82 @@ var MUblock = React.createClass({
 	}
 });
 
-var User = React.createClass({
+var UserList = React.createClass({
 	mixins: [Mixins()],
 	getInitialState: function() {
 		return {
 			user: GLOBAL.user,
 			needUpdate: 0,
-			userInfo: {
-				portraitUrl: 'https://m.imread.com/src/img/user/avatar@2x.png',
-				balance: 0
-			},
+			userInfo: null,
 		};
 	},
 	login: function(e) {
 		if (!this.isLogin()) {
 			this.requireLogin(e);
 		} else{
-			browserHistory.push(GLOBAL.setHref('userInfo'));
+			browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
 		}
-	},
-	shouldComponentUpdate: function(nextProp, nextState) {
-		return this.state.user.phone !== nextState.user.phone 
-		    || this.state.needUpdate !== nextState.needUpdate
-		    || this.props.children !== nextProp.children
-		    || this.state.userInfo !== nextState.userInfo;
 	},
 	componentDidMount: function() {
 		this.getUserInfo();
-
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
 		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
-
 	},
 	componentWillUnmount: function(){
-		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,false), false);
-		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,false),false);
+		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,null), false);
+		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,null),false);
 	},
-	componentDidUpdate: function(nextProp){
-	},
-	getUserInfo: function(callback) { //获取个人信息
+	getUserInfo: function() { //获取个人信息		
 		var that = this;
 		if (this.isLogin()) {
 			AJAX.init('me');
 			AJAX.get(function(data) {
-				var newPortraitUrl = data.portraitUrl;
-				data.portraitUrl = that.state.userInfo.portraitUrl;
+				if(data.code != 200) {
+					storage.rm('userToken');
+					return;
+				}
 				that.setState({
 					userInfo: data,
-					needUpdate: that.needUpdate + 1
 				});
-				GLOBAL.cookie('userId', data.user_id, {
-					expires: 1000
-				});
-
-				callback && (callback());
-
-				if (!/\/face\/null$/.test(newPortraitUrl)) {
-					GLOBAL.loadImage(newPortraitUrl, function() {
-						data.portraitUrl = newPortraitUrl;
-						that.setState({
-							userInfo: data,
-							needUpdate: that.needUpdate + 1
-						});
-					});
-				}
-			}, GLOBAL.noop);
-		} 
+			}, ()=>{
+					storage.rm('userToken');
+			});
+		}else{
+			that.setState({
+				userInfo: null
+			});
+		}
 	},
 	requireLogin:function(e) {
-		var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
-		var that = this;
 		if (!this.isLogin()) {
+			e.preventDefault();
+			var target = e.target.nodeName == 'A' ? e.target : e.target.parentNode;
 			var href = target.getAttribute('data-href');
+			// console.log(target);
+			// console.log(href);
+			
 			if (!href) {
 				var hash = location.pathname+'/login';
 				browserHistory.push(hash);
-				myEvent.setCallback('login', login_c);
+				//myEvent.setCallback('login', login_c);
 				return false;
 			}
-			this.goLogin(login_c,href);
-			e.preventDefault();
+			this.goLogin(function(){browserHistory.push(href)});
 			return false;
-		}
-		function login_c() {
-			setTimeout(function() {
-				that.setState({
-					needUpdate: that.state.needUpdate + 1
-				});
-			}, 0);
-			setTimeout(function() {
-				that.getUserInfo(function() {
-					if(/pay/.test(href)) href="/pay"
-					browserHistory.push(href || location.pathname);
-				});
-			}, 10);
 		}
 		return true;
 	},
 	gotoBalance:function(){
 		browserHistory.push(GLOBAL.setHref('balance'))
 	},
-	// shouldComponentUpdate: function(nextProp,nextState){
-	// 	//console.log(this.props,nextProp)
-	// 	return this.props.noMore !== nextState.noMore;
-	// },
+	shouldComponentUpdate: function(nextProp, nextState) {
+		return this.state.user.phone !== nextState.user.phone 
+		    || this.state.needUpdate !== nextState.needUpdate
+		    || this.props.children !== nextProp.children
+		    || this.props.path !== nextProp.path
+		    || this.state.userInfo !== nextState.userInfo;
+	},
 	render:function() {
-
 		var blockData = [
 			[{
 				title: '书架',
@@ -208,42 +194,36 @@ var User = React.createClass({
 				href: 'setting'
 			}]
 		];
-		var logoutBtn;
-		var userName = '',aidou=0;
-		var avatarPic = this.state.userInfo.portraitUrl;
-		avatarPic = avatarPic? avatarPic.replace(/^http\:\/\//,'https://'):false;
-		 if (this.isLogin()) {
-			userName = this.state.userInfo.user_name || this.state.userInfo.mobile_num;
-			logoutBtn = (<div>
-				<div className="avatar-wrap" onClick={this.login}>
-					<img src={ avatarPic || 'https://m.imread.com/src/img/user/avatar@2x.png'} />
-				</div>
-				<div className="username"><p className="f-ellipsis" onClick={this.login}>{userName}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
-				</div>
-			);
-		} else {
-			logoutBtn = (<div onClick={this.login}>
-				<div className="avatar-wrap">
-						<img src='https://m.imread.com/src/img/user/avatar@2x.png' />
-				</div>
-				<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
-				</div>
-			);
+
+		let userCard;
+		if(!this.state.userInfo){
+			userCard = (<div onClick={this.login}>
+							<div className="avatar-wrap">
+									<img src='/src/img/user/avatar@2x.png' />
+							</div>
+							<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
+						</div>)
+		}else{
+			userCard = (<div>
+						<div className="avatar-wrap" onClick={this.login}>
+							<img src={ this.state.userInfo.portraitUrl || '/src/img/user/avatar@2x.png'} />
+						</div>
+						<div className="username"><p className="f-ellipsis" onClick={this.login}>{this.state.userInfo.user_name || this.state.userInfo.mobile_num}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
+					</div>)
 		}
+
 		return (
 			<div className="g-ggWraper" >
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
-							<img src="https://m.imread.com/src/img/user/bg@2x.png" className="bg"/>
-						
-								{logoutBtn}
-	
+							<img src="/src/img/user/bg@2x.png" className="bg"/>
+								{userCard}
 						</section>
 						{
 							blockData.map(function(lines, i) {
-								return (<MUblock key={i} lines={lines} index={i} />);
-							})
+								return (<MUblock key={i} lines={lines} index={i} path={this.props.path}/>);
+							}.bind(this))
 						}
 					</div>
 
@@ -254,4 +234,4 @@ var User = React.createClass({
 	}
 });
 
-module.exports  = User;
+module.exports  = UserList;

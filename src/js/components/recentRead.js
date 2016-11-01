@@ -1,10 +1,20 @@
+import storage from '../modules/storage'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
+import Loading from './loading'
 var Header = require('./header');
-var Mixins = require('../modules/mixins');
 var Book9 = require('./book9_recentRead');
-var Hammer = require('../modules/hammer');
 var NoData = require('./noData');
 
-require('../../css/recentRead.css');
+if(typeof window !== 'undefined'){
+	require('../../css/recentRead.css');
+}
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+	var Hammer = require('../modules/hammer');
+}
 
 var recentRead = React.createClass({
     mixins: [Mixins()],
@@ -22,7 +32,7 @@ var recentRead = React.createClass({
         this.goBackUrl(this.props.route);
     },
     troggle: function() {
-        var right = < button className = "f-fr textBtn" onClick = { this.compClick } > 完成 < /button>;
+        var right = <button className = "f-fr textBtn" onClick = { this.compClick } > 完成 </button>;
         this.setState({
             right: right,
             icon: true,
@@ -30,7 +40,7 @@ var recentRead = React.createClass({
         });
     },
     compClick: function(){
-    	var right = < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>;
+    	var right = <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>;
     	this.setState({
             right: right,
             icon: false,
@@ -42,46 +52,19 @@ var recentRead = React.createClass({
         this.lazyloadImage(this.refs.container);
     },
     getList: function(scrollUpdate) {
-        // if (this.isLogin()) {
-        //     var that = this;
-        //     that.setState({
-        //         scrollUpdate: true
-        //     });
-        //     AJAX.init(this.props.route.path);
-        //     if (scrollUpdate) {
-        //         var n = AJAX.API._param['pages'] ? 'pages' : 'page';
-        //         AJAX.API._param[n]++;
-        //     }
-
-        //     AJAX.get(function(data) {
-        //         if (data.content.length < 10) {
-        //             that.setState({
-        //                 noMore: true,
-        //                 scrollUpdate: false
-        //             });
-        //         }
-        //         if (that.state.list) {
-        //             data.content = that.state.list.concat(data.content);
-        //         }
-        //         that.setState({
-        //             list: data.content
-        //         });
-        //     });
-        // } else {
-            var readLog = storage.get('readLogNew');
-            var list = [];
-            for (var n in readLog) {
-                list.push(readLog[n]);
-            }
-            list.sort(function(a, b) {
-                return a.recent_time < b.recent_time ? 1 : -1;
-            });
-            this.setState({
-                list: list,
-                right:list.length? < a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > < /a>:null,
-                noMore: true
-            });
-       // }
+        var readLog = storage.get('readLogNew');
+        var list = [];
+        for (var n in readLog) {
+            list.push(readLog[n]);
+        }
+        list.sort(function(a, b) {
+            return a.recent_time < b.recent_time ? 1 : -1;
+        });
+        this.setState({
+            list: list,
+            right:list.length? <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>:null,
+            noMore: true
+        });
     },
     componentDidUpdate: function() {
         this.lazyloadImage(this.refs.container);
@@ -119,51 +102,36 @@ var recentRead = React.createClass({
             }
             storage.set('readLogNew', readLog);
             ui_callback();
-
-        // if (that.isLogin()) {
-        //     AJAX.go('deleteRecentRead', {
-        //         book_id: bid
-        //     }, ui_callback);
-        // } else {
-        //     var readLog = storage.get('readLogNew');
-        //     for (var content_id in readLog) {
-        //         if (content_id == bid) {
-        //             delete readLog[content_id];
-        //         }
-        //     }
-        //     storage.set('readLogNew', readLog);
-        //     ui_callback();
-        // }
 },
 render: function() {
     var content;
 
     if (!this.state.list) {
         if(GLOBAL.isRouter(this.props))
-            content = < Loading / >
+            content = <Loading />
     } else if (this.state.list.length) {
-        content = ( < ul > {
+        content = ( <ul> {
             this.state.list.map(function(book, i) {
                 return <Book9 book = { book }
                 key = { i }
                 icon = { this.state.icon }
                 deleteWay = { this.deleteBook }/>
             }.bind(this))
-        } < /ul>);
+        } </ul>);
     } else {
-        content = < NoData type = "recentRead" / >
+        content = <NoData type = "recentRead" />
     }
 
 
-    return ( < div className = "gg-body" >
-        < div className = "recentRead-block" >
-        	< Header right = { this.state.right } left={this.state.left} title = { '最近阅读' } path = { this.props.route }/> 
-        	< div className = "g-main g-main-1" >
-        		< div className = "g-scroll" ref = "container" onScroll = { this.scrollHandle } > { content } < /div> 
-        	< /div> 
-       < /div> 
+    return ( <div className = "gg-body" >
+        <div className = "recentRead-block" >
+        	<Header right = { this.state.right } left={this.state.left} title = { '最近阅读' } path = { this.props.route }/> 
+        	<div className = "g-main g-main-1" >
+        		<div className = "g-scroll" ref = "container" onScroll = { this.scrollHandle } > { content } </div> 
+        	</div> 
+       </div> 
        { this.props.children } 
-       < /div>
+       </div>
     );
 }
 });

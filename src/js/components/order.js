@@ -1,6 +1,17 @@
+import myEvent from '../modules/myEvent'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 var Header = require('./header');
 
-require('../../css/pay.css');
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css');
+}
 
 var Order = React.createClass({
 	mixins: [Mixins()],
@@ -8,12 +19,15 @@ var Order = React.createClass({
 		if(this.props.isMigu){
 			browserHistory.push(GLOBAL.setHref('m_recharge'));
 		} else {
-		 	var hash = location.pathname;
-			location.href = '/pay?backUrl='+encodeURIComponent(location.href);
-			// myEvent.setCallback('recharge',function(){
-			// 	browserHistory.push(hash);
-			// 	//this.getBalance();
-			// }.bind(this));
+			if(this.isWx()){
+				location.href = '/pay?backUrl='+encodeURIComponent(location.pathname);
+			}else{
+				browserHistory.push('/pay?backUrl='+encodeURIComponent(location.pathname));
+				myEvent.setCallback('recharge',function(){
+					browserHistory.push('/pay?backUrl='+encodeURIComponent(location.pathname));
+					this.getBalance();
+				}.bind(this));
+			}
 		}
  	},
 	payHandle: function(count) {

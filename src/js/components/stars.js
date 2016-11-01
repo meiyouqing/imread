@@ -1,3 +1,4 @@
+import React from 'react'
 
 
 var Stars = React.createClass({

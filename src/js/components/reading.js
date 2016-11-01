@@ -1,16 +1,29 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
+import Mixins from '../modules/mixins'
+import Loading from './loading'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+	var Hammer = require('../modules/hammer');
+	var isHidden = require('../modules/isHidden');
+}
+if(typeof window !== 'undefined'){
+	require('../../css/reading.css');
+}
+
 var Header = require('./header');
 
 var Chapterlist = require('./chapterlist');
 var readingStyle = require('../modules/readingStyle');
-var storage = require('../modules/storage');
 var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
-var Hammer = require('../modules/hammer');
-var isHidden = require('../modules/isHidden');
 var PayOrder = require('./order');
-var ReadConfig = require('../modules/readConfig');
-require('../../css/reading.css');
 
 var styleMixins = {
 	cloneStyle: function(style) {
@@ -275,7 +288,7 @@ var Reading = React.createClass({
 				chapter_offset: 0
 			}];
 			this.shelfAdding(param,function(){
-				myEvent.execCallback('updateShelfBtn');
+				myEvent.execCallback('updateShelfBtn');console.log(this.path)
 				GLOBAL.goBack(this.path);
 			}.bind(this));
 		}.bind(this);
@@ -420,7 +433,7 @@ var Reading = React.createClass({
 			return;
 		}
 		if(data.pageType==='order'){
-			if(GLOBAL.cookie(that.bid)==='autoPay'){
+			if(storage.get(that.bid)==='autoPay'){
 				that.autoPay(data);
 				return;
 			}
@@ -664,13 +677,11 @@ var Reading = React.createClass({
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
 		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
 
-		if (GLOBAL.cookie('showGuide') != '1') {
+		if (storage.get('showGuide') != '1') {
 			this.setState({
 				showGuide: true
 			});
-			GLOBAL.cookie('showGuide', '1', {
-				expires: 1000
-			});
+			storage.set('showGuide', '1');
 		}
 		//扉页信息
 		this.states = this.props.location.state;
@@ -835,15 +846,15 @@ var Reading = React.createClass({
 			AJAX.init('loginout');
 			AJAX.get(function(res){
 			}.bind(this));
-			GLOBAL.removeCookie('userPhone');
-			GLOBAL.removeCookie('userToken');
-			GLOBAL.removeCookie('uuid');
+			//GLOBAL.removeCookie('userPhone');
+			storage.rm('userToken');
+			//GLOBAL.removeCookie('uuid');
 
 			this.getContent();
 		}.bind(this));
 	},
 	goBack: function(){
-		GLOBAL.cookie(this.bid,'autoPay',7)
+		storage.set(this.bid,'autoPay',7)
 		this.getContent();
 		this.setState({order: false});
 	},
@@ -1026,15 +1037,8 @@ var Reading = React.createClass({
 
 					</div>
 				</section>
-				{loading}
-
-				<div className={"m-reading"} ref="scrollarea">
-					{
-
-					this.source_id == '1'?
-						(<i className="u-miguLogo"></i>):
-						null
-				}
+				<div className={"m-reading" + classNames} ref="scrollarea" onScroll={this.handleScroll}>
+					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					
 					<section className="u-chapterName">{this.state.data.name}</section>
@@ -1074,7 +1078,7 @@ var Reading = React.createClass({
 					</div>
 					<div className="reading-guide-item guide-middle f-clearfix">
 						<div className="guide-icon f-fl">
-							<img src="https://m.imread.com/src/img/reading-guide.png" />
+							<img src="/src/img/reading-guide.png" />
 						</div>
 						<div className="guide-content f-fl">
 							<div className="guide-tip">

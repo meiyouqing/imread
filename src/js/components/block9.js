@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
+import storage from '../modules/storage'
 
 var Block9 = React.createClass({
 	getWidthAndHeight: function() {
@@ -184,11 +185,13 @@ var Block9 = React.createClass({
 			                	this.props.data.contentlist.map(function(v, i) {
 			                		
 									var hrefObj = this.typeHref(v);
-									var search="?devicetoken="+GLOBAL.cookie('uuid')+'&comeFrom='+encodeURIComponent(location.pathname);
+									var search=this.props.fromReading?
+										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname):
+										'';
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
 
 			                		return (
-			                			<Link style={{backgroundImage: 'url(https://m.imread.com/src/img/back/ad_default_back.jpg)',height: "100%",backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+			                			<Link style={{backgroundImage: 'url(/src/img/back/ad_default_back.jpg)',height: "100%",backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 			                				<img src={v.intercut_url || v.image_url} className="u-adimg" style={{width: '100%',height:"100%"}}/>
 			                			</Link>
 			                		);

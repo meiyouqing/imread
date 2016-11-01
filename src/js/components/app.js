@@ -1,16 +1,15 @@
-import route from 'react-router'
-import Nav from './nav'
+import React from 'react'
 
-require('../../css/iconfont1.css');
-require('../../css/imread.css');
-
+if(typeof window !== 'undefined'){
+	require('../../css/iconfont1.css');
+	require('../../css/imread.css');
+}
 
 export default React.createClass({
 	render:function(){
 		return (
-			<div className="g-wraper">
+			<div>
 				{this.props.children}
-				
 			</div>
 		);				
 	}

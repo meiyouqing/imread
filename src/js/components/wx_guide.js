@@ -1,5 +1,8 @@
+import React from 'react'
 var Header = require('./header');
-require('../../css/login.css');
+if(typeof window !== 'undefined'){
+	require('../../css/login.css');
+}
 
 var Login = React.createClass({
 

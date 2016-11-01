@@ -1,5 +1,14 @@
+import myEvent from '../modules/myEvent'
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Header = require('./header');
-require('../../css/tag.css');
+if(typeof window !== 'undefined'){
+	require('../../css/tag.css');
+}
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var tag = React.createClass({
 	mixins: [Mixins()],

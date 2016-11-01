@@ -1,3 +1,5 @@
+import AJAX from '../modules/AJAX'
+import React from 'react'
 import {Route, IndexRoute, WithRoute, IndexRedirect, RouterContext} from 'react-router';
 import App from './app'
 import Shelf from './shelf'
@@ -28,13 +30,16 @@ import StoreList from './storeList'
 import UserInfo from './userInfo'
 import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
-import MLogin from './mLogin'
-import MBinder from './mBinder'
-import MRecharge from './mRecharge'
+// import MLogin from './mLogin'
+//import MRecharge from './mRecharge'
+//import MBinder from './mBinder'
+import WxLogin from './wxLogin'
+import SDK from './sdk'
 import AlyPay from './alyPay'
 
 var APImemory = {};
 const scrollResetHandle = function(){
+	if(!AJAX.API._param) return;
 	const p = AJAX.API._param['pages']? 'pages':'page';
 	AJAX.API._param[p] = 1;	
 }
@@ -48,9 +53,6 @@ var loginWrap = (
 	)
 var readWrap = (
 		<Route path="reading/:readingId" component={Reading}>
-			<Route path="m_login" component={MLogin} />
-			<Route path="m_binder" component={MBinder} />
-			<Route path="m_recharge" component={MRecharge} />
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >
@@ -103,7 +105,6 @@ var topWrap = (
 					{searchWrap}
 		</Route>
 	)
-
 var payWrap = (
 		<Route path="pay" component={Balance} >
 			<Route path="alyPay" component={AlyPay} />
@@ -137,6 +138,8 @@ var selfWrap = (
 module.exports = (
 	<Route path="/" component={App}>
 		<IndexRedirect to="/mall" />
+		<Route path="/wxlogin" component={WxLogin}/>
+		<Route path="/sdk/:id" component={SDK}/>
 		{loginWrap}
 		{selfWrap}
 		{payWrap}

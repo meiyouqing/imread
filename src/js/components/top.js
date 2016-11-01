@@ -1,7 +1,17 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import Loading from './loading'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import Mixins from '../modules/mixins'
+import React from 'react'
 var Blocklist = require('./blocklist');
 var Header = require('./header');
 var BookStore = require('./bookStore');
 import MallNavLink from './mallNavLink'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+}
 
 var MallNav = React.createClass({
 	render: function() {
@@ -11,7 +21,10 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
-							var hrefStr =window.location.pathname.replace(/top\/([^\"]*)/,"") +'top/block.'+i;
+							var path = typeof window === 'undefined'?
+										global.pathname:
+										location.pathname;
+							var hrefStr = path.replace(/top\/block\.\d/,'top/block.'+i);
 							return (
 								<MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
@@ -38,37 +51,48 @@ var Top = React.createClass({
 		AJAX.init('group.6');
 		AJAX.get((data)=>{
 			this.params = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1'
+			// POP._alert(this.params)
 			this.getLists();			
 		},this.onerror)
 	},
 	getLists: function (){
 		AJAX.init(this.params);
-		AJAX.get((data)=>{
-			if(!data.blocklist){return}
-			if (!data.blocklist.length) {
-				this.setState({
-					noMore:true
-				})
-			}
+		AJAX.get(this.ajaxHandle,this.onerror);
+	},
+	ajaxHandle: function(data){
+		if(!data.blocklist){return}
+		if (!data.blocklist.length) {
 			this.setState({
-				list: this.state.scrollUpdate? this.state.list.concat(data.blocklist):data.blocklist,
-				scrollUpdate: false
-			});
-			//设置GLOBAL.booklist/book
-			GLOBAL.setBlocklist(data.blocklist);
-		},this.onerror);
+				noMore:true
+			})
+		}
+		this.setState({
+			list: this.state.scrollUpdate? this.state.list.concat(data.blocklist):data.blocklist,
+			scrollUpdate: false
+		});
+		//设置GLOBAL.booklist/book
+		GLOBAL.setBlocklist(data.blocklist);
 	},			
+	componentWillMount:function(){
+		if(typeof window === 'undefined') return;
+		if(window.__PRELOADED_STATE__ && window.__PRELOADED_STATE__.topNav){
+			const data = window.__PRELOADED_STATE__.topNav;
+			const n = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1';
+			this.usePreload(n);
+		}
+	},
 	componentDidMount: function(){
-		if(GLOBAL.isRouter(this.props))	this.getData();
+		if(GLOBAL.isRouter(this.props) && !this.state.list)	{
+			this.getData();
+		}else{
+			this.lazyloadImage(this.refs.container);		
+		}
 		// myEvent.setCallback('updateTopList',this.getData);
 	},
 	componentDidUpdate: function(nextProp) {
-		if(GLOBAL.isRouter(this.props) &&!this.state.list) this.getData();
+		if(GLOBAL.isRouter(this.props) && !this.state.list) this.getData();
 		if(!this.state.list || !this.state.list.length){return;}
-		//setTimeout(function(){
-		this.lazyloadImage(this.refs.container);
-		//}.bind(this),300);
-		
+		this.lazyloadImage(this.refs.container);		
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.noMore !== nextState.noMore
@@ -88,7 +112,7 @@ var Top = React.createClass({
 				list = (
 					<div className="g-main g-main-3 m-top">
 						<div ref="container">
-							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} updateGuess={this.getLists}/>
+							<BookStore dom={this.refs.container} data={this.state.list}  order={this.pid} />
 						</div>
 					</div>
 					);
@@ -100,25 +124,6 @@ var Top = React.createClass({
 			list = (<div className="g-main"><NoData type="UFO" /></div>);
 		}
 
-		// var list;
-		// if(!this.state.list){
-		// 	list = <Loading />
-		// }else{
-		// 	if(this.state.list.length){
-		// 		list = (
-		// 			<div className="g-main g-main-3">
-		// 				<div className="g-scroll" onScroll={this.scrollHandle} ref="container">
-		// 					<Blocklist blockList={this.state.list} />
-		// 				</div>
-		// 			</div>
-		// 			);
-		// 	}else{
-		// 		list = (<div className="g-main"><NoData /></div>);
-		// 	}
-		// }
-		// if(this.state.onerror){
-		// 	list = (<div className="g-main"><NoData type="UFO" /></div>);
-		// }
 		return (
 			<div  className="gg-body">
 				<Header title="发现"  path={this.props.route} />
