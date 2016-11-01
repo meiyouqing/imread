@@ -146,7 +146,7 @@ var User = React.createClass({
 			}, 0);
 			setTimeout(function() {
 				that.getUserInfo(function() {
-					if(href.indexOf('pay')>-1) href="/pay"
+					if(/pay/.test(href)) href="/pay"
 					browserHistory.push(href || location.pathname);
 				});
 			}, 10);
