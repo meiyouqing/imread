@@ -40,8 +40,7 @@ var Balance = React.createClass({
 	},
 	render: function () {
 		
-		var content,wxPayLoading=null;
-		content = (<div dangerouslySetInnerHTML={{__html: this.state.html}}></div>);
+		var content = (<div dangerouslySetInnerHTML={{__html: this.state.html}}></div>);
 
 		return (
 			<div className="gg-body">

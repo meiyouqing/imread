@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHead
 
 // route the pay rout resolve reading page
 app.get('/pay',(req, res)=>{
+    res.setHeader('Cache-Control','no-cache')
     res.send(renderFullPage('',{}));
 });
 app.get(/\/reading\//,(req, res)=>{
@@ -57,7 +58,11 @@ app.get('*', (req, res) => {
     } else if (redirect) {
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
-      res.setHeader('cache-control','private,max-age=600')
+      if(/\/pay|\/login/.test(req.url)){
+        res.setHeader('Cache-Control','no-cache')
+      }else{
+        res.setHeader('Cache-Control','private,max-age=600')
+      }
       getPost(req.url, goSend.bind(null,res,props), onError.bind(null,res))
     } else {
       res.status(404).send('Not Found')
@@ -91,10 +96,10 @@ function onError(res,err){
 //set static acesse header
 function setHeader(res,url,stat){	
 	if(/\.js$/.test(path.resolve(url))){
-		res.setHeader('cache-control','private,max-age=31536000')
+		res.setHeader('Cache-Control','private,max-age=31536000')
 	}
 	if(/\/p[^\/]+$/.test(path.resolve(url))){
     //console.log(path.resolve(url))
-		res.setHeader('cache-control','max-age=31536000')
+		res.setHeader('Cache-Control','max-age=31536000')
 	}
 }

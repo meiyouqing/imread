@@ -15,7 +15,7 @@ import { match } from 'react-router'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
 
-import getPost from './getPost'
+import getPost from './getPost-dev'
 import sdkPost from './sdkPost'
 
 import routes from '../src/js/components/routes'
