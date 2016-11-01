@@ -131,7 +131,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 		url = urlBase + url;
 	}
 	if(typeof window !== 'undefined'){
-		GETJSONWITHAJAX(method, url, postdata, callback, onError);
+		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson);
 		return;
 	}
 
@@ -227,12 +227,11 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 					request.responseText;
 				if(!res) {
 					onError(new Error('服务器返回为空'));
-					return;
 				}else if(res.error){
 					onError(res.error);
-					return;
-				}
-				callback(res);
+				}else{
+					callback(res);
+				}			
 			} catch (e) {
 				//res = '连接超时！';
 				onError(e);

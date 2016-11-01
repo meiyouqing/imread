@@ -1,8 +1,14 @@
 var Header = require('./header');
 var Recharge = require('./recharge');
+import AJAX from '../modules/AJAX'
+import Mixins from '../modules/mixins'
+import React from 'react'
+import Loading from './loading'
+import parseQuery from '../modules/parseQuery'
 
-require('../../css/pay.css')
-
+if(typeof window !== 'undefined'){
+	require('../../css/pay.css')
+}
 var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
@@ -35,7 +41,6 @@ var Balance = React.createClass({
 	render: function () {
 		
 		var content,wxPayLoading=null;
-
 		content = (<div dangerouslySetInnerHTML={{__html: this.state.html}}></div>);
 
 		return (

@@ -32,9 +32,9 @@ import EditUserame from './editUserame'
 import SelfBuild from './selfbuild'
 // import MLogin from './mLogin'
 //import MRecharge from './mRecharge'
+//import MBinder from './mBinder'
 import WxLogin from './wxLogin'
 import SDK from './sdk'
-import MBinder from './mBinder'
 import AlyPay from './alyPay'
 
 var APImemory = {};
