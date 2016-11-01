@@ -10,6 +10,11 @@ app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, '../public')));
 
 // send all requests to index.html so browserHistory works
+app.get('/pay', function (req, res) {	
+  res.setHeader('Cache-Control', 'no-cache')
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
+
 app.get('*', function (req, res) {	
   res.sendFile(path.join(__dirname, 'index.html'))
 })

@@ -40,6 +40,7 @@ var API={
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
 	wxPay:{method:'POST', base:'/api/v1/cert/pay', param:{productId:0}},
+	alyPay: {method: 'POST',base:'/api/v1/pay',param:{}},
 	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
 	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
@@ -114,7 +115,7 @@ function getGETUrl(url, postdata) {
 	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
 }
 //getJSON接口
-function GETJSON(method, url, postdata, callback, onError) {
+function GETJSON(method, url, postdata, callback, onError,isJson) {
 	//var urlBase = 'https://m.imread.com';
 	var urlBase = 'https://readapi.imread.com';
 	//var urlBase = 'http://192.168.0.34:9090';
@@ -135,9 +136,9 @@ function GETJSON(method, url, postdata, callback, onError) {
 			},0);
 		}
 	}
-	GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
+	GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse,isJson);
 }
-function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse) {
+function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse,isJson) {
 	method = method || 'POST';
 	var time = 15000;
 	var request = null;
@@ -170,7 +171,10 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse
 		if (request.status === 200) {
 			var res = false;
 			try {
-				res = JSON.parse(request.responseText);
+				if(!isJson)
+					res = JSON.parse(request.responseText);
+				else
+					res = request.responseText;
 			} catch (e) {
 				//res = '连接超时！';
 				onError(res);
@@ -239,6 +243,7 @@ function setRequestHeaders(request) {
 		'Info-Userid': GLOBAL.cookie('userId') || '',
 		'Info-Uuid': GLOBAL.cookie('uuid') || GLOBAL.getUuid(),
 		//'Info-Token': GLOBAL.cookie('userToken') || '',
+		// "Cache-Control": "no-cache",
 		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
@@ -276,8 +281,8 @@ var AJAX = {
 	get: function(callback, onerror){
 		GETJSON(this.API._m,this.API._base,this.API._param,callback,onerror);
 	},
-	go: function(n,param,callback,onerror){
-		GETJSON(this.API[n].method, this.API[n].base, param, callback, onerror)
+	go: function(n,param,callback,onerror,isJson){
+		GETJSON(this.API[n].method, this.API[n].base, param, callback, onerror,isJson)
 	},
 	getJSON: GETJSON
 }

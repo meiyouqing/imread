@@ -20,11 +20,16 @@ app.use(webpackHotMiddleware(compiler))
 app.use(express.static(path.join(__dirname, 'tmp')));
 
 // send all requests to index.html so browserHistory works
+app.get('/pay', function (req, res) {	
+  res.setHeader('Cache-Control', 'no-cache')
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
+
 app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-var PORT = process.env.PORT || 8080
+var PORT = process.env.PORT || 80
 app.listen(PORT, function() {
   console.log('Production Express server running at localhost:' + PORT)
 })
