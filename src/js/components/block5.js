@@ -144,7 +144,7 @@ var Block5 = React.createClass({
 			if(link) return pathname+'/'+url;
 			// return url;
 			var match = pathname.match(/\/mall\/page\.\d+/);
-			var base = match? match[0] : '//192.168.0.251:8080/mall/page.9.3'
+			var base = match? match[0] : '//m.imread.com/mall/page.9.3'
 			return base +'/'+url;
 		};
 		// console.log(type)
@@ -167,9 +167,9 @@ var Block5 = React.createClass({
 			case 15://app to H5
 				return {url:data.redirect_url || "javascript:void(0)",target};
 			case 16: //to home
-				return {url:'//192.168.0.251:8080',target}
+				return {url:'//m.imread.com',target}
 			case 17: //to shelf
-				return {url:'//192.168.0.251:8080/mall/page.9.3/shelf',target}
+				return {url:'//m.imread.com/mall/page.9.3/shelf',target}
 			default: return null;
 		}
 	},

@@ -47,7 +47,7 @@ const GLOBAL = {
 		if(typeof window === 'undefined'){
 			//sdk need to full url
 			if(/sdk\/sdk\.\d+$/.test(global.pathname)){
-				return '//192.168.0.251:8080/mall/page.9.3/'+str;
+				return '//m.imread.com/mall/page.9.3/'+str;
 			}
 			return global.pathname+'/'+str
 		}else{
