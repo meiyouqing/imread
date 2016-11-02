@@ -288,7 +288,7 @@ var Reading = React.createClass({
 				chapter_offset: 0
 			}];
 			this.shelfAdding(param,function(){
-				myEvent.execCallback('updateShelfBtn');console.log(this.path)
+				myEvent.execCallback('updateShelfBtn');
 				GLOBAL.goBack(this.path);
 			}.bind(this));
 		}.bind(this);
@@ -411,19 +411,15 @@ var Reading = React.createClass({
 			showSetting:false,
 			fromId: from || false
 		})		
-		data = data.success?data.success:data;
+		data = data.success || data;
 		//如果是付费章节，跳到确认订单
 		if(data.errorMsg)  {
 			if(location.pathname.slice(-5) == 'login')	return;
+			// console.log(data.errorMsg)
 			this.goLogin(this.getContent,location.pathname);
 			return;
 		}
-
 		var that = this;
-		//设置auto pay cookie
-		// if(autoPay){
-		// 	GLOBAL.cookie(that.bid,'autoPay',7)
-		// }
 		if(data.buyMsg) {
 			that.setState({
 				order: true,
@@ -433,7 +429,7 @@ var Reading = React.createClass({
 			return;
 		}
 		if(data.pageType==='order'){
-			if(storage.get(that.bid)==='autoPay'){
+			if(storage.get(that.bid,'string')==='autoPay'){
 				that.autoPay(data);
 				return;
 			}
@@ -555,7 +551,6 @@ var Reading = React.createClass({
 		}
 	},
 	autoPay: function(orderData) {
-
 		var that = this;
 		if(!this.state.fromId){
 			if(that.isLogin()){
@@ -578,7 +573,8 @@ var Reading = React.createClass({
 			
 							that.storeBookOrdered(that.chapterid);
 							that.disPatch('updateUser');
-							that.goBack();
+							that.gotContent(data);
+							//that.goBack();
 						}
 					});
 				}else{
@@ -854,7 +850,7 @@ var Reading = React.createClass({
 		}.bind(this));
 	},
 	goBack: function(){
-		storage.set(this.bid,'autoPay',7)
+		storage.set(this.bid,'autoPay');
 		this.getContent();
 		this.setState({order: false});
 	},
@@ -1037,7 +1033,7 @@ var Reading = React.createClass({
 
 					</div>
 				</section>
-				<div className={"m-reading" + classNames} ref="scrollarea" onScroll={this.handleScroll}>
+				<div className={"m-reading" + classNames} ref="scrollarea" onScroll={this.handleScroll} style={{overflowY:(this.state.showSetting||this.state.showChapterlist)? 'hidden':'auto'}}>
 					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					

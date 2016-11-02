@@ -3,7 +3,7 @@
 .bsBrief{padding: 10px 10px 0;color: #777;text-indent: 2em;}
 
 .m-block.m-sheet{padding: 0}
-.m-sheet .m-sheet-header{position: relative;width: 100%;}
+.m-sheet .m-sheet-header{position: relative;width: 100%;min-height: 150px;}
 .m-sheet .m-sheet-header .u-sheet-c{position:absolute;margin-top: -1px;right: 12px;top:0; padding-top:5px;width: 47px;height: 72px;background: url(../img/back/pic_sheet.png) no-repeat;background-size: cover;font-size: 15px;color: #bc6107;}
 .m-sheet .m-sheet-header .u-sheet-c p{text-align: center;padding-left: 2px;line-height: 20px;}
 .m-sheet .m-sheet-header img{display:block;width: 100%;height: auto;}

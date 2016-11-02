@@ -63,42 +63,10 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(/(mall\/?|page\.\d+)$/.test(location.pathname)){
+		if(/(\/|mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
-
-// 		//wx login
-		// if(this.isWx()){
-		// 	this.from = parseQuery(location.search);       
-		// 	// if(!this.from.code){
-		// 	// 	var url = encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))
-		// 	// 	window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+url+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
-		// 	// }
-			
-		// 	if(!this.from.code && !this.isLogin){
-		// 		POP._alert(this.from.code+' 登录失败');
-		// 		return;
-		// 	}
-		// 	if(this.from  && this.from.code && this.from.state == '123') {
-		// 		AJAX.go('login_wx',{
-		// 			code: this.from.code,
-		// 			grant_type: 'authorization_code'
-		// 		},res => {
-		// 			this.do_result(res);
-		// 		})
-		// 	}
-		// }
 	},
-	// do_result: function(data){
-	// 	var that = this;
-	// 	if(data.code == 200){
-	// 		storage.set('userToken', 'loaded hello world');
-	// 		that.disPatch('updateUser');
-	// 		that.disPatch('updateMall');
-	// 	} else {
-	// 		POP._alert('登录失败');
-	// 	}
-	// },	
 	upApp: function(page){
 		var obj = parseQuery(location.search);
 		if(obj.action && obj.action==='openapp'){
@@ -112,7 +80,7 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		if(!this.state.navList) this.getNav();
+		if(!this.state.navList && /(\/|mall\/?|page\.\d+)$/.test(location.pathname)) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
