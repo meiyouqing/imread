@@ -20,4 +20,4 @@ package.json
 test.js
 webpack.config.js
 .gitlab-ci.yml
-
+public/p
