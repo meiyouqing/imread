@@ -31,6 +31,7 @@ var List = React.createClass({
 		});
 	},
 	ajaxHandle:function(data){
+		if(!this.isMounted()) return;
 		this.isLoading = false;
 		var pathname = this.props.location.pathname.split('/');
 		if(/^search./.test(pathname[pathname.length-1])){

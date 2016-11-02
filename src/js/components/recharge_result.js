@@ -8,6 +8,9 @@ var Header = require('./header');
 if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
+// if(typeof window !== 'undefined'){
+// 	var POP = require('../modules/confirm')
+// }
 
 var RechageRes = React.createClass({
 	times: 0,
@@ -35,13 +38,13 @@ var RechageRes = React.createClass({
 		this.disPatch('rechargeSuccess');
 	},
 	failed: function(){
-		console.log('失败');
+		// console.log('失败');
 		this.setState({success: false,status: '充值失败'});
 	},
 	checkCharge: function(){
 		var params = this.props.location.state || {};
 		AJAX.go('payCheck',params,function(data){
-			if(data.code === 200)
+			if(data.code === 200){
 				switch(data.status){
 					case 1: 
 						this.times++;
@@ -60,18 +63,23 @@ var RechageRes = React.createClass({
 					default:
 						this.failed();
 				}
-		}.bind(this));
+			}
+		}.bind(this),(err)=>{
+			// POP._alert('服务器错误')
+			this.failed();
+			
+		});
 	},
 	componentDidMount: function(){
 		this.checkCharge();
 	},
 	render: function() {
-		 var right = < button className = "f-fr textBtn" onClick = { this.completed } > 完成 < /button>;
+		 var right = <button className = "f-fr textBtn" onClick = { this.completed } > 完成 </button>;
 		 var list;
 
-		 if(this.state.success == null)
+		 if(this.state.success == null){
 		 	list = <Loading />;
-		 else if(this.state.success === true) {
+		 }else if(this.state.success === true) {
 		 	list = (
 		 			<div className="m-recharge-result">
 		 				<div className="m-result-status">

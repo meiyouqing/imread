@@ -2,6 +2,7 @@ import { browserHistory } from 'react-router'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
+import myEvent from '../modules/myEvent'
 import React from 'react'
 var Header = require('./header');
 var PayTips = require('./payTips');
@@ -44,22 +45,21 @@ var Recharge = React.createClass({
 		// browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 
 
-		AJAX.go('payConfirm', this.params, success, null, 'recharge');
+		AJAX.go('payConfirm', this.params, success, null);
 		function success(data){
+			myEvent.setCallback('recharge',function(){
+				browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/,''));	
+			}.bind(this));
 
 			that.loading=false;
-			if(data.code === 200){
-				myEvent.setCallback('recharge',function(){
-					browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/,''));	
-				}.bind(this));
-				browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
-				
-			} else {
-				POP._alert(data.reason, function(){
-					that.refs.key.select();
-				});
-				return;
+			if(data.code != 200){
+				if(data.reason == '省份被屏蔽'){
+					POP._alert('您的号码所在省份暂不支持充值，请使用其他充值方式');
+				}else{
+					POP._alert(data.reason);
+				}
 			}
+			browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 
 			
 			// setTimeout(function(){

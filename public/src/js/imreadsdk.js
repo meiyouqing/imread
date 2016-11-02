@@ -1,9 +1,10 @@
 var _open_imread_SDK_list_ =[];
 function _open_imread_SDK_(type,channel,container){
+    container = /^#/.test(container)? container:'#'+container;
     container = container? document.querySelector(container) : document.body;
     var iframe = document.createElement('iframe');
     type = type || 1;
-    iframe.src = 'http://192.168.0.251:8080/sdk/sdk.'+type+'?channel='+channel;
+    iframe.src = 'https://m.imread.com/sdk/sdk.'+type+'?channel='+channel;
     iframe.width = '100%';
     iframe.height = '200';
     iframe.setAttribute('frameborder','0');
@@ -18,7 +19,7 @@ function _open_imread_SDK_(type,channel,container){
     _open_imread_SDK_list_.push(iframe);
 }
 window.addEventListener('message',function(e){
-    if (e.origin !== 'http://192.168.0.251:8080') return;
+    if (e.origin !== 'https://m.imread.com') return;
     var exp = new RegExp(e.data.type+'\\?');
     _open_imread_SDK_list_.forEach(function(v){
         // console.log(e.data.type,v.src)

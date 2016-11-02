@@ -7,7 +7,7 @@ const sdkPost =  function(url,res,props,search){
   url = url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
- console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
+//  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
 
