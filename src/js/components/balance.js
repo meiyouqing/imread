@@ -186,7 +186,7 @@ var Balance = React.createClass({
 						{/*<a className="u-btn u-btn-full f-mb-20"  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.isWx() && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>
 						<a className={"u-btn u-btn-full u-btn-3"}  onClick={this.WxInsideOrder} >确认充值</a>*/}
-						<a className={"u-btn u-btn-full f-mb-20" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
+						<a className={"u-btn u-btn-full f-mb-15" + (!this.state.isWX?'':' f-hide')}  onClick={this.orderHandle} >话费充值</a>
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX)?'':' f-hide')} onClick={this.zfbPay} >支付宝充值</a>
 						{/*<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWX && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>*/}
 						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWX?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>

@@ -144,7 +144,7 @@ var UserInfo = React.createClass({
 	},
 	gotoEditname: function(){
 		if(!this.state.isEdit)  return;
-		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user.user_name}});
+		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user_name}});
 	},
 	// getData: function() {
 	// 	AJAX.init('me');
@@ -194,7 +194,6 @@ var UserInfo = React.createClass({
 		else
 			list = (<div className="g-main g-main-1 m-userinfo">
 					<section className="m-user-header" onClick={this.selectHeader} >
-
 						<input type="file" className="user-header" ref="header" accept="image/*;capture=camera" />
 						<span>头像</span>
 						{this.state.access}

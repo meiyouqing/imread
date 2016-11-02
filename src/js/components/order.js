@@ -13,7 +13,7 @@ if(typeof window !== 'undefined'){
 	require('../../css/pay.css');
 }
 
-var Order = React.createClass({
+var PayOrder = React.createClass({
 	mixins: [Mixins()],
 	rechargeHandle: function(e) {
 		if(this.props.isMigu){
@@ -197,4 +197,4 @@ var Order = React.createClass({
 	}
 });
 
-module.exports  = Order;
+module.exports  = PayOrder;

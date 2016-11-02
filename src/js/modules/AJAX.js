@@ -124,7 +124,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	// var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.251:8080/nono';
 
 	if (/^\/api/.test(url)) {

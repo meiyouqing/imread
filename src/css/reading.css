@@ -92,7 +92,7 @@
 
 .setting-fontfamily {display: none;}
 .display-inline{display: inline-block;}
-.style .u-sLoading{background: transparent;height: 50px;line-height: 50px;}
+.style .u-sLoading{background: transparent;height: 70px;line-height: 50px;}
 
 .reading-guide{ position: absolute;left: 0;right: 0;top: 0;bottom: 0;background: rgba(0, 0, 0, .5);color: #FFFFFF;text-align: center;line-height: 20px;font-size: 16px;cursor: pointer;z-index: 4002;}
 .reading-guide-item{position: absolute;left: 0;width: 100%;height: 40%;}
