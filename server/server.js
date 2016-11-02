@@ -44,7 +44,7 @@ app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
       res.setHeader('cache-control','private,max-age=600')
-      sdkPost(req.url,res,props)
+      sdkPost(req.url,res,props,req.query)
     } else {
       res.status(404).send('Not Found')
     }
@@ -70,7 +70,7 @@ app.get('*', (req, res) => {
   })
 })
 
-const port = process.argv[2] || 9097
+const port = process.argv[2] || 9099
 app.listen(port, (error) => {
   if (error) {
     console.error(error)
