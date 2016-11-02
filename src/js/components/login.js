@@ -60,7 +60,7 @@ var Login = React.createClass({
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
 				}else{
 					GLOBAL.goBack();
-					myEvent.execCallback('login');
+					setTimeout(()=>{myEvent.execCallback('login')},10);
 				}
 
 			} else {
@@ -129,7 +129,7 @@ var Login = React.createClass({
 				}else{
 					// that.setState({status: true});
 					GLOBAL.goBack();
-					myEvent.execCallback('login');
+					setTimeout(()=>{myEvent.execCallback('login')},10);
 				}
 			}
 			else {
