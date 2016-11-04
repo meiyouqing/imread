@@ -99,6 +99,7 @@ var UserList = React.createClass({
 	},
 	getUserInfo: function() { //获取个人信息		
 		var that = this;
+			//POP.alert(this.isLogin)
 		if (this.isLogin()) {
 			AJAX.init('me');
 			AJAX.get(function(data) {
@@ -109,7 +110,7 @@ var UserList = React.createClass({
 				that.setState({
 					userInfo: data,
 				});
-			}, ()=>{
+			}, (err)=>{
 					storage.rm('userToken');
 			});
 		}else{

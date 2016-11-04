@@ -241,7 +241,7 @@ var Login = React.createClass({
 			});
 		//}
 
-		//微信登录
+		//微博登录
 		if(this.from  && this.from.code) {
 			this.setState({WX_loading: true});
 			   AJAX.go('login_wb',{
@@ -261,13 +261,15 @@ var Login = React.createClass({
 			that.disPatch('updateMall');
 
 			GLOBAL.cookie('loadingType', type);
-
+			//POP.alert(GLOBAL.cookie('loadingType'))
+			browserHistory.push('/')
+			return;
 			//判断登陆后的跳转
-			if(that.from && that.from.skipurl){
-				window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
-			}else{
-				window.location.href =location.href.replace('/login','');
-			}
+			// if(that.from && that.from.skipurl){
+			// 	window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+			// }else{
+			// 	window.location.href =location.href.replace(/\/login.*$/,'');
+			// }
 		} else {
 			that.onloginErr();
 		}
