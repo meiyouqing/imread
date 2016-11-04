@@ -59,7 +59,7 @@ var Login = React.createClass({
 				if(that.from && that.from.skipurl){
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
 				}else{
-					GLOBAL.goBack();
+					GLOBAL.goBack(location.pathname.replace(/\/login$/,''));
 					setTimeout(()=>{myEvent.execCallback('login')},10);
 				}
 
@@ -128,7 +128,7 @@ var Login = React.createClass({
 					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+GLOBAL.getUuid();
 				}else{
 					// that.setState({status: true});
-					GLOBAL.goBack();
+					GLOBAL.goBack(location.pathname.replace(/\/login$/,''));
 					setTimeout(()=>{myEvent.execCallback('login')},10);
 				}
 			}
@@ -244,10 +244,10 @@ var Login = React.createClass({
 			   AJAX.go('login_wb',{
         			code: this.from.code,
         			grant_type: 'authorization_code',
-        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9/login')
+        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9.3/login')
 			   },function(res){
-			   	that.do_result(res,'wb');
-			   })
+			   		that.do_result(res,'wb');
+			   },that.onloginErr)
 		}
 	},
 	do_result: function(data,type){
@@ -266,9 +266,14 @@ var Login = React.createClass({
 				window.location.href =location.href.replace('/login','');
 			}
 		} else {
-			this.setState({WX_loading: false,QQ_loading: false});
-			POP._alert('登录失败');
+			that.onloginErr();
 		}
+	},
+	onloginErr:function(){
+			this.setState({WX_loading: false,QQ_loading: false});
+			POP.alert('登录失败！请尝试其他登录方式',function(){
+				browserHistory.push('/mall/page.9/login');
+			});		
 	},
 	QQ_login: function(){
 		if(navigator.userAgent.indexOf('QQ')>-1)
@@ -280,9 +285,9 @@ var Login = React.createClass({
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
 
   	},
-	  gowinLogin:function(){
-		  this.disPatch('winLogin');
-	  },
+	gowinLogin:function(){
+		this.disPatch('winLogin');
+	},
 	render: function() {
 		var list;
 		var loading = <Loading />
