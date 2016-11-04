@@ -244,7 +244,7 @@ var Login = React.createClass({
 			   AJAX.go('login_wb',{
         			code: this.from.code,
         			grant_type: 'authorization_code',
-        			redirect_uri: 'https://m.imread.com/mall/page.9/login'
+        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9.3/login')
 			   },function(res){
 			   		that.do_result(res,'wb');
 			   },that.onloginErr)
