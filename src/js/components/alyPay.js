@@ -35,8 +35,7 @@ var Balance = React.createClass({
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.html != this.state.html
-		|| nextState.loading != this.state.loading;
-			   
+		|| nextState.loading != this.state.loading;			   
 	},
 	render: function () {
 		
