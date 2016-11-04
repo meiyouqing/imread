@@ -228,7 +228,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 				if(!res) {
 					onError(new Error('服务器返回为空'));
 				}else if(res.error){
-					onError(res.error);
+					onError(res);
 				}else{
 					callback(res);
 				}			
