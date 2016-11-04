@@ -307,6 +307,9 @@ const GLOBAL = {
 		}
 		else
 			return day;
+	},
+	htmlContent:function(str){
+		return str.replace(/<br>/g,'\n');
 	}
 }
 
