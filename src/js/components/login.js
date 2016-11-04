@@ -51,7 +51,10 @@ var Login = React.createClass({
 				token: postData.token
 			});
 			if(data.code == 200){
-				storage.set('userToken', data.token);
+				if(!storage.set('userToken', data.token)){
+					POP.alert('无法正常登录！您可能已开启无痕浏览。如需继续登录，请关闭无痕浏览模式！');
+					return;
+				};
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				GLOBAL.header.userId = data.userInfo.user_id;
