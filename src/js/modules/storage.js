@@ -32,6 +32,13 @@ var storage = {
 			return false;
 		}
 		return true;
+	},
+	rm: function(item){
+		if(localStorage.getItem(item)){
+			localStorage.removeItem(item);
+			return true;
+		}
+		return false;
 	}
 };
 

@@ -1,32 +1,84 @@
+import myEvent from '../modules/myEvent'
+import { browserHistory } from 'react-router'
+import GLOBAL from '../modules/global'
+import React from 'react'
+import parseQuery from '../modules/parseQuery';
+
 var Header = React.createClass({
 	getDefaultProps: function(){
 		var sHandle = function(e){
-			window.location.hash = Router.setHref('searchPage&page.11.1.3');
+			browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
 		};
 
+
+		// browserHistory.listen(function(nextHistory){
+		// 	var arr = nextHistory.pathname.split('/');
+		// 	var path = arr.pop();
+		// 	if(path.indexOf('.')>=0)	path = arr.pop();
+
+		// 	GLOBAL.historyPath = nextHistory.pathname.split('/'+path)[0];
+
+		// 	if(nextHistory.action == 'POP'){
+		// 		if(!GLOBAL.state)  return;
+		// 		GLOBAL.state--;
+		// 	} else if(nextHistory.action == 'PUSH'){
+		// 		GLOBAL.state++;
+		// 	} else {
+		// 		console.log('replace')
+		// 	}
+		// });
 
 		return {
-			left:<a className="f-fl icon-back iconfont" onClick={Router.goBack.bind(Router)} ></a>,
-			right:<a className="f-fr icon-search iconfont" onClick={sHandle}></a>,
-			title: Router.title
+			right:<a className="icon-s icon-searcher f-fr" onClick={sHandle}></a>,
+			title: GLOBAL.title || '艾美阅读'
 		};
+	},
+	goBack: function(){
+		var current = GLOBAL.pushLinks[location.pathname];
+		if(current) {
+			GLOBAL.pushLinks[location.pathname] = null;
+			browserHistory.push(current);
+			return;
+		}
+		GLOBAL.goBack(this.path);
+		if(this.props.page==='tag'){
+			myEvent.execCallback('updateGuess');
+		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.title !== nextProps.title 
 				|| this.props.left !== nextProps.left 
 				|| this.props.right !== nextProps.right;
 	},
-	render: function(){
+	getInitialState:function(){
+		return {
+			skipurl:''
+		}
+	},
+	componentDidMount:function(){
+		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
+
+		if(this.props.path.path.split('/')[1] == 'self')
+			this.path = '/mall';
+
 		var from = parseQuery(location.search);
-		var isskip = false;
-
-		if(this.props.skipurl && from.skipurl)
-			isskip = true;
-
+		if(this.props.skipurl && from.skipurl){
+			this.setState({
+				skipurl:from.skipurl
+			})
+		}			
+	},
+	render: function(){
 		return (
 			<header className="m-bar m-bar-head">
-				{isskip?<a className="f-fl icon-back iconfont" href={from.skipurl}></a>:this.props.left}
-				{this.props.closeRight?'':this.props.right}
+				{
+					this.state.isskip?
+					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
+					(this.props.left?this.props.left:<a className="f-fl icon-back icon-s" onClick={this.goBack}></a>)
+				}
+				{this.props.right}
+				{this.props.middle}
 				<h1 className="title">{this.props.title}</h1>
 			</header>
 		);

@@ -1,19 +1,33 @@
-var getJSON = require('../modules/getJSON').getJSON;
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import storage from '../modules/storage'
+
 
 var Token = {
 	refreshToken: function () {
-		var oldToken = GLOBAL.cookie('userToken');
-		if (oldToken) {
-			getJSON('GET', '/api/upToken', {
+		// var oldToken = GLOBAL.cookie('userToken');
+		// if (oldToken) {
+			AJAX.getJSON('GET', '/api/v1/upToken', {
 				//oldToken: encodeURIComponent(oldToken)
 			}, function(data) {
-				GLOBAL.cookie('userToken', data.token, {
-					expires: 1000
-				});
+				if(data.code==200){
+					// GLOBAL.cookie('token', data.token, {
+					// 	expires: 1000
+					// });
+					//GLOBAL.cookie('uuid', data.uuid,{expires: 1000});
+				}else{
+					//GLOBAL.removeCookie('userPhone');
+					storage.rm('userToken');
+					//GLOBAL.removeCookie('userId');
+					//GLOBAL.removeCookie('uuid');
+				}
 			}, function(res) {
-				GLOBAL.removeCookie('userToken');
+				//GLOBAL.removeCookie('userPhone');
+				storage.rm('userToken');
+				//GLOBAL.removeCookie('userId');
+				//GLOBAL.removeCookie('uuid');
 			});
-		}
+		//}
 	}
 };
 

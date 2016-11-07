@@ -1,3 +1,4 @@
+import React from 'react'
 
 var EmptyShelf = React.createClass({
 	render:function(){

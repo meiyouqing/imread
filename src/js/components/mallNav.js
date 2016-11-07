@@ -1,8 +1,7 @@
+import React from 'react'
+import MallNavLink from './mallNavLink'
+
 var MallNav = React.createClass({
-	shouldComponentUpdate: function(nextProp,nextState){
-		return this.props.navList !== nextProp.navList
-				||this.props.part !== nextProp.part;
-	},
 	render: function() {
 		//console.log('pageNav render');
 		// var isYulan = /yulan=1/.test(window.location.search);
@@ -13,11 +12,9 @@ var MallNav = React.createClass({
 				<div className="m-nav f-flexbox" >
 					{
 						this.props.navList.map(function(v,i){
-							var href = '#mall&page.'+v.pgid+'.1.'+v.blocks;
-							var cls = v.pgid==this.props.part? ' active':'';
-							//console.log(v.pgid,this.props.part)
+							var href = 'page.'+v.pgid;
 							return (
-								<a key={i} className={'f-flex1 '+cls} href={href}>{v.name}</a>
+								<MallNavLink to={'/mall/'+href} key={i} className="f-flex1">{v.name}</MallNavLink>
 							)
 						}.bind(this))
 					}

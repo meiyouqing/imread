@@ -1,3 +1,6 @@
+import GLOBAL from '../modules/global'
+import React from 'react'
+import { Link } from 'react-router';
 var Img = require('./img');
 
 var Book6 = React.createClass({
@@ -5,16 +8,16 @@ var Book6 = React.createClass({
 		return this.props.data !== nextProps.data;
 	},
 	render: function() {
-		var hrefStr = Router.typeHref(this.props.data,this.props.spm);
+		var hrefStr = GLOBAL.typeHref(this.props.data);
 		if(!this.props.noImage){
 			var img = <Img src={this.props.data.big_coverlogo || this.props.data.small_coverlogo || this.props.data.image_url}/>
 		} 
 		return (
 			<li className="u-book-6">
-				<a href={hrefStr}>
+				<Link to={hrefStr}>
 					{img}
 					<span className="f-ellipsis">{this.props.data.name + (this.props.data.count ? ' ' + this.props.data.count : '')}</span>
-				</a>
+				</Link>
 			</li>
 		);
 	}

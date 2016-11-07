@@ -1,3 +1,6 @@
+import GLOBAL from '../modules/global'
+import React from 'react'
+import { Link } from 'react-router';
 var uploadLog = require('../modules/uploadLog');
 
 var Intercut = React.createClass({
@@ -17,12 +20,12 @@ var Intercut = React.createClass({
 	},
 	render: function() {
 		// var className = this.props.data.intercut_style === 6 ? " half-screen" : " fullscreen";
-		var hrefObj = Router.typeHref(this.props.data, []);
+		var hrefObj = GLOBAL.typeHref(this.props.data, []);
 		return (
 			<div className="m-intercut" style={{height: this.state.height}}>
 				<img src={this.props.data.intercut_url} />
 				<div className="btn">
-					<a href={hrefObj.url} onClick={this.handleClick}>{this.props.data.button_name || '点击立即下载'}</a>
+					<Link to={hrefObj.url} onClick={this.handleClick}>{this.props.data.button_name || '点击立即下载'}</Link>
 				</div>
 			</div>
 		);

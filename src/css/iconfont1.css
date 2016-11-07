@@ -28,18 +28,18 @@
 .icon-arrow-right:before {content: "\e606";}
 .icon-star:before {content: "\e612";}
 .icon-search:before {content: "\e600";}
-.icon-back:before {content: "\e605";}
+/*.icon-back:before {content: "\e605";}*/
 .icon-selected:after {content: "\e61f"}
 .icon-delete:before {content: "\e618"}
-.icon-lock:before {content: "\e60f";}
-.icon-menu:before {content: "\e613";}
+/*.icon-lock:before {content: "\e60f";}*/
+/*.icon-menu:before {content: "\e613";}*/
 .icon-fsize:before {content: "\e602";}
 .icon-moon:before {content: "\e61d";}
 .icon-sun:before {content: "\e616";}
 .icon-group:before {content: "\e61c";}
 .icon-add:before {content: "\e61e";}
 .icon-logo:before {content: "\e611";}
-.icon-close:before {content: "\e609";}
+.icon-close:before {content: "\e609";position: relative;top: 1px;left: 6px;}
 .icon-heart:before {content: "\e60c";}
 .icon-refresh:before {content: "\e60b";}
 

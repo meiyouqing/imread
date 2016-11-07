@@ -1,3 +1,6 @@
+import GLOBAL from '../modules/global'
+import React from 'react'
+import { Link } from 'react-router';
 
 var Book3 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
@@ -5,17 +8,17 @@ var Book3 = React.createClass({
 	},
 	render: function() {
 		//console.log(this.props.data)
-		var hrefStr = Router.typeHref(this.props.data,this.props.spm);
+		var hrefStr = GLOBAL.typeHref(this.props.data);
 		return (
 			<li className="u-book-3">
-				<a href={hrefStr}>
+				<Link to={hrefStr}>
 					<div>
 						<span className="title">{this.props.data.name}</span>
 						<span className="author">{this.props.data.author}</span>
 						<span className="bookState">{'/'+(this.props.data.status == '0' ? '连载' : '完本')}</span>
 					</div>
-					<div className="summary f-ellipsis-2">{this.props.data.book_brief}</div>
-				</a>
+					<div className="summary f-ellipsis-2">{this.props.data.brief}</div>
+				</Link>
 			</li>
 		);
 	}

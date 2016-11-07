@@ -1,3 +1,4 @@
+import GLOBAL from '../modules/global'
 function getFormatRequest(obj, base, str) {
 	if (GLOBAL.isArray(obj)) {
 		for (var i = 0; i < obj.length; i++) {

@@ -1,5 +1,46 @@
-.introduce-container {position: absolute;left: 0;right: 0;top: 0;bottom: 0;width:100%;height:calc(100% - (43px));height:-webkit-calc(100% - (43px));overflow: auto;background: #FFFFFF;-webkit-overflow-scrolling: touch;}
+.introduce-container {position: absolute;left: 0;right: 0;top: 0;bottom: 0;width:100%;overflow: auto;background: #ffffff;-webkit-overflow-scrolling: touch;}
 
+.u-bookIntroduce{margin: 60px 15px 0 15px;}
+.u-bookIntroduce .bookinfo{margin-left: 115px;position: relative;}
+.u-bookIntroduce .title{color: #000;font-size: 15px;margin-bottom: 5px;}
+.u-bookIntroduce .author, .u-bookIntroduce .wordCount, .u-bookIntroduce .bookSource{font-size: 13px;color: #777777;line-height: 20px;}
+.u-bookIntroduce .bookSource span, .u-bookIntroduce .bookSource b{display: inline-block;vertical-align: middle;}
+.u-bookIntroduce .sourceIcon{width: 16px;height: 16px;margin-right: 8px;}
+.u-bookIntroduce .sourceIcon img{width: 100%;height: auto;}
+.u-bookIntroduce .buttons{margin-top: 8px;}
+.u-bookIntroduce .button{width:48.5%;height: 30px;line-height: 28px;box-sizing:border-box;text-align: center;border: 1px solid #0196aa;border-radius: 3px;cursor: pointer;color: #0196aa;}
+.u-bookIntroduce .button.disabled{border:none;background:#ddd;color: #fff;}
+.u-bookIntroduce .readButton{background: #0196aa;color: #FFFFFF;border: 1px solid #0196aa;}
+.u-bookIntroduce .chapter{line-height: 50px;color: #000;cursor: pointer;font-size: 15px;padding: 0 15px;border-bottom: 1px solid #eeeeee;}
+.u-bookIntroduce .chapter.current{color: #0096aa}
+.u-bookIntroduce .chapter .name{display: block;line-height: 50px}
+.u-bookIntroduce .chapter .name.lock{color: #777777;}
+.u-bookIntroduce .chapter.current .name.lock{color: #0096aa}
+.u-bookIntroduce .imgWrap-133{width: 100px; height: 133.3333px;overflow: hidden;}
+
+.u-tabs{margin-top: 25px;}
+.g-body-3 .u-fixTabbar{left: 100%;}
+.g-body-3.active .u-fixTabbar{left: 0;transition: left 0.3s;}
+.u-fixTabbar{position: fixed;left: 0px;right: 0px;top: 42px;background: #FFFFFF;}
+.u-tabbar .tab{display: inline-block;box-sizing: border-box;width: 33.333%;height: 44px;line-height: 44px;text-align: center;color: #777777;font-size: 17px;}
+.u-tabbar .tab.active{color: #000;border-bottom: 1px solid #999999;}
+.u-tabs .contents{border-top: 1px solid #cccccc;}
+.u-tabs .content-0{text-indent: 2em;line-height: 1.6;color: #000;}
+.u-tabs .contents .content{display: none;padding: 15px;font-size: 15px;}
+.u-tabs .contents .content.content-2{padding: 15px 5px 0;}
+.u-tabs .contents .content.content-1{padding: 0 ;}
+.u-tabs .contents .active{display: block;}
+.introduce-cover{width: 100px;height: auto;}
+
+.introduce-container{top: 44px;}
+.introduce-container .icon-lock{margin-top: 12px; }
+.u-bookIntroduce{margin-top: 15px;}
+.u-bookIntroduce.u-tabs{margin: 15px 0 0 0;}
+.introduce-container .u-sLoading{height: 70px;line-height: 50px;}
+
+
+
+/*
 .u-bookIntroduce{margin: 60px 15px 0 15px;}
 .u-bookIntroduce .bookinfo{margin-left: 125px;}
 .u-bookIntroduce .title{color: #333333;font-weight: bold;font-size: 14px;}
@@ -31,4 +72,4 @@
 .introduce-cover{width: 100px;height: auto;}
 
 .introduce-container{top: 44px;}
-.u-bookIntroduce{margin-top: 12px;}
+.u-bookIntroduce{margin-top: 15px;}*/

@@ -1,13 +1,29 @@
+import myEvent from '../modules/myEvent'
+import NoData from './noData'
+import storage from '../modules/storage'
+import { browserHistory } from 'react-router'
+import AJAX from '../modules/AJAX'
+import GLOBAL from '../modules/global'
+import React from 'react'
+import Mixins from '../modules/mixins'
+import Loading from './loading'
+if(typeof window !== 'undefined'){
+	var POP = require('../modules/confirm')
+	var Hammer = require('../modules/hammer');
+	var isHidden = require('../modules/isHidden');
+}
+if(typeof window !== 'undefined'){
+	require('../../css/reading.css');
+}
+
 var Header = require('./header');
-var getJSON = require('../modules/getJSON').getJSON;
+
 var Chapterlist = require('./chapterlist');
 var readingStyle = require('../modules/readingStyle');
 var bookContent = require('../modules/bookContent');
 var uploadLog = require('../modules/uploadLog');
 var Intercut = require('./intercut');
-var Hammer = require('../modules/hammer');
-var isHidden = require('../modules/isHidden');
-
+var PayOrder = require('./order');
 
 var styleMixins = {
 	cloneStyle: function(style) {
@@ -35,10 +51,10 @@ var styleMixins = {
 	},
 	setFontBg: function(e) {
 		e.stopPropagation();
-		var bg = e.target.getAttribute('data-id');
+		var a = e.target.getAttribute('data-id');
 		var style = this.cloneStyle(this.state.style);
-		style.bg = bg;
-		style.night = 0;
+		style.style = Number(a);
+		// style.night = 0;
 		this.setState({
 			style: style
 		});
@@ -54,21 +70,13 @@ var styleMixins = {
 		});
 		readingStyle.set(style);
 	},
-	setFontSize: function(offset) {
+	setFontSize: function(e) {
 		var style = this.cloneStyle(this.state.style);
-		style.fontSize = Math.min(Math.max(style.fontSize + offset, 1), 5);
+		style.fontSize = Number(e.target.getAttribute('data-font'));
 		this.setState({
 			style: style
 		});
 		readingStyle.set(style);
-	},
-	setFontSm: function(e) {
-		e.stopPropagation();
-		this.setFontSize(-1);
-	},
-	setFontLg: function(e) {
-		e.stopPropagation();
-		this.setFontSize(1);
 	},
 	setFontFamily: function(e) {
 		e.stopPropagation();
@@ -84,27 +92,38 @@ var styleMixins = {
 
 var chapterMixins = {
 	getChapterlist: function(next) {
-		if (this.state.getChapterlistLoading) {
+		if (this.state.getChapterlistLoading || this.state.chapterlistNoMore) {
 			return ;
 		}
-		next = next || 0;
-		if (this.state.page + next < 1 || this.state.page + next > this.state.pages) {return;}
+		// next = next || 0;
+		// if (this.state.page + next < 1 || this.state.page + next > this.state.pages) {return;}
+
+		var page;
+		if(this.state.orderSeq)
+			page = this.state.page + 1;
+		else
+			page = this.state.page - 1;
+
+		if(page==0)	return;
+
 		this.setState({
 			getChapterlistLoading: true
 		});
-		Router.setAPI([['chapterlist', Router.parts[3], this.state.page + next , '', this.state.page_size, 0].join('.')]);
 
-		Router.get(function(data) {
+		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+page);
+		AJAX.get(function(data) {
 			this.setState({
-				pages: Math.ceil(+data.totalSize / this.state.page_size),
-				chapterlist: data.chapterList,
-				page: this.state.page + next,
-				getChapterlistLoading: false
+				pages: Math.ceil(data.totalSize / this.state.page_size),
+				chapterlist: (this.state.orderSeq?(this.state.chapterlist || []).concat(data.chapterList):data.chapterList.concat(this.state.chapterlist || [])),
+				page: page,
+				getChapterlistLoading: false,
+				chapterlistNoMore: this.state.orderSeq?(data.chapterList.length<this.state.page_size):(page<=1),
 			});
+			if(!this.state.orderSeq && data.chapterList.length<this.state.page_size)  this.getChapterlist();
 			for (var i = 0; i < data.chapterList.length; i++) {
-				if (data.chapterList[i].cid == this.state.chapterid && data.chapterList[i].intercut) {
+				if (data.chapterList[i].cid == this.chapterid && data.chapterList[i].intercut) {
 					//处理插页广告
-					var intercut = data.chapterList[i].intercut;				
+					var intercut = data.chapterList[i].intercut;			
 					GLOBAL.loadImage(intercut.intercut_url, function() {
 						this.setState({
 							intercut: intercut
@@ -113,6 +132,19 @@ var chapterMixins = {
 				}
 			}
 		}.bind(this));	
+	},
+	troggleChapterlist: function(){
+
+		this.setState({orderSeq: !this.state.orderSeq,chapterlist:[],chapterlistNoMore:false});
+		var page = 0;
+		if(this.state.orderSeq)
+			page = Math.ceil(this.state.introduce.chapter_count/this.state.page_size)+1;
+		this.setState({page: page});
+
+		setTimeout(function(){
+			this.getChapterlist();
+		}.bind(this),200)
+		
 	},
 	prevPage: function() {
 		this.getChapterlist(-1);
@@ -124,19 +156,23 @@ var chapterMixins = {
 		if (!this.state.data.preChapterId) {
 			return this.alert('已经是第一章了', -1);
 		}
+		this.setState({showSetting: false});
 		this.goToChapter(this.state.data.preChapterId);
 	},
 	nextChapter: function() {
 		if (!this.state.data.nextChapterId) {
 			return this.alert('已经是最后一章了', 1);
 		}
-		this.goToChapter(this.state.data.nextChapterId);
+		this.setState({showSetting: false});
+		this.goToChapter(this.state.data.nextChapterId);	
 	},
 	goToChapter: function(chapterid, Offset) {
 		if (!chapterid) {return ;}
-		window.location.replace(window.location.hash.replace(/reading\&crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
-			return 'reading&crossDomain.' + $2 + '.' + chapterid;
-		}.bind(this)));
+		browserHistory.replace({pathname:location.pathname.replace(/reading\/crossDomain\.(\d+)\.(\d+)/, function($1, $2, $3) {
+			return 'reading/crossDomain.' + $2 + '.' + chapterid;
+		}.bind(this)),state:this.props.location.state});
+
+		//if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
 	},
 	handleClickChapter: function(e) {
 		this.goToChapter(e.target.getAttribute('data-cid'));
@@ -158,13 +194,14 @@ var Reading = React.createClass({
 			data: null,
 			loading: true,
 			getChapterlistLoading: false,
-			page: 1,
+			page: 0,
 			pages: 1,
 			page_size: 20,
 			vt: 9,
-			bid: Router.parts[1],
-			chapterid: Router.parts[2],
-			source_id: Router.parts[4],
+			showFy: true,
+			// bid: this.APIParts()[1],
+			// chapterid: this.APIParts()[2],
+			// source_id: this.APIParts()[4],
 			showSetting: false,
 			showChapterlist: false,
 			showSettingFont: false,
@@ -175,30 +212,41 @@ var Reading = React.createClass({
 			intercutList: false, //呼出页广告
 			showIntercut: false, //是否显示呼出页广告
 			intercut: false, //插页广告
-			download: false //界面底部下载浮层
+			download: false, //界面底部下载浮层,
+			orderData: null,
+			introduce: null,
+			orderSeq: true,
+			chapterlistMore: true,
+			fromId: false,//true:咪咕 ,
+			adHc: null,	//呼出广告
+			showIntercutXp: false,
+			intercutXp: null,
+			orderedBook: [], //解锁章节本地
+			isBuyAll: false//是否购买全本 用于解锁
 		}
 	},
 	cacheReadLog: function(readLog) {
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return}
-		var bookIntroduce = {};
+		// var bookIntroduce = {};
 		var readLogs = storage.get('readLogNew');
-		var books = storage.get('bookIntroduce', 'array');
-		for (var i = 0; i < books.length; i++) {
-			if (books[i].bid == readLog.content_id) {
-				bookIntroduce = books[i];
-				break;
-			}
-		}
-		readLog.name = bookIntroduce.book_name;
-		readLog.author = bookIntroduce.author;
-		readLog.big_coverlogo = bookIntroduce.big_coverlogo;
-		readLog.recent_time = new Date().Format('yyyy-MM-dd hh:mm:ss');
-		readLog.source_bid = this.state.bid;
-		readLog.source_id = this.state.source_id;
-		readLog.chapter_id = this.state.chapterid;
+		// var books = storage.get('bookIntroduce', 'array');
+		// for (var i = 0; i < books.length; i++) {
+		// 	if (books[i].bid == readLog.content_id) {
+		// 		bookIntroduce = books[i];
+		// 		break;
+		// 	}
+		// }
+
+		readLog.name = this.state.introduce.book_name;
+		readLog.author = this.state.introduce.author;
+		readLog.big_coverlogo = this.state.introduce.big_coverlogo;
+		readLog.recent_time = new Date().getTime();
+		readLog.source_bid = this.bid;
+		readLog.source_id = this.source_id;
+		readLog.chapter_id = this.chapterid;
 		readLog.offset = {};
-		readLog.offset[this.state.chapterid] = scrollarea.scrollTop;
+		readLog.offset[this.chapterid] = scrollarea.scrollTop;
 		readLogs[readLog.content_id] = readLog;
 		storage.set('readLogNew', readLogs);
 	},
@@ -206,19 +254,20 @@ var Reading = React.createClass({
 		if (!this.state.data) {return ;}
 		var readLog = [{
 			content_id: bid,
+			chapter_id:chapterid,
 			current_chapterid: chapterid,
 			current_time:(new Date()).Format('yyyyMMddhhmmss'),
+			chapter_read_time:Date.now()-this.startTime,
 			chapter_offset:0,
-			read_time: (new Date()).Format('yyyyMMddhhmmss'),
+			read_time: Date.now()-this.startTime,
 			chapter_name: this.state.data.name,
-			chapter_read_time: Date.now()-this.time,
+			//chapter_read_time: Date.now()-this.time,
 			playorder: this.state.data.chapterSort
 		}];
 		if (this.isLogin()) {
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
-			//getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
+			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
-
 		this.cacheReadLog(readLog[0]);
 		this.time = Date.now();
 		myEvent.execCallback('reading' + bid, true);
@@ -226,33 +275,34 @@ var Reading = React.createClass({
 	},
 	componentWillUnmount: function() {
 		uploadLog.sending('intercut');
-		this.addRecentRead(this.props.localid, this.state.chapterid);
+		this.addRecentRead(this.book_id, this.chapterid);
 		document.removeEventListener && document.removeEventListener('visibilitychange',this.onVisibilitychange);
 	},
 	goOut:function(e){
 		var addShelf = function() {
 			var param = [{
-				bookId: Router.parts[3],
+				bookId: this.book_id,
 				type: 3,
 				time: new Date().getTime(),
-				chapter_id: this.state.chapterid,
+				chapter_id: this.chapterid,
 				chapter_offset: 0
 			}];
 			this.shelfAdding(param,function(){
 				myEvent.execCallback('updateShelfBtn');
-				Router.goBack();
-			});
+				GLOBAL.goBack(this.path);
+			}.bind(this));
 		}.bind(this);
-		this.isOnShelf = GLOBAL.onShelf[Router.parts[3]]? 1:this.isOnShelf;
+
+		this.isOnShelf = GLOBAL.onShelf[this.book_id]? 1:this.isOnShelf;
 		if(!this.isOnShelf){
-			POP.confirm('是否将该书加入书架？',addShelf,Router.goBack.bind(Router));
+			POP.confirm('是否将该书加入书架？',addShelf,GLOBAL.goBack.bind(null,this.path));
 		}else{
 			myEvent.execCallback('refreshShelf');
-			Router.goBack();			
+			GLOBAL.goBack(this.path);			
 		}
 	},
 	getFormatContent: function(content) {
-		//console.log(content)
+
 		var passages = content
 							.replace(/&amp;/g, '&')
 							.replace(/(&\#160;){2,4}|\s{2,4}/g, '<br/>')
@@ -283,17 +333,18 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		getJSON('GET','/api/book/introduce',{bid:Router.parts[3]},function(data){
+		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts('readingId')[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
 			that.setState({
-				bookName : data.book_name
+				bookName : data.book_name,
+				introduce: data
 			});
 			that.chapterCount = data.chapter_count;
 			that.chargeMode = +data.charge_mode;
 			that.isOnShelf = +data.is_self;
-			that.getAD_block5(data);
+			//that.getAD_block5(data);
 			if(typeof callback==='function'){callback()}
 		}
 	},
@@ -304,19 +355,18 @@ var Reading = React.createClass({
 				var Block5 = require('./block5');
 				var randIndex = Math.floor(Math.random() * data.intercutList.length) % data.intercutList.length;
 				that.intercut_id = data.intercutList[randIndex].content_id;
-				
 				//广告图片加载好之后再显示广告
-				GLOBAL.loadImage(data.intercutList[randIndex].intercut_url, callback);
-				
+				GLOBAL.loadImage(data.intercutList[randIndex].image_url, callback);
 				function callback() {
 					var intercutList = (
 						<div>
 							<Block5 data={{
 								contentlist: [data.intercutList[randIndex]]
-							}} spm={[]} type="11" fromReading={true} />
+							}} type="11" fromReading={true} />
 							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
 						</div>
 					);
+
 					that.intercutList = data.intercutList[randIndex];
 					if(!that.isMounted()){return;}
 					that.setState({
@@ -327,43 +377,120 @@ var Reading = React.createClass({
 			});
 		}
 	},
-	gotContent: function(data,autoPay){
-		//如果是付费章节，跳到确认订单
-		if(!this.isMounted()){return;}
+	getAD_xp: function(data){
 		var that = this;
-		//设置auto pay cookie
-		if(autoPay){
-			GLOBAL.cookie(that.state.bid,'autoPay',7)
+		if (data.content && data.content.length) {
+			require.ensure(['./block9'],function(require){
+				var Block9 = require('./block9');
+				var randIndex = Math.floor(Math.random() * data.content.length) % data.content.length;
+				//广告图片加载好之后再显示广告
+				GLOBAL.loadImage(data.content[randIndex].image_url, callback);
+				function callback() {
+					var intercutXp = (
+						<div>
+							<Block9 data={{
+								contentlist: [data.content[randIndex]]
+							}} type="11" fromReading={true} />
+
+						</div>
+					);
+
+					if(!that.isMounted()){return;}
+					that.setState({
+						intercutXp: intercutXp,
+						showIntercutXp: true
+					});
+				}
+			});
+		}
+	},
+	gotContent: function(data,from){
+		if(!this.isMounted()){return;}
+		if(data.code === 403) return;
+		this.setState({
+			showSetting:false,
+			fromId: from || false
+		})		
+		data = data.success || data;
+		//如果是付费章节，跳到确认订单
+		if(data.errorMsg)  {
+			if(location.pathname.slice(-5) == 'login')	return;
+			// console.log(data.errorMsg)
+			this.goLogin(this.getContent,location.pathname);
+			return;
+		}
+		var that = this;
+		if(data.buyMsg) {
+			that.setState({
+				order: true,
+				orderData: data
+			})
+			that.getIntroduce(that.confirmOrder.bind(that,data));
+			return;
 		}
 		if(data.pageType==='order'){
-			if(GLOBAL.cookie(that.state.bid)==='autoPay'){
+			if(storage.get(that.bid,'string')==='autoPay'){
 				that.autoPay(data);
 				return;
 			}
 			that.setState({
-				order: true
+				order: true,
+				orderData: data
 			})
 			that.getIntroduce(that.confirmOrder.bind(that,data));
 			return;
 		}
 		that.getIntroduce();
 		//that.getChapterlist();
+		if(!data.content) return;
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
-		that.setState({
-			data: data,
-			loading: false,
-			page: currentPage,
-			pages: currentPage,
-			order: false
-		}, that.getChapterlist);
-		that.getNextContent(data);
+
+		setTimeout(function(){
+			that.setState({
+				data: data,
+				loading: false,
+				//page: currentPage,
+				pages: currentPage,
+				order: false
+			}, that.getChapterlist);
+			if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
+		}.bind(this),800);
+
+		this.getAd_xp(this.book_id,data.chapterSort);
+
+		if(that.isLogin() && !from)
+			that.getNextContent(data);
+	},
+	getAd_xp: function(bid,page){
+		AJAX.go('adXp',{bid: bid,page:(Number(page)),page_size:1,order_type:'asrc',vt:9},function(res){
+			if(res.content)	{
+				this.getAD_xp(res);
+			}
+		}.bind(this));
+	},
+	getAd_hc: function(bid){
+		AJAX.go('adHc',{bid: bid},function(res){
+			if(res.intercutList)	{
+				this.setState({Adhc: res});
+				if(!this.state.adHc)
+					this.getAD_block5(res);
+			}
+		}.bind(this));
 	},
 	getContent: function() {
+		var book_info = this.APIParts('readingId');
+		this.bid = book_info[1];
+		this.chapterid = book_info[2];
+		this.source_id = book_info[4];
+		this.book_id = book_info[3];
+
+		if(this.state.Adhc)
+			this.getAD_block5(this.state.Adhc);
+
 		if(!this.isMounted()){return;}
 		var nextChapter = storage.get('nextChapter');
-		//console.log(nextChapter.nextChapterId,this.state.chapterid)
-		if((nextChapter.nextChapterId-1)==this.state.chapterid){
+		if((nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
 		}
@@ -372,9 +499,10 @@ var Reading = React.createClass({
 		});
 		var that = this;
 		bookContent.get({
-			bid: that.state.bid,
-			cid: that.state.chapterid,
-			source_id : Router.parts[4],
+			bid: this.bid,
+			cid: this.chapterid,
+			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: that.gotContent,
 			onError: function(res){
 				if(!that.isLogin()){
@@ -389,15 +517,17 @@ var Reading = React.createClass({
 		});
 	},
 	getNextContent: function(data) {
+
 		if(!this.isMounted()){return;}
 		var that = this;
 		bookContent.get({
 			noCross:true,
-			bid: that.state.bid,
+			bid: that.bid,
 			cid: data.nextChapterId,
-			source_id : Router.parts[4],
+			source_id : this.source_id,
+			book_id: this.book_id,
 			callback: function(data){
-				storage.set('nextChapter',data);
+				storage.set('nextChapter',data.success);
 			}.bind(this),
 			onError: GLOBAL.noop
 		});
@@ -407,39 +537,45 @@ var Reading = React.createClass({
 		that.setState({
 			chapterName : data.name
 		})
-		if(that.isLogin()){
+		if(!this.state.fromId){
+			if(that.isLogin()){
+				goOrder();
+			}else{
+				that.goLogin(goOrder);
+			}
+		} else {
 			goOrder();
-		}else{
-			that.goLogin(goOrder);
 		}
 		function goOrder(){
-			window.location.replace(Router.setHref('confirmOrder'));
-			require.ensure([], function(require) {
-				var Order = require('./order');
-				that.props.popup(<Order 
-					paySuccess={that.gotContent} 
-					data={data} 
-					bookName={that.state.bookName} 
-					chargeMode={that.chargeMode} 
-					chapterCount={that.chapterCount} />);
-			});						
+			that.setState({order: true,orderData: data})					
 		}
 	},
 	autoPay: function(orderData) {
-		//console.log(orderData);	
 		var that = this;
-		if(that.isLogin()){
-			pay();
-		}else{
-			that.goLogin(pay);
+		if(!this.state.fromId){
+			if(that.isLogin()){
+				pay();
+			}else{
+				that.goLogin(pay);
+			}
+		} else {
+			pay_m();
 		}
 		function pay(){	
-			getJSON('GET','/api/auth/balance',{},function(data){
+			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				//console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
-					getJSON('GET',orderData.orderUrl,{},function(data){
-						that.gotContent(data);
+					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
+						if(data.code !== 200)
+							POP._alert('支付失败');
+						else {
+			
+							that.storeBookOrdered(that.chapterid);
+							that.disPatch('updateUser');
+							that.gotContent(data);
+							//that.goBack();
+						}
 					});
 				}else{
 					that.setState({
@@ -451,6 +587,22 @@ var Reading = React.createClass({
 					// }
 				}
 			})
+		};
+
+		function pay_m(){
+			AJAX.go('mOrder',{
+				book_id:that.book_id,
+				chapter_id:that.chapterid,
+				cm:orderData.cm,
+				firmnum:'',
+				count:1
+			},function(data){
+				if(data.code == 403)
+					POP._alert('支付失败');
+				else {
+					that.gotContent(data);
+				}
+			});
 		}
 	},
 	//type -1 为第一章， 1位最后一章
@@ -478,39 +630,60 @@ var Reading = React.createClass({
 		}
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
-	toggleSettings: function(closeChapterlist) {
+	timeoutId:0,
+	toggleSettings: function() {
 		if(!this.isMounted()){return;}
-		if (!this.state.showSetting && this.state.showIntercut) {
-			uploadLog.send('intercut', {
-				content_id: this.intercutList.content_id,
-				event: 1,
-				show_class: this.intercutList.show_class
-			});
-		}
-		this.setState({
-			showSetting: !this.state.showSetting,
-			showChapterlist: closeChapterlist && false || this.state.showChapterlist
-		});
+		clearTimeout(this.timeoutId);
+		this.timeoutId = setTimeout(()=>{
+			if(this.state.showChapterlist){
+				this.toggleChapterlist();
+				return;
+			}
+			if (this.state.showSetting && this.state.showIntercut) {
+				uploadLog.send('intercut', {
+					content_id: this.intercutList.content_id,
+					event: 1,
+					show_class: this.intercutList.show_class
+				});
+			}
+			this.setState({
+				showSetting: !this.state.showSetting
+			});			
+		},10)
 	},
 	onVisibilitychange: function(){
 		if(isHidden()){
-			this.addRecentRead(this.props.localid, this.state.chapterid);
+			this.addRecentRead(this.book_id, this.chapterid);
 		}else{
 			this.time = Date.now();
 		}
 	},
+	getAds: function(){
+		var bookid = this.APIParts('readingId')[3];
+		this.getAd_hc(bookid);
+	},
 	componentDidMount:function(){
-		this.getContent();
+		this.startTime = Date.now();
+		setTimeout(function(){
+			this.setState({showFy: false})
+		}.bind(this),1000);
+		
+		this.getAds();
+		if(GLOBAL.isRouter(this.props)) this.getContent();
 		document.addEventListener && document.addEventListener('visibilitychange',this.onVisibilitychange);
-		window.onbeforeunload = this.addRecentRead.bind(this,this.props.localid, this.state.chapterid);
-		if (GLOBAL.cookie('showGuide') != '1') {
+		window.onbeforeunload = this.addRecentRead.bind(this,this.book_id, this.chapterid);
+
+		if (storage.get('showGuide') != '1') {
 			this.setState({
 				showGuide: true
 			});
-			GLOBAL.cookie('showGuide', '1', {
-				expires: 1000
-			});
+			storage.set('showGuide', '1');
 		}
+		//扉页信息
+		this.states = this.props.location.state;
+		this.timeOut();
+		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
+		this.path = window.location.pathname.split('/'+this.path)[0];
 		this.isdownLoad();
 	},
 	handlePullToRrefresh: function(e) {
@@ -527,32 +700,63 @@ var Reading = React.createClass({
 				break;
 		}
 	},
-	componentDidUpdate: function() {
-		// var that = this;
+	componentDidUpdate: function(nextProps, nextState) {
+		// var that = this; || (this.props.children !== nextProps.children)
+		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
+			this.getContent();
+		}
+		if(this.state.showSetting || this.state.showChapterlist){
+			var hammer = new Hammer(this.refs.mask);
+			hammer.on('tap',this.toggleSettings)
+		}
+
+		if(this.refs.swiper) {
+			this.hammer = new Hammer(this.refs.swiper);
+			this.hammer.off('swipeup swipeleft swiperight');
+		    	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+		    	this.hammer.on("swipeleft swiperight", function (ev) {
+		    		this.setState({showIntercutXp: false});
+		    	}.bind(this));
+		}
+
 		var scrollarea = this.refs.scrollarea;
 		if(!scrollarea){return};
 		//第一次进入阅读跳到上次阅读的地方
 		if(this.bookmarkFlag){
 			//console.log(storage.get('readLogNew'))
-			var obj = storage.get('readLogNew')[Router.parts[3]];
-			var offset = obj? obj.offset[this.state.chapterid] : false;
+			var obj = storage.get('readLogNew')[this.APIParts('readingId')[3]];
+			var offset = obj? obj.offset[this.chapterid] : false;
 			scrollarea.scrollTop = offset? offset-200 : 0;
 		}
 		this.bookmarkFlag = false;
+		//scrollarea.addEventListener('touchstart',this.handleClick);
 		if (scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');
 			var hammerTime = new Hammer(scrollarea);
 			hammerTime.on('tap', this.handleClick);
 			hammerTime.on("pandown panend", this.handlePullToRrefresh);
 		}
+
+		var container = this.refs.containers;
+		container.onscroll = function(e) {
+			e.stopPropagation();
+			var time;
+			if (container.scrollTop + document.body.scrollHeight + 160 > container.scrollHeight) {
+				clearTimeout(time);
+				time= setTimeout(function() {
+					this.getChapterlist(true);
+				}.bind(this), 100);
+			};
+		}.bind(this)
 	},
 	toggleChapterlist: function() {
+		if(!this.isMounted()){return;}
 		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
 			this.getChapterlist();
 		}
 		this.setState({
 			showChapterlist: !this.state.showChapterlist,
-			showSetting: this.state.showChapterlist
+			showSetting: false
 		});
 	},
 	handleClick: function(e) {
@@ -569,41 +773,58 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	handleScroll: function(e) {
-		
-		if(this.showDownload) {
-			var scroller = this.refs.scrollarea,
-				reader = this.refs.reading;
+	// handleScroll: function(e) {		
+	// 	if(this.showDownload) {
+	// 		var scroller = this.refs.scrollarea,
+	// 			reader = this.refs.reading;
 
-			if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
-				if(this.state.download)	  this.setState({download: false});
-			} else {
-				if(!this.state.download)	  this.setState({download: true});
-			}
-		}	//下载客户端提示
-
-		if (this.state.showSetting) {
-			this.toggleSettings(1);
-		}
+	// 		if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
+	// 			if(this.state.download)	  this.setState({download: false});
+	// 		} else {
+	// 			if(!this.state.download)	  this.setState({download: true});
+	// 		}
+	// 	}	//下载客户端提示
+	// 	console.log(111)
+	// 	if (this.state.showSetting) {
+	// 		this.toggleSettings();
+	// 	}
+	// },
+	changeOrder: function(){
+		//this.setState({orderSeq: !this.state.orderSeq});
+		this.troggleChapterlist();
 	},
 	isdownLoad: function(){
 		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
-		var index = book_isload.indexOf(Router.parts[1])>=0;
+		var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
 		this.showDownload = index;
 		if(index)	
 			setTimeout(function(){
 				this.setState({download: true});
 			}.bind(this),500);
 	},
+	orderedBook: [],
+	storeBookOrdered: function(cid,isBuyAll){
+		if(isBuyAll)
+			this.setState({isBuyAll: isBuyAll});
+		this.orderedBook.push(cid)
+		this.setState({orderedBook: this.orderedBook});
+	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.loading !== nextState.loading 
 				|| this.state.data !== nextState.data
 				|| this.state.showChapterlist !== nextState.showChapterlist
 				|| this.state.showSettingFont !== nextState.showSettingFont
+				|| this.state.showSetting !== nextState.showSetting
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
 				|| this.state.showGuide !== nextState.showGuide
-				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true;
+				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
+				|| this.props.children !== nextProps.children
+				|| this.props.params !== nextProps.params
+				|| this.state.introduce !== nextState.introduce
+				|| this.state.orderData !==nextState.orderData
+				|| this.state.orderedBook !==nextState.orderedBook
+				|| this.state.intercutList !== nextState.intercutList;
 	},
 	
 	hideGuide:function(e) {
@@ -612,43 +833,99 @@ var Reading = React.createClass({
 			showGuide: false
 		});
 	},
+	downLoad: function(){
+		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
+	},
+	logout: function(e) {
+		e.preventDefault && (e.preventDefault());
+		POP.confirm('确定退出登录?',function() {
+			AJAX.init('loginout');
+			AJAX.get(function(res){
+			}.bind(this));
+			//GLOBAL.removeCookie('userPhone');
+			storage.rm('userToken');
+			//GLOBAL.removeCookie('uuid');
+
+			this.getContent();
+		}.bind(this));
+	},
+	goBack: function(){
+		storage.set(this.bid,'autoPay');
+		this.getContent();
+		this.setState({order: false});
+	},
+	timeOut: function(){
+
+	},
 	render:function(){
-		var currentRoute = window.location.hash.split('/');
+		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();
 		var ChapterlistHrefBase = currentRoute.join('/');
-		var head = <Header title={this.state.bookName} right={null} />;
-		var className = readingStyle.getClass(this.state.style);
-		var intercut;
+		var head = <Header title={this.state.bookName} right={null} path={this.props.route}/>;
+		var classNames = readingStyle.getClass(this.state.style);
+		var intercut,loading=null;
+
+		//防止排序时候的绑定
+		var chapterlist = {};
+		chapterlist.list = this.state.chapterlist;
+		var list = JSON.parse(JSON.stringify(chapterlist)).list;
+
+		if(!this.states) 
+			this.states = {book_name: '',author:''}
+
 		if(this.state.UFO){
 			return (
-				<div>
+				<div className="gg-body">
 					{head}
 					<div className="g-main g-main-1">
 						<NoData type="UFO" />
 					</div>
+					{this.props.children}
 				</div>
 			);
 		}
-		if(this.state.order){
-			return (
-				<div>
-					{head}
-					<div className="g-main">
-						<h3 className="f-mt-30 f-tc">{this.state.chapterName}</h3>
-						<p className="u-loading">本节为付费章节</p>
-						<div className="u-loading f-tc" style={{marginTop:'30px'}}><input type="button" className="u-btn" onClick={this.getContent} value="去支付" /></div>
-					</div>
+		if(this.state.order && this.state.introduce){
+			var right = this.state.fromId?(<a className="icon-s icon-tc right" onClick={this.logout}></a>):null;
+			return (<div className="gg-body">
+				<Header path={this.props.route} right={right} title={"确认订单"} />
+				<div className="g-main g-main-1">
+					<PayOrder data={this.state.orderData} chapterid={this.APIParts('readingId')[2]}  storeBookOrdered={this.storeBookOrdered} goBack={this.goBack}  route={this.props.route} isMigu={this.state.fromId} introduce={this.state.introduce} />
+				</div>
+				{this.props.children}
 				</div>
 				);
 		}
-		if(this.state.loading) {
+
+		if(this.state.showFy){
 			return (
-				<div>
-					{head}
-					<i className="u-loading u-book-loading">努力加载中...</i>
+				<div className="gg-body">
+					{/*{head}
+					<i className="u-loading u-book-loading">努力加载中...</i>*/}
+					<div className={"m-reading-fy style-" + (this.state.style.style)}>
+						<div className="fy-detail">
+							<p className="fy-title">{this.states.book_name || '艾美阅读'}</p>
+							<p className="fy-author">{this.states.author || ''}</p>
+						</div>
+						<div className="fy-gw">发现阅读之美</div>
+					</div>
+					{this.props.children}
 				</div>
 			);
 		}
+
+		if(!this.state.data){
+			return (<div className="gg-body">
+						<div className={"m-reading-fy style-" + (this.state.style.style)}>
+						<Loading />
+						</div>
+						{this.props.children}
+						</div>)
+		}
+
+		if(this.state.loading) {
+			loading = <Loading />
+		}
+
 		if (this.state.intercut) {
 			intercut = <Intercut data={this.state.intercut} />
 			if (!this.uploadLogIntercut) {
@@ -660,46 +937,71 @@ var Reading = React.createClass({
 				this.uploadLogIntercut = true;
 			}
 		}
+
 		return (
-			<div ref="container">
+			<div className="gg-body m-reading-body" ref="container">
+				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
+					{this.state.intercutXp}
+					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
+				</div>
+				<div className={"style " + classNames}>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
-						<div className="iconfont icon-back" onClick={this.goOut}></div>
-						<span className="title f-ellipsis">{this.state.data.name}</span>
+						<span className="back f-fl" onClick={this.goOut}></span>
+						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
+						<span onClick={this.downLoad} className="download f-fr"></span>
+					</div>
 
+					<div className="u-settings u-settings-top ad">
 						<div className={this.state.showIntercut ? "" : "f-hide"}>
 							{this.state.intercutList}
 						</div>
 					</div>
+				
+			
 					<div className={"u-settings u-settings-font" + (!this.state.showSettingFont && ' f-hide' || '')}>
-						<div className="setting-fontfamily setting-font-line f-flexbox">
+						{/*<div className="setting-fontfamily setting-font-line f-flexbox">
 							<div className="title">字体</div>
 							{
 								['默认', '宋体', '黑体', '楷体'].map(function(font, i) {
 									return <div className={"item f-flex1" + (this.state.style.fontFamily == (i + 1) ? ' active' : '')} onClick={this.setFontFamily} data-id={i + 1} key={i}>{font}</div>;
 								}.bind(this))
 							}
-						</div>
+						</div>*/}
 						<div className="setting-fontsize setting-font-line f-flexbox">
-							<div className="title">字号</div>
-							<div className={"item f-flex1" + (this.state.style.fontSize == 1 ? ' active': '')} onClick={this.setFontSm}>A-</div>
-							<div className={"item f-flex1" + (this.state.style.fontSize == 5 ? ' active': '')} onClick={this.setFontLg}>A+</div>
+							<span className="icon-font"></span>
+							<div className="font-list">
+								<div className="f-fr">
+									<span className="circle active" data-font={1}></span>
+									{
+
+										[1, 2, 3, 4,5].map(function(dataid, i) {
+											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"display-inline" + (this.state.style.fontSize>=dataid?" active":'')}>
+													<span className="line" data-font={dataid} ></span>
+													<span className="circle" data-font={dataid}></span>
+												</div>)
+										}.bind(this))
+
+									}
+
+								</div>
+							</div>
 						</div>
-						<div className="setting-line-height setting-font-line f-flexbox">
+						{/*<div className="setting-line-height setting-font-line f-flexbox">
 							<div className="title">排版</div>
 							{
 								['icon-lh3', 'icon-lh2', 'icon-lh1'].map(function(icon, i) {
 									return <div className={"item f-flex1" + (this.state.style.lineheight == (i + 1) ? ' active' : '')} onClick={this.setFontHeight} data-id={i + 1} key={i}><span className={"iconfont " + icon}></span></div>
 								}.bind(this))
 							}
-						</div>
+						</div>*/}
 						<div className="setting-bg setting-font-line f-flexbox">
-							<div className="title">背景</div>
 							{
-								[1, 2, 3, 4].map(function(dataid, i) {
+								[0,1, 2, 3, 4].map(function(dataid, i) {
 									return (
-										<div className={"item f-flex1 bg-" + dataid + (this.state.style.bg == dataid ? ' active' : '')} onClick={this.setFontBg} data-id={dataid} key={i}>
-											<div className="active-border"></div>
+										<div className="item f-flex1" key={i}>
+											<div className={"active-border" + (this.state.style.style == dataid ? ' active' : '')} data-id={dataid} onClick={this.setFontBg} ></div>
 										</div>
 									)
 								}.bind(this))
@@ -707,34 +1009,39 @@ var Reading = React.createClass({
 						</div>
 					</div>
 					<div className="u-settings u-settings-bottom f-flexbox">
-						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="iconfont u-icon icon-menu"></span></a>
+						<a className="u-settingitem f-flex1" onClick={this.prevChapter}><span className="icon-r prv"></span><span>上一章</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="icon-r menu"></span><span>目录</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="icon-r setting"></span><span>设置</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.nextChapter}><span className="icon-r next"></span><span>下一章</span></a>
+						{/*<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
-						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">
-							{this.state.data.name}
+							<span>目录</span>
+							<div onClick={this.changeOrder} >
+								<span>{this.state.orderSeq?'顺序':'倒序'}</span>
+								<span className={"icon-20 icon-w-paixu f-fr" + (this.state.orderSeq?' rev':' seq')}></span>
+							</div>
 						</div>
-						<div className="u-scroll-y">
-							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.chapterlist} source_bid={this.state.bid} bid={this.props.localid} currentChapterId={this.state.chapterid} fromReading={true} source_id={this.state.source_id}/>
+						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
+							<Chapterlist hrefBase={ChapterlistHrefBase} chapterlist={this.state.orderSeq?list:list.reverse()}  isBuyAll={this.state.isBuyAll} store={this.state.orderedBook} source_bid={this.bid} bid={this.book_id} loading={this.state.chapterlistNoMore} book={this.states} currentChapterId={this.chapterid} fromReading={true} source_id={this.source_id}/>
 						</div>
-						<div className="u-chapter-action f-flexbox">
-							<div className="u-chapter-page f-flex1" onClick={this.prevPage}>上一页</div>
-							<div className="u-chapter-page f-flex1" onClick={this.nextPage}>下一页</div>
-						</div>
+
 					</div>
-					<div className="u-hideChapterlist" onClick={this.toggleChapterlist}></div>
 				</section>
-				<div className={"m-reading" + className} ref="scrollarea" onScroll={this.handleScroll}>
-					<i className="u-miguLogo"></i>
+				<div className={"m-reading" + classNames} ref="scrollarea" onScroll={this.handleScroll} style={{overflowY:(this.state.showSetting||this.state.showChapterlist)? 'hidden':'auto'}}>
+					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
+					
 					<section className="u-chapterName">{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
-								return <p key={i}>{p}</p>;
+								return <p key={i} dangerouslySetInnerHTML={{__html: p}}></p>;
 							})
 						}
 					</section>
@@ -744,8 +1051,8 @@ var Reading = React.createClass({
 
 				
 			        <div id="reading-download" className={this.state.download?'active':''}>
-			        	<a href="//readapi.imread.com/api/upgrade/download?channel=aidouhd">
-			            <img src="//www.imread.com/img/mobile-logo.png?2" />
+			        	<a href="https://readapi.imread.com/api/upgrade/download?channel=aidouhd">
+			            <img src="https://www.imread.com/img/mobile-logo.png?2" />
 			            <div className="detail">
 			                <p>你想看的好书</p>
 			                <p>艾美阅读都有</p>
@@ -760,31 +1067,33 @@ var Reading = React.createClass({
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>
 					<div className="reading-guide-item guide-top">
 						<div className="guide-tip">
-							<span>点击 向上滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页首到上一页</span>
 						</div>
 					</div>
 					<div className="reading-guide-item guide-middle f-clearfix">
 						<div className="guide-icon f-fl">
-							<img src="src/img/reading-guide.png" />
+							<img src="/src/img/reading-guide.png" />
 						</div>
 						<div className="guide-content f-fl">
 							<div className="guide-tip">
 								<span>点击中间</span>
 								<br />
-								<span>呼出工具框</span>
+								<span>呼出菜单</span>
 							</div>
 						</div>
 					</div>
 					<div className="reading-guide-item guide-bottom">
 						<div className="guide-tip">
-							<span>点击 向下滚动</span>
+							<span>点击可以滚动</span>
 							<br />
 							<span>页尾到下一页</span>
 						</div>
 					</div>
 				</div>
+				</div>
+				{this.props.children}
 			</div>
 		)
 	}
