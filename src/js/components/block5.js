@@ -1,7 +1,7 @@
 import GLOBAL from '../modules/global'
 import React from 'react'
 import storage from '../modules/storage'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 

@@ -1,7 +1,7 @@
 import NoData from './noData'
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'

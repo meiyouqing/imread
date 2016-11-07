@@ -3,7 +3,7 @@ if(typeof window !== 'undefined'){
 }
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'

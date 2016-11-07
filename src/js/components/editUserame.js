@@ -1,7 +1,7 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'

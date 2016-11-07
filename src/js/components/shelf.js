@@ -2,12 +2,13 @@ import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import Loading from './loading'
 import storage from '../modules/storage'
-import { browserHistory, Link } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
+import Link from 'react-router/lib/Link'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
-import Order from '../modules/order'
+// import Order from '../modules/order' //by required
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
@@ -191,19 +192,24 @@ var Shelf = React.createClass({
 				}
 				break;
 			case '2':
-				if(isReverse){
-					arr.reverse();
-					this.isReverse_s('book_order');
-				} else {
-					arr = Order.queue(arr,'name');
-					// arr = arr.sort(function(a,b){  
-					// 	var x = a.name,y=b.name;
-					// 	return x.localeCompare(y);
-					// });
-
-					if(this.models.book_order == 1)
+				require.ensure([], require =>{
+					const Order = require('../modules/order');
+					console.log(isReverse,arr)
+					if(isReverse){
 						arr.reverse();
-				}
+						this.isReverse_s('book_order');
+					} else {
+						arr = Order.queue(arr,'name');
+						// arr = arr.sort(function(a,b){  
+						// 	var x = a.name,y=b.name;
+						// 	return x.localeCompare(y);
+						// });
+
+						if(this.models.book_order == 1)
+							arr.reverse();
+					}
+					doAasycFunction.call(this,arr);
+				});
 				break;
 			default:
 				if(isReverse){
@@ -217,14 +223,14 @@ var Shelf = React.createClass({
 						arr.reverse();
 				}
 		};
-		this.models.order_model = i;
-		this.setState({order_model: i,recent_order:this.models.recent_order,reading_order:this.models.reading_order,book_order:this.models.book_order,shelfList:arr});
-		try{
-			localStorage.setItem('models',JSON.stringify(this.models));
-		} catch(e) {}
-
-		//localStorage.models = JSON.stringify(this.models);
-		return arr;
+		doAasycFunction.call(this,arr);
+		function doAasycFunction(arr){
+			this.models.order_model = i;
+			this.setState({order_model: i,recent_order:this.models.recent_order,reading_order:this.models.reading_order,book_order:this.models.book_order,shelfList:arr});
+			try{
+				localStorage.setItem('models',JSON.stringify(this.models));
+			} catch(e) {}
+		}
 	},
 	isExist: function(n){
 		return n?n:'0';
@@ -291,9 +297,7 @@ var Shelf = React.createClass({
 	ajaxHandle:	function(data){
 		if(!this.isMounted()) return;
 		var order_model = this.models.order_model?this.models.order_model:0;
-		this.setState({			
-			shelfList: this.sortBook(order_model,data.content,true)
-		});
+		this.sortBook(order_model,data.content,true)		
 		//设置GLOBAL.booklist/book
 		//GLOBAL.setBlocklist(data);
 	},	

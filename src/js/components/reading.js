@@ -1,7 +1,7 @@
 import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'

@@ -1,4 +1,5 @@
-import { browserHistory, Link } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
+import Link from 'react-router/lib/Link'
 import React from 'react'
 import Loading from './loading'
 import AJAX from '../modules/AJAX'

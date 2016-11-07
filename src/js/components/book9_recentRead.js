@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import GLOBAL from '../modules/global'
 import React from 'react'
 var Img = require('./img');

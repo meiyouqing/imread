@@ -1,5 +1,5 @@
 import Loading from './loading'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import React from 'react'
 import storage from '../modules/storage'
 var myEvent = require('../modules/myEvent');

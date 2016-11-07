@@ -52,8 +52,6 @@ module.exports = {
 		// 	React: 'react',
 		// 	AJAX: '../modules/AJAX',
 		// 	GLOBAL: '../modules/global',
-		// 	Link: '../modules/link',
-		// 	browserHistory: '../modules/history',
 		// 	storage: '../modules/storage',
 		// 	Loading: './loading',
 		// 	NoData: './noData',

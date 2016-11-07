@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import React from 'react'
 var Img = require('./img');
 var Book10 = React.createClass({
