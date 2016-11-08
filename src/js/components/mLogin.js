@@ -8,7 +8,6 @@ import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'
-import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
 var myEvent = require('../modules/myEvent'); 

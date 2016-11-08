@@ -4,10 +4,10 @@ import IndexRoute from 'react-router/lib/IndexRoute'
 import IndexRedirect from 'react-router/lib/IndexRedirect'
 import Route from 'react-router/lib/Route'
 import App from './app'
-import Shelf from './shelf' //TODO:load on demand
+// import Shelf from './shelf' //TODO:load on demand
 import Mall from './mall'
 import SubMall from './subMall'
-import Top from './top'
+import Top from './top' //TODO:load on demand
 import Search from './search'
 import List from './list'
 import Login from './login'
@@ -21,7 +21,7 @@ import Tag from './tag'
 import RecentRead from './recentRead'
 import ReadHistory from './readHistory'
 import Feedback from './feedback'
-import Reading from './reading' //TODO:load on demand
+// import Reading from './reading' //TODO:load on demand
 import Order from './order'
 import Compact from './compact'
 import Purchased from './purchased'
@@ -38,6 +38,19 @@ import WxLogin from './wxLogin'
 import SDK from './sdk'
 import AlyPay from './alyPay'
 
+//按需加载的模块 Reading Shelf
+function getReading(nextState, cb){
+	require.ensure([], function(require){
+		cb(null,require('./reading'))
+	})
+}
+function getShelf(nextState, cb){
+	require.ensure([], function(require){
+		cb(null,require('./shelf'))
+	})
+}
+
+
 var APImemory = {};
 const scrollResetHandle = function(){
 	if(!AJAX.API._param) return;
@@ -53,7 +66,7 @@ var loginWrap = (
 	</Route>
 	)
 var readWrap = (
-		<Route path="reading/:readingId" component={Reading}>
+		<Route path="reading/:readingId" getComponent={getReading}>
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >
@@ -64,7 +77,7 @@ var readWrap = (
 	)
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
-		<Route path="shelf" component={Shelf}>
+		<Route path="shelf" getComponent={getShelf}>
 			<Route path="book/:introduceId" component={Introduce}>
 				{readWrap}
 			</Route>
@@ -171,7 +184,7 @@ module.exports = (
 
 				{topWrap}
 
-				<Route path="shelf" component={Shelf}>
+				<Route path="shelf" getComponent={getShelf}>
 					{bookWrap}
 					{loginWrap}
 					{readWrap}
