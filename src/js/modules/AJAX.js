@@ -64,7 +64,7 @@ var API={
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
 	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
-	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1}}
+	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}}
 };
 
 //接口缓存机制
