@@ -46,7 +46,7 @@ const GLOBAL = {
 	setHref:function(str){
 		if(typeof window === 'undefined'){
 			//sdk need to full url
-			if(/sdk\/sdk\.\d+$/.test(global.pathname)){
+			if(/sdk\/sdk\.\d+/.test(global.pathname)){
 				return '//m.imread.com/mall/page.9.3/'+str;
 			}
 			return global.pathname+'/'+str

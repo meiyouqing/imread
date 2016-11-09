@@ -205,7 +205,7 @@ var Block5 = React.createClass({
 										("?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname)):
 										'';
 									var imgSrc = v.intercut_url || v.image_url;
-									if(typeof window === 'undefined' && /sdk\/sdk\.\d+$/.test(pathname)){
+									if(typeof window === 'undefined' && /sdk\/sdk\.\d+/.test(pathname)){
 										var imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 									}else{
 										imgSrc = imgSrc.replace(/^http\:\/\//,'https://');
