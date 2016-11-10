@@ -360,7 +360,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-cover{position: absolute;z-index: 3000;top: 0;bottom: 0;width: 100%;background-color: #fff;color: #FFF;}
 
 .u-btn{display: inline-block;height: 40px;padding: 0 30px;line-height: 40px;background-color: #0196aa;font-size: 18px;text-align: center;color: #ffffff !important;letter-spacing: 0;-moz-border-radius: 5px;border-radius: 2px;}
-.u-btn.u-btn-2{background: transparent;border: 1px solid #0196aa;color:#0196aa!important;}
+.u-btn.u-btn-2{box-sizing: border-box;background: transparent;border: 1px solid #0196aa;color:#0196aa!important;}
 .u-btn.u-btn-3{background: #09bb07;}
 .u-btn-full{width: 100%;padding: 0;}
 .u-btn-disabled{background-color: #E1E1E1;color: #B1B1B1 !important;}
