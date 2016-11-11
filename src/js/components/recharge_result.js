@@ -83,7 +83,7 @@ var RechageRes = React.createClass({
 		 	list = (
 		 			<div className="m-recharge-result">
 		 				<div className="m-result-status">
-		 					<span className="m-result-icon-s"></span>
+		 					<span className="iconfont icon-duihao-2"></span>
 		 					<span className="m-result-icon">{this.state.status}</span>
 		 				</div>
 		 				<div className="m-result-detail">
@@ -97,7 +97,7 @@ var RechageRes = React.createClass({
 		 	list = (
 		 			<div className="m-recharge-result">
 		 				<div className="m-result-status">
-		 					<span className="m-result-icon-f"></span>
+		 					<span className="iconfont icon-cha"></span>
 		 					<span className="m-result-icon">{this.state.status}</span>
 		 				</div>
 		 				<div className="m-result-detail-f">

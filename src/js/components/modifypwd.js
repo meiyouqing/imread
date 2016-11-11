@@ -43,7 +43,7 @@ var Modifypwd = React.createClass({
 		this.checkLogin(this.props.route);
 	},
 	render:function() {
-		var right = <div className="f-fr icon-s icon-right" onClick={this.clickHandle} ></div>;
+		var right = <div className="f-fr iconfont icon-duihao" onClick={this.clickHandle} ></div>;
 		return (
 			<div className="g-ggWraper  gg-body">
 				<Header right={right} title={'修改密码'} path={this.props.route}/>

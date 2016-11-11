@@ -54,14 +54,14 @@ var EditUsername = React.createClass({
 		}.bind(this);
 	},
 	render: function() {
-		var right = <span onClick={this.editname} className="icon-s icon-right f-fr"></span>;
+		var right = <span onClick={this.editname} className="iconfont icon-duihao f-fr"></span>;
 		return (
 			<div className="gg-body">
 				<Header title={"修改昵称"} right={right}  path={this.props.route}  />
 				<div className="g-main g-main-1 m-username">
 					<section className="m-name-input">
 						<input type="text" ref="username" placeholder="10个字以内，支持中英文、数字" />
-						<span className="icon-20 icon-deletes" onClick={this.clearValue}></span>
+						<span className="iconfont icon-cha" onClick={this.clearValue}></span>
 					</section>
 				</div>
 			</div>

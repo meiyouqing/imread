@@ -31,9 +31,9 @@
 .u-p-25 .u-btn.u-btn-full{border-radius: 2px;}
 .u-btn-disabled.u-n-bg{background: transparent;}
 
-.avatar-block{min-height: 133px; height: 133px;background: #40AFA9;}
-.avatar-block .bg{display:block;width: 100%;height: 100%;}
+.avatar-block{min-height: 133px; height: 133px;background-color: #2ECCD5;background-image: url(../img/user/bg@2x.jpg);background-size: cover;} 
 .avatar-wrap{position: absolute;top: 50%;left: 20px;width: 60px;height: 60px;overflow: hidden;box-sizing:border-box;margin-top: -30px;border-radius: 50%;}
+.avatar-wrap .icon-shu_1{display: block;height: 60px;line-height: 60px;color: #28D1D9;font-size: 38px;background-color: white;}
 .avatar-wrap img{display: block;position: absolute;left: 0;top:0;width: 60px;height: 60px;border-radius: 50%;}
 .username{position: absolute;top: 50%;left: 100px;right: 0;text-align: left;margin-top: -27px;font-size: 17px;color: #FFFFFF;line-height: 30px;}
 .username > p:nth-child(2) {font-size: 12px;}

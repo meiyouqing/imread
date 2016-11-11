@@ -85,7 +85,7 @@ var Mall = React.createClass({
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
 		}
-		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){
+		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){console.log(this.subnav)
 			browserHistory.replace('/mall/'+this.subnav);	
 		}
 	},
@@ -102,8 +102,8 @@ var Mall = React.createClass({
 	},
 
 	render:function(){
-		const right = <div className="icon-s icon-menu right icon-m-r6" onClick={this.showUser} ></div>,
-			middle = <a className="icon-s icon-searcher right" onClick={this.gotoSearch}></a>,
+		const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} ></div>,
+			middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
 		let main = (
 				<div className="g-mall" style={{top:0}}>

@@ -281,10 +281,21 @@ var Login = React.createClass({
 			});		
 	},
 	QQ_login: function(){
-		if(navigator.userAgent.indexOf('QQ')>-1)
-    			return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
-  		else 
-  			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";
+		//加载qq登录所需js
+		// const sr = document.createElement('script');
+		// sr.src = "https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js";
+		// sr.dataAppid = "101354986";
+		// sr.dataRedirecturi = "https://m.imread.com/mall/page.9/login";
+		// sr.dataCallback = "true";
+		// sr.type = "text/javascript";
+		// sr.charset = "utf-8";
+		// document.body.appendChild(sr);
+		// sr.onload = function(){
+			if(navigator.userAgent.indexOf('QQ')>-1)
+					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+			else 
+				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";			
+		// }
   	},
   	WB_login: function(){
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
@@ -357,18 +368,18 @@ var Login = React.createClass({
 				<div className="g-scroll" ref="gScroll">
 					<div className="m-loginblock" ref="loginBlock">
 						<div className="m-login-header">
-							<a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+							<a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>
 							<div className="m-login-register">
-								<a className={this.state.status?'':"active"} onClick={this.setRegister}>注册</a>
-								<a className={"second "+(this.state.status?"active":'')} onClick={this.setLogin}>登录</a>
+								<a className={this.state.status?'':"active"} onClick={this.setRegister}>注册<span className="iconfont icon-up first"></span></a>
+								<a className={this.state.status?"active":''} onClick={this.setLogin}>登录<span className="iconfont icon-up second"></span></a>
 							</div>
 						</div>
 						{list}
 						<div className="third-login">
 							<div className="t-title"><span>第三方账号登录</span></div>
 							<div className="t-login">
-								<a onClick={this.QQ_login} className="QQ_Login"></a>
-								<a onClick={this.WB_login} className="WB_Login"></a>
+								<a onClick={this.QQ_login} className="QQ_Login iconfont icon-qq"></a>
+								<a onClick={this.WB_login} className="WB_Login iconfont icon-weibo"></a>
 							</div>
 						</div>
 					</div>

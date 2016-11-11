@@ -31,7 +31,7 @@ module.exports = {
 			{ 
 				test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") 
 			},
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=10092'}
+			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=5048'}
 		]
 	},
 	plugins: debug?

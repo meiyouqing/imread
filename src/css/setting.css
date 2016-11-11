@@ -20,4 +20,9 @@
 .u-feed-footer a{display: block;height: 54px;    line-height: 54px;font-size: 15px;color: #777777;margin: 0 15px;border-bottom: 1px solid #eee;}
 .u-feed-footer a:last-child{border-bottom: none;}
 .u-feed-footer a .u-r{float: right;color:#0196aa;font-size: 14px;}
- .u-feed-footer a input.u-r {background: transparent;line-height: 54px;width: 56px;}
+.u-feed-footer a input.u-r {background: transparent;line-height: 54px;width: 56px;}
+.u-feed-footer span{vertical-align: middle;}
+.u-feed-footer .iconfont{display: inline-block;width: 30px;font-size: 24px;}
+.icon-qq:before{color: #4DAFEA;}
+.icon-weixin:before{color: #3EB135;}
+.icon-weibo:before{color: #DF4D69;}

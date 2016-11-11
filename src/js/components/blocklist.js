@@ -396,22 +396,6 @@ var Block15 = React.createClass({
 		}
 	}
 });
-var AdWrap = React.createClass({
-	getInitialState:function(){
-		return {show:false}
-	},
-	componentDidMount: function(){
-		this.setState({show:true})
-	},
-	render:function(){
-		if(this.state.show){
-			return <Block5 data={this.props.data} style={this.props.style} />
-		}else{
-			return <section className="m-block-top m-block n-padding" style={{width:'100%',paddingTop:'33.333333%',
-    backgroundImage: 'url(/src/img/back/ad_default_back.jpg)'}}></section>
-		}
-	}
-})
 var Blocklist = React.createClass({
 	getInitialState: function(){
 		return {

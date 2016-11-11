@@ -20,7 +20,7 @@ var StoreList = React.createClass({
 			list:null,
 			icon: false,
 			right: null,
-			left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+			left: <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>
 		}
 	},
 	getList: function(bool){
@@ -40,7 +40,7 @@ var StoreList = React.createClass({
 				list = this.state.scrollUpdate? this.state.list.concat(data.success):data.success;
 			this.setState({
 				list: list,
-				right:list.length? <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>:null,
+				right:list.length? <a className = "f-fr iconfont icon-shezhi-1" onClick = { this.troggle } > </a>:null,
 				scrollUpdate: false
 			});
 		},this.onerror)
@@ -59,11 +59,11 @@ var StoreList = React.createClass({
     	},
 	compClick: function(){
 		if(!this.isMounted()) return;
-		var right = <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>;
+		var right = <a className = "f-fr iconfont icon-shezhi-1" onClick = { this.troggle } > </a>;
 			this.setState({
 			right: right,
 			icon: false,
-			left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+			left: <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>
 		});
 	},
 	deleteSheet: function(e){
@@ -84,7 +84,7 @@ var StoreList = React.createClass({
 	            if(that.state.list.length == 0){
 	            	that.initData(true);
 		    	    that.setState({
-		            	left: <a className="f-fl icon-s icon-back" onClick={that.goBack} ></a>
+		            	left: <a className="f-fl iconfont icon-left" onClick={that.goBack} ></a>
 		        	});
 	            }
 	      }

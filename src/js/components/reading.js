@@ -684,7 +684,7 @@ var Reading = React.createClass({
 		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
-		this.isdownLoad();
+		// this.isdownLoad();
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
@@ -793,15 +793,15 @@ var Reading = React.createClass({
 		//this.setState({orderSeq: !this.state.orderSeq});
 		this.troggleChapterlist();
 	},
-	isdownLoad: function(){
-		var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
-		var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
-		this.showDownload = index;
-		if(index)	
-			setTimeout(function(){
-				this.setState({download: true});
-			}.bind(this),500);
-	},
+	// isdownLoad: function(){
+	// 	var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
+	// 	var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
+	// 	this.showDownload = index;
+	// 	if(index)	
+	// 		setTimeout(function(){
+	// 			this.setState({download: true});
+	// 		}.bind(this),500);
+	// },
 	orderedBook: [],
 	storeBookOrdered: function(cid,isBuyAll){
 		if(isBuyAll)
@@ -899,8 +899,6 @@ var Reading = React.createClass({
 		if(this.state.showFy){
 			return (
 				<div className="gg-body">
-					{/*{head}
-					<i className="u-loading u-book-loading">努力加载中...</i>*/}
 					<div className={"m-reading-fy style-" + (this.state.style.style)}>
 						<div className="fy-detail">
 							<p className="fy-title">{this.states.book_name || '艾美阅读'}</p>
@@ -948,9 +946,9 @@ var Reading = React.createClass({
 				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
 					<div className="u-settings u-settings-top">
-						<span className="back f-fl" onClick={this.goOut}></span>
+						<span className="iconfont icon-left f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
-						<span onClick={this.downLoad} className="download f-fr"></span>
+						<span onClick={this.downLoad} className="iconfont icon-download f-fr"></span>
 					</div>
 
 					<div className="u-settings u-settings-top ad">
@@ -970,7 +968,7 @@ var Reading = React.createClass({
 							}
 						</div>*/}
 						<div className="setting-fontsize setting-font-line f-flexbox">
-							<span className="icon-font"></span>
+							<span className="iconfont icon-font"></span>
 							<div className="font-list">
 								<div className="f-fr">
 									<span className="circle active" data-font={1}></span>
@@ -1009,10 +1007,10 @@ var Reading = React.createClass({
 						</div>
 					</div>
 					<div className="u-settings u-settings-bottom f-flexbox">
-						<a className="u-settingitem f-flex1" onClick={this.prevChapter}><span className="icon-r prv"></span><span>上一章</span></a>
-						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="icon-r menu"></span><span>目录</span></a>
-						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="icon-r setting"></span><span>设置</span></a>
-						<a className="u-settingitem f-flex1" onClick={this.nextChapter}><span className="icon-r next"></span><span>下一章</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.prevChapter}><span className="iconfont icon-up  prv"></span><span>上一章</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleChapterlist}><span className="iconfont icon-mulu"></span><span>目录</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont icon-lanmu-copy"></span><span>设置</span></a>
+						<a className="u-settingitem f-flex1" onClick={this.nextChapter}><span className="iconfont icon-down next"></span><span>下一章</span></a>
 						{/*<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
@@ -1024,7 +1022,7 @@ var Reading = React.createClass({
 							<span>目录</span>
 							<div onClick={this.changeOrder} >
 								<span>{this.state.orderSeq?'顺序':'倒序'}</span>
-								<span className={"icon-20 icon-w-paixu f-fr" + (this.state.orderSeq?' rev':' seq')}></span>
+								<span className={"iconfont icon-paixu f-fr" + (this.state.orderSeq?' rev':' seq')}></span>
 							</div>
 						</div>
 						<div className="u-scroll-y"  onClick={this.toggleChapterlist}  ref="containers">
@@ -1050,7 +1048,7 @@ var Reading = React.createClass({
 				</div>
 
 				
-			        <div id="reading-download" className={this.state.download?'active':''}>
+			        {/* <div id="reading-download" className={this.state.download?'active':''}>
 			        	<a href="https://readapi.imread.com/api/upgrade/download?channel=aidouhd">
 			            <img src="https://www.imread.com/img/mobile-logo.png?2" />
 			            <div className="detail">
@@ -1061,7 +1059,7 @@ var Reading = React.createClass({
 			                立即下载
 			            </div>
 			           </a>
-			        </div>
+			        </div> */}
 			    
 
 				<div className={"reading-guide" + (this.state.showGuide ? '' : ' f-hide')} onClick={this.hideGuide}>

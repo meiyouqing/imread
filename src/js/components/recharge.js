@@ -25,6 +25,7 @@ var Recharge = React.createClass({
 		var that = this;
 		// var data = {code:200};
 		// success(data);
+		// browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 		// return;
 		var phoneNumber = that.refs.mobile_num.value;
 		var verifyCode = that.refs.key.value;

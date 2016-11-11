@@ -57,7 +57,7 @@ var Feedback = React.createClass({
 		return this.state.showFeedFooter !== nextProps.showFeedFooter;
 	},
 	render: function() {
-		var right = <span className="f-fr icon-s icon-right" onClick={this.handleSubmit} ></span>;
+		var right = <span className="f-fr iconfont icon-duihao" onClick={this.handleSubmit} ></span>;
 		return (
 			<div className="gg-body">
 				<Header right={right} path={this.props.route} title="意见反馈"/>
@@ -72,9 +72,9 @@ var Feedback = React.createClass({
 					</form>
 
 					<div className={"u-feed-footer"+(this.state.showFeedFooter?'':' f-hide')} ref="feedFooter">
-						<a target="_blank" href="http://qm.qq.com/cgi-bin/qm/qr?k=yvE1mfItNhQSQEEaDXwEltjy-UUsaSy-"><span className="icon-n icon-QQ"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
-						<a onClick={this.copy}><span className="icon-n icon-WX"></span> <span>微信公众号</span><span className="u-r">艾美阅读</span></a>
-						<a href="https://weibo.com/u/5824384026" target="_blank"><span className="icon-n icon-WB"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
+						<a target="_blank" href="http://qm.qq.com/cgi-bin/qm/qr?k=yvE1mfItNhQSQEEaDXwEltjy-UUsaSy-"><span className="iconfont icon-qq"></span> <span>读者交流群</span><span className="u-r">469935346</span></a>
+						<a onClick={this.copy}><span className="iconfont icon-weixin"></span> <span>微信公众号</span><span className="u-r">艾美阅读</span></a>
+						<a href="https://weibo.com/u/5824384026" target="_blank"><span className="iconfont icon-weibo"></span> <span>官方微博</span><span className="u-r">艾美阅读</span></a>
 					</div>
 				</div>
 			</div>

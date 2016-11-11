@@ -70,7 +70,7 @@ var Shelf = React.createClass({
 				var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
 				var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
 				setting=true;
-				icon =  <i className="icon-selected-s"></i>;
+				icon =  <i className="iconfont icon-duihao"></i>;
 				left = this.state.toggle? seNone : seAll;
 				break;
 			case 2:
@@ -99,9 +99,9 @@ var Shelf = React.createClass({
 	},
 	compClick: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
-		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
-		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
+		var setting = <div className="iconfont icon-lanmu f-fr" onClick={this.showModels} ></div>;
+		var back = <a className="f-fl iconfont icon-left" onClick={this.gotoHome}></a>;
+		var middle = <a className="iconfont icon-shucheng f-fr" onClick={this.gotoZy}></a>;
 		this.setState({
 			setting:false,
 			left:back,
@@ -254,9 +254,9 @@ var Shelf = React.createClass({
 	models:{},
 	getInitialState: function(){
 		//var icon = <i className="u-recentRead"></i>;	
-		var setting = <div className="icon-s icon-editor right icon-m-r6" onClick={this.showModels} ></div>;
-		var back = <a className="f-fl icon-back icon-s" onClick={this.gotoHome}></a>;
-		var middle = <a className="icon-s icon-bookstore right" onClick={this.gotoZy}></a>;
+		var setting = <div className="iconfont icon-lanmu f-fr" onClick={this.showModels} ></div>;
+		var back = <a className="f-fl iconfont icon-left" onClick={this.gotoHome}></a>;
+		var middle = <a className="iconfont icon-shucheng f-fr" onClick={this.gotoZy}></a>;
 		this.models = {
 			order_model: '0',
 			book_order: '0',
@@ -447,22 +447,22 @@ var Shelf = React.createClass({
 		switch(this.state.model){
 			case 1: 
 				nav = (<div className="s-b s-b-sec">
-							<a className={len===1?'active':''} onClick={this.gotoReading}><span className="icon-n icon-jingyong"></span><span>详情</span></a>
-							<a className={len?'active':''} onClick={this.gotoDownload}><span className="icon-n icon-xiazai"></span><span>下载</span></a>
-							<a className={len?'active':''} onClick={this.delBtnClick}><span className="icon-n icon-shanchu"></span><span>删除</span></a>
+							<a className={len===1?'active':''} onClick={this.gotoReading}><span className="iconfont icon-gantanhao"></span><span>详情</span></a>
+							<a className={len?'active':''} onClick={this.gotoDownload}><span className="iconfont icon-download"></span><span>下载</span></a>
+							<a className={len?'active':''} onClick={this.delBtnClick}><span className="iconfont icon-shanchu"></span><span>删除</span></a>
 						</div>);
 				break;
 			case 2:
 				nav = (<div className="s-b s-b-thi">
-							<a className={this.state.order_model==0?'active':''} onClick={this.changeOrder} data-info={0}><span className={"icon-n icon-paixu "+(this.state.recent_order==0?'seq':'rev')}></span><span>最近</span></a>
-							<a className={this.state.order_model==1?'active':''} onClick={this.changeOrder} data-info={1}><span className={"icon-n icon-paixu "+(this.state.reading_order==0?'seq':'rev')}></span><span>进度</span></a>
-							<a className={this.state.order_model==2?'active':''} onClick={this.changeOrder} data-info={2}><span className={"icon-n icon-paixu "+(this.state.book_order==0?'seq':'rev')}></span><span>书名</span></a>
+							<a className={this.state.order_model==0?'active':''} onClick={this.changeOrder} data-info={0}><span className={"iconfont icon-paixu "+(this.state.recent_order==0?'seq':'rev')}></span><span>最近</span></a>
+							<a className={this.state.order_model==1?'active':''} onClick={this.changeOrder} data-info={1}><span className={"iconfont icon-paixu "+(this.state.reading_order==0?'seq':'rev')}></span><span>进度</span></a>
+							<a className={this.state.order_model==2?'active':''} onClick={this.changeOrder} data-info={2}><span className={"iconfont icon-paixu "+(this.state.book_order==0?'seq':'rev')}></span><span>书名</span></a>
 						</div>);
 				break;
 			case 3:
 				nav = (<div className="s-b s-b-fir">
-							<a className={this.state.show_model!=0?'active':''} onClick={this.changeShow} data-cls={0}><span className="icon-n icon-fengmian"></span><span>封面模式</span></a>
-							<a className={this.state.show_model!=1?'active':''} onClick={this.changeShow} data-cls={1}><span className="icon-n icon-liebiao"></span><span>列表模式</span></a>
+							<a className={this.state.show_model!=0?'active':''} onClick={this.changeShow} data-cls={0}><span className="iconfont icon-zaixue"></span><span>封面模式</span></a>
+							<a className={this.state.show_model!=1?'active':''} onClick={this.changeShow} data-cls={1}><span className="iconfont icon-mulu"></span><span>列表模式</span></a>
 						</div>);
 				break;
 			default: 

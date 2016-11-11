@@ -132,7 +132,7 @@ var mLogin = React.createClass({
 	},
 	render: function() {
 		var right =<button className="f-fr textBtn" onClick={this.showRegister}>注册</button>;
-		var left = <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>;
+		var left = <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>;
 		var isAndroid = GLOBAL.isAndroid();
 		var loading = null;
 

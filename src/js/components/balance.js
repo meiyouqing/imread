@@ -39,7 +39,7 @@ var Balance = React.createClass({
 			back = '/';
 
 		return {
-			back:  <Link className="f-fl icon-s icon-back" to={back} ></Link>,
+			back:  <Link className="f-fl iconfont icon-left" to={back} ></Link>,
 			loading: true,
 			list: [],
 			balance: 0,
@@ -157,8 +157,8 @@ var Balance = React.createClass({
 				<div>
 					{wxPayLoading}
 					<div className="u-balance">
-						<div className="i-icon-large"></div>
-						<div className="count"><span>{(this.state.balance/100).toFixed(2)}</span></div>
+						<div className="i-icon-large iconfont icon-aidou"></div>
+						<div className="count"><span>{(this.state.balance/100).toFixed(2)}</span><span className="iconfont icon-aidou"></span></div>
 					</div>
 					<div className="u-divider"></div>
 					<ul className="pay-list f-clearfix">
@@ -169,7 +169,7 @@ var Balance = React.createClass({
 								if(!this.state.isWx)
 									return (
 										<li key={i} className={"f-fl" + activeClass} onClick={this.handleClick} data-index={i}>
-											<span className={"icon-n icon-black-aidou " + activeClass}></span>
+											<span className={"iconfont icon-aidou " + activeClass}></span>
 											<span className="count">{item.productPrice / 100+'艾豆'}</span>
 										</li>
 									);
