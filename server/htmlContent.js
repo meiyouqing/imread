@@ -34,14 +34,10 @@ export const renderFullPage = (html, preloadedState) => {
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
         <script>
             (function () {   
-                var ua = window.navigator.userAgent.toLowerCase();
-                if(ua.match(/MicroMessenger/i) == 'micromessenger' && !localStorage.getItem('userToken')) {
-                    var match = location.search.match(/code=([^\&]*)/);
-                    var code = match && match[1];
-                    if(code){
-                        localStorage.setItem('userToken','wxLogined');
-                        return;
-                    }       
+                var ua = window.navigator.userAgent.toLowerCase(), code;
+                if(/micromessenger/.test(ua)) {
+                    /code=[^\&]+/.test(location.search) && localStorage.setItem('timestamp', Date.now());
+                    if(Date.now() - localStorage.getItem('timestamp') < 10000) return;
                     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
                 }
             })()
