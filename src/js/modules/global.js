@@ -185,7 +185,7 @@ const GLOBAL = {
                         options.path ? '; path='+options.path:'; path=/',
                         options.domain ? '; domain=' + options.domain :'',
                         options.secure ? '; secure=' + options.secure :''
-                ].join(''));
+                ].join(''));				
         }
         // read
         var cookies = document.cookie.split('; ');

@@ -26,7 +26,7 @@ app.disable('x-powered-by');
 
 
 
-app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
+app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHeader}))
 
 // route the pay rout resolve reading page
 app.get('/pay',(req, res)=>{

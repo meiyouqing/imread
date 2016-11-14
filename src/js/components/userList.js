@@ -5,6 +5,7 @@ import GLOBAL from '../modules/global'
 import storage from '../modules/storage'
 import Mixins from '../modules/mixins'
 import React from 'react'
+import parseQuery from '../modules/parseQuery'
 var myEvent = require('../modules/myEvent');
 
 if(typeof window !== 'undefined'){
@@ -86,10 +87,14 @@ var UserList = React.createClass({
 		if (!this.isLogin()) {
 			this.requireLogin(e);
 		} else{
-			browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
+			this.state.userInfo && browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
 		}
 	},
 	componentDidMount: function() {
+		const search = parseQuery(location.search);
+		if(search.token){
+			GLOBAL.cookie('token',search.token,{expires:1000});
+		}
 		this.getUserInfo();
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
 		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
@@ -106,6 +111,7 @@ var UserList = React.createClass({
 			AJAX.get(function(data) {
 				if(data.code != 200) {
 					storage.rm('userToken');
+					GLOBAL.removeCookie('token');
 					return;
 				}
 				that.setState({
@@ -113,6 +119,7 @@ var UserList = React.createClass({
 				});
 			}, (err)=>{
 					storage.rm('userToken');
+					GLOBAL.removeCookie('token');
 			});
 		}else{
 			that.setState({
