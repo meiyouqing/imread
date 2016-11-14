@@ -48,7 +48,6 @@ export const renderFullPage = (html, preloadedState) => {
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
-        <script type="text/javascript" src="https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js" data-appid="101354986" data-redirecturi="https://m.imread.com/mall/page.9/login" charset="utf-8" data-callback="true"></script>
         <script src="/p/bundle1.js"></script>
       </body>
     </html>
