@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}
 app.get('/pay',(req, res)=>{
     res.send(renderFullPage('',{}));
 });
-app.get(/\/reading\//,(req, res)=>{
+app.get(/\/reading\/|\/shelf/,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
 app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
@@ -100,12 +100,12 @@ function onError(res,err){
 
 //set static acesse header
 function setHeader(res,url,stat){	
-	if(/\.js$/.test(path.resolve(url))){
-		res.setHeader('cache-control','private,max-age=31536000')
+  console.log(url);
+	if(/\\p\\modules\\.+\.js$/.test(path.resolve(url))){
+		res.setHeader('Cache-Control','max-age=31536000')
 	}
-	if(/\/p[^\/]+$/.test(path.resolve(url))){
-    //console.log(path.resolve(url))
-		res.setHeader('cache-control','max-age=31536000')
+	if(/\\p\\[^\\]+(\.png|\.gif|\.jpg)$/.test(path.resolve(url))){
+		res.setHeader('Cache-Control','max-age=31536000')
 	}
 }
 

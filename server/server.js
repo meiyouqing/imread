@@ -33,7 +33,7 @@ app.get('/pay',(req, res)=>{
     res.setHeader('Cache-Control','no-cache')
     res.send(renderFullPage('',{}));
 });
-app.get(/\/reading\//,(req, res)=>{
+app.get(/\/reading\/|\/shelf/,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
 app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
@@ -51,6 +51,7 @@ app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
   })
 });
 app.get('*', (req, res) => {
+  //console.log(req.url)
   if(/(error|undefined|favicon\.ico)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
@@ -59,9 +60,9 @@ app.get('*', (req, res) => {
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
       if(/\/pay|\/login/.test(req.url)){
-        res.setHeader('Cache-Control','no-cache')
+        res.setHeader('Cache-Control','private,no-cache')
       }else{
-        res.setHeader('Cache-Control','private,max-age=600')
+        res.setHeader('Cache-Control','private,max-age=60')
       }
       getPost(req.url, goSend.bind(null,res,props), onError.bind(null,res))
     } else {
@@ -95,10 +96,11 @@ function onError(res,err){
 
 //set static acesse header
 function setHeader(res,url,stat){	
-	if(/\.js$/.test(path.resolve(url))){
-		res.setHeader('Cache-Control','private,max-age=31536000')
+  //console.log(url)
+	if(/\/p\/modules\/.+\.js$/.test(path.resolve(url))){
+		res.setHeader('Cache-Control','max-age=31536000')
 	}
-	if(/\/p[^\/]+$/.test(path.resolve(url))){
+	if(/\/p\/[^\/]+(\.png|\.gif|\.jpg)$/.test(path.resolve(url))){
     //console.log(path.resolve(url))
 		res.setHeader('Cache-Control','max-age=31536000')
 	}
