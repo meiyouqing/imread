@@ -194,7 +194,7 @@ var Shelf = React.createClass({
 			case '2':
 				require.ensure([], require =>{
 					const Order = require('../modules/order');
-					console.log(isReverse,arr)
+					// console.log(isReverse,arr)
 					if(isReverse){
 						arr.reverse();
 						this.isReverse_s('book_order');
