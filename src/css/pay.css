@@ -1,9 +1,10 @@
 .m-balance{background-color: #fff;}
 .u-balance{padding: 15px;text-align: center;background: #20ced7;height: 205px;}
 .u-balance .title{font-size: 16px;}
-.u-balance .count{margin-top: 12px;font-size: 36px;color: #ffffff;}
-.u-balance .count span{display: inline-block;width: auto;position: relative;}
-.u-balance .count span:before{content:'';position: absolute;right: -23px;top:26px;width:25px;height: 25px;background: url(../img/icons/icon_aidou2@2x.png) no-repeat;background-size: cover;}
+.u-balance .count{margin-top: 12px;}
+.u-balance .count span{display: inline-block;width: auto;position: relative;font-size: 36px;color: #ffffff;}
+.u-balance .count span.iconfont{width: 25px;height: 25px;}
+.u-balance .count span.iconfont:before{width:25px;height: 25px;color: white;font-size: 14px;}
 .u-balance .unit{margin-left: 6px;font-size: 14px;}
 
 .u-balance-r{padding: 12px 15px;}
@@ -38,10 +39,12 @@
 .pay-list .f-wx.active{color: #09bb07;}
 .pay-list .f-wx.active p{color: #000000;}
 
+.pay-list .icon-aidou:before{display: inline-block;width: 33px;font-size: 14px;color: #4C4C4C;}
+.pay-list .active .icon-aidou:before{color:#FF4081; }
+
 .m-balance .u-userform{padding-top: 25px;letter-spacing: 0.1em;}
 .m-balance .formTitle{margin-top: -10px;margin-bottom: 10px;}
 
-.m-recharge{}
 .m-recharge .title{margin-bottom: 12px;padding: 15px 0 20px;border-bottom: 1px solid #EEE;line-height: 1;text-align: center;}
 .m-recharge .result-suc td{font-size: 16px;}
 .m-recharge .result-note{margin-bottom: 5px;}
@@ -84,14 +87,17 @@
 
 .bind-way{position: absolute;line-height: 36px;padding: 0 15px;color: #777;background: #fafafa;width: 100%;}
 
-.i-icon-large{width: 100px;height: 100px;background:url(../img/icons/icon_aidou@2x.png);background-size: cover;margin: auto;margin-top: 25px;}
-
+.i-icon-large{width: 100px;height: 100px;margin: auto;margin-top: 25px;border-radius: 100%;background-color:#79E1E7; }
+.i-icon-large.iconfont:before{font-size: 52px;line-height: 100px;color: white;}
 
 .g-f{background: #fafafa;}
 .m-recharge-result{margin-top: 15px;background: #ffffff;padding: 0 15px;}
 .m-recharge-result .m-result-status{padding: 20px 0;font-size: 22px;color: #000;text-align: center;border-bottom: 1px solid #eee;}
+.m-recharge-result .m-result-status .iconfont{display: block;font-size: 63px;line-height: 1.2;}
+.m-recharge-result .m-result-status .icon-cha{color: #FF6D6D;}
+.m-recharge-result .m-result-status .icon-duihao-2{color: #0096AA;}
 .m-recharge-result .m-result-detail,.m-recharge-result .m-result-detail-f{padding: 15px 0;color: #777777;font-size: 15px;line-height: 27px;}
 .m-recharge-result .m-result-detail-f{padding: 14px 0;text-align: center;}
 .m-recharge-result .m-result-detail .m-s{font-size: 14px;float: right;}
-.m-recharge-result .m-result-icon-s{display: block;margin: auto;width:45px;height:45px;background: url(../img/icons/icon_success@2x.png);background-size: cover;}
-.m-recharge-result .m-result-icon-f{display: block;margin: auto;width:45px;height:45px;background: url(../img/icons/icon_fail@2x.png);background-size: cover;}
+/*.m-recharge-result .m-result-icon-s{display: block;margin: auto;width:45px;height:45px;background: url(../img/icons/icon_success@2x.png);background-size: cover;}
+.m-recharge-result .m-result-icon-f{display: block;margin: auto;width:45px;height:45px;background: url(../img/icons/icon_fail@2x.png);background-size: cover;}*/

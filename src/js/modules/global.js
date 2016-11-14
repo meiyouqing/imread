@@ -1,5 +1,5 @@
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import parseQuery from '../modules/parseQuery'
 
 if(typeof window !== 'undefined'){
@@ -268,10 +268,17 @@ const GLOBAL = {
 		} else {
 			if (typeof res.error === 'string') {
 				POP.alert(res.error);
+				return true;
 			} else {
-				POP.alert(res.error.detail);
+				if(typeof res.error.error == 'string'){
+					POP.alert(res.error.error);
+					return true;
+				}else if(typeof res.error.detail == 'string'){
+					POP.alert(res.error.detail);
+					return true;
+				}
 			}
-			return true;
+			return false;
 		}
 	},
 	noop: function() {},

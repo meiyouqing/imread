@@ -1,4 +1,4 @@
-import {Link} from 'react-router'
+import Link from 'react-router/lib/Link'
 import React from 'react' 
 export default React.createClass({
 	render(){

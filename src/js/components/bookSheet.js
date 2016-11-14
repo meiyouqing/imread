@@ -122,15 +122,15 @@ var BookSheet = React.createClass({
 						<section className="m-block m-sheet">
 							<div className="content">
 								<div className="m-sheet-header">
-									<div className="u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
+									<div className="iconfont icon-tag u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
 									<img src={this.state.data.image_url} />
 									<div className="m-b-footer">
-										<span className="icon-l icon-love i-s-m"></span>
+										<span className="iconfont icon-heart i-s-m"></span>
 										<span className="u-sc">{this.state.data.collect_uv || 0}</span>
 										<span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
 									</div>
 									<div className="u-m-store" onClick={this.addFavaHandle} >
-										<span className={"icon-n icon-love-store "+(this.state.collected?'active':'')}></span>
+										<span className={"iconfont "+(this.state.collected?'active icon-heart':'icon-xin')}></span>
 									</div>
 								</div>
 								<div className="u-sheet-detail">

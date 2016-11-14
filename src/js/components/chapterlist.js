@@ -1,5 +1,5 @@
 import Loading from './loading'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import React from 'react'
 import storage from '../modules/storage'
 var myEvent = require('../modules/myEvent');
@@ -72,7 +72,7 @@ var Chapterlist = React.createClass({
 						// console.log(this.props.store,chapter.cid)
 						var currentChapterId = this.props.currentChapterId || this.state.currentChapterId;
 						if (chapter.feeType != '0' && (store.indexOf(chapter.cid)<0) && !this.props.isBuyAll) {
-							lock = <span className="icon-n icon-lock f-fr"></span>;
+							lock = <span className="iconfont icon-suo lock f-fr"></span>;
 						}
 						return (
 							<li key={i} className={"chapter f-clearfix" + (chapter.cid == currentChapterId ? ' current' : '')} onClick={this.handleClick} data-cid={chapter.cid} data-fee={chapter.feeType}>

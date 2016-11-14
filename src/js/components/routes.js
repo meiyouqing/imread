@@ -1,14 +1,17 @@
 import AJAX from '../modules/AJAX'
 import React from 'react'
-import {Route, IndexRoute, WithRoute, IndexRedirect, RouterContext} from 'react-router';
+import IndexRoute from 'react-router/lib/IndexRoute'
+import IndexRedirect from 'react-router/lib/IndexRedirect'
+import Route from 'react-router/lib/Route'
 import App from './app'
-import Shelf from './shelf'
+// import Shelf from './shelf' //TODO:load on demand
 import Mall from './mall'
 import SubMall from './subMall'
-import Top from './top'
+import Top from './top' //TODO:load on demand
 import Search from './search'
 import List from './list'
 import Login from './login'
+import Logintest from './login_test'
 import Register from './register'
 import Introduce from './introduce'
 import Balance from './balance'
@@ -19,8 +22,7 @@ import Tag from './tag'
 import RecentRead from './recentRead'
 import ReadHistory from './readHistory'
 import Feedback from './feedback'
-import About from './about'
-import Reading from './reading'
+// import Reading from './reading' //TODO:load on demand
 import Order from './order'
 import Compact from './compact'
 import Purchased from './purchased'
@@ -37,6 +39,19 @@ import WxLogin from './wxLogin'
 import SDK from './sdk'
 import AlyPay from './alyPay'
 
+//按需加载的模块 Reading Shelf
+function getReading(nextState, cb){
+	require.ensure([], function(require){
+		cb(null,require('./reading'))
+	})
+}
+function getShelf(nextState, cb){
+	require.ensure([], function(require){
+		cb(null,require('./shelf'))
+	})
+}
+
+
 var APImemory = {};
 const scrollResetHandle = function(){
 	if(!AJAX.API._param) return;
@@ -52,7 +67,7 @@ var loginWrap = (
 	</Route>
 	)
 var readWrap = (
-		<Route path="reading/:readingId" component={Reading}>
+		<Route path="reading/:readingId" getComponent={getReading}>
 			{loginWrap}
 			<Route path="balance" component={Balance} >
 				<Route path="recharge/:rechargeId" component={Recharge} >
@@ -63,7 +78,7 @@ var readWrap = (
 	)
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
-		<Route path="shelf" component={Shelf}>
+		<Route path="shelf" getComponent={getShelf}>
 			<Route path="book/:introduceId" component={Introduce}>
 				{readWrap}
 			</Route>
@@ -85,24 +100,24 @@ var searchWrap = (
 
 var topWrap = (
 		<Route path="top/:topId" component={Top}>
-					<Route path="myTags" component={Tag}/>
-					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
-						{loginWrap}
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					<Route path="myTags" component={Tag}/>
-					{loginWrap}
-					{bookWrap}
-					{searchWrap}
+			<Route path="myTags" component={Tag}/>
+			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+				{loginWrap}
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="myTags" component={Tag}/>
+			{loginWrap}
+			{bookWrap}
+			{searchWrap}
 		</Route>
 	)
 var payWrap = (
@@ -116,22 +131,22 @@ var payWrap = (
 
 var selfWrap = (
 		<Route path="self/:selfId" component={SelfBuild}>
-					<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
-						{loginWrap}
-						{bookWrap}
-						{searchWrap}
-					</Route>
-					{loginWrap}
-					{bookWrap}
-					{searchWrap}
+			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+				{loginWrap}
+				{bookWrap}
+				{searchWrap}
+			</Route>
+			{loginWrap}
+			{bookWrap}
+			{searchWrap}
 		</Route>
 	)
 
@@ -143,6 +158,7 @@ module.exports = (
 		{loginWrap}
 		{selfWrap}
 		{payWrap}
+		<Route path="/login_test" component={Logintest}/>
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
 				{selfWrap}
@@ -170,7 +186,7 @@ module.exports = (
 
 				{topWrap}
 
-				<Route path="shelf" component={Shelf}>
+				<Route path="shelf" getComponent={getShelf}>
 					{bookWrap}
 					{loginWrap}
 					{readWrap}
@@ -199,7 +215,6 @@ module.exports = (
 					</Route>
 					<Route path="feedback" component={Feedback}/>
 					<Route path="compact" component={Compact} />
-					<Route path="about" component={About} />
 				</Route>
 
 				<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
@@ -214,40 +229,8 @@ module.exports = (
 					{bookWrap}
 					{searchWrap}
 				</Route>
-
 			</Route>
-		</Route>
-		
-		{topWrap}
-
-		<Route path="balance" component={Balance} >
-			<Route path="recharge/:rechargeId" component={Recharge} >
-				<Route path="recharge_result" component={RechargeResult} />
-			</Route>
-		</Route>
-		<Route path="recentRead" onLeave={scrollResetHandle} component={RecentRead}>
-			{readWrap}
-		</Route>
-		<Route path="myTags" component={Tag}/>
-		<Route path="purchased" component={Purchased}>
-			{bookWrap}
-		</Route>
-		<Route path="readHistory" component={ReadHistory}/>
-		<Route path="setting" component={Setting}>
-			{loginWrap}
-			<Route path="modifypwd" component={Modifypwd}>
-				{loginWrap}
-			</Route>
-			<Route path="feedback" component={Feedback}/>
-			<Route path="compact" component={Compact} />
-			<Route path="about" component={About} />
-		</Route>
-
-		<Route path="/shelf" component={Shelf}>
-			{bookWrap}
-			{loginWrap}
-			{readWrap}
-		</Route>
+		</Route>		
 	</Route>
 
 )

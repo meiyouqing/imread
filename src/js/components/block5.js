@@ -1,7 +1,7 @@
 import GLOBAL from '../modules/global'
 import React from 'react'
 import storage from '../modules/storage'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 
@@ -216,7 +216,7 @@ var Block5 = React.createClass({
 									if(this.adlist.length<2) 
 										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
 			                		return (
-			                			<Link style={{backgroundImage: 'url(/src/img/back/ad_default_back.jpg)',height: this.state.height, backgroundSize: "cover"}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id=		{v.content_id}>
+			                			<Link style={{backgroundColor: '#e3e3e3',height: this.state.height}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id=		{v.content_id}>
 			                				{imger}
 			                			</Link>
 			                		);
