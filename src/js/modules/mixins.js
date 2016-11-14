@@ -135,7 +135,7 @@ var mixins = function() {
         },
         isLogin: function() {
             // return !!GLOBAL.cookie('userToken')
-            return !!storage.get('userToken','string');
+            return !!storage.get('userToken','string') || GLOBAL.cookie('token');
         },
         goLogin: function(callback) {
             // var ua = window.navigator.userAgent.toLowerCase();

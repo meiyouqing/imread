@@ -206,6 +206,7 @@ const GLOBAL = {
         return result;
 	},
 	removeCookie: function(key,path) {
+		path = path || '/';
 		if (GLOBAL.cookie(key) !== undefined) {
                 GLOBAL.cookie(key, '', {expires: -1,path:path});
                 return true;
