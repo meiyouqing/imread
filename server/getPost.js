@@ -10,7 +10,7 @@ const getPost =  function(url,callback,onError){
   let param = path[path.length-1];
 
   //sdk
-  if(/sdk\/sdk\.\d+$/.test(url)){
+  if(/sdk\/sdk\.\d+/.test(url)){
     // console.log('sdk param >>>>>>> '+param)
     AJAX.init(param);
     AJAX.get(function(data){
