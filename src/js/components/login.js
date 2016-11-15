@@ -221,27 +221,7 @@ var Login = React.createClass({
 
 		//判断并赋值全局QC，执行qq登录.
 		if(/^#access_token=.+/.test(location.hash)){
-            this.QQ_prefly(function(){
-                QC.Login({
-                        // btnId: "qqLoginBtn"
-                }, function(reqData, opts) { //登录成功
-					console.log(reqData);
-                    var paras = {};
-                    that.setState({QQ_loading: true});
-                    QC.Login.getMe(function(openId, accessToken){  
-                            AJAX.go('login_qq',{
-                                user_identifier:openId,
-                                promot:'H5',
-                                channel:'3',
-                                img_url: reqData.figureurl_qq_2,
-                                nick_name:reqData.nickname},function(data){
-                            that.do_result(data,'qq');
-                        });
-                    });  
-                }, function(opts) {
-                    this.setState({WX_loading: false,QQ_loading: false});
-                });
-            });
+            this.QQ_prefly(this.QC_LOGIN);
 		}
 
 		//微博登录
@@ -255,6 +235,27 @@ var Login = React.createClass({
 			   		that.do_result(res,'wb');
 			   },that.onloginErr)
 		}
+	},
+	QC_LOGIN:function(){
+		QC.Login({
+				// btnId: "qqLoginBtn"
+		}, function(reqData, opts) { //登录成功
+			console.log(reqData);
+			var paras = {};
+			that.setState({QQ_loading: true});
+			QC.Login.getMe(function(openId, accessToken){  
+					AJAX.go('login_qq',{
+						user_identifier:openId,
+						promot:'H5',
+						channel:'3',
+						img_url: reqData.figureurl_qq_2,
+						nick_name:reqData.nickname},function(data){
+					that.do_result(data,'qq');
+				});
+			});  
+		}, function(opts) {
+			this.setState({WX_loading: false,QQ_loading: false});
+		});
 	},
 	do_result: function(data,type){
 		var that = this;
@@ -293,11 +294,13 @@ var Login = React.createClass({
 		sr.type = "text/javascript";
 		sr.charset = "utf-8";
 		document.body.appendChild(sr);
-		sr.onload =()=>{setTimeout(()=>{cb()},1000)};
+		sr.onload =cb;
     },
 	QQ_login: function(){
         this.QQ_prefly(goQQ);
+		var that = this;
 		 function goQQ(){
+			that.QC_LOGIN();
 			if(navigator.userAgent.indexOf('QQ')>-1)
 					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
 			else 
