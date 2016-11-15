@@ -42,7 +42,7 @@ var UserInfo = React.createClass({
 			AJAX.init('loginout');
 			AJAX.get(function(res){
 				storage.rm('userToken');
-				GLOBAL.removeCookie('token');
+				GLOBAL.removeCookie('token','/','.imread.com');
 				this.disPatch('updateUser');
 				if(GLOBAL.cookie('loadingType') === 'qq') {
 					QC.Login.signOut();

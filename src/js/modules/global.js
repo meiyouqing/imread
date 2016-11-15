@@ -205,10 +205,11 @@ const GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key,path) {
+	removeCookie: function(key,path,domain) {
 		path = path || '/';
+		domain = domain || location.hostname;
 		if (GLOBAL.cookie(key) !== undefined) {
-                GLOBAL.cookie(key, '', {expires: -1,path:path});
+                GLOBAL.cookie(key, '', {expires:'Thu, 01-Jan-1970 00:00:01 GMT',path,domain});
                 return true;
         }
         return false;
