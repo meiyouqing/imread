@@ -225,6 +225,7 @@ var Login = React.createClass({
                 QC.Login({
                         // btnId: "qqLoginBtn"
                 }, function(reqData, opts) { //登录成功
+					console.log(reqData);
                     var paras = {};
                     that.setState({QQ_loading: true});
                     QC.Login.getMe(function(openId, accessToken){  
@@ -292,7 +293,7 @@ var Login = React.createClass({
 		sr.type = "text/javascript";
 		sr.charset = "utf-8";
 		document.body.appendChild(sr);
-		sr.onload =cb;
+		sr.onload =()=>{setTimeout(()=>{cb()},500)};
     },
 	QQ_login: function(){
         this.QQ_prefly(goQQ);
