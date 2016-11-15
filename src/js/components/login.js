@@ -288,18 +288,18 @@ var Login = React.createClass({
 		const sr = document.createElement('script');
 		sr.src = "https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js";
 		sr.dataAppid = "101354986";
-		sr.dataRedirecturi = "https://m.imread.com/login_test";
+		sr.dataRedirecturi = "https://m.imread.com/mall/page.9/login";
 		sr.dataCallback = "true";
 		sr.type = "text/javascript";
 		sr.charset = "utf-8";
 		document.body.appendChild(sr);
-		sr.onload =()=>{setTimeout(()=>{cb()},500)};
+		sr.onload =()=>{setTimeout(()=>{cb()},1000)};
     },
 	QQ_login: function(){
         this.QQ_prefly(goQQ);
 		 function goQQ(){
 			if(navigator.userAgent.indexOf('QQ')>-1)
-					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
 			else 
 				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";			
 		}
