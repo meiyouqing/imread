@@ -144,7 +144,6 @@ function renderFullPage (html, preloadedState){
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
-        
         <script src="/p/bundle1.js"></script>
       </body>
     </html>
