@@ -4,7 +4,6 @@ build:
    - production
   script:
    - cd /opt/ci_www/imread
-   - git reset --hard HEAD^^^
    - git checkout .
    - git pull origin production  
    - rm -rf public/p
