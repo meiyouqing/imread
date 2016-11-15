@@ -217,7 +217,7 @@ var Login = React.createClass({
 		//判断来源from
 		this.from = parseQuery(location.search);
 
-		var  that = this;
+		var  that = this; 
 
 		//判断并赋值全局QC，执行qq登录.
 		if(/^#access_token=.+/.test(location.hash)){
