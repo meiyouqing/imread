@@ -220,7 +220,7 @@ var Login = React.createClass({
 		var  that = this;
 
 		//判断并赋值全局QC，执行qq登录.
-		if(GLOBAL.cookie('__qc__k')){
+		if(/^#access_token=.+/.test(location.hash)){
             this.QQ_prefly(function(){
                 QC.Login({
                         // btnId: "qqLoginBtn"
@@ -234,7 +234,6 @@ var Login = React.createClass({
                                 channel:'3',
                                 img_url: reqData.figureurl_qq_2,
                                 nick_name:reqData.nickname},function(data){
-
                             that.do_result(data,'qq');
                         });
                     });  

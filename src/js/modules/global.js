@@ -173,15 +173,18 @@ const GLOBAL = {
 		// write
         if (value !== undefined) {
                 options = options || {};
-                if (typeof options.expires === 'number') {
-                        var days = options.expires, t = options.expires = new Date();
-                        t.setDate(t.getDate() + days);
+				var dt = options.expires;
+                if (typeof dt === 'number') {
+                        var days = dt;
+						dt = new Date();
+                        dt.setDate(dt.getDate() + days);
+						dt = dt.toUTCString();
                 }
                 return (document.cookie = [
                         encodeURIComponent(key),
                         '=',
                         encodeURIComponent(value),
-                        options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                        options.expires ? '; expires=' + dt : '', // use expires attribute, max-age is not supported by IE
                         options.path ? '; path='+options.path:'; path=/',
                         options.domain ? '; domain=' + options.domain :'',
                         options.secure ? '; secure=' + options.secure :''
