@@ -93,7 +93,7 @@ var UserList = React.createClass({
 	componentDidMount: function() {
 		const search = parseQuery(location.search);
 		if(search.token){
-			GLOBAL.cookie('token',search.token,{expires:1000,path:'/',domain:'.imread.com'});
+			GLOBAL.cookie('token',search.token,{expires:7,path:'/',domain:'.imread.com'});
 		}
 		this.getUserInfo();
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
@@ -111,7 +111,7 @@ var UserList = React.createClass({
 			AJAX.get(function(data) {
 				if(data.code != 200) {
 					storage.rm('userToken');
-					GLOBAL.removeCookie('token','/','.imread.com');
+					GLOBAL.removeCookie('token', '/', '.imread.com');
 					return;
 				}
 				that.setState({
@@ -119,7 +119,7 @@ var UserList = React.createClass({
 				});
 			}, (err)=>{
 					storage.rm('userToken');
-					GLOBAL.removeCookie('token','/','.imread.com');
+					GLOBAL.removeCookie('token', '/', '.imread.com');
 			});
 		}else{
 			that.setState({

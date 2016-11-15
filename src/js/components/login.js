@@ -220,26 +220,27 @@ var Login = React.createClass({
 		var  that = this;
 
 		//判断并赋值全局QC，执行qq登录.
-		if(GLOBAL.cookie('__qc__k')){
-			QC.Login({
-	    			// btnId: "qqLoginBtn"
-			}, function(reqData, opts) { //登录成功
-			    var paras = {};
-			    that.setState({QQ_loading: true});
-			     QC.Login.getMe(function(openId, accessToken){  
-				        AJAX.go('login_qq',{
-				        	user_identifier:openId,
-				        	promot:'H5',
-				        	channel:'3',
-				        	img_url: reqData.figureurl_qq_2,
-				        	nick_name:reqData.nickname},function(data){
-
-						that.do_result(data,'qq');
-					});
-			    });  
-			}, function(opts) {
-				this.setState({WX_loading: false,QQ_loading: false});
-			});
+		if(/^#access_token=.+/.test(location.hash)){
+            this.QQ_prefly(function(){
+                QC.Login({
+                        // btnId: "qqLoginBtn"
+                }, function(reqData, opts) { //登录成功
+                    var paras = {};
+                    that.setState({QQ_loading: true});
+                    QC.Login.getMe(function(openId, accessToken){  
+                            AJAX.go('login_qq',{
+                                user_identifier:openId,
+                                promot:'H5',
+                                channel:'3',
+                                img_url: reqData.figureurl_qq_2,
+                                nick_name:reqData.nickname},function(data){
+                            that.do_result(data,'qq');
+                        });
+                    });  
+                }, function(opts) {
+                    this.setState({WX_loading: false,QQ_loading: false});
+                });
+            });
 		}
 
 		//微博登录
@@ -281,11 +282,26 @@ var Login = React.createClass({
 				browserHistory.push('/mall/page.9/login');
 			});		
 	},
+    QQ_prefly:function(cb){
+        //加载qq登录所需js
+		const sr = document.createElement('script');
+		sr.src = "https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js";
+		sr.dataAppid = "101354986";
+		sr.dataRedirecturi = "https://m.imread.com/login_test";
+		sr.dataCallback = "true";
+		sr.type = "text/javascript";
+		sr.charset = "utf-8";
+		document.body.appendChild(sr);
+		sr.onload =cb;
+    },
 	QQ_login: function(){
-		if(navigator.userAgent.indexOf('QQ')>-1)
-				return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
-		else 
-			window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";			
+        this.QQ_prefly(goQQ);
+		 function goQQ(){
+			if(navigator.userAgent.indexOf('QQ')>-1)
+					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+			else 
+				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";			
+		}
   	},
   	WB_login: function(){
   		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
