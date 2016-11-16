@@ -94,6 +94,7 @@ var UserList = React.createClass({
 		const search = parseQuery(location.search);
 		if(search.token){
 			GLOBAL.cookie('token',search.token,{expires:7,path:'/',domain:'.imread.com'});
+			GLOBAL.cookie('client-type','3',{expires:7,path:'/',domain:'.imread.com'});
 		}
 		this.getUserInfo();
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
