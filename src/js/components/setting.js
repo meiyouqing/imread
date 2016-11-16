@@ -1,4 +1,5 @@
-import { browserHistory, Link } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
+import Link from 'react-router/lib/Link'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -61,7 +62,7 @@ var Setting = React.createClass({
 		return true;
 	},
 	componentDidMount: function(){
-		this.setState({isWx:true})
+		this.setState({isWx:this.isWx()})
 	},
 	render:function() {
 		var blockData = [

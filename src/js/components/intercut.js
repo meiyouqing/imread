@@ -1,6 +1,6 @@
 import GLOBAL from '../modules/global'
 import React from 'react'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 var uploadLog = require('../modules/uploadLog');
 
 var Intercut = React.createClass({

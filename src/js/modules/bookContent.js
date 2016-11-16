@@ -1,6 +1,6 @@
 import myEvent from '../modules/myEvent'
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
@@ -106,7 +106,7 @@ var BookContent = (function() {
 		var getContent =  function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			// console.log(sourceConfig)
-			var totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+			var totalUrl = sourceConfig.source_host.replace('http://','https://') + sourceConfig.chapter_content;
 			// var totalUrl = 'https://readapi.imread.com' + sourceConfig.chapter_content;
 			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 							.replace(/\?*/, '')

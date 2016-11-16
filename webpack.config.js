@@ -31,7 +31,7 @@ module.exports = {
 			{ 
 				test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") 
 			},
-			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=10092'}
+			{test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=5048'}
 		]
 	},
 	plugins: debug?
@@ -52,8 +52,6 @@ module.exports = {
 		// 	React: 'react',
 		// 	AJAX: '../modules/AJAX',
 		// 	GLOBAL: '../modules/global',
-		// 	Link: '../modules/link',
-		// 	browserHistory: '../modules/history',
 		// 	storage: '../modules/storage',
 		// 	Loading: './loading',
 		// 	NoData: './noData',

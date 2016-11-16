@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import parseQuery from '../modules/parseQuery';
@@ -13,8 +13,8 @@ var Header = React.createClass({
 		};
 
 		return {
-			middle:<a className="icon-s icon-bookstore right" onClick={gotoZy}></a>,
-			right:<a className="icon-s icon-searcher f-fr" onClick={sHandle}></a>,
+			middle:<a className="iconfont icon-shucheng f-fr" onClick={gotoZy}></a>,
+			right:<a className="iconfont icon-sousuo f-fr" onClick={sHandle}></a>,
 			title: GLOBAL.title || '艾美阅读'
 		};
 	},
@@ -41,7 +41,7 @@ var Header = React.createClass({
 
 
 		return (
-			<header className="m-bar m-bar-head m-p">
+			<header className="m-bar m-bar-head">
 				{defaultLeft}
 				{this.props.right}
 				{this.props.middle}

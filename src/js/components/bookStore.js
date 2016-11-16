@@ -2,7 +2,7 @@ import NoData from './noData'
 import AJAX from '../modules/AJAX'
 import Mixins from '../modules/mixins'
 import React from 'react'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 var Img = require('./img');
 var Book10 = require('./book10');
 var Block7 = require('./block7');

@@ -1,5 +1,5 @@
 import myEvent from '../modules/myEvent'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'

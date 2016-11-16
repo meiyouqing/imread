@@ -25,7 +25,7 @@ var recentRead = React.createClass({
             noMore: false,
             icon: null,
             right: null,
-            left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+            left: <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>
         }
     },
     goBack: function(){
@@ -40,11 +40,11 @@ var recentRead = React.createClass({
         });
     },
     compClick: function(){
-    	var right = <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>;
+    	var right = <a className = "f-fr iconfont icon-shezhi-1" onClick = { this.troggle } > </a>;
     	this.setState({
             right: right,
             icon: false,
-            left: <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>
+            left: <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>
        });
     },
     componentDidMount: function() {
@@ -62,7 +62,7 @@ var recentRead = React.createClass({
         });
         this.setState({
             list: list,
-            right:list.length? <a className = "icon-s icon-recent-set f-fr" onClick = { this.troggle } > </a>:null,
+            right:list.length? <a className = "f-fr iconfont icon-shezhi-1" onClick = { this.troggle } > </a>:null,
             noMore: true
         });
     },
@@ -87,7 +87,7 @@ var recentRead = React.createClass({
             if(!that.state.list.length){
                 that.setState({
                     right:null,
-                    left:<a className="f-fl icon-s icon-back" onClick={that.goBack} ></a>
+                    left:<a className="f-fl iconfont icon-left" onClick={that.goBack} ></a>
                 });  
                 return;              
             }

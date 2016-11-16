@@ -29,8 +29,9 @@ export const renderFullPage = (html, preloadedState) => {
         <meta name="description" content="小说在线阅读、下载，精彩小说尽在艾美阅读。艾美阅读提供小说，小说网，言情小说，玄幻小说，武侠小说，都市小说，历史小说，出版书，正版小说，正版电子小说，网络小说，原创网络文学。" />
         <title>艾美阅读-发现阅读之美</title>
         <link href="/p/style.css" rel="stylesheet" type="text/css"></link>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" href="/src/img/logo.png">
+        <link href="//at.alicdn.com/t/font_smbelzs6o6dh1tt9.css" rel="stylesheet" type="text/css"></link>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
         <script>
             (function () {   
@@ -48,7 +49,6 @@ export const renderFullPage = (html, preloadedState) => {
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>
-        <script type="text/javascript" src="https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js" data-appid="101354986" data-redirecturi="https://m.imread.com/mall/page.9/login" charset="utf-8" data-callback="true"></script>
         <script src="/p/bundle1.js"></script>
       </body>
     </html>

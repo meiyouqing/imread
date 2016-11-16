@@ -1,6 +1,7 @@
 
-import browserHistory from './modules/history'
-import { Router, Route} from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
+import Router from 'react-router/lib/Router'
+import Route from 'react-router/lib/Route'
 import ReactDOM from 'react-dom'
 import React from 'react'
 import routes from './components/routes'

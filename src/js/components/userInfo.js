@@ -2,7 +2,7 @@ if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
 import Loading from './loading'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
@@ -22,7 +22,7 @@ var UserInfo = React.createClass({
 				user_name: data.user_name || data.mobile_num,
 				portraitUrl: data.portraitUrl,		
 			user_gender: this.switchSex(data.user_gender),
-			right:<span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>,
+			right:<span onClick={this.changeEdit} className="iconfont icon-bianji f-fr"></span>,
 			isEdit: false,
 			finishButton: true,
 			access: <span className="icon-h icon-return-black"></span>,
@@ -42,23 +42,26 @@ var UserInfo = React.createClass({
 			AJAX.init('loginout');
 			AJAX.get(function(res){
 				storage.rm('userToken');
+				GLOBAL.removeCookie('token','/','.imread.com');
 				this.disPatch('updateUser');
-				if(GLOBAL.cookie('loadingType') === 'qq') {
-					QC.Login.signOut();
-				}
+				// if(GLOBAL.cookie('loadingType') === 'qq' && typeof QC !== 'undefined') {
+				// 	GLOBAL.removeCookie('loadingType','/');
+				// 	QC.Login.signOut();
+				// }
+				// console && console.log(path)
 				GLOBAL.goBack(path);
 			}.bind(this));
 		}.bind(this));
 	},
 	changeEdit: function(){
-		var right = <span onClick={this.finishEdit} className="icon-s icon-right f-fr"></span>;
+		var right = <span onClick={this.finishEdit} className="iconfont icon-duihao f-fr"></span>;
 		var access = <span className="icon-h icon-return-black show"></span>;
 		GLOBAL.addClass(this.refs.header,'show');//兼容部分安卓机不能触发click()
 		GLOBAL.addClass(this.refs.date,'show');
 		this.setState({right: right,isEdit: true,finishButton: false,access: access});
 	},
 	finishEdit: function(){
-		var right = <span onClick={this.changeEdit} className="icon-s icon-edit f-fr"></span>;
+		var right = <span onClick={this.changeEdit} className="iconfont icon-bianji f-fr"></span>;
 		var access = <span className="icon-h icon-return-black"></span>
 		GLOBAL.removeClass(this.refs.header,'show');
 		GLOBAL.removeClass(this.refs.date,'show');

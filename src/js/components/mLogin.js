@@ -3,11 +3,10 @@ if(typeof window !== 'undefined'){
 }
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
-import { Link } from 'react-router';
+import Link from 'react-router/lib/Link';
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
-import storage from '../modules/storage'
 import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
@@ -133,7 +132,7 @@ var mLogin = React.createClass({
 	},
 	render: function() {
 		var right =<button className="f-fr textBtn" onClick={this.showRegister}>注册</button>;
-		var left = <a className="f-fl icon-s icon-back" onClick={this.goBack} ></a>;
+		var left = <a className="f-fl iconfont icon-left" onClick={this.goBack} ></a>;
 		var isAndroid = GLOBAL.isAndroid();
 		var loading = null;
 

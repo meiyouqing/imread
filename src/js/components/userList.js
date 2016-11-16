@@ -1,9 +1,11 @@
-import { browserHistory, Link } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
+import Link from 'react-router/lib/Link'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import storage from '../modules/storage'
 import Mixins from '../modules/mixins'
 import React from 'react'
+import parseQuery from '../modules/parseQuery'
 var myEvent = require('../modules/myEvent');
 
 if(typeof window !== 'undefined'){
@@ -34,7 +36,7 @@ var ULine = React.createClass({
 			return (
 				<li className="u-line">
 					<a href={Src} data-href={Src} className="f-cb">
-						<span className={"icon-u" + ' ' + this.props.line.icon}></span>
+						<span className={"iconfont icon-user" + ' ' + this.props.line.icon}></span>
 						<span className="title">{this.props.line.title}</span>
 						<span className='s-title'>{this.props.line.s_title}</span>
 					</a>
@@ -44,7 +46,7 @@ var ULine = React.createClass({
 			return (
 				<li className="u-line">
 					<Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
-						<span className={"icon-u" + ' ' + this.props.line.icon}></span>
+						<span className={"iconfont icon-user" + ' ' + this.props.line.icon}></span>
 						<span className="title">{this.props.line.title}</span>
 						<span className='s-title'>{this.props.line.s_title}</span>
 					</Link>
@@ -85,10 +87,15 @@ var UserList = React.createClass({
 		if (!this.isLogin()) {
 			this.requireLogin(e);
 		} else{
-			browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
+			this.state.userInfo && browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
 		}
 	},
 	componentDidMount: function() {
+		const search = parseQuery(location.search);
+		if(search.token){
+			GLOBAL.cookie('token',search.token,{expires:7,path:'/',domain:'.imread.com'});
+			GLOBAL.cookie('client-type','3',{expires:7,path:'/',domain:'.imread.com'});
+		}
 		this.getUserInfo();
 		document.addEventListener('updateUser',this.getUserInfo.bind(this,false));
 		document.addEventListener('rechargeSuccess',this.getUserInfo.bind(this,false));
@@ -99,18 +106,21 @@ var UserList = React.createClass({
 	},
 	getUserInfo: function() { //获取个人信息		
 		var that = this;
+			//POP.alert(this.isLogin)
 		if (this.isLogin()) {
 			AJAX.init('me');
 			AJAX.get(function(data) {
 				if(data.code != 200) {
 					storage.rm('userToken');
+					GLOBAL.removeCookie('token', '/', '.imread.com');
 					return;
 				}
 				that.setState({
 					userInfo: data,
 				});
-			}, ()=>{
+			}, (err)=>{
 					storage.rm('userToken');
+					GLOBAL.removeCookie('token', '/', '.imread.com');
 			});
 		}else{
 			that.setState({
@@ -151,21 +161,21 @@ var UserList = React.createClass({
 		var blockData = [
 			[{
 				title: '书架',
-				icon: 'icon-shelf',
+				icon: 'icon-shujiaxuanzhong',
 				href: 'shelf',
 				requireLogin: this.requireLogin
 			}, {
 				title: '发现',
-				icon: 'icon-discover',
+				icon: 'icon-zhinanzhen',
 				s_title: '书单·排行',
 				href: 'top/block.0'
 			}], [{
 				title: '最近阅读',
-				icon: 'icon-recent',
+				icon: 'icon-shizhong',
 				href: 'recentRead'
 			},{
 				title: '书单收藏',
-				icon: 'icon-bookstored',
+				icon: 'icon-book',
 				href: 'bookstore',
 				requireLogin: this.requireLogin
 			}, {
@@ -175,22 +185,22 @@ var UserList = React.createClass({
 				requireLogin: this.requireLogin
 			},{
 				title: '已购书籍',
-				icon: 'icon-chongzhi',
+				icon: 'icon-leftbarrecharge',
 				href: 'purchased',
 				requireLogin: this.requireLogin
 			}, {
 				title: '我的标签',
-				icon: 'icon-tags',
+				icon: 'icon-biaoqian',
 				href: 'myTags',
 				requireLogin: this.requireLogin
 			}, {
 				title: '我的成就',
-				icon: 'icon-achieve',
+				icon: 'icon-trophy',
 				href: 'readHistory',
 				requireLogin: this.requireLogin
 			},{
 				title: '设置',
-				icon: 'icon-setter',
+				icon: 'icon-shezhi',
 				href: 'setting'
 			}]
 		];
@@ -198,15 +208,17 @@ var UserList = React.createClass({
 		let userCard;
 		if(!this.state.userInfo){
 			userCard = (<div onClick={this.login}>
-							<div className="avatar-wrap">
-									<img src='/src/img/user/avatar@2x.png' />
-							</div>
+							<div className="avatar-wrap"><span className="iconfont icon-shu_1"></span></div>
 							<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
 						</div>)
 		}else{
 			userCard = (<div>
 						<div className="avatar-wrap" onClick={this.login}>
-							<img src={ this.state.userInfo.portraitUrl || '/src/img/user/avatar@2x.png'} />
+							{
+								this.state.userInfo.portraitUrl ?
+								 <img src={this.state.userInfo.portraitUrl} />:
+								 <span className="iconfont icon-shu_1"></span>
+							}
 						</div>
 						<div className="username"><p className="f-ellipsis" onClick={this.login}>{this.state.userInfo.user_name || this.state.userInfo.mobile_num}</p><p onClick={this.gotoBalance}>艾豆余额：{this.state.userInfo.balance/100}艾豆</p></div>
 					</div>)
@@ -217,7 +229,6 @@ var UserList = React.createClass({
 				<div className="g-main g-main-4">
 					<div className="m-userblock g-scroll">
 						<section className="avatar-block f-pr">
-							<img src="/src/img/user/bg@2x.png" className="bg"/>
 								{userCard}
 						</section>
 						{

@@ -1,7 +1,7 @@
 import React from 'react'
 
 if(typeof window !== 'undefined'){
-	require('../../css/iconfont1.css');
+	require('../../css/iconfont.css');
 	require('../../css/imread.css');
 }
 

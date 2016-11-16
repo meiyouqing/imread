@@ -2,7 +2,7 @@ import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import Loading from './loading'
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
@@ -245,7 +245,7 @@ var Introduce = React.createClass({
 	},
 	render: function() {
 		var header, loading, introduceTabs, detail;
-		var right = <span onClick={this.gotoShelf} className="icon-s icon-shelf-s f-fr"></span>
+		var right = <span onClick={this.gotoShelf} className="iconfont icon-shujia f-fr"></span>
 		if (!this.state.book || !this.isUpdate) {
 			header = <Header title={null} right={right}  path={this.props.route} />
 			if(GLOBAL.isRouter(this.props))	//兼容低端安卓
@@ -353,7 +353,7 @@ var IntroduceTabs = React.createClass({
 		var list = JSON.parse(JSON.stringify(this.props.chapterlist || []));
 		list= this.state.orderSeq?list:list.reverse();
 		const orderIcon = this.state.showOrderIcon?
-				<span className={"icon-n icon-b-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span>:
+				<span className={"iconfont icon-paixu"+(this.state.orderSeq?" rev":" seq")} onClick={this.troggleOrderList}></span>:
 				null;
 		const path = typeof window === 'undefined'?
 				global.pathname:

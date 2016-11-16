@@ -14,7 +14,7 @@
 .u-bookIntroduce .chapter{line-height: 50px;color: #000;cursor: pointer;font-size: 15px;padding: 0 15px;border-bottom: 1px solid #eeeeee;}
 .u-bookIntroduce .chapter.current{color: #0096aa}
 .u-bookIntroduce .chapter .name{display: block;line-height: 50px}
-.u-bookIntroduce .chapter .name.lock{color: #777777;}
+.u-bookIntroduce .chapter .lock{color: #777777;}
 .u-bookIntroduce .chapter.current .name.lock{color: #0096aa}
 .u-bookIntroduce .imgWrap-133{width: 100px; height: 133.3333px;overflow: hidden;}
 

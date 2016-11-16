@@ -1,6 +1,6 @@
 import myEvent from '../modules/myEvent'
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import AJAX from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
@@ -135,7 +135,7 @@ var mixins = function() {
         },
         isLogin: function() {
             // return !!GLOBAL.cookie('userToken')
-            return !!storage.get('userToken','string');
+            return !!storage.get('userToken','string') || GLOBAL.cookie('token');
         },
         goLogin: function(callback) {
             // var ua = window.navigator.userAgent.toLowerCase();

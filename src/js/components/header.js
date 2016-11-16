@@ -1,5 +1,5 @@
 import myEvent from '../modules/myEvent'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import parseQuery from '../modules/parseQuery';
@@ -29,7 +29,7 @@ var Header = React.createClass({
 		// });
 
 		return {
-			right:<a className="icon-s icon-searcher f-fr" onClick={sHandle}></a>,
+			right:<a className="iconfont icon-sousuo f-fr" onClick={sHandle}></a>,
 			title: GLOBAL.title || '艾美阅读'
 		};
 	},
@@ -75,7 +75,7 @@ var Header = React.createClass({
 				{
 					this.state.isskip?
 					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
-					(this.props.left?this.props.left:<a className="f-fl icon-back icon-s" onClick={this.goBack}></a>)
+					(this.props.left?this.props.left:<a className="f-fl iconfont icon-left" onClick={this.goBack}></a>)
 				}
 				{this.props.right}
 				{this.props.middle}

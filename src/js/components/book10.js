@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import React from 'react'
 var Img = require('./img');
 var Book10 = React.createClass({
@@ -19,12 +19,12 @@ var Book10 = React.createClass({
 					<div className="f-b-block">
 						<span className="book-name f-ellipsis">{this.props.data.name || this.props.data.sheet_name}</span>
 						<div className="f-fr last">
-							<span className="icon-l icon-book"></span>
+							<span className="iconfont icon-2273"></span>
 							<span >{(this.props.data.count || this.props.data.content_cnt)+'本'}</span>
 						</div>
 
 						<div className="f-fr">
-							<span className="icon-l icon-love"></span>
+							<span className="iconfont icon-heart"></span>
 							<span>{this.props.data.collect_uv || 0}</span>
 						</div>
 					</div>

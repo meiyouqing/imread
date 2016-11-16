@@ -1,5 +1,5 @@
 import storage from '../modules/storage'
-import { browserHistory } from 'react-router'
+import browserHistory from 'react-router/lib/browserHistory'
 import parseQuery from '../modules/parseQuery'
 
 if(typeof window !== 'undefined'){
@@ -173,19 +173,22 @@ const GLOBAL = {
 		// write
         if (value !== undefined) {
                 options = options || {};
-                if (typeof options.expires === 'number') {
-                        var days = options.expires, t = options.expires = new Date();
-                        t.setDate(t.getDate() + days);
+				var dt = options.expires;
+                if (typeof dt === 'number') {
+                        var days = dt;
+						dt = new Date();
+                        dt.setDate(dt.getDate() + days);
+						dt = dt.toUTCString();
                 }
                 return (document.cookie = [
                         encodeURIComponent(key),
                         '=',
                         encodeURIComponent(value),
-                        options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                        options.expires ? '; expires=' + dt : '', // use expires attribute, max-age is not supported by IE
                         options.path ? '; path='+options.path:'; path=/',
                         options.domain ? '; domain=' + options.domain :'',
                         options.secure ? '; secure=' + options.secure :''
-                ].join(''));
+                ].join(''));				
         }
         // read
         var cookies = document.cookie.split('; ');
@@ -205,9 +208,11 @@ const GLOBAL = {
 
         return result;
 	},
-	removeCookie: function(key,path) {
+	removeCookie: function(key,path,domain) {
+		path = path || '/';
+		domain = domain || location.hostname;
 		if (GLOBAL.cookie(key) !== undefined) {
-                GLOBAL.cookie(key, '', {expires: -1,path:path});
+                GLOBAL.cookie(key, '', {expires:'Thu, 01-Jan-1970 00:00:01 GMT',path,domain});
                 return true;
         }
         return false;
@@ -268,10 +273,17 @@ const GLOBAL = {
 		} else {
 			if (typeof res.error === 'string') {
 				POP.alert(res.error);
+				return true;
 			} else {
-				POP.alert(res.error.detail);
+				if(typeof res.error.error == 'string'){
+					POP.alert(res.error.error);
+					return true;
+				}else if(typeof res.error.detail == 'string'){
+					POP.alert(res.error.detail);
+					return true;
+				}
 			}
-			return true;
+			return false;
 		}
 	},
 	noop: function() {},
