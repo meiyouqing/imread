@@ -44,9 +44,11 @@ var UserInfo = React.createClass({
 				storage.rm('userToken');
 				GLOBAL.removeCookie('token','/','.imread.com');
 				this.disPatch('updateUser');
-				if(GLOBAL.cookie('loadingType') === 'qq') {
-					QC.Login.signOut();
-				}
+				// if(GLOBAL.cookie('loadingType') === 'qq' && typeof QC !== 'undefined') {
+				// 	GLOBAL.removeCookie('loadingType','/');
+				// 	QC.Login.signOut();
+				// }
+				// console && console.log(path)
 				GLOBAL.goBack(path);
 			}.bind(this));
 		}.bind(this));

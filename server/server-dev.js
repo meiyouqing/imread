@@ -38,11 +38,13 @@ app.use(webpackHotMiddleware(compiler))
 app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
 
 // app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
+//TODO resolve this
+app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{
+  console.log('zzzzzzzz > '+req.url);
+  res.end();
+})
 // route the pay rout resolve reading page
-app.get('/pay',(req, res)=>{
-    res.send(renderFullPage('',{}));
-});
-app.get(/\/reading\/|\/shelf/,(req, res)=>{
+app.get(/\/reading\/|\/shelf|\/pay/,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
 app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
@@ -60,7 +62,6 @@ app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
   })
 });
 app.get('*', (req, res) => {
-  if(/(error|undefined|favicon\.ico)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message)
