@@ -121,7 +121,8 @@ function renderFullPage (html, preloadedState){
         <title>艾美阅读-发现阅读之美</title>
         <link href="/p/style.css" rel="stylesheet" type="text/css"></link>
         <link href="//at.alicdn.com/t/font_smbelzs6o6dh1tt9.css" rel="stylesheet" type="text/css"></link>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
       </head>
       <body>
