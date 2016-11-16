@@ -38,11 +38,13 @@ app.use(webpackHotMiddleware(compiler))
 app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
 
 // app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
+//TODO resolve this
+app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{
+  console.log('zzzzzzzz > '+req.url);
+  res.end();
+})
 // route the pay rout resolve reading page
-app.get('/pay',(req, res)=>{
-    res.send(renderFullPage('',{}));
-});
-app.get(/\/reading\/|\/shelf/,(req, res)=>{
+app.get(/\/reading\/|\/shelf|\/pay/,(req, res)=>{
     res.send(renderFullPage('',{}));
 });
 app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
@@ -60,7 +62,6 @@ app.get(/\/sdk\/sdk\.\d+/,(req, res)=>{
   })
 });
 app.get('*', (req, res) => {
-  if(/(error|undefined|favicon\.ico)$/.test(req.url)) return;  //TODO resolve this
   match({ routes, location: req.url }, (err, redirect, props) => {
     if (err) {
       res.status(500).send(err.message)
@@ -121,7 +122,8 @@ function renderFullPage (html, preloadedState){
         <title>艾美阅读-发现阅读之美</title>
         <link href="/p/style.css" rel="stylesheet" type="text/css"></link>
         <link href="//at.alicdn.com/t/font_smbelzs6o6dh1tt9.css" rel="stylesheet" type="text/css"></link>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
       </head>
       <body>
