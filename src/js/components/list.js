@@ -34,8 +34,12 @@ var List = React.createClass({
 		if(!this.isMounted()) return;
 		this.isLoading = false;
 		var pathname = this.props.location.pathname.split('/');
-		if(/^search./.test(pathname[pathname.length-1])){
+		if(/^search\./.test(pathname[pathname.length-1])){
 			if (!data.contentlist.length) {
+				if(!this.state.bookList){
+					this.setState({empty:true});
+					return;
+				}
 				this.setState({
 					scrollUpdate:false,
 					noMore:true
@@ -46,6 +50,8 @@ var List = React.createClass({
 				recommend: data,
 				resultCount: data.result_count,
 				bookList: this.state.scrollUpdate? this.state.bookList.concat(data.contentlist):data.contentlist,
+				UFO:false,
+				empty:false,
 				scrollUpdate: false
 			})
 			//设置GLOBAL book name
@@ -84,6 +90,7 @@ var List = React.createClass({
 			bookList: null,
 			scrollUpdate: false,
 			UFO:false,
+			empty:false,
 			title: '艾美阅读'
 		}
 	},
@@ -118,6 +125,7 @@ var List = React.createClass({
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
+				|| this.state.empty !== nextState.empty
 				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProps.children
 				|| this.props.params.listId !== nextProps.params.listId;
@@ -145,8 +153,8 @@ var List = React.createClass({
 		if(this.state.noMore){
 			sLoading = null;
 		}
-		if(this.state.UFO){
-			noData = (<div className="g-main g-main-1"><NoData type="UFO" /></div>);
+		if(this.state.UFO || this.state.empty){
+			noData = (<div className="g-main g-main-1"><NoData type={this.state.UFO?"UFO":"emptySearch"} /></div>);
 			content = null;
 			result_count = null;
 			sLoading = null;

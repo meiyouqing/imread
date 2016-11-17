@@ -118,7 +118,7 @@ var Balance = React.createClass({
 					           "paySign" : data.success.paySign //微信签名 
 					       },
 					       function(res){
-					           that.setState({payLoading: false});   alert('done')  
+					           that.setState({payLoading: false}); 
 					           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 					           		that.getBalance();
 					           		// that.disPatch('updateUser');
