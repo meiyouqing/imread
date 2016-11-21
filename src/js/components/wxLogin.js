@@ -34,7 +34,7 @@ var WxLogin = React.createClass({
 		if(data.code == 200){
 			storage.set('userToken', 'loaded');
 			if(this.from.callback){
-				browserHistory.replace(decodeURIComponent(this.from.callback));
+				window.location = decodeURIComponent(this.from.callback);
             }else{
                 browserHistory.replace('/');
             }
