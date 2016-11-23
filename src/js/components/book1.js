@@ -8,14 +8,18 @@ var Book1 = React.createClass({
 		return this.props.data !== nextProps.data;
 	},
 	render: function() {
-		//console.log(this.props)
 		var hrefStr;	
-		if(this.props.fromIntroduce){
-			var lastPart = this.props.pathname.split('/').pop();
-			hrefStr = this.props.pathname.replace(lastPart,'') + 'introduce.'+this.props.data.content_id;
+		var cludeIntro = location.pathname.match(/\/book\/introduce./);
+		// if(this.props.fromIntroduce){
+		// 	var lastPart = this.props.pathname.split('/').pop();
+		// 	hrefStr = this.props.pathname.replace(lastPart,'') + 'introduce.'+this.props.data.content_id;
+		// }
+		if(cludeIntro){
+			hrefStr = location.pathname.split(cludeIntro)[0]+cludeIntro+this.props.data.content_id;
 		}
 		else
 			hrefStr = GLOBAL.typeHref(this.props.data);
+
 		return (
 			
 			<li className="u-book-1 f-clearfix">

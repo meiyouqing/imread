@@ -35,6 +35,9 @@ var Detail = React.createClass({
 		}];
 		this.shelfAdding(param,this.props.onShelf);
 	},
+	gotoAuthor: function(){
+		browserHistory.push(GLOBAL.setHref('author/alist.'+encodeURIComponent(this.props.book.author)))
+	},
 	gotoDownload: function(){
 		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
@@ -63,7 +66,7 @@ var Detail = React.createClass({
 					</div>	
 					<div className="bookinfo">
 						<div className="title">{this.props.book.book_name}</div>
-						<div className="author">{this.props.book.author}</div>
+						<div className="author" onClick={this.gotoAuthor}>{this.props.book.author}</div>
 						<div className="wordCount">{this.props.book.word_count + "字/"+ (this.props.book.status == "0" ? "连载中" : "已完本")}</div>
 						<div className="bookSource"><span>{this.props.book.source_name}</span></div>
 						<div className="buttons f-clearfix">

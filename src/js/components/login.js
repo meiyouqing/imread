@@ -34,52 +34,71 @@ var Login = React.createClass({
 			phone: this.refs.mobile_num.value,
 			password: this.refs.password.value//,
 		};
+		var vcode = this.refs.key.value;
 		if (!GLOBAL.assertNotEmpty(postData.phone, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(postData.phone, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
-
+		if (!GLOBAL.assertNotEmpty(vcode, '请输入验证码')) {return ;}
 		that.loading = true;
-		AJAX.go('login',postData, function(data) {
-			that.loading = false;
-			// var options = {
-			// 	expires: 1000
-			// };
-			that.loading = false;
-			
-			GLOBAL.setUser({
-				phone: postData.phone,
-				token: postData.token
-			});
-			if(data.code == 200){
-				if(!storage.set('userToken', data.token)){
-					POP.alert('无法正常登录！您可能已开启无痕浏览。如需继续登录，请关闭无痕浏览模式！');
-					return;
-				};
-				that.disPatch('updateUser');
-				that.disPatch('updateMall');
-				GLOBAL.header.userId = data.userInfo.user_id;
-				//判断登陆后的跳转
-				if(that.from && that.from.skipurl){
-					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
-				}else{
-					GLOBAL.goBack(location.pathname.replace(/\/login$/,''));
-					setTimeout(()=>{myEvent.execCallback('login')},10);
-				}
-
-			} else {
-				if(typeof data.error === 'string')
-					POP._alert(data.error);
-				else 
-					for(var key in data.error[0]){
-						POP._alert(data.error[0][key])
+ 		this.checkVcode(function(){
+ 		
+			AJAX.go('login',postData, function(data) {
+				that.loading = false;
+				// var options = {
+				// 	expires: 1000
+				// };
+				that.loading = false;
+				
+				GLOBAL.setUser({
+					phone: postData.phone,
+					token: postData.token
+				});
+				if(data.code == 200){
+					if(!storage.set('userToken', data.token)){
+						POP.alert('无法正常登录！您可能已开启无痕浏览。如需继续登录，请关闭无痕浏览模式！');
+						return;
+					};
+					that.disPatch('updateUser');
+					that.disPatch('updateMall');
+					GLOBAL.header.userId = data.userInfo.user_id;
+					//判断登陆后的跳转
+					if(that.from && that.from.skipurl){
+						window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+					}else{
+						GLOBAL.goBack(location.pathname.replace(/\/login$/,''));
+						setTimeout(()=>{myEvent.execCallback('login')},10);
 					}
+
+				} else {
+					if(typeof data.error === 'string')
+						POP._alert(data.error);
+					else 
+						for(var key in data.error[0]){
+							POP._alert(data.error[0][key])
+						}
+				}
+				
+			}, function(res) {
+				that.loading = false;
+				GLOBAL.defaultOnError(res);
+			});
+			return false;
+ 		}.bind(this))
+
+	},
+	checkVcode: function(callback){
+		if(!this.refs.key.value)	return;
+		AJAX.private_go('GET','http://192.168.0.3:8005/vcode/verify',{vcode: this.refs.key.value}, function(data) {
+			if(data.code !== 200){
+				POP._alert('验证码错误');
+				this.switchCode();
+				this.loading = false;
+			} else {
+				callback();
 			}
-			
-		}, function(res) {
-			that.loading = false;
-			GLOBAL.defaultOnError(res);
-		});
-		return false;
+		}.bind(this),function(res){
+			this.loading = false;
+		}.bind(this),false,true);
 	},
 	setLogin: function(){
 		this.setState({status: true});
@@ -255,6 +274,10 @@ var Login = React.createClass({
 			   },that.onloginErr)
 		}
 	},
+	switchCode: function(){
+		this.refs.key.value = '';
+		this.refs.vcode.src = 'http://192.168.0.3:8005/vcode?date='+ new Date().getTime()
+	},
 	do_result: function(data,type){
 		var that = this;
 		if(data.code == 200){
@@ -329,6 +352,16 @@ var Login = React.createClass({
 								</div>
 								<div className="u-inputline-2 f-clearfix">
 										<input className="u-input-2" placeholder="密码" type="password" ref="password" onClick={this.handleFocus} onBlur={this.handleBlur} />
+								</div>
+								<div className="u-vcode">
+									<div className="u-inputline-2 f-clearfix w-120 f-fl">
+										<input className="u-input-2" placeholder="验证码" type="tele" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
+									</div>
+									<img className="f-fl" ref="vcode" src="http://192.168.0.3:8005/vcode" />
+									<div className="f-fr switch" onClick={this.switchCode}>
+										<p>看不清</p>
+										<p>换一张</p>
+									</div>
 								</div>
 
 								<div className="u-inputline">

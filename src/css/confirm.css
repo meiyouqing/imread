@@ -32,11 +32,13 @@
 
 
 .UI_selecter{position: absolute; bottom: 0;width: 94%;height:244px;margin: 0 3%;left: 0;z-index: 100;transition: all .2s;-webkit-transition: all .2s;transform: translateY(244px);-webkit-transform: translateY(244px);}
-.UI_selecter.show{transform: translateY(0);-webkit-transform: translateY(0);}
+.UI_selecter.show,.UI_selecter.ph_selector.show{transform: translateY(0);-webkit-transform: translateY(0);}
 .UI_selecter > ul,.UI_selecter  button{background: #fff;text-align: center;border-radius: 13px;font-size: 20px;color: #007aff;}
 .UI_selecter > ul >li {border-bottom: 1px solid #eee;}
 .UI_selecter > ul >li:last-child{border: 0;}
 .UI_selecter  button{display: inline-block; width: 100%;margin: 6px 0 8px;}
+
+.UI_selecter.ph_selector{position: absolute; bottom: 0;width: 94%;height:300px;margin: 0 3%;left: 0;z-index: 100;transition: all .2s;-webkit-transition: all .2s;transform: translateY(300px);-webkit-transform: translateY(300px);}
 
 .UI_selecter > ul,.UI_selecter button{line-height: 57px;}
 
@@ -46,4 +48,5 @@
 	}
 
 	.UI_selecter{height: 208px}
+	.UI_selecter.ph_selector{height: 254px;}
 }

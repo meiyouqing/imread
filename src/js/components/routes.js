@@ -38,6 +38,7 @@ import SelfBuild from './selfbuild'
 import WxLogin from './wxLogin'
 import SDK from './sdk'
 import AlyPay from './alyPay'
+import RechargeDetails from './recharge_details'
 
 //按需加载的模块 Reading Shelf
 function getReading(nextState, cb){
@@ -78,6 +79,7 @@ var readWrap = (
 	)
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
+		<Route path="author/:listId"  onLeave={scrollResetHandle} component={List} />
 		<Route path="shelf" getComponent={getShelf}>
 			<Route path="book/:introduceId" component={Introduce}>
 				{readWrap}
@@ -126,6 +128,7 @@ var payWrap = (
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />
 			</Route>
+			<Route path="recharge_details/:details" component={RechargeDetails} />
 		</Route>
 	)
 

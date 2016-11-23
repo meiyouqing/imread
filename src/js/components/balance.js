@@ -65,7 +65,7 @@ var Balance = React.createClass({
 	},
 	orderHandle:function(){
 		var ordered = this.state.list[this.state.active];
-		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId));
+		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId+location.search));
 	},
 	WxOrder: function(){
 		AJAX.go('pay',{
@@ -148,6 +148,7 @@ var Balance = React.createClass({
 	render: function () {
 		
 		var content,wxPayLoading=null;
+		var right = <Link className="u-btn-font f-fr" to={GLOBAL.setHref('recharge_details/datails.1.10')}>明细</Link>;
 		if(this.state.payLoading)	wxPayLoading = <Loading />;
 // console.log(this.state.loading)
 		if (this.state.loading) {
@@ -198,7 +199,7 @@ var Balance = React.createClass({
 		}
 		return (
 			<div className="gg-body">
-				<Header right={false} left={this.state.back} title={'艾豆充值'} path={this.props.route}/>
+				<Header right={right} left={this.state.back} title={'艾豆充值'} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="g-scroll m-balance">
 						{content}

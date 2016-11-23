@@ -14,7 +14,7 @@ var List = React.createClass({
 	isLoading: false,
 	getList: function(param){
 		if(!this.isMounted()) return;
-		var hash = param?param:this.props.params.listId;
+		var hash = param?param:this.getListId();
 		AJAX.init(hash);
 		AJAX.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
@@ -95,10 +95,18 @@ var List = React.createClass({
 		}
 	},
 	componentWillMount:function(){
-		this.usePreload(this.props.params.listId);
+		this.usePreload(this.getListId());
+	},
+	getListId: function(){
+		var listId = this.props.params.listId;
+		if(typeof listId === 'string')
+			return listId;
+		else 
+			return listId[listId.length-1]
 	},
 	componentDidMount: function(){
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
+		if(location.pathname.match(/\/alist./)){GLOBAL.title = this.APIParts('listId')[1]}
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProps,nextState) {

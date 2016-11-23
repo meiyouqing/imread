@@ -9,7 +9,7 @@ var Config = {
 };
 var API={
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
-	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
+	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id:1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
@@ -64,7 +64,9 @@ var API={
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
 	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
-	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}}
+	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}},
+	datails: {method: 'GET',base:'/api/v2/me/particulars',param:{pages:1,contents:10}},
+	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}}
 };
 
 //接口缓存机制
@@ -124,8 +126,8 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
-	// var urlBase = 'http://192.168.0.34:9090';
-	// var urlBase = 'http://192.168.0.251:8080';
+	var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'http://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -188,7 +190,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
     	onError(error)
   	})
 }
-function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
+function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader) {
 	method = method || 'POST';
 	var time = 10000;
 	var timeout = false;
@@ -244,7 +246,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 	if (method === 'POST') {
 		request.open(method, url);
 		request.withCredentials = true;
-		setRequestHeaders(request);
+		if(!noHeader) setRequestHeaders(request);
 		if(postdata.formdata){
 			//request.setRequestHeader("Content-Type", "multipart/form-data");
 			postdata = postdata.formdata;
@@ -262,7 +264,7 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 		// isYulan = isYulan && /yulan=1/.test(window.location.search);
 		request.open(method, getGETUrl(url, postdata));
 		request.withCredentials = true;
-		setRequestHeaders(request);
+		if(!noHeader) setRequestHeaders(request);
 		request.send(null);
 	}
 }
@@ -320,6 +322,9 @@ var AJAX = {
 	},
 	go: function(n,param,callback,onerror,isJson){
 		GETJSON(this.API[n].method, this.API[n].base, param, callback, onerror,isJson)
+	},
+	private_go: function(method, url, postdata, callback, onError,isJson,noHeader){
+		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader)
 	},
 	getJSON: GETJSON
 }
