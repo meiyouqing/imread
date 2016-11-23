@@ -15,6 +15,8 @@ import sdkPost from './sdkPost'
 import { loadingHTML, renderFullPage } from './htmlContent'
 
 import routes from '../src/js/components/routes'
+
+import AJAX from '../src/js/modules/AJAX'
 // import { Provider } from 'react-redux'
 
 // import configureStore from '../src/js/store/configureStore'
@@ -27,7 +29,20 @@ app.disable('x-powered-by');
 
 
 app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHeader}))
-
+//语音朗读api
+app.get('/baiduClientCredentials',(req,res)=>{
+  AJAX.getJSON('POST','https://openapi.baidu.com/oauth/2.0/token',{
+    grant_type:'client_credentials',
+    client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
+    client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
+  },sec,err,true);
+  function sec(data){
+    console.log(data)
+  }
+  function err(err){
+    console.log(err.error+'description: '+err.error_description)
+  }
+})
 app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{
   console.log('zzzzzzzz > '+req.url);
   res.end();

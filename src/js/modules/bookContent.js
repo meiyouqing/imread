@@ -34,6 +34,7 @@ var BookContent = (function() {
 				if(res.success){
 					res.success['cm'] = sourceConfig.cm;
 					if(res.success.loginSubmitUrl){
+						
 						gotoMigu(sourceConfig);
 					}else{
 						options.callback(res,true);
@@ -41,8 +42,7 @@ var BookContent = (function() {
 				}
 					
 			}, function(err) {
-				// console.log(err)
-				if(options.noCross){return} //不要跳转
+				console.log(err);return;
 				gotoMigu(sourceConfig);
 			});
 		};
@@ -54,6 +54,8 @@ var BookContent = (function() {
 		}
 
 		var gotoMigu = function(sourceConfig){
+			if(options.noCross){return} //不要跳转
+
 			//跳转之前先回到书籍详情，不然会循环跳转
 			var path = location.pathname;
 			path = path.replace(/\/reading.*$/,'');

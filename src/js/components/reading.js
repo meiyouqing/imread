@@ -92,6 +92,7 @@ var styleMixins = {
 
 var chapterMixins = {
 	getChapterlist: function(next) {
+		this.audioRead();
 		if (this.state.getChapterlistLoading || this.state.chapterlistNoMore) {
 			return ;
 		}
@@ -187,6 +188,8 @@ var Reading = React.createClass({
 	mixins: [styleMixins, chapterMixins, Mixins()],
 	getInitialState: function() {
 		return {
+			ttsModer:false,
+			ttsIndex:0,
 			time: Date.now(),
 			bookName: '艾美阅读',
 			chapterName: '',
@@ -441,6 +444,7 @@ var Reading = React.createClass({
 		that.getIntroduce();
 		//that.getChapterlist();
 		if(!data.content) return;
+
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
@@ -660,6 +664,48 @@ var Reading = React.createClass({
 		var bookid = this.APIParts('readingId')[3];
 		this.getAd_hc(bookid);
 	},
+	playHandle:function(){
+		if(!this.state.ttsModer){
+			this.setState({ttsModer:true})
+			POP._alert('进入语音朗读模式');
+		}
+		this.player.play();
+	},
+	audioRead:function(){
+		//audio reading 
+		let ttsIndex = 0;
+		const len = this.state.data.content.length;
+		const access_token = '24.9871614f3a3a6fca1c621fdca104b9a4.2592000.1482378570.282335-6772709';
+		const cuid = 'ewfwiiw883';
+		
+		
+		doinsert.bind(this)();
+		this.player.onended = (e)=>{
+			ttsIndex++;
+			if(ttsIndex >= len) return;
+			this.setState({ttsIndex});
+			this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=5&pit=5&vol=5&per=0&tex=${this.state.data.content[ttsIndex]}`;
+			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
+			this.player.oncanplay = ()=>{
+				this.player.play();
+			}
+		};
+
+		function doinsert(){
+			if(this.player) document.body.removeChild(this.player);
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=5&pit=5&vol=5&per=0&tex=${this.state.data.content[ttsIndex]}`;
+			// this.audioSource = document.createElement('source');
+			//console.log(params)
+			this.player = document.createElement('video');
+			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
+			this.player.setAttribute('type','audio/mp3');
+			// this.player.appendChild(this.audioSource);
+			// this.player.setAttribute('autoplay','');
+			this.player.id = 'audioRead';
+			document.body.appendChild(this.player);
+		}
+	},
 	componentDidMount:function(){
 		this.startTime = Date.now();
 		setTimeout(function(){
@@ -681,7 +727,7 @@ var Reading = React.createClass({
 		this.states = this.props.location.state;
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
-		// this.isdownLoad();
+
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
@@ -864,7 +910,7 @@ var Reading = React.createClass({
 		var chapterlist = {};
 		chapterlist.list = this.state.chapterlist;
 		var list = JSON.parse(JSON.stringify(chapterlist)).list;
-
+		
 		if(!this.states) 
 			this.states = {book_name: '',author:''}
 
@@ -933,6 +979,7 @@ var Reading = React.createClass({
 
 		return (
 			<div className="gg-body m-reading-body" ref="container">
+				<button type="button" className="u-playBtn" onClick={this.playHandle}>play</button>
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
 					{this.state.intercutXp}
 					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
@@ -1034,8 +1081,15 @@ var Reading = React.createClass({
 					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
-								return <p key={i} dangerouslySetInnerHTML={{__html: p}}></p>;
-							})
+								return (
+									<p 
+								className={this.state.ttsModer&&(i === this.state.ttsIndex)?'ttsReading':''} 
+								ref={this.state.ttsModer&&(i === this.state.ttsIndex)?'ttsReading':''} 
+								key={i} 
+								dangerouslySetInnerHTML={{__html: p}}>
+								</p>
+								);
+							}.bind(this))
 						}
 					</section>
 					{intercut}

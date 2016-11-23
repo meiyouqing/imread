@@ -326,7 +326,10 @@
 }
 */
 
-
+/* audio reading */
+.u-playBtn{position: fixed;z-index:999999;top: 100px;right: 20px;background: blue;color: white;}
+#audioRead{position: fixed;z-index:-999;top: -9999px;visibility: hidden;}
+.m-reading .u-readingContent .ttsReading{color: blue;}
 @media screen and (max-width: 340px) {
 	.m-reading-body .font-list .line{width: 35px; }
 }
