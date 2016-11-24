@@ -237,7 +237,7 @@ var Reading = React.createClass({
 		// 		break;
 		// 	}
 		// }
-
+		readLog.chapter_offset = scrollarea.scrollTop;
 		readLog.name = this.state.introduce.book_name;
 		readLog.author = this.state.introduce.author;
 		readLog.big_coverlogo = this.state.introduce.big_coverlogo;
@@ -245,8 +245,6 @@ var Reading = React.createClass({
 		readLog.source_bid = this.bid;
 		readLog.source_id = this.source_id;
 		readLog.chapter_id = this.chapterid;
-		readLog.offset = {};
-		readLog.offset[this.chapterid] = scrollarea.scrollTop;
 		readLogs[readLog.content_id] = readLog;
 		storage.set('readLogNew', readLogs);
 	},
@@ -446,7 +444,7 @@ var Reading = React.createClass({
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
-		setTimeout(function(){
+		// setTimeout(function(){
 			that.setState({
 				data: data,
 				loading: false,
@@ -455,7 +453,7 @@ var Reading = React.createClass({
 				order: false
 			}, that.getChapterlist);
 			if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
-		}.bind(this),800);
+		// }.bind(this),800);
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
@@ -681,7 +679,6 @@ var Reading = React.createClass({
 		}
 		//扉页信息
 		this.states = this.props.location.state;
-		this.timeOut();
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 		// this.isdownLoad();
@@ -723,12 +720,13 @@ var Reading = React.createClass({
 		if(!scrollarea){return};
 		//第一次进入阅读跳到上次阅读的地方
 		if(this.bookmarkFlag){
-			//console.log(storage.get('readLogNew'))
+			// console.log(storage.get('readLogNew'));console.log(this.APIParts('readingId'));
 			var obj = storage.get('readLogNew')[this.APIParts('readingId')[3]];
-			var offset = obj? obj.offset[this.chapterid] : false;
-			scrollarea.scrollTop = offset? offset-200 : 0;
+			var offset = obj? obj.chapter_offset : 0;
+			// console.log(offset);console.log(scrollarea)
+			scrollarea.scrollTop = offset;
+			this.bookmarkFlag = false;
 		}
-		this.bookmarkFlag = false;
 		//scrollarea.addEventListener('touchstart',this.handleClick);
 		if (scrollarea.getAttribute('data-events') != '1') {
 			scrollarea.setAttribute('data-events', '1');
@@ -809,23 +807,6 @@ var Reading = React.createClass({
 		this.orderedBook.push(cid)
 		this.setState({orderedBook: this.orderedBook});
 	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		return this.state.loading !== nextState.loading 
-				|| this.state.data !== nextState.data
-				|| this.state.showChapterlist !== nextState.showChapterlist
-				|| this.state.showSettingFont !== nextState.showSettingFont
-				|| this.state.showSetting !== nextState.showSetting
-				|| this.state.chapterlist !== nextState.chapterlist
-				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
-				|| this.state.showGuide !== nextState.showGuide
-				|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)||true
-				|| this.props.children !== nextProps.children
-				|| this.props.params !== nextProps.params
-				|| this.state.introduce !== nextState.introduce
-				|| this.state.orderData !==nextState.orderData
-				|| this.state.orderedBook !==nextState.orderedBook
-				|| this.state.intercutList !== nextState.intercutList;
-	},
 	
 	hideGuide:function(e) {
 		if(!this.isMounted()){return;}
@@ -854,9 +835,23 @@ var Reading = React.createClass({
 		this.getContent();
 		this.setState({order: false});
 	},
-	timeOut: function(){
-
-	},
+	// shouldComponentUpdate: function(nextProps, nextState) {
+	// 	return this.state.loading !== nextState.loading 
+	// 			|| this.state.data !== nextState.data
+	// 			|| this.state.showChapterlist !== nextState.showChapterlist
+	// 			|| this.state.showSettingFont !== nextState.showSettingFont
+	// 			|| this.state.showSetting !== nextState.showSetting
+	// 			|| this.state.chapterlist !== nextState.chapterlist
+	// 			|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading
+	// 			|| this.state.showGuide !== nextState.showGuide
+	// 			|| JSON.stringify(this.state.style) !== JSON.stringify(nextState.style)
+	// 			|| this.props.children !== nextProps.children
+	// 			|| this.props.params !== nextProps.params
+	// 			|| this.state.introduce !== nextState.introduce
+	// 			|| this.state.orderData !==nextState.orderData
+	// 			|| this.state.orderedBook !==nextState.orderedBook
+	// 			|| this.state.intercutList !== nextState.intercutList;
+	// },
 	render:function(){
 		var currentRoute = location.pathname.split('/');
 		currentRoute.pop();

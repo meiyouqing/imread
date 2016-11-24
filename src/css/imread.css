@@ -139,6 +139,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-self-build .m-block.m-block-top{margin-top: 0px;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
 .m-block > .title h2{font-size: 17px;color: #000;}
+.m-block.m-block-catgory > .title h2{text-align: center;font-size: 16px;}
 .m-block > .title h2.style-2{color: #EA2510;}
 .m-block > .title h2 .iconfont{margin-right: 12px;font-weight: 100;font-size: 15px;}
 .m-block > .title .batchChange{}
@@ -191,7 +192,10 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-6{float: left;box-sizing: border-box;width: 50%;border-bottom: 1px solid #EEEEEE;margin-top: 0;}
 .u-book-6 a {display: block;margin-top: 10px;text-align: center;}
 .u-book-6 a img{width: 100px;height: auto;margin-top: 10px;}
-.u-book-6 a span{display: block;font-size: 12px;height: 40px;line-height: 30px;color: #666666;margin: 0;}
+.subCat-6 a .infos{padding: 0 10%;}
+.u-book-6 a .infos span{display: block;height: 40px;line-height: 30px;margin: 0;}
+.subCat-6 a .infos .name{color: #333;font-size: 15px;}
+.subCat-6 a .infos .count{color: #999;font-size: 12px;}
 .u-book-6:nth-child(2n+1){border-right: 1px solid #EEEEEE;}
 .empty-book-6{position: relative;left: 1px;top: 1px;border-bottom: none;background: #FFFFFF;}
 

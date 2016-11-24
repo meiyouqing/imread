@@ -55,10 +55,12 @@ var ReadConfig = function(callback) {
 			}
 			
 			_config.time = Date.now();
-			if(callback)	callback(_config);
+			if(callback) callback(_config);
 			storage.set('readConfig', _config);
 		}, GLOBAL.noop);
 		//update = true;
+	}else{
+		if(callback) callback(_config);
 	}
 	return _config;
 };

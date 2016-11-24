@@ -16,7 +16,10 @@ var Book6 = React.createClass({
 			<li className="u-book-6">
 				<Link to={hrefStr}>
 					{img}
-					<span className="f-ellipsis">{this.props.data.name + (this.props.data.count ? ' ' + this.props.data.count : '')}</span>
+					<div className="infos f-clearfix">
+						<span className="f-ellipsis name f-fl">{this.props.data.name }</span>
+						<span className="count f-fr">{this.props.data.count ? this.props.data.count+'本' : ''}</span>
+					</div>
 				</Link>
 			</li>
 		);

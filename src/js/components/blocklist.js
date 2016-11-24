@@ -152,9 +152,9 @@ var Block6 = React.createClass({
 			emptyBook6 = <li className="u-book-6 empty-book-6"><a><span></span></a></li>;
 		}
 		return (
-			<section className="m-block">
+			<section className="m-block m-block-catgory">
 				<div className="title">
-					<h2><i className="iconfont icon-group"></i>{this.props.data.name}</h2>
+					<h2>{this.props.data.name}</h2>
 				</div>
 				<div className="content">
 					<ul className="subCat-6 f-clearfix">
