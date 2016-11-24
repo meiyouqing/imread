@@ -48,6 +48,7 @@ var styleMixins = {
 		this.setState({
 			showSettingFont: !this.state.showSettingFont
 		});
+		
 	},
 	setFontBg: function(e) {
 		e.stopPropagation();
@@ -92,7 +93,7 @@ var styleMixins = {
 
 var chapterMixins = {
 	getChapterlist: function(next) {
-		this.audioRead();
+		// this.audioRead();
 		if (this.state.getChapterlistLoading || this.state.chapterlistNoMore) {
 			return ;
 		}
@@ -190,6 +191,11 @@ var Reading = React.createClass({
 		return {
 			ttsModer:false,
 			ttsIndex:0,
+			showSetting_tts:false,
+			playing:false,
+			femaleVoice:true,
+			volum:3,
+			speed:3,
 			time: Date.now(),
 			bookName: '艾美阅读',
 			chapterName: '',
@@ -633,6 +639,13 @@ var Reading = React.createClass({
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
 	timeoutId:0,
+	toggleSettings_tts:function(){
+		if(!this.isMounted()) return;
+		clearTimeout(this.timeoutId);
+		this.timeoutId = setTimeout(()=>{
+			this.setState({showSetting_tts:!this.state.showSetting_tts});
+		},10)
+	},
 	toggleSettings: function() {
 		if(!this.isMounted()){return;}
 		clearTimeout(this.timeoutId);
@@ -653,6 +666,25 @@ var Reading = React.createClass({
 			});			
 		},10)
 	},
+	toggleChapterlist: function() {
+		if(!this.isMounted()){return;}
+		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
+			this.getChapterlist();
+		}
+		this.setState({
+			showChapterlist: !this.state.showChapterlist,
+			showSetting: false
+		});
+	},
+	togglePlay:function(condition){
+		if(this.state.ttsModer){
+			if(condition){
+				this.player.pause();
+			}else{
+				this.player.play();
+			}
+		}				
+	},
 	onVisibilitychange: function(){
 		if(isHidden()){
 			this.addRecentRead(this.book_id, this.chapterid);
@@ -666,44 +698,91 @@ var Reading = React.createClass({
 	},
 	playHandle:function(){
 		if(!this.state.ttsModer){
-			this.setState({ttsModer:true})
+			this.setState({ttsModer:true,showSetting:false,playing:true})
 			POP._alert('进入语音朗读模式');
+			//调节音量
+			const volumBtns = Array.prototype.slice.call(this.refs.volum.querySelectorAll('b'),0)
+			const speedBtns = Array.prototype.slice.call(this.refs.speed.querySelectorAll('b'),0)
+			volumBtns.forEach((v,i)=>{
+				v.onclick = ()=>{
+					this.setState({volum:i+1},this.playHandle);	
+					// this.player.volume = (i+1)*2/10;
+				}
+			});
+			speedBtns.forEach((v,i)=>{
+				const hammer = new Hammer(v);
+				hammer.on('tap',()=>{
+					this.setState({speed:i+1},this.playHandle)
+				})
+			})
 		}
-		this.player.play();
+		if(this.refs.scrollarea.scrollTop > 165){
+			const ps = this.refs.scrollarea.querySelectorAll('p');
+			const len=ps.length;
+			for(var i=0;i<len;i++){
+				// console.log(this.refs.scrollarea.scrollTop,' / ',ps[i].offsetTop)
+				if(ps[i].offsetTop > this.refs.scrollarea.scrollTop){
+					this.setState({
+						ttsIndex:i-1
+					},this.audioRead);
+					break;
+				}
+			}
+		}else{
+			this.audioRead();
+		}
+	},
+	quitTtsHandle:function(){
+		this.player.pause();
+		this.setState({
+			ttsModer:false,
+			showSetting_tts:false				
+		})
+		POP._alert('退出语音朗读模式')
+	},
+	pauseHandle:function(){
+		this.setState({
+			playing:!this.state.playing, 
+			showSetting_tts:false
+		},this.togglePlay.bind(this,this.state.playing));
+	},
+	voiceHandle:function(){
+		this.setState({femaleVoice:!this.state.femaleVoice, playing:true, showSetting_tts:false},this.playHandle);
 	},
 	audioRead:function(){
 		//audio reading 
-		let ttsIndex = 0;
 		const len = this.state.data.content.length;
 		const access_token = '24.9871614f3a3a6fca1c621fdca104b9a4.2592000.1482378570.282335-6772709';
 		const cuid = 'ewfwiiw883';
-		
+		const voice = this.state.femaleVoice? 0:1;
+		const volum = this.state.volum*2-1;
+		const speed = this.state.speed*2-1;
 		
 		doinsert.bind(this)();
 		this.player.onended = (e)=>{
-			ttsIndex++;
-			if(ttsIndex >= len) return;
-			this.setState({ttsIndex});
-			this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
-			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=5&pit=5&vol=5&per=0&tex=${this.state.data.content[ttsIndex]}`;
+			if(this.state.ttsIndex >= len || !this.state.ttsModer) return;
+			this.setState({ttsIndex:this.state.ttsIndex+1});
+			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
 			this.player.oncanplay = ()=>{
 				this.player.play();
-			}
+			}			
 		};
 
 		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
-			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=5&pit=5&vol=5&per=0&tex=${this.state.data.content[ttsIndex]}`;
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			// this.audioSource = document.createElement('source');
 			//console.log(params)
 			this.player = document.createElement('video');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
 			// this.player.appendChild(this.audioSource);
-			// this.player.setAttribute('autoplay','');
+			this.player.setAttribute('autoplay','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
+			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 		}
 	},
 	componentDidMount:function(){
@@ -752,6 +831,10 @@ var Reading = React.createClass({
 			var hammer = new Hammer(this.refs.mask);
 			hammer.on('tap',this.toggleSettings)
 		}
+		if(this.state.showSetting_tts){
+			var hammer = new Hammer(this.refs.mask);
+			hammer.on('tap',this.toggleSettings_tts)
+		}
 
 		if(this.refs.swiper) {
 			this.hammer = new Hammer(this.refs.swiper);
@@ -793,16 +876,6 @@ var Reading = React.createClass({
 			};
 		}.bind(this)
 	},
-	toggleChapterlist: function() {
-		if(!this.isMounted()){return;}
-		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
-			this.getChapterlist();
-		}
-		this.setState({
-			showChapterlist: !this.state.showChapterlist,
-			showSetting: false
-		});
-	},
 	handleClick: function(e) {
 		var y = e.center.y;
 		var h = document.body.offsetHeight;
@@ -811,7 +884,11 @@ var Reading = React.createClass({
 			this.offsetPage(-1);
 		} else if (y < 0.7 * h) {
 			//middle
-			this.toggleSettings();
+			if(this.state.ttsModer){
+				this.toggleSettings_tts();
+			}else{
+				this.toggleSettings();
+			}
 		} else {
 			//bottom
 			this.offsetPage(1);
@@ -976,17 +1053,16 @@ var Reading = React.createClass({
 				this.uploadLogIntercut = true;
 			}
 		}
-
 		return (
 			<div className="gg-body m-reading-body" ref="container">
-				<button type="button" className="u-playBtn" onClick={this.playHandle}>play</button>
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
 					{this.state.intercutXp}
 					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')}></div>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting || this.state.showSetting_tts)? ' active' : '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
+					<button type="button" className="u-playBtn" onClick={this.playHandle}>play</button>					
 					<div className="u-settings u-settings-top">
 						<span className="iconfont icon-left f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
@@ -1056,6 +1132,26 @@ var Reading = React.createClass({
 						{/*<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleSettingFont}><span className="iconfont u-icon icon-fsize"></span></a>
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
+					</div>
+				</div>
+				<div className={"u-ttsSetting" +(this.state.showSetting_tts?'':' f-hide')}>
+					<button type="button" className="u-quitTtsBtn" onClick={this.quitTtsHandle}>quit</button>
+					<button type="button" className="u-pauseBtn" onClick={this.pauseHandle}>{!this.state.playing?'play':'pause'}</button>
+					<button type="button" className="u-voiceBtn" onClick={this.voiceHandle}>{this.state.femaleVoice?'女声':'男声'}</button>
+					<div className="u-volume" ref="volum">
+						{
+							[1,2,3,4,5].map(v=>{
+								return <b key={v} className={v <= this.state.volum? 'on':''}></b>
+							})
+						}
+					</div>
+					<div className="u-speed" ref="speed">
+						{
+							[1,2,3,4,5].map(v=>{
+								return <b key={v} className={v <= this.state.speed? 'on':''}></b>
+							})
+						}
+					
 					</div>
 				</div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>

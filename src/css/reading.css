@@ -327,9 +327,21 @@
 */
 
 /* audio reading */
-.u-playBtn{position: fixed;z-index:999999;top: 100px;right: 20px;background: blue;color: white;}
 #audioRead{position: fixed;z-index:-999;top: -9999px;visibility: hidden;}
 .m-reading .u-readingContent .ttsReading{color: blue;}
+.u-readingsetting .u-playBtn{position: fixed;z-index:999999;top: 100px;right: 20px;background: blue;color: white;}
+.u-ttsSetting{position: fixed;width: 100%;bottom:0;z-index: 999;}
+.u-ttsSetting .u-pauseBtn, .u-ttsSetting .u-quitTtsBtn, .u-ttsSetting .u-voiceBtn {position: absolute;bottom:10px;background: darkred;color: white;}
+.u-ttsSetting .u-pauseBtn{left:100px;}
+.u-ttsSetting .u-quitTtsBtn{right: 100px;}
+.u-ttsSetting .u-voiceBtn{left: 10px;}
+.u-ttsSetting .u-volume {position: absolute;bottom: 300px;left: 10px;}
+.u-ttsSetting .u-volume b, .u-ttsSetting .u-speed b{display: block;width: 10px;height: 10px;margin:20px;background: green;border-radius: 100%;}
+.u-ttsSetting .u-volume b.on, .u-ttsSetting .u-speed b.on {width: 15px;height: 15px;}
+.u-ttsSetting .u-speed {position: absolute;bottom: 300px;right: 10px;}
+
+
+
 @media screen and (max-width: 340px) {
 	.m-reading-body .font-list .line{width: 35px; }
 }
