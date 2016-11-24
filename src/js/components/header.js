@@ -34,6 +34,11 @@ var Header = React.createClass({
 		};
 	},
 	goBack: function(){
+		var search = parseQuery(location.search);
+		if(search.skipurl)	{
+			location.href = search.skipurl;
+			return;
+		}
 		var current = GLOBAL.pushLinks[location.pathname];
 		if(current) {
 			GLOBAL.pushLinks[location.pathname] = null;
@@ -46,8 +51,10 @@ var Header = React.createClass({
 		}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
+
 		return this.props.title !== nextProps.title 
 				|| this.props.left !== nextProps.left 
+				|| this.state.skipurl !== nextState.skipurl 
 				|| this.props.right !== nextProps.right;
 	},
 	getInitialState:function(){
@@ -70,11 +77,12 @@ var Header = React.createClass({
 		}			
 	},
 	render: function(){
+
 		return (
 			<header className="m-bar m-bar-head">
 				{
-					this.state.isskip?
-					<a className="f-fl icon-back iconfont" href={this.state.skipurl}></a>:
+					this.state.skipurl?
+					<a className="f-fl icon-left iconfont" href={this.state.skipurl}></a>:
 					(this.props.left?this.props.left:<a className="f-fl iconfont icon-left" onClick={this.goBack}></a>)
 				}
 				{this.props.right}
