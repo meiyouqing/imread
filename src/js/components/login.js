@@ -268,7 +268,7 @@ var Login = React.createClass({
 			   AJAX.go('login_wb',{
         			code: this.from.code,
         			grant_type: 'authorization_code',
-        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9.3/login')
+        			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9.3/login'+location.search)
 			   },function(res){
 			   		that.do_result(res,'wb');
 			   },that.onloginErr)
@@ -325,13 +325,13 @@ var Login = React.createClass({
         this.QQ_prefly(goQQ);
 		 function goQQ(){
 			if(navigator.userAgent.indexOf('QQ')>-1)
-					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin', 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin'+encodeURIComponent(location.search), 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
 			else 
-				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin";			
+				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin"+encodeURIComponent(location.search);			
 		}
   	},
   	WB_login: function(){
-  		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin";
+  		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin"+encodeURIComponent(location.search);
 
   	},
 	gowinLogin:function(){
