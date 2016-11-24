@@ -65,7 +65,7 @@ var API={
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
 	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
 	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}},
-	datails: {method: 'GET',base:'/api/v2/me/particulars',param:{pages:1,contents:10}},
+	datails: {method: 'GET',base:'/api/v2/me/particulars',param:{pages:1,contents:20}},
 	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}}
 };
 
@@ -126,7 +126,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
-	var urlBase = 'http://192.168.0.34:9090';
+	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 
 	if (/^\/api/.test(url)) {

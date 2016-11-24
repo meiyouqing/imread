@@ -117,7 +117,7 @@ var Mall = React.createClass({
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
 		}
-		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){console.log(this.subnav)
+		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){
 			browserHistory.replace('/mall/'+this.subnav);	
 		}
 	},

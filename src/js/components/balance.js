@@ -148,7 +148,7 @@ var Balance = React.createClass({
 	render: function () {
 		
 		var content,wxPayLoading=null;
-		var right = <Link className="u-btn-font f-fr" to={GLOBAL.setHref('recharge_details/datails.1.10')}>明细</Link>;
+		var right = <Link className="u-btn-font f-fr" to={GLOBAL.setHref('recharge_details/datails.1.20')}>明细</Link>;
 		if(this.state.payLoading)	wxPayLoading = <Loading />;
 // console.log(this.state.loading)
 		if (this.state.loading) {

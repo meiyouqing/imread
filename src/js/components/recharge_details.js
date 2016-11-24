@@ -7,7 +7,13 @@ import React from 'react'
 var Header = require('./header');
 
 var Lister =  React.createClass({
+	toTimes: function(date){
+		date = date.substring(0,4)+'/'+date.substring(4,6)+'/'+date.substring(6,8) +' '+date.substring(8,10)+':'+date.substring(10,12)+':'+date.substring(12,14);
+		date = new Date(date).getTime();
+		return date;
+	},
 	prettyDate: function(date) {
+		date = this.toTimes(date);
 		var d = new Date(date);
 		if(d.toString() === "Invalid Date") return date;
 		var current = new Date();
@@ -25,7 +31,7 @@ var Lister =  React.createClass({
 		if (deltaSecond < 24 * 60 * 60) {
 			return Math.floor(deltaSecond / 60 / 60) + '小时前';
 		}
-		return d.Format('MM-dd');
+		return d.Format('yyyy-MM-dd');
 	},
 	render: function(){
 		var f = (this.props.data.change_type==1)?'+':'-';
@@ -34,7 +40,7 @@ var Lister =  React.createClass({
 			<li>
 				<div className="f-fl">
 					<span>{this.props.data.remarks}</span>
-					<span>{this.prettyDate(Number(this.props.data.create_time))}</span>
+					<span>{this.prettyDate(this.props.data.create_time)}</span>
 				</div>
 				<div className = "f-fr">
 					<span className={!this.props.data.invalid_time?"u-dis-sec":''}>{f+this.props.data.change_amount}</span>
@@ -74,7 +80,7 @@ var RechageDetail = React.createClass({
 		this.scrollHandle(e);
 	},
 	componentDidMount: function(){
-		AJAX.init('datails.1.10');
+		AJAX.init('datails.1.20');
 		this.getList();
 		this.disPatch('scroll',this.refs.container);
 	},
