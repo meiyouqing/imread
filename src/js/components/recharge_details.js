@@ -35,16 +35,17 @@ var Lister =  React.createClass({
 	},
 	render: function(){
 		var f = (this.props.data.change_type==1)?'+':'-';
+		var plus =  this.props.data.change_type==1?'plus':''
 		return (
 			
 			<li>
 				<div className="f-fl">
-					<span>{this.props.data.remarks}</span>
-					<span>{this.prettyDate(this.props.data.create_time)}</span>
+					<span className="d-title">{this.props.data.remarks}</span>
+					<span className="d-date">{this.prettyDate(this.props.data.create_time)}</span>
 				</div>
 				<div className = "f-fr">
-					<span className={!this.props.data.invalid_time?"u-dis-sec":''}>{f+this.props.data.change_amount}</span>
-					<span className={!this.props.data.invalid_time?"u-dis-none":''}>{this.props.data.invalid_time}</span>
+					<span className={'f-tr '+plus+(!this.props.data.invalid_time?" u-dis-sec":'')}>{f+this.props.data.change_amount}</span>
+					<span className={'d-lastdate'+(!this.props.data.invalid_time?" u-dis-none":'')}>{'有效期截止'+this.props.data.invalid_time}</span>
 				</div>
 			</li>
 		)
@@ -93,7 +94,7 @@ var RechageDetail = React.createClass({
 		return (
 			<div>
 				<Header right={null} title={'艾豆明细'} path={this.props.route}/>
-				<div className="g-main g-main-1 g-f">
+				<div className="g-main g-main-1">
 					<div className="g-scroll m-recharge-detail" onScroll={this.scrollData} ref="container">
 						<div className="content">
 						<ul>

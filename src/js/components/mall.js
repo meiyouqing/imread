@@ -56,6 +56,7 @@ var Mall = React.createClass({
 	},
 	gotoMall: function(){
 		this.refs.selector.style.opacity = 0;
+		this.id = this.id===undefined?1:this.id;
 		localStorage.viewed = this.id;
 
 		setTimeout(function(){
@@ -156,12 +157,12 @@ var Mall = React.createClass({
 						{
 							['男生网文','女生网文','出版图书','随便看看'].map(function(v,i){
 								return (
-									<li key={i}><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i+(this.state.selected===i?' active':'')}></a><span>{v}</span></li>
+									<li key={i}><div className={"selected"+(this.state.selected===i?' active':'')}></div><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i}></a><span>{v}</span></li>
 									)
 							}.bind(this))
 						}
 						</ul>
-						<a className="u-btn u-btn-4" onClick={this.gotoMall}>立即体验</a>
+						<a className="u-btn-4" onClick={this.gotoMall}>立即体验</a>
 						</div>
 					</div>
 				</div>
