@@ -48,6 +48,7 @@ var styleMixins = {
 		this.setState({
 			showSettingFont: !this.state.showSettingFont
 		});
+		
 	},
 	setFontBg: function(e) {
 		e.stopPropagation();
@@ -92,6 +93,7 @@ var styleMixins = {
 
 var chapterMixins = {
 	getChapterlist: function(next) {
+		// this.audioRead();
 		if (this.state.getChapterlistLoading || this.state.chapterlistNoMore) {
 			return ;
 		}
@@ -187,6 +189,13 @@ var Reading = React.createClass({
 	mixins: [styleMixins, chapterMixins, Mixins()],
 	getInitialState: function() {
 		return {
+			ttsModer:false,
+			ttsIndex:0,
+			showSetting_tts:false,
+			playing:false,
+			femaleVoice:true,
+			volum:3,
+			speed:3,
 			time: Date.now(),
 			bookName: '艾美阅读',
 			chapterName: '',
@@ -441,6 +450,7 @@ var Reading = React.createClass({
 		that.getIntroduce();
 		//that.getChapterlist();
 		if(!data.content) return;
+
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
@@ -457,7 +467,7 @@ var Reading = React.createClass({
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
-		if(that.isLogin() && !from)
+		// if(that.isLogin() && !from) //from：来自咪咕
 			that.getNextContent(data);
 	},
 	getAd_xp: function(bid,page){
@@ -487,8 +497,8 @@ var Reading = React.createClass({
 			this.getAD_block5(this.state.Adhc);
 
 		if(!this.isMounted()){return;}
-		var nextChapter = storage.get('nextChapter');
-		if((nextChapter.nextChapterId-1)==this.chapterid){
+		var nextChapter = GLOBAL._nextChapter_;
+		if(nextChapter && (nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
 		}
@@ -525,7 +535,7 @@ var Reading = React.createClass({
 			source_id : this.source_id,
 			book_id: this.book_id,
 			callback: function(data){
-				storage.set('nextChapter',data.success);
+				GLOBAL._nextChapter_ = data.success;
 			}.bind(this),
 			onError: GLOBAL.noop
 		});
@@ -629,6 +639,13 @@ var Reading = React.createClass({
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
 	},
 	timeoutId:0,
+	toggleSettings_tts:function(){
+		if(!this.isMounted()) return;
+		clearTimeout(this.timeoutId);
+		this.timeoutId = setTimeout(()=>{
+			this.setState({showSetting_tts:!this.state.showSetting_tts});
+		},10)
+	},
 	toggleSettings: function() {
 		if(!this.isMounted()){return;}
 		clearTimeout(this.timeoutId);
@@ -649,6 +666,25 @@ var Reading = React.createClass({
 			});			
 		},10)
 	},
+	toggleChapterlist: function() {
+		if(!this.isMounted()){return;}
+		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
+			this.getChapterlist();
+		}
+		this.setState({
+			showChapterlist: !this.state.showChapterlist,
+			showSetting: false
+		});
+	},
+	togglePlay:function(condition){
+		if(this.state.ttsModer){
+			if(condition){
+				this.player.pause();
+			}else{
+				this.player.play();
+			}
+		}				
+	},
 	onVisibilitychange: function(){
 		if(isHidden()){
 			this.addRecentRead(this.book_id, this.chapterid);
@@ -659,6 +695,98 @@ var Reading = React.createClass({
 	getAds: function(){
 		var bookid = this.APIParts('readingId')[3];
 		this.getAd_hc(bookid);
+	},
+	disableVoiceHandle:function(){
+		this.player.volume = 0;	
+	},
+	volumHandle:function(e){
+		const targ = e.target; 
+		const i = targ.dataset.v || targ.parentNode.dataset.v;
+		this.setState({volum:+i},this.playHandle);	
+	},
+	speedHandle:function(e){
+		const targ = e.target; 
+		const i = targ.dataset.v || targ.parentNode.dataset.v;
+		this.setState({speed:+i},this.playHandle)
+	},
+	playHandle:function(){
+		if(!this.state.ttsModer){
+			this.setState({ttsModer:true,showSetting:false,playing:true})
+			POP._alert('进入语音朗读模式');
+		}
+		if(this.refs.scrollarea.scrollTop > 165){
+			const ps = this.refs.scrollarea.querySelectorAll('p');
+			const len=ps.length;
+			for(var i=0;i<len;i++){
+				// console.log(this.refs.scrollarea.scrollTop,' / ',ps[i].offsetTop)
+				if(ps[i].offsetTop > this.refs.scrollarea.scrollTop){
+					this.setState({
+						ttsIndex:i-1
+					},this.audioRead);
+					break;
+				}
+			}
+		}else{
+			this.audioRead();
+		}
+	},
+	quitTtsHandle:function(){
+		this.player.pause();
+		this.setState({
+			ttsModer:false,
+			showSetting_tts:false				
+		})
+		POP._alert('退出语音朗读模式')
+	},
+	pauseHandle:function(){
+		this.setState({
+			playing:!this.state.playing 
+		},this.togglePlay.bind(this,this.state.playing));
+	},
+	voiceHandle:function(){
+		this.setState({femaleVoice:!this.state.femaleVoice, playing:true},this.playHandle);
+	},
+	audioRead:function(){
+		//audio reading 
+		const len = this.state.data.content.length;
+		const access_token = '24.9871614f3a3a6fca1c621fdca104b9a4.2592000.1482378570.282335-6772709';
+		const cuid = 'ewfwiiw883';
+		const voice = this.state.femaleVoice? 0:1;
+		const volum = this.state.volum*2-1;
+		const speed = this.state.speed*2-1;
+		
+		doinsert.bind(this)();
+		this.player.onended = (e)=>{
+			const isChapterEnd = this.state.ttsIndex >= len;
+			if(isChapterEnd){
+				this.goToChapter(this.state.data.nextChapterId);
+				// return;
+			}
+			this.setState({ttsIndex:isChapterEnd? 0:this.state.ttsIndex+1});
+			this.refs.ttsReading && !isChapterEnd && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
+			this.player.oncanplay = ()=>{
+				if(!this.state.playing) return;
+				this.player.play();
+			}
+		}		
+
+		function doinsert(){
+			if(this.player) document.body.removeChild(this.player);
+			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			// this.audioSource = document.createElement('source');
+			//console.log(params)
+			this.player = document.createElement('audio');
+			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
+			this.player.setAttribute('type','audio/mp3');
+			// this.player.appendChild(this.audioSource);
+			// this.player.setAttribute('autoplay','');
+			this.player.id = 'audioRead';
+			document.body.appendChild(this.player);
+			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.player.play();
+		}
 	},
 	componentDidMount:function(){
 		this.startTime = Date.now();
@@ -681,7 +809,7 @@ var Reading = React.createClass({
 		this.states = this.props.location.state;
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
-		// this.isdownLoad();
+
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
@@ -705,6 +833,10 @@ var Reading = React.createClass({
 		if(this.state.showSetting || this.state.showChapterlist){
 			var hammer = new Hammer(this.refs.mask);
 			hammer.on('tap',this.toggleSettings)
+		}
+		if(this.state.showSetting_tts){
+			var hammer = new Hammer(this.refs.mask);
+			hammer.on('tap',this.toggleSettings_tts)
 		}
 
 		if(this.refs.swiper) {
@@ -747,16 +879,6 @@ var Reading = React.createClass({
 			};
 		}.bind(this)
 	},
-	toggleChapterlist: function() {
-		if(!this.isMounted()){return;}
-		if (!this.state.showChapterlist && !this.state.chapterlist.length) {
-			this.getChapterlist();
-		}
-		this.setState({
-			showChapterlist: !this.state.showChapterlist,
-			showSetting: false
-		});
-	},
 	handleClick: function(e) {
 		var y = e.center.y;
 		var h = document.body.offsetHeight;
@@ -765,7 +887,11 @@ var Reading = React.createClass({
 			this.offsetPage(-1);
 		} else if (y < 0.7 * h) {
 			//middle
-			this.toggleSettings();
+			if(this.state.ttsModer){
+				this.toggleSettings_tts();
+			}else{
+				this.toggleSettings();
+			}
 		} else {
 			//bottom
 			this.offsetPage(1);
@@ -864,7 +990,7 @@ var Reading = React.createClass({
 		var chapterlist = {};
 		chapterlist.list = this.state.chapterlist;
 		var list = JSON.parse(JSON.stringify(chapterlist)).list;
-
+		
 		if(!this.states) 
 			this.states = {book_name: '',author:''}
 
@@ -930,7 +1056,6 @@ var Reading = React.createClass({
 				this.uploadLogIntercut = true;
 			}
 		}
-
 		return (
 			<div className="gg-body m-reading-body" ref="container">
 				<div className={"ad-xp"+ (this.state.showIntercutXp ? "" : " f-hide")} ref="swiper">
@@ -938,8 +1063,9 @@ var Reading = React.createClass({
 					<div className="banner">点击图片查看更多，左右滑动继续阅读</div>
 				</div>
 				<div className={"style " + classNames}>
-				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting) && ' active' || '')}></div>
+				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting || this.state.showSetting_tts)? ' active' : '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
+					<button type="button" className="u-playBtn iconfont icon-erji" onClick={this.playHandle}></button>					
 					<div className="u-settings u-settings-top">
 						<span className="iconfont icon-left f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
@@ -962,15 +1088,14 @@ var Reading = React.createClass({
 								}.bind(this))
 							}
 						</div>*/}
-						<div className="setting-fontsize setting-font-line f-flexbox">
-							<span className="iconfont icon-font"></span>
-							<div className="font-list">
-								<div className="f-fr">
-									<span className="circle active" data-font={1}></span>
+						<div className="setting-fontsize setting-font-line f-flexbox m-slidBar">
+							<span className="iconfont icon-font label"></span>
+							<div className="u-slidBar f-fr f-clearfix">
 									{
 
 										[1, 2, 3, 4,5].map(function(dataid, i) {
-											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"display-inline" + (this.state.style.fontSize>=dataid?" active":'')}>
+											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"f-fl" + (this.state.style.fontSize>=dataid?" active":'')}>
+													{dataid===1?(<span className="circle" data-font={dataid}></span>):null}
 													<span className="line" data-font={dataid} ></span>
 													<span className="circle" data-font={dataid}></span>
 												</div>)
@@ -978,7 +1103,6 @@ var Reading = React.createClass({
 
 									}
 
-								</div>
 							</div>
 						</div>
 						{/*<div className="setting-line-height setting-font-line f-flexbox">
@@ -1011,6 +1135,42 @@ var Reading = React.createClass({
 						<a className="u-settingitem f-flex1" onClick={this.toggleNightStyle}><span className={"iconfont u-icon icon-moon" + (this.state.style.night ? ' icon-sun' : '')}></span></a>*/}
 					</div>
 				</div>
+				<div className={"u-ttsSetting" +(this.state.showSetting_tts?'':' f-hide')}>
+					<div className="m-slidBar f-clearfix" ref="volum">
+						<button className="label f-fl" type="button" onClick={this.disableVoiceHandle}>{this.state.volum==0?'静音':'音量'}</button>
+						<div className="f-fr u-slidBar f-clearfix">
+							{
+								[1,2,3,4,5].map(v=>{
+									return (<div onClick={this.volumHandle} data-v={v} key={v} className={"f-fl" + (v <= this.state.volum?" active":'')}>
+												{v==1?(<span className="circle"></span>):null}
+												<span className="line"></span>
+												<span className="circle"></span>
+											</div>)
+								})
+							}
+						</div>
+					</div>
+					<div className="m-slidBar f-clearfix" ref="speed">
+						<button className="label f-fl">语速</button>
+						<div className="f-fr u-slidBar f-clearfix">
+							{
+								[1,2,3,4,5].map(v=>{
+									return (<div onClick={this.speedHandle} data-v={v} key={v} className={"f-fl" + (v <= this.state.speed?" active":'')}>
+												{v==1?(<span className="circle"></span>):null}
+												<span className="line"></span>
+												<span className="circle"></span>
+											</div>)
+								})
+							}
+						</div>
+					
+					</div>
+					<div className="btnWrap">
+						<button type="button" className={"u-voiceBtn iconfont"+(this.state.femaleVoice? ' icon-female':' icon-male')} onClick={this.voiceHandle}></button>
+						<button type="button" className={"u-pauseBtn iconfont"+(!this.state.playing? ' icon-play':' icon-pause')} onClick={this.pauseHandle}></button>
+						<button type="button" className="u-quitTtsBtn iconfont icon-quit" onClick={this.quitTtsHandle}></button>
+					</div>
+				</div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>
 					<div className="u-chapterlist">
 						<div className="u-bookname f-ellipsis">
@@ -1034,8 +1194,15 @@ var Reading = React.createClass({
 					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
-								return <p key={i} dangerouslySetInnerHTML={{__html: p}}></p>;
-							})
+								return (
+									<p 
+								className={this.state.ttsModer&&(i === this.state.ttsIndex)?'ttsReading':''} 
+								ref={this.state.ttsModer&&(i === this.state.ttsIndex)?'ttsReading':''} 
+								key={i} 
+								dangerouslySetInnerHTML={{__html: p}}>
+								</p>
+								);
+							}.bind(this))
 						}
 					</section>
 					{intercut}

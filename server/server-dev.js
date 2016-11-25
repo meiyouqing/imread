@@ -19,6 +19,8 @@ import getPost from './getPost-dev'
 import sdkPost from './sdkPost'
 
 import routes from '../src/js/components/routes'
+
+import AJAX from '../src/js/modules/AJAX'
 // import { Provider } from 'react-redux'
 
 // import configureStore from '../src/js/store/configureStore'
@@ -37,8 +39,20 @@ app.use(webpackHotMiddleware(compiler))
 
 app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
 
-// app.get(/nono/,()=>{console.log('nonononoo')})   //test conect overtime
-//TODO resolve this
+//语音朗读api
+app.get('/baiduClientCredentials',(req,res)=>{
+  AJAX.getJSON('POST','https://openapi.baidu.com/oauth/2.0/token',{
+    grant_type:'client_credentials',
+    client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
+    client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
+  },sec,err,true);
+  function sec(data){
+    res.send(JSON.stringify(data));
+  }
+  function err(err){
+    console.log(err.error+'description: '+err.error_description)
+  }
+})
 app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{
   console.log('zzzzzzzz > '+req.url);
   res.end();
@@ -143,6 +157,7 @@ function renderFullPage (html, preloadedState){
             })()
         </script>
         <div id="appContainer">${html}</div>
+        <audio id="audioRead" src="" autoplay></audio>
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>

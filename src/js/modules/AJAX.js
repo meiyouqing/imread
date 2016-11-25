@@ -129,6 +129,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	//var urlBase = 'http://192.168.0.34:9090';
 	//var urlBase = 'http://192.168.0.252:8080';
 
+
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
