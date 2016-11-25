@@ -467,7 +467,7 @@ var Reading = React.createClass({
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
-		if(that.isLogin() && !from)
+		// if(that.isLogin() && !from) //from：来自咪咕
 			that.getNextContent(data);
 	},
 	getAd_xp: function(bid,page){
@@ -497,8 +497,8 @@ var Reading = React.createClass({
 			this.getAD_block5(this.state.Adhc);
 
 		if(!this.isMounted()){return;}
-		var nextChapter = storage.get('nextChapter');
-		if((nextChapter.nextChapterId-1)==this.chapterid){
+		var nextChapter = GLOBAL._nextChapter_;
+		if(nextChapter && (nextChapter.nextChapterId-1)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
 		}
@@ -535,7 +535,7 @@ var Reading = React.createClass({
 			source_id : this.source_id,
 			book_id: this.book_id,
 			callback: function(data){
-				storage.set('nextChapter',data.success);
+				GLOBAL._nextChapter_ = data.success;
 			}.bind(this),
 			onError: GLOBAL.noop
 		});
@@ -696,25 +696,23 @@ var Reading = React.createClass({
 		var bookid = this.APIParts('readingId')[3];
 		this.getAd_hc(bookid);
 	},
+	disableVoiceHandle:function(){
+		this.player.volume = 0;	
+	},
+	volumHandle:function(e){
+		const targ = e.target; 
+		const i = targ.dataset.v || targ.parentNode.dataset.v;
+		this.setState({volum:+i},this.playHandle);	
+	},
+	speedHandle:function(e){
+		const targ = e.target; 
+		const i = targ.dataset.v || targ.parentNode.dataset.v;
+		this.setState({speed:+i},this.playHandle)
+	},
 	playHandle:function(){
 		if(!this.state.ttsModer){
 			this.setState({ttsModer:true,showSetting:false,playing:true})
 			POP._alert('进入语音朗读模式');
-			//调节音量
-			const volumBtns = Array.prototype.slice.call(this.refs.volum.querySelectorAll('b'),0)
-			const speedBtns = Array.prototype.slice.call(this.refs.speed.querySelectorAll('b'),0)
-			volumBtns.forEach((v,i)=>{
-				v.onclick = ()=>{
-					this.setState({volum:i+1},this.playHandle);	
-					// this.player.volume = (i+1)*2/10;
-				}
-			});
-			speedBtns.forEach((v,i)=>{
-				const hammer = new Hammer(v);
-				hammer.on('tap',()=>{
-					this.setState({speed:i+1},this.playHandle)
-				})
-			})
 		}
 		if(this.refs.scrollarea.scrollTop > 165){
 			const ps = this.refs.scrollarea.querySelectorAll('p');
@@ -742,12 +740,11 @@ var Reading = React.createClass({
 	},
 	pauseHandle:function(){
 		this.setState({
-			playing:!this.state.playing, 
-			showSetting_tts:false
+			playing:!this.state.playing 
 		},this.togglePlay.bind(this,this.state.playing));
 	},
 	voiceHandle:function(){
-		this.setState({femaleVoice:!this.state.femaleVoice, playing:true, showSetting_tts:false},this.playHandle);
+		this.setState({femaleVoice:!this.state.femaleVoice, playing:true},this.playHandle);
 	},
 	audioRead:function(){
 		//audio reading 
@@ -760,29 +757,35 @@ var Reading = React.createClass({
 		
 		doinsert.bind(this)();
 		this.player.onended = (e)=>{
-			if(this.state.ttsIndex >= len || !this.state.ttsModer) return;
-			this.setState({ttsIndex:this.state.ttsIndex+1});
-			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			const isChapterEnd = this.state.ttsIndex >= len;
+			if(isChapterEnd){
+				this.goToChapter(this.state.data.nextChapterId);
+				// return;
+			}
+			this.setState({ttsIndex:isChapterEnd? 0:this.state.ttsIndex+1});
+			this.refs.ttsReading && !isChapterEnd && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
 			this.player.oncanplay = ()=>{
+				if(!this.state.playing) return;
 				this.player.play();
-			}			
-		};
+			}
+		}		
 
 		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
 			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			// this.audioSource = document.createElement('source');
 			//console.log(params)
-			this.player = document.createElement('video');
+			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
 			// this.player.appendChild(this.audioSource);
-			this.player.setAttribute('autoplay','');
+			// this.player.setAttribute('autoplay','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
 			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.player.play();
 		}
 	},
 	componentDidMount:function(){
@@ -1062,7 +1065,7 @@ var Reading = React.createClass({
 				<div className={"style " + classNames}>
 				<div ref="mask" className={"u-hideChapterlist" + ((this.state.showChapterlist || this.state.showSetting || this.state.showSetting_tts)? ' active' : '')}></div>
 				<div className={"u-readingsetting" + (!this.state.showSetting && ' f-hide' || '')}>
-					<button type="button" className="u-playBtn" onClick={this.playHandle}>play</button>					
+					<button type="button" className="u-playBtn iconfont icon-erji" onClick={this.playHandle}></button>					
 					<div className="u-settings u-settings-top">
 						<span className="iconfont icon-left f-fl" onClick={this.goOut}></span>
 						<span className="title f-ellipsis f-fl">{this.state.bookName}</span>
@@ -1085,15 +1088,14 @@ var Reading = React.createClass({
 								}.bind(this))
 							}
 						</div>*/}
-						<div className="setting-fontsize setting-font-line f-flexbox">
-							<span className="iconfont icon-font"></span>
-							<div className="font-list">
-								<div className="f-fr">
-									<span className="circle active" data-font={1}></span>
+						<div className="setting-fontsize setting-font-line f-flexbox m-slidBar">
+							<span className="iconfont icon-font label"></span>
+							<div className="u-slidBar f-fr f-clearfix">
 									{
 
 										[1, 2, 3, 4,5].map(function(dataid, i) {
-											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"display-inline" + (this.state.style.fontSize>=dataid?" active":'')}>
+											return (<div key={i} onClick={this.setFontSize}  data-font={dataid} className={"f-fl" + (this.state.style.fontSize>=dataid?" active":'')}>
+													{dataid===1?(<span className="circle" data-font={dataid}></span>):null}
 													<span className="line" data-font={dataid} ></span>
 													<span className="circle" data-font={dataid}></span>
 												</div>)
@@ -1101,7 +1103,6 @@ var Reading = React.createClass({
 
 									}
 
-								</div>
 							</div>
 						</div>
 						{/*<div className="setting-line-height setting-font-line f-flexbox">
@@ -1135,23 +1136,39 @@ var Reading = React.createClass({
 					</div>
 				</div>
 				<div className={"u-ttsSetting" +(this.state.showSetting_tts?'':' f-hide')}>
-					<button type="button" className="u-quitTtsBtn" onClick={this.quitTtsHandle}>quit</button>
-					<button type="button" className="u-pauseBtn" onClick={this.pauseHandle}>{!this.state.playing?'play':'pause'}</button>
-					<button type="button" className="u-voiceBtn" onClick={this.voiceHandle}>{this.state.femaleVoice?'女声':'男声'}</button>
-					<div className="u-volume" ref="volum">
-						{
-							[1,2,3,4,5].map(v=>{
-								return <b key={v} className={v <= this.state.volum? 'on':''}></b>
-							})
-						}
+					<div className="m-slidBar f-clearfix" ref="volum">
+						<button className="label f-fl" type="button" onClick={this.disableVoiceHandle}>{this.state.volum==0?'静音':'音量'}</button>
+						<div className="f-fr u-slidBar f-clearfix">
+							{
+								[1,2,3,4,5].map(v=>{
+									return (<div onClick={this.volumHandle} data-v={v} key={v} className={"f-fl" + (v <= this.state.volum?" active":'')}>
+												{v==1?(<span className="circle"></span>):null}
+												<span className="line"></span>
+												<span className="circle"></span>
+											</div>)
+								})
+							}
+						</div>
 					</div>
-					<div className="u-speed" ref="speed">
-						{
-							[1,2,3,4,5].map(v=>{
-								return <b key={v} className={v <= this.state.speed? 'on':''}></b>
-							})
-						}
+					<div className="m-slidBar f-clearfix" ref="speed">
+						<button className="label f-fl">语速</button>
+						<div className="f-fr u-slidBar f-clearfix">
+							{
+								[1,2,3,4,5].map(v=>{
+									return (<div onClick={this.speedHandle} data-v={v} key={v} className={"f-fl" + (v <= this.state.speed?" active":'')}>
+												{v==1?(<span className="circle"></span>):null}
+												<span className="line"></span>
+												<span className="circle"></span>
+											</div>)
+								})
+							}
+						</div>
 					
+					</div>
+					<div className="btnWrap">
+						<button type="button" className={"u-voiceBtn iconfont"+(this.state.femaleVoice? ' icon-female':' icon-male')} onClick={this.voiceHandle}></button>
+						<button type="button" className={"u-pauseBtn iconfont"+(!this.state.playing? ' icon-play':' icon-pause')} onClick={this.pauseHandle}></button>
+						<button type="button" className="u-quitTtsBtn iconfont icon-quit" onClick={this.quitTtsHandle}></button>
 					</div>
 				</div>
 				<section className={"u-chapterlistc" + (this.state.showChapterlist && ' active' || '')}>

@@ -135,7 +135,7 @@ function renderFullPage (html, preloadedState){
         <meta name="description" content="小说在线阅读、下载，精彩小说尽在艾美阅读。艾美阅读提供小说，小说网，言情小说，玄幻小说，武侠小说，都市小说，历史小说，出版书，正版小说，正版电子小说，网络小说，原创网络文学。" />
         <title>艾美阅读-发现阅读之美</title>
         <link href="/p/style.css" rel="stylesheet" type="text/css"></link>
-        <link href="//at.alicdn.com/t/font_smbelzs6o6dh1tt9.css" rel="stylesheet" type="text/css"></link>
+        <link href="//at.alicdn.com/t/font_pn9j0pxdhxv42t9.css" rel="stylesheet" type="text/css"></link>
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
