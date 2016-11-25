@@ -129,6 +129,9 @@ var List = React.createClass({
 			this.getList(nextProps.params.listId);
 		}
 	},
+	componentWillUnmount: function(){
+		delete GLOBAL.title;
+	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
