@@ -15,7 +15,8 @@ var ULine = React.createClass({
 		return (
 			<li className="u-line">
 				<Link to={this.props.line.href?src_href:location.pathname} className="f-cb" target={target} data-href={src_href} onClick={this.props.line.requireLogin}>
-					<span className="iconfont icon-arrow-right f-fr w-auto">{this.props.line.detail}</span>
+					<span className="iconfont icon-right f-fr w-auto"></span>
+					<span className='f-fr f-g'>{this.props.line.detail}</span>
 					<span className="title">{this.props.line.title}</span>
 				</Link>
 			</li>
