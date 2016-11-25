@@ -399,7 +399,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-btn3{display: inline-block;padding: 5px 40px;border: 1px solid #41C2C2;border-radius: 2px;font-size: 15px;color: #41C2C2 !important;}
 .u-btn-4{margin: 40px 0;height: 50px;line-height: 50px;display: inline-block;width: 165px;border: 1px solid #0096aa;font-size: 23px;color: #0096aa;border-radius: 5px}
 
- .u-none{line-height: 60px;text-align: center;font-size: 12px;display: block;}
+ .u-none{line-height: 50px;text-align: center;font-size: 14px;display: block;color: #777;}
  .u-dis-none{display: none!important}
 /* unit */
 /* bookrack */

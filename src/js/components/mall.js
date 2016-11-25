@@ -82,7 +82,6 @@ var Mall = React.createClass({
 		this.usePreload('mallNav');
 	},
 	componentDidMount: function(){
-		// /alert(JSON.stringify(localStorage))
 		try{
 			localStorage.agent_model = "private";
 			this.setState({firstTime: localStorage.viewed?false:true,show: true})

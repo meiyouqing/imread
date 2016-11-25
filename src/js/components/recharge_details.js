@@ -89,7 +89,7 @@ var RechageDetail = React.createClass({
 		 var sLoading = <Loading cls='u-sLoading transparent' />,list=null;
 
 		 if(this.state.noMore)
-			sLoading = (<div className="u-none"> --没有更多了-- </div>);
+			sLoading = (<div className="u-none"> 没有更多了</div>);
 
 		return (
 			<div>
