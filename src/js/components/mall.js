@@ -150,13 +150,13 @@ var Mall = React.createClass({
 			main = (
 				<div>
 					<div className="g-main g-main-4">
-						<div className="m-welcome" ref="selector">
+						<div className="m-welcome g-scroll" ref="selector">
 						<header>选择你的阅读偏好</header>
 						<ul>
 						{
 							['男生网文','女生网文','出版图书','随便看看'].map(function(v,i){
 								return (
-									<li key={i}><a onClick={this.chooseFavor.bind(this,i)} className={this.state.selected===i?'active':''}>{v}</a></li>
+									<li key={i}><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i+(this.state.selected===i?' active':'')}></a><span>{v}</span></li>
 									)
 							}.bind(this))
 						}

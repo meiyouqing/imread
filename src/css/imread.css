@@ -77,11 +77,15 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 
 /* first time */
 .m-welcome{position:absolute;width:100%;height: 100%;background: #fff;z-index: 9999;text-align: center;opacity: 1;transition: all 1s;-webkit-transition: all 1s;}
-.m-welcome  header{margin: 100px 0 10px;font-size: 16px;}
+.m-welcome  header{margin: 45px 0 10px;font-size: 21px;color: #333;}
 .m-welcome  ul{width: 80%;overflow: hidden;margin-left: 10%;}
 .m-welcome  ul > li{width: 50%;float: left;margin-top: 30px;}
-.m-welcome  ul > li a{width: 80px;height: 80px;display: inline-block;background: #eee;line-height: 80px;}
-.m-welcome  ul > li a.active{background: #000;color: #fff;}
+.m-welcome  ul > li a{width: 100px;height: 100px;display: inline-block;background: #eee;line-height: 80px;}
+.m-welcome  ul > li span{display: block;font-size: 16px;margin-top: 5px;}
+.m-welcome ul > li a.select-0{background: url('../img/back/man.png') no-repeat;background-size: cover}
+.m-welcome ul > li a.select-1{background: url('../img/back/woman.png') no-repeat;background-size: cover}
+.m-welcome ul > li a.select-2{background: url('../img/back/chuban.png') no-repeat;background-size: cover}
+.m-welcome ul > li a.select-3{background: url('../img/back/suibian.png') no-repeat;background-size: cover}
 
 /* grid */
 .g-wraper{position: absolute;left:0;width: 100%;height: 100%;overflow: hidden;background: #FFFFFF;}
