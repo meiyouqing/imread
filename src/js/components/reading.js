@@ -766,10 +766,13 @@ var Reading = React.createClass({
 			this.refs.ttsReading && !isChapterEnd && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
-			this.player.oncanplay = ()=>{
-				if(!this.state.playing) return;
+			// this.player.oncanplay = ()=>{
+				if(!this.state.playing) {
+					this.player.pause();
+				};
+				this.player.load();
 				this.player.play();
-			}
+			// }
 		}		
 
 		function doinsert(){
@@ -781,10 +784,11 @@ var Reading = React.createClass({
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
 			// this.player.appendChild(this.audioSource);
-			// this.player.setAttribute('autoplay','');
+			this.player.setAttribute('preload','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
 			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.player.load();
 			this.player.play();
 		}
 	},
