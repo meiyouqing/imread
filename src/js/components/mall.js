@@ -59,10 +59,18 @@ var Mall = React.createClass({
 		this.id = this.id===undefined?1:this.id;
 		localStorage.viewed = this.id;
 
-		setTimeout(function(){
-			this.setState({firstTime: false});
-			this.getNav();
-		}.bind(this),500);
+		AJAX.go('setConfig',{config_id:3,config_value:this.id},function(res){
+			if(res.code === 200)
+				setTimeout(function(){
+					this.setState({firstTime: false});
+					this.getNav();
+				}.bind(this),800);
+		}.bind(this));
+
+		// setTimeout(function(){
+		// 	this.setState({firstTime: false});
+		// 	this.getNav();
+		// }.bind(this),500);
 		
 	},
 	hideUser: function(){

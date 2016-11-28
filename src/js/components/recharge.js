@@ -135,7 +135,7 @@ var Recharge = React.createClass({
 		var postData = {
 			productId:this.props.params.rechargeId,
 			mobileNum:that.refs.mobile_num.value,
-			callback: encodeURIComponent('https://m.imread.com/pay'+location.search)
+			callback: 'https://m.imread.com/pay'+location.search //encodeURIComponent('https://m.imread.com/pay'+location.search)
 		}
 
 		AJAX.go('pay',postData,function(data){

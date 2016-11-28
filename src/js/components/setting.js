@@ -2,6 +2,7 @@ import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
+import AJAX from '../modules/AJAX'
 import React from 'react'
 var Header = require('./header');
 if(typeof window !== 'undefined'){
@@ -77,9 +78,15 @@ var Setting = React.createClass({
 	selectedFavor: function(e){
 		if(e.target.tagName !== 'LI') return;
 		var a  = e.target.getAttribute('data-index');
-		localStorage.viewed = a;
-		this.setState({detail: this.py[a]});
-		this.disPatch('resetMall');
+
+		AJAX.go('setConfig',{config_id:3,config_value:a},function(res){
+			if(res.code === 200){
+				localStorage.viewed = a;
+				this.setState({detail: this.py[a]});
+				this.disPatch('resetMall');
+			}
+
+		}.bind(this));
 		this.closeSelector();
 	},
 	componentDidMount: function(){
@@ -90,7 +97,7 @@ var Setting = React.createClass({
 		}catch(e){
 			this.setState({isWx:this.isWx(),localStorage: false})
 		}
-		
+
 	},
 	render:function() {
 		var blockData = [

@@ -66,7 +66,8 @@ var API={
 	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
 	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}},
 	datails: {method: 'GET',base:'/api/v2/me/particulars',param:{pages:1,contents:20}},
-	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}}
+	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}},
+	setConfig: {method: 'POST',base: '/api/v2/readperference/update',param:{config_id:3,config_value:''}}
 };
 
 //接口缓存机制
