@@ -81,7 +81,7 @@ var UserList = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: null,
-			aidou: 0
+			aidou: null
 		};
 	},
 	login: function(e) {
@@ -218,7 +218,7 @@ var UserList = React.createClass({
 		if(!this.state.userInfo){
 			userCard = (<div onClick={this.login}>
 							<div className="avatar-wrap"><span className="iconfont icon-shu_1"></span></div>
-							<div className="username"><p>登录/注册</p><p>新用户注册送{this.state.aidou}艾豆</p></div>
+							<div className="username"><p>登录/注册</p><p>新用户注册送{this.state.aidou || ''}艾豆</p></div>
 						</div>)
 		}else{
 			userCard = (<div>
