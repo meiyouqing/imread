@@ -28,7 +28,7 @@ var Book1 = React.createClass({
 					<div className="info">
 						<span className="f-ellipsis-2 title">{this.props.data.name || this.props.data.book_name}</span>
 						<span className="author">{this.props.data.author || this.props.data.author_name}</span>
-						<span className="summary f-ellipsis-3">{this.props.data.brief}</span>
+						<span className="summary f-ellipsis-3" dangerouslySetInnerHTML={{__html: this.props.data.brief}}></span>
 					</div>
 				</Link>
 			</li>
