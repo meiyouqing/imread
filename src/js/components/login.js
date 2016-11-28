@@ -355,7 +355,7 @@ var Login = React.createClass({
 								</div>
 								<div className="u-vcode">
 									<div className="u-inputline-2 f-clearfix w-120 f-fl">
-										<input className="u-input-2" placeholder="验证码" type="tele" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
+										<input className="u-input-2" placeholder="验证码" type="tele" maxLength="6" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
 									</div>
 									<img className="f-fl" ref="vcode" src="https:i.imread.com/vcode" />
 									<div className="f-fr switch" onClick={this.switchCode}>
