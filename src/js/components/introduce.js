@@ -68,7 +68,7 @@ var Detail = React.createClass({
 						<div className="title">{this.props.book.book_name}</div>
 						<div className="author" onClick={this.gotoAuthor}>{this.props.book.author}</div>
 						<div className="wordCount">{this.props.book.word_count + "字/"+ (this.props.book.status == "0" ? "连载中" : "已完本")}</div>
-						<div className="bookSource"><span>{this.props.book.source_name}</span></div>
+						<div className="bookSource"><span>来源：{this.props.book.source_name}</span></div>
 						<div className="buttons f-clearfix">
 							<a className="readButton button f-fl" onClick={this.startReading}>开始阅读</a>
 							<button className={"button f-fr"} onClick={this.props.isOnshelf?this.gotoDownload:this.addBook}>{val}</button>

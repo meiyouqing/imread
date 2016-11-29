@@ -110,6 +110,7 @@
 .m-recharge-detail .content li span.d-date{font-size: 12px;color: #777777;}
 .m-recharge-detail .content li span.d-lastdate{font-size: 11px;color: #777777;}
 .m-recharge-detail .content li .u-dis-sec{line-height: 40px;height: 40px;font-size: 17px}
+.m-recharge-detail .content li .f-fl{max-width: 80%;}
 .m-recharge-detail .u-sLoading{height: 54px;line-height: 50px;}
  .plus{color: #0196aa;}
 

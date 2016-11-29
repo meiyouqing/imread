@@ -29,7 +29,7 @@ var Mall = React.createClass({
 			navList:data.pagelist
 		});
 		if(typeof window === 'undefined') return;
-		if(!/mall\/?$/.test(location.pathname)) return;
+		if(!/mall\/?$/.test(location.pathname) && !this.state.firstTime) return;
 		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	getNavFaile: function(){
@@ -58,10 +58,10 @@ var Mall = React.createClass({
 		this.refs.selector.style.opacity = 0;
 		this.id = this.id===undefined?1:this.id;
 		GLOBAL.cookie('group_id',this.id,{expires: 1000});
+		this.getNav();
 
 		setTimeout(function(){
 			this.setState({firstTime: false});
-			this.getNav();
 		}.bind(this),800);
 	},
 	hideUser: function(){

@@ -21,3 +21,4 @@ test.js
 webpack.config.js
 .gitlab-ci.yml
 public/p
+server/access_token.json

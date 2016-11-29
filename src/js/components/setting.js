@@ -115,10 +115,10 @@ var Setting = React.createClass({
 		];
 		//微信不需要 ‘修改密码’
 		if(this.state.isWx) blockData.shift();
-
+		var back = <Link className="f-fl iconfont icon-left" to='/'></Link>
 		return (
 			<div className="g-ggWraper gg-body">
-				<Header right={false} title={'设置'} path={this.props.route}/>
+				<Header right={false} title={'设置'} left={back} path={this.props.route}/>
 				<div className="g-main g-main-1">
 					<div className="m-settingblock g-scroll">
 					<section className="m-list">
