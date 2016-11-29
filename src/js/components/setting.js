@@ -77,7 +77,7 @@ var Setting = React.createClass({
 	selectedFavor: function(e){
 		if(e.target.tagName !== 'LI') return;
 		var a  = e.target.getAttribute('data-index');
-		GLOBAL.cookie('group_id', a);
+		GLOBAL.cookie('group_id', a,{expires: 1000});
 		this.setState({detail: this.py[a]});
 		this.disPatch('resetMall');
 		this.closeSelector();

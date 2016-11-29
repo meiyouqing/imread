@@ -57,7 +57,7 @@ var Mall = React.createClass({
 	gotoMall: function(){
 		this.refs.selector.style.opacity = 0;
 		this.id = this.id===undefined?1:this.id;
-		GLOBAL.cookie('group_id',this.id);
+		GLOBAL.cookie('group_id',this.id,{expires: 1000});
 
 		setTimeout(function(){
 			this.setState({firstTime: false});
