@@ -9,7 +9,7 @@ var Config = {
 };
 var API={
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
-	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
+	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id: 1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
@@ -128,7 +128,7 @@ function getGETUrl(url, postdata) {
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
 	// var urlBase = 'http://192.168.0.34:9090';
-	 var urlBase = 'http://192.168.0.252:8080';
+	// var urlBase = 'http://192.168.0.252:8080';
 
 
 
