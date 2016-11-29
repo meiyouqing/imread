@@ -271,7 +271,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .u-book-0 .add .icon-add{left: 0;right: 0;top: 0;bottom: 0;background: #FFFFFF;}
 .u-book-0 .add .icon-add:before{position: absolute;left: 0;right: 0;text-align: center;top: 50%;height: 44px;line-height: 44px;font-size: 44px;margin-top: -22px;color: #DDDDDD;}
 
-.u-book-1{padding:10px 10px 4px;border-top: 1px solid #eeeeee;}
+.u-book-1{padding:10px 10px 4px;border-bottom: 1px solid #eeeeee;}
 .u-book-1:first-of-type{border-top: none;padding-top: 0px;}
 /*.u-book-1:last-of-type{padding-bottom: 0px;}*/
 .u-pWrap > .u-book-1:first-of-type{padding-top: 10px;}
