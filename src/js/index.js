@@ -25,6 +25,15 @@ if(typeof window !== 'undefined'){
 	if(window.__PRELOADED_STATE__ === null){
 		browserHistory.replace('/');
 	}
+}else{
+	if(/appid=\w+/.test(global.location) && !GLOBAL.appid){
+		var appid = global.location.match(/appid=(\w+)&?/)[1];
+		GLOBAL.header.appid = appid;
+	}
+	if(/channel=\w+/.test(global.location) && !GLOBAL.channel){
+		var channel = global.location.match(/channel=(\w+)&?/)[1];
+		GLOBAL.header.channel = channel;
+	}
 }
 
 render(
