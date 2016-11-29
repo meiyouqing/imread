@@ -45,6 +45,7 @@ app.get('/baiduClientCredentials',(req,res)=>{
   const token = global.access_token || fs.readFileSync(path.join(__dirname, './access_token.json'),'utf8');
   const token_ = token && JSON.parse(token);
   if(token_ && token_.lastTime + token_.expires_in >= Date.now()){ //access_token does not expired
+    console.log('token from file')
     res.send(token);
     return;
   }
@@ -53,7 +54,8 @@ app.get('/baiduClientCredentials',(req,res)=>{
     client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
     client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
   },sec,err,true);
-  function sec(data){  
+  function sec(data){
+    console.log('token from request')
     data.lastTime = Date.now();
     global.access_token = JSON.stringify(data);
     fs.writeFileSync(path.join(__dirname, './access_token.json'),JSON.stringify(data));
@@ -167,7 +169,6 @@ function renderFullPage (html, preloadedState){
             })()
         </script>
         <div id="appContainer">${html}</div>
-        <audio id="audioRead" src="" autoplay></audio>
         <script>
           window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\x3c')}
         </script>

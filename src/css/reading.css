@@ -10,7 +10,7 @@
 .u-settings-top{top: 0;line-height: 60px;text-align: left;font-size: 16px;border-bottom: 1px solid #eeeeee;}
 .u-settings-top .icon-back{position:absolute; left: 15px;padding: 0 10px;line-height: 60px;color: #FFFFFF;cursor: pointer;}
 .u-settings-top .m-block{border-top: 0;border-bottom: 0;}
-.u-settings-top .icon-close{position: absolute;display:block;bottom: 10px;width: 24px;height: 24px;line-height: 24px;border-radius: 50%;right: 16px;color: #FFF;font-size: 12px;background: rgba(0, 0, 0, .7);}
+.u-settings-top.ad .icon-cha{position: absolute;display:block;bottom: 10px;width: 24px;height: 24px;line-height: 24px;border-radius: 50%;right: 10px;color: #555;font-size: 24px;background: white;}
 .u-settings-top span.title{max-width:60%;height: 60px;display: block;padding: 0 15px;font-size: 18px;}
 .u-settings-top .iconfont{display: inline-block;width: 34px;height: 61px;line-height: 61px;font-size: 23px;}
 .u-settings-top .icon-left{margin-left: 7px;}
@@ -340,6 +340,7 @@
 
 .u-ttsSetting .btnWrap{display: -webkit-flex;display: flex;justify-content: space-around;align-items: center;padding:0 10%;margin-top: 25px;}
 .u-ttsSetting .u-pauseBtn {font-size: 70px;line-height:1;color: #32ABBD;}
+.u-ttsSetting .u-pauseBtn:active{color: #0faabe;}
 .u-ttsSetting .u-quitTtsBtn, .u-ttsSetting .u-voiceBtn {font-size: 50px;line-height:1;color: #0096aa;}
 
 .u-ttsSetting .m-slidBar{margin-top: 12px;}

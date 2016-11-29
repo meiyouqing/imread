@@ -42,6 +42,7 @@ var BookContent = (function() {
 				}
 					
 			}, function(err) {
+				// console.log(err);return;
 				gotoMigu(sourceConfig);
 			});
 		};
