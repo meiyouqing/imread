@@ -9,7 +9,7 @@ var Config = {
 };
 var API={
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
-	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
+	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id:1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
@@ -309,7 +309,7 @@ function setRequestHeaders(request) {
 		'Info-Imsi': '',
 		'Info-Imei': '',
 		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
-		'Info-appid' : GLOBAL.header.appid ||'7',
+		'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
 		'Info-Version': '1.0.1',
 		'Info-Model': '',
 		'Info-Os': '',
