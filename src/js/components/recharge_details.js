@@ -40,7 +40,7 @@ var Lister =  React.createClass({
 			
 			<li>
 				<div className="f-fl">
-					<span className="d-title">{this.props.data.remarks}</span>
+					<span className="d-title f-ellipsis">{this.props.data.remarks}</span>
 					<span className="d-date">{this.prettyDate(this.props.data.create_time)}</span>
 				</div>
 				<div className = "f-fr">
