@@ -317,13 +317,15 @@ var Reading = React.createClass({
 							.replace(/&rdquo;/g, '”')
 							.replace(/&nbsp;/g, '')
 							.replace(/&middot;/g, '·')
-							.replace(/\<img[^\>]+src='([^\>]+)'[^\>]*\/\>/g, function($1, $2) {
-								//return "<img src='" + '//wap.cmread.com' + $2 + "' />";
-								return '';
-							}).split(/\<br\s*\/\>/);
+							.replace(/<img[^>]+>/g, '')
+							.split(/<br\s*\/?>/);
 
 		//按段落处理引号，防止错误一个所有的配对出错，这样最多影响一段
 		for (var i = 0; i < passages.length; i++) {
+			if(!passages[i].length) { //去掉空内容
+				passages.splice(i,1);
+				continue;
+			}
 			passages[i] = passages[i].replace(/&quot;([^(&quot;)]*)&quot;/g, function($1, $2) {
 				return '“' + $2 + '”';
 			})
@@ -370,7 +372,7 @@ var Reading = React.createClass({
 							<Block5 data={{
 								contentlist: [data.intercutList[randIndex]]
 							}} type="11" fromReading={true} />
-							<span className="iconfont icon-close" onClick={that.closeIntercut}></span>
+							<span className="iconfont icon-cha" onClick={that.closeIntercut}></span>
 						</div>
 					);
 
@@ -717,7 +719,7 @@ var Reading = React.createClass({
 		if(this.refs.scrollarea.scrollTop > 165){
 			const ps = this.refs.scrollarea.querySelectorAll('p');
 			const len=ps.length;
-			for(var i=0;i<len;i++){
+			for(var i=1;i<len;i++){
 				// console.log(this.refs.scrollarea.scrollTop,' / ',ps[i].offsetTop)
 				if(ps[i].offsetTop > this.refs.scrollarea.scrollTop){
 					this.setState({
@@ -748,15 +750,7 @@ var Reading = React.createClass({
 	},
 	audioRead:function(){
 		//audio reading 
-		if(!this.access_token){
-			AJAX.getJSON('GET','/baiduClientCredentials',{},(data)=>{
-				this.access_token = data.access_token;
-				this.audioRead();
-			},(err)=>{
-				POP.alert(err.error+' description: '+err.error_description);
-			})
-			return;
-		}
+		if(!this.access_token) return;
 		const len = this.state.data.content.length;
 		const cuid = 'ewfwiiw883';
 		const voice = this.state.femaleVoice? 0:1;
@@ -786,19 +780,17 @@ var Reading = React.createClass({
 		}
 			
 
-		function doinsert(){
+		function doinsert(){console.log(this.state.data.content[this.state.ttsIndex])
 			if(this.player) document.body.removeChild(this.player);
 			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
-			// this.audioSource = document.createElement('source');
-			//console.log(params)
 			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
-			// this.player.appendChild(this.audioSource);
 			this.player.setAttribute('preload','');
+			this.player.setAttribute('autoPay','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
-			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.refs.ttsReading && this.state.ttsIndex!==0 && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			this.player.load();
 			this.player.play();
 		}
@@ -825,6 +817,10 @@ var Reading = React.createClass({
 		this.path = this.props.route.path.replace(/:([^\"]*)/,'');
 		this.path = window.location.pathname.split('/'+this.path)[0];
 
+		//为语音朗读准备access token
+		AJAX.getJSON('GET','/baiduClientCredentials',{},(data)=>{
+			this.access_token = data.access_token;
+		})		
 	},
 	handlePullToRrefresh: function(e) {
 		var scrollY = this.refs.scrollarea.scrollTop;
