@@ -1,6 +1,7 @@
 /* eslint-disable no-console, no-use-before-define */
 
 import path from 'path'
+import fs from 'fs'
 import express from 'express'
 // import qs from 'qs'
 
@@ -41,16 +42,27 @@ app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}
 
 //语音朗读api
 app.get('/baiduClientCredentials',(req,res)=>{
+  const token = global.access_token || fs.readFileSync(path.join(__dirname, './access_token.json'),'utf8');
+  const token_ = token && JSON.parse(token);
+  if(token_ && token_.lastTime + token_.expires_in >= Date.now()){ //access_token does not expired
+    res.send(token);
+    return;
+  }
   AJAX.getJSON('POST','https://openapi.baidu.com/oauth/2.0/token',{
     grant_type:'client_credentials',
     client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
     client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
   },sec,err,true);
-  function sec(data){
-    res.send(JSON.stringify(data));
+  function sec(data,fresh){  
+    data.lastTime = Date.now();
+    global.access_token = JSON.stringify(data);
+    fs.writeFileSync(path.join(__dirname, './access_token.json'),JSON.stringify(data));
+    res.send(JSON.stringify(data))
   }
   function err(err){
-    console.log(err.error+'description: '+err.error_description)
+    console.log(err)
+    console.log(err.error+' description: '+err.error_description);
+    res.status('402').send(JSON.stringify(err))
   }
 })
 app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{
