@@ -78,15 +78,27 @@ var Setting = React.createClass({
 	selectedFavor: function(e){
 		if(e.target.tagName !== 'LI') return;
 		var a  = e.target.getAttribute('data-index');
-
 		AJAX.go('setConfig',{config_id:3,config_value:a},function(res){
-			if(res.code === 200){
+			//if(res.code === 200){
 				localStorage.viewed = a;
 				this.setState({detail: this.py[a]});
 				this.disPatch('resetMall');
-			}
-
-		}.bind(this));
+			//}
+		}.bind(this),function(data){
+			console.log(data)
+			if (typeof data.error === 'string')
+	                POP.alert(data.error);
+	            else
+	                for (var key in data.error[0]) {
+	                	if(data.error[0][key] == '用户未登录')	{
+	                		localStorage.viewed = a;
+					this.setState({detail: this.py[a]});
+					this.disPatch('resetMall');
+	                		return;
+	                	}
+	                  POP.alert(data.error[0][key])
+	                }
+			}.bind(this));
 		this.closeSelector();
 	},
 	componentDidMount: function(){

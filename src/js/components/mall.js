@@ -19,7 +19,7 @@ var Mall = React.createClass({
 		var config_id = (localStorage.viewed == undefined) ?1: localStorage.viewed;
 		AJAX.go('group',{
 			group_id: '1',
-			config_id: config_id
+			// config_id: config_id
 		},this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
@@ -29,7 +29,7 @@ var Mall = React.createClass({
 			navList:data.pagelist
 		});
 		if(typeof window === 'undefined') return;
-		if(!/mall\/?$/.test(location.pathname)) return;
+		if(!/mall.page.\d\/?$/.test(location.pathname)) return;
 		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	getNavFaile: function(){
@@ -65,6 +65,20 @@ var Mall = React.createClass({
 					this.setState({firstTime: false});
 					this.getNav();
 				}.bind(this),800);
+		}.bind(this),function(data){
+			if (typeof data.error === 'string')
+	                POP.alert(data.error);
+	            else
+	                for (var key in data.error[0]) {
+	                	if(data.error[0][key] == '用户未登录')	{
+	                		setTimeout(function(){
+						this.setState({firstTime: false});
+						this.getNav();
+					}.bind(this),800);
+	                		return;
+	                	}
+	                  POP.alert(data.error[0][key])
+	                }
 		}.bind(this));
 
 		// setTimeout(function(){
