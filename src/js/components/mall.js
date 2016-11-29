@@ -16,10 +16,10 @@ if(typeof window !== 'undefined'){
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	getNav: function(){
-		var config_id = (localStorage.viewed == undefined) ?1: localStorage.viewed;
+		var config_id = (GLOBAL.cookie('group_id') == undefined) ?1: GLOBAL.cookie('group_id');
 		AJAX.go('group',{
 			group_id: '1',
-			// config_id: config_id
+			config_id: config_id
 		},this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
@@ -29,7 +29,7 @@ var Mall = React.createClass({
 			navList:data.pagelist
 		});
 		if(typeof window === 'undefined') return;
-		if(!/mall.page.\d\/?$/.test(location.pathname)) return;
+		if(!/mall\/?$/.test(location.pathname)) return;
 		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	getNavFaile: function(){
@@ -57,35 +57,12 @@ var Mall = React.createClass({
 	gotoMall: function(){
 		this.refs.selector.style.opacity = 0;
 		this.id = this.id===undefined?1:this.id;
-		localStorage.viewed = this.id;
+		GLOBAL.cookie('group_id',this.id,{expires: 1000});
 
-		AJAX.go('setConfig',{config_id:3,config_value:this.id},function(res){
-			if(res.code === 200)
-				setTimeout(function(){
-					this.setState({firstTime: false});
-					this.getNav();
-				}.bind(this),800);
-		}.bind(this),function(data){
-			if (typeof data.error === 'string')
-	                POP.alert(data.error);
-	            else
-	                for (var key in data.error[0]) {
-	                	if(data.error[0][key] == '用户未登录')	{
-	                		setTimeout(function(){
-						this.setState({firstTime: false});
-						this.getNav();
-					}.bind(this),800);
-	                		return;
-	                	}
-	                  POP.alert(data.error[0][key])
-	                }
-		}.bind(this));
-
-		// setTimeout(function(){
-		// 	this.setState({firstTime: false});
-		// 	this.getNav();
-		// }.bind(this),500);
-		
+		setTimeout(function(){
+			this.setState({firstTime: false});
+			this.getNav();
+		}.bind(this),800);
 	},
 	hideUser: function(){
 		this.setState({
@@ -105,8 +82,7 @@ var Mall = React.createClass({
 	},
 	componentDidMount: function(){
 		try{
-			localStorage.agent_model = "private";
-			this.setState({firstTime: localStorage.viewed?false:true,show: true})
+			this.setState({firstTime: GLOBAL.cookie('group_id')?false:true,show: true})
 		}catch(e){
 			this.setState({firstTime: false,show: true})
 		}

@@ -49,8 +49,7 @@ var Setting = React.createClass({
 		return {
 			isWx:false,
 			showSelector: false,
-			index: 0,
-			localStorage: false
+			index: 0
 		}
 	},
 	requireLogin: function(e){
@@ -78,36 +77,17 @@ var Setting = React.createClass({
 	selectedFavor: function(e){
 		if(e.target.tagName !== 'LI') return;
 		var a  = e.target.getAttribute('data-index');
-		AJAX.go('setConfig',{config_id:3,config_value:a},function(res){
-			//if(res.code === 200){
-				localStorage.viewed = a;
-				this.setState({detail: this.py[a]});
-				this.disPatch('resetMall');
-			//}
-		}.bind(this),function(data){
-			console.log(data)
-			if (typeof data.error === 'string')
-	                POP.alert(data.error);
-	            else
-	                for (var key in data.error[0]) {
-	                	if(data.error[0][key] == '用户未登录')	{
-	                		localStorage.viewed = a;
-					this.setState({detail: this.py[a]});
-					this.disPatch('resetMall');
-	                		return;
-	                	}
-	                  POP.alert(data.error[0][key])
-	                }
-			}.bind(this));
+		GLOBAL.cookie('group_id', a,{expires: 1000});
+		this.setState({detail: this.py[a]});
+		this.disPatch('resetMall');
 		this.closeSelector();
 	},
 	componentDidMount: function(){
 		try{
-			localStorage.agent_model = "private";
 			this.py = ['随便看看','男生网文','女生网文','出版图书'];
-			this.setState({isWx:this.isWx(),detail:this.py[localStorage.viewed],localStorage: true})
+			this.setState({isWx:this.isWx(),detail:this.py[GLOBAL.cookie('group_id')]})
 		}catch(e){
-			this.setState({isWx:this.isWx(),localStorage: false})
+			this.setState({isWx:this.isWx()})
 		}
 
 	},
@@ -133,7 +113,6 @@ var Setting = React.createClass({
 				target: '_self'
 			}
 		];
-		if(!this.state.localStorage) blockData.shift();
 		//微信不需要 ‘修改密码’
 		if(this.state.isWx) blockData.shift();
 
