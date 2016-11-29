@@ -115,7 +115,7 @@ function onError(res,err){
 
 //set static acesse header
 function setHeader(res,url,stat){	
-  console.log(url);
+  //console.log(url);
 	if(/\\p\\modules\\.+\.js$/.test(path.resolve(url))){
 		res.setHeader('Cache-Control','max-age=31536000')
 	}

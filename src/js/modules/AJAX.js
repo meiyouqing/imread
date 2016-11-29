@@ -127,8 +127,8 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
-	var urlBase = 'http://192.168.0.34:9090';
-	var urlBase = 'http://192.168.0.252:8080';
+	// var urlBase = 'http://192.168.0.34:9090';
+	 var urlBase = 'http://192.168.0.252:8080';
 
 
 	if (/^\/api/.test(url)) {
@@ -153,13 +153,45 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
 	// console.log(headers)
 	// console.log(method)
-		
-	const promise = method === 'GET'?
-				fetch(getGETUrl(url,postdata)):
-				fetch(url,{
-					method,
-					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
-				});
+
+	//request object
+	const headers = new Headers({
+		'Info-Imsi': '',
+		'Info-Imei': '',
+		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
+		'Info-appid' : GLOBAL.header.appid ||'7',
+		'Info-Version': '1.0.1',
+		'Info-Model': '',
+		'Info-Os': '',
+		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
+		'Info-Vcode': '101',
+		'Info-Userid': GLOBAL.header.userId || '',
+		'Info-Uuid': '',
+		'Info-Resolution': 1,
+		'Curtime': new Date().Format('yyyyMMddhhmmss'),
+		'WidthHeight': 1
+	})
+
+	const request = method === 'GET'?
+					 new Request(getGETUrl(url,postdata),{
+						method,
+						headers,
+						mode:'cors'
+					}):
+					 new Request(url,{
+						method,
+						headers,
+						mode:'cors',
+						body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+					})
+	const promise = fetch(request);
+
+	// const promise = method === 'GET'?
+	// 			fetch(getGETUrl(url,postdata)):
+	// 			fetch(url,{
+	// 				method,
+	// 				body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+	// 			});
 	let timeoutId = 0;
 	const timeout = (ms,promise) => {
 		return new Promise((resolve,reject)=>{
@@ -169,7 +201,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 			promise.then(resolve,reject);
 		})
 	};	
-	timeout(5000,promise).then(function(response) {
+	timeout(50000,promise).then(function(response) {
 		clearTimeout(timeoutId);
 		if (response.status >= 200 && response.status < 300) {
 		    return response.json();
