@@ -53,14 +53,13 @@ app.get('/baiduClientCredentials',(req,res)=>{
     client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
     client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
   },sec,err,true);
-  function sec(data,fresh){  
+  function sec(data){  
     data.lastTime = Date.now();
     global.access_token = JSON.stringify(data);
     fs.writeFileSync(path.join(__dirname, './access_token.json'),JSON.stringify(data));
     res.send(JSON.stringify(data))
   }
   function err(err){
-    console.log(err)
     console.log(err.error+' description: '+err.error_description);
     res.status('402').send(JSON.stringify(err))
   }
@@ -95,7 +94,7 @@ app.get('*', (req, res) => {
       res.redirect(redirect.pathname + redirect.search)
     } else if (props) {
       res.setHeader('cache-control','private,max-age=600')
-      getPost(req.url, goSend.bind(null,res,props), onError.bind(null,res))
+      getPost(req, goSend.bind(null,res,props), onError.bind(null,res));
     } else {
       res.status(404).send('Not Found')
     }
@@ -127,7 +126,6 @@ function onError(res,err){
 
 //set static acesse header
 function setHeader(res,url,stat){	
-  console.log(url);
 	if(/\\p\\modules\\.+\.js$/.test(path.resolve(url))){
 		res.setHeader('Cache-Control','max-age=31536000')
 	}

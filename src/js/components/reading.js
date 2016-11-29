@@ -751,10 +751,11 @@ var Reading = React.createClass({
 		if(!this.access_token){
 			AJAX.getJSON('GET','/baiduClientCredentials',{},(data)=>{
 				this.access_token = data.access_token;
+				this.audioRead();
 			},(err)=>{
 				POP.alert(err.error+' description: '+err.error_description);
-				return;
 			})
+			return;
 		}
 		const len = this.state.data.content.length;
 		const cuid = 'ewfwiiw883';
@@ -764,7 +765,7 @@ var Reading = React.createClass({
 		
 		doinsert.bind(this)();
 		
-		this.player.onended = (e)=>{
+		this.player.onended = this.player.onerror = (e)=>{
 			const isChapterEnd = this.state.ttsIndex >= len;
 			if(isChapterEnd){
 				this.goToChapter(this.state.data.nextChapterId);
@@ -777,11 +778,13 @@ var Reading = React.createClass({
 			// this.player.oncanplay = ()=>{
 				if(!this.state.playing) {
 					this.player.pause();
+					return;
 				};
 				this.player.load();
 				this.player.play();
 			// }
-		}		
+		}
+			
 
 		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
