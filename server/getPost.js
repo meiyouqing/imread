@@ -1,8 +1,8 @@
 import AJAX from '../src/js/modules/AJAX'
 import React from 'react'
 
-const getPost =  function(url,callback,onError){
-  url = url.replace(/\?.*$/,'') //移出微信有时自带字符
+const getPost =  function(req,callback,onError){
+  const url = req.url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
  //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
@@ -21,7 +21,9 @@ const getPost =  function(url,callback,onError){
   }
 
   if(path.length<3 && !/pay$/.test(url)){
-    AJAX.init('group.1');
+    const match = req.headers.cookie.match(/group_id=(\d)/);
+    const group_id = (match && match[1]) || 1;
+    AJAX.init('group.'+group_id);
     // console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
       param = path.length ===2?param:'page.'+data.pagelist[0].pgid;

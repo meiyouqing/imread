@@ -30,6 +30,15 @@ const GLOBAL = {
 	unRendered:[],
 	orderLIst:{},
 	pushLinks:{},
+	getUuid: function () {
+		var uuid = storage.get('InfoUuid', 'string');
+		if (!uuid) {
+			uuid = '' + (+new Date) + Math.random();
+			GLOBAL.header['InfoUuid'] = uuid;
+			storage.set('InfoUuid', uuid);
+		}
+		return uuid;
+	},
 	getLocation: function(){
 		return (typeof window === 'undefined'? global.pathname:location.pathname);
 	},
@@ -287,15 +296,6 @@ const GLOBAL = {
 		}
 	},
 	noop: function() {},
-	getUuid: function () {
-		var uuid = storage.get('InfoUuid', 'string');
-		if (!uuid) {
-			uuid = '' + (+new Date) + Math.random();
-			GLOBAL.header['InfoUuid'] = uuid;
-			storage.set('InfoUuid', uuid);
-		}
-		return uuid;
-	},
 	prettyDate: function(date) {
 		var day = date.substr(4,2)+ '-' +date.substr(6,2);
 		date = date.substr(0,4) + '/' +date.substr(4,2)+ '/' +date.substr(6,2)+ ' ' +date.substr(8,2)+ ':' +date.substr(10,2)+ ':' +date.substr(12,2);
