@@ -748,14 +748,22 @@ var Reading = React.createClass({
 	},
 	audioRead:function(){
 		//audio reading 
+		if(!this.access_token){
+			AJAX.getJSON('GET','/baiduClientCredentials',{},(data)=>{
+				this.access_token = data.access_token;
+			},(err)=>{
+				POP.alert(err.error+' description: '+err.error_description);
+				return;
+			})
+		}
 		const len = this.state.data.content.length;
-		const access_token = '24.9871614f3a3a6fca1c621fdca104b9a4.2592000.1482378570.282335-6772709';
 		const cuid = 'ewfwiiw883';
 		const voice = this.state.femaleVoice? 0:1;
 		const volum = this.state.volum*2-1;
 		const speed = this.state.speed*2-1;
 		
 		doinsert.bind(this)();
+		
 		this.player.onended = (e)=>{
 			const isChapterEnd = this.state.ttsIndex >= len;
 			if(isChapterEnd){
@@ -764,27 +772,31 @@ var Reading = React.createClass({
 			}
 			this.setState({ttsIndex:isChapterEnd? 0:this.state.ttsIndex+1});
 			this.refs.ttsReading && !isChapterEnd && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
-			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
-			this.player.oncanplay = ()=>{
-				if(!this.state.playing) return;
+			// this.player.oncanplay = ()=>{
+				if(!this.state.playing) {
+					this.player.pause();
+				};
+				this.player.load();
 				this.player.play();
-			}
+			// }
 		}		
 
 		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
-			const params = `lan=zh&tok=${access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
 			// this.audioSource = document.createElement('source');
 			//console.log(params)
 			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
 			// this.player.appendChild(this.audioSource);
-			// this.player.setAttribute('autoplay','');
+			this.player.setAttribute('preload','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
 			this.refs.ttsReading && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.player.load();
 			this.player.play();
 		}
 	},

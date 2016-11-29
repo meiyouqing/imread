@@ -37,10 +37,11 @@ app.get('/baiduClientCredentials',(req,res)=>{
     client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
   },sec,err,true);
   function sec(data){
-    console.log(data)
+    res.end(JSON.stingify({code:data}))
   }
   function err(err){
-    console.log(err.error+'description: '+err.error_description)
+    console.log(err.error+'description: '+err.error_description);
+    res.status('403').send(JSON.stringify(err))
   }
 })
 app.get(/(error|undefined|null|favicon\.ico)$/,(req, res)=>{

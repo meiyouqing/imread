@@ -53,9 +53,13 @@ var Recharge = React.createClass({
 			}.bind(this));
 
 			that.loading=false;
+			that.setState({showKey: false});
 			if(data.code != 200){
+				that.params = {};
+				that.refs.key.value = '';
 				if(data.reason == '省份被屏蔽'){
 					POP._alert('您的号码所在省份暂不支持充值，请使用其他充值方式');
+					return;
 				}else{
 					POP._alert(data.reason);
 					return;
@@ -66,7 +70,7 @@ var Recharge = React.createClass({
  	},
 	getCode: function(e) {
 		e.preventDefault();
-		if (this.state.s) {return ;}
+		// if (this.state.s) {return ;}
 		var mobile_num = this.refs.mobile_num.value;
 		if (!GLOBAL.assertNotEmpty(mobile_num, '请输入手机号')) {return ;}
 		if (!GLOBAL.assertMatchRegExp(mobile_num, /^1\d{10}$/, '请输入正确的手机号')) {return ;}
@@ -75,27 +79,27 @@ var Recharge = React.createClass({
 			return;
 		}
 		//this.params_init.mobileNum = mobile_num;
-		var countDown = function(){
-			this.setState({
-				s: 60
-			});
-			var inter = setInterval(function() {
-				if (this.state.s > 0 && this.isMounted()) {
-					this.setState({
-						s: this.state.s - 1
-					});
-				} else {
-					clearInterval(inter);
-				}
-			}.bind(this), 1000);
-		}.bind(this);
-		var initError = function (res){
-			// console.log(res)
-			this.setState({
-				s: 0
-			});
-			POP.alert((res.reason+', 错误码：'+res.code));
-		}.bind(this);
+		// var countDown = function(){
+		// 	this.setState({
+		// 		s: 60
+		// 	});
+		// 	var inter = setInterval(function() {
+		// 		if (this.state.s > 0 && this.isMounted()) {
+		// 			this.setState({
+		// 				s: this.state.s - 1
+		// 			});
+		// 		} else {
+		// 			clearInterval(inter);
+		// 		}
+		// 	}.bind(this), 1000);
+		// }.bind(this);
+		// var initError = function (res){
+		// 	// console.log(res)
+		// 	this.setState({
+		// 		s: 0
+		// 	});
+		// 	POP.alert((res.reason+', 错误码：'+res.code));
+		// }.bind(this);
 
 
 		// var gotInit = function(data,again){
@@ -115,7 +119,7 @@ var Recharge = React.createClass({
 		else this.rePay();
 
 		this.prv_num = mobile_num;
-		countDown();
+		//countDown();
 		// if(!this.initData||storage.get('payUser')!==mobile_num){
 		// 	AJAX.go('paySign', this.params_init, function(data) {
 		// 		// console.log(data)
@@ -131,6 +135,7 @@ var Recharge = React.createClass({
 		var postData = {
 			productId:this.props.params.rechargeId,
 			mobileNum:that.refs.mobile_num.value,
+			callback: encodeURIComponent('https://m.imread.com/pay'+location.search)
 		}
 
 		AJAX.go('pay',postData,function(data){
@@ -141,7 +146,13 @@ var Recharge = React.createClass({
 					trade_day:data.success.trade_day,
 					order_no:data.success.orderno
 				};
-				POP._alert('验证码发送成功');
+
+				if(data.success.pay_url){
+					location.href = data.success.pay_url;
+				} else {
+					that.setState({showKey: true});
+					POP._alert('验证码发送成功');
+				}
 			} else {
 				POP._alert('验证码发送失败');
 			}
@@ -152,8 +163,10 @@ var Recharge = React.createClass({
 			trade_no: this.params.trade_no,
 			trade_day:this.params.trade_day
 		};
+		var that = this;
 		AJAX.go('repay',params,function(data){
 			if(data.code == 200){
+				that.setState({showKey: true});
 				POP._alert('重新发送成功');
 			} else {
 				POP._alert('重新发送失败');
@@ -177,13 +190,18 @@ var Recharge = React.createClass({
 		return {
 			s:0,
 			aidou: 0,
-			sum: 0
+			sum: 0,
+			showKey: false
 		}
+	},
+	hiddenBox: function(){
+		this.setState({showKey:false})
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
 		return nextState.s != this.state.s 
 			    || nextState.aidou != this.state.aidou
 			    || nextState.sum != this.state.sum
+			    || nextState.showKey != this.state.showKey
 			    || this.props.children != nextPros.children;
 	},
 	componentWillMount: function(){
@@ -228,15 +246,22 @@ var Recharge = React.createClass({
 							<form className="u-registerform u-userform">
 								<div className="u-inputline-2">
 									<input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onFocus={this.handleFocus} onBlur={this.handleBlur} />
-									<div className="f-fr">
+									{/*<div className="f-fr">
 										<a className={"u-ymz u-n-bg "+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
-									</div>
+									</div>*/}
 								</div>
-								<div className="u-inputline-2 f-clearfix">
+								{/*<div className="u-inputline-2 f-clearfix">
 										<input className="u-input-2" placeholder="验证码" type="tel" ref="key" onFocus={this.handleFocus} onBlur={this.handleBlur} />
+								</div>*/}
+								<div ref="key_box" className={"key-box"+(this.state.showKey?' active':'')}>
+									<div className="swaper" onClick={this.hiddenBox}></div>
+									  <div className="key-inner">
+								            <p>请输入验证码:</p> <input className="u-input-2" placeholder="验证码" type="tel" ref="key" />
+								            <a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
+								        </div>
 								</div>
 								<div className="u-inputline u-p-25">
-									<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
+									<a className="u-btn u-btn-full" onClick={this.getCode}>确认充值</a>
 								</div>
 							</form>
 						</div>

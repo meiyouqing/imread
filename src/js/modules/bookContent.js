@@ -46,11 +46,8 @@ var BookContent = (function() {
 			});
 		};
 
-		if(JSON.stringify(storage.get('readConfig')).length == 2) {
-			ReadConfig(getContent)
-		} else {
-			getContent(ReadConfig());
-		}
+		ReadConfig(getContent)
+
 
 		var gotoMigu = function(sourceConfig){
 			if(options.noCross){return} //不要跳转
@@ -116,11 +113,7 @@ var BookContent = (function() {
 						      .replace('$cm', sourceConfig.cm);
 			AJAX.getJSON('GET', url, {}, options.callback, options.onError);
 		};
-		if(JSON.stringify(storage.get('readConfig')).length == 2) {
-			ReadConfig(getContent)
-		} else {
-			getContent(ReadConfig());
-		}
+		ReadConfig(getContent);
 
 		//var sourceConfig = ReadConfig()['config-' + options.source_id];
 	}

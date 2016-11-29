@@ -38,7 +38,7 @@ export const renderFullPage = (html, preloadedState) => {
                 var ua = window.navigator.userAgent.toLowerCase(), code;
                 if(/micromessenger/.test(ua)) {
                     /code=[^\&]+/.test(location.search) && localStorage.setItem('timestamp', Date.now());
-                    if(Date.now() - localStorage.getItem('timestamp') < 10000) return;
+                    if(Date.now() - localStorage.getItem('timestamp') < 30000) return;
                     window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc4b3ed2404d2139f&redirect_uri='+encodeURIComponent(location.origin+'/wxlogin?callback='+encodeURIComponent(location.href))+'&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect';
                 }
             })()
