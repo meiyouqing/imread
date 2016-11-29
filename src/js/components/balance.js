@@ -65,7 +65,7 @@ var Balance = React.createClass({
 	},
 	orderHandle:function(){
 		var ordered = this.state.list[this.state.active];
-		browserHistory.push(GLOBAL.setHref('recharge/'+ordered.productId+location.search));
+		browserHistory.push('/pay/recharge/'+ordered.productId+location.search);
 	},
 	WxOrder: function(){
 		AJAX.go('pay',{
