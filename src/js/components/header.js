@@ -34,6 +34,11 @@ var Header = React.createClass({
 		};
 	},
 	goBack: function(){
+		var search = parseQuery(location.search);
+		if(search.skipurl)	{
+			location.href = search.skipurl;
+			return;
+		}
 		var current = GLOBAL.pushLinks[location.pathname];
 		if(current) {
 			GLOBAL.pushLinks[location.pathname] = null;
