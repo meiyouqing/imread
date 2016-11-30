@@ -31,7 +31,7 @@ var List = React.createClass({
 		});
 	},
 	ajaxHandle:function(data){
-		if(!this.isMounted()) return;
+		// if(!this.isMounted()) return;
 		this.isLoading = false;
 		var pathname = this.props.location.pathname.split('/');
 		if(/^search\./.test(pathname[pathname.length-1])){
@@ -54,20 +54,17 @@ var List = React.createClass({
 				empty:false,
 				scrollUpdate: false
 			})
-			//设置GLOBAL book name
 		}else{
 			if (!data || !data.content.length) {
 				this.setState({
 					noMore:true
 				})
 			}
-
 			this.setState({
 				recommend: data,
 				bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
 				scrollUpdate: false
 			});				
-			//设置GLOBAL book name
 		}
 	},
 	goSearch: function(){
@@ -105,12 +102,13 @@ var List = React.createClass({
 			return listId[listId.length-1]
 	},
 	componentDidMount: function(){
+		// console.log(this.state.bookList)
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 		if(location.pathname.match(/\/alist./)){GLOBAL.title = this.APIParts('listId')[1]}
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProps,nextState) {
-		
+		console.log(this.state.bookList, '/', nextState.bookList)
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props))  {
 			if(!this.state.bookList){

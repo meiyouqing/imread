@@ -20,14 +20,14 @@ const getPost =  function(req,callback,onError){
     return;
   }
 
-  if(path.length<3 && /^mall/.test(url)){
-    const match = req.headers.cookie.match(/group_id=(\d)/);
+  if(path.length<3 && /^\/mall/.test(url)){
+    const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
     const group_id = (match && match[1]) || 1;
     console.log(group_id)
-    AJAX.init('group.'+group_id);
+    AJAX.init('group.1.'+group_id);
     console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
-      param = path.length ===2?param:'page.'+data.pagelist[0].pgid;
+      param = 'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
      if( path.length !== 2) global.pathname += '/'+param;
       goRend();

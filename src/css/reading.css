@@ -333,15 +333,16 @@
 
 /* audio reading */
 #audioRead{position: fixed;z-index:-999;top: -9999px;visibility: hidden;}
-.m-reading .u-readingContent .ttsReading{color: #0096aa;}
+.m-reading .ttsReading{color: #0096aa;}
 .u-readingsetting .u-playBtn{position: fixed;z-index:1000;bottom: 100px;right: 33px;width: 65px;height: 65px;font-size: 29px;border-radius: 100%;background: white;color: #0096aa;}
 
 .u-ttsSetting{position: fixed;width: 100%;height: 225px;bottom:0;z-index: 999;background: white;}
 
 .u-ttsSetting .btnWrap{display: -webkit-flex;display: flex;justify-content: space-around;align-items: center;padding:0 10%;margin-top: 25px;}
-.u-ttsSetting .u-pauseBtn {font-size: 70px;line-height:1;color: #32ABBD;}
-.u-ttsSetting .u-pauseBtn:active{color: #0faabe;}
+.u-ttsSetting .u-pauseBtn {font-size: 70px;line-height:1;padding-top:3px;color: #32ABBD;}
+.u-ttsSetting .u-pauseBtn:active{color: cyan;}
 .u-ttsSetting .u-quitTtsBtn, .u-ttsSetting .u-voiceBtn {font-size: 50px;line-height:1;color: #0096aa;}
+.u-ttsSetting .u-quitTtsBtn:active, .u-ttsSetting .u-voiceBtn:active{color:cyan;}
 
 .u-ttsSetting .m-slidBar{margin-top: 12px;}
 /*.u-ttsSetting .u-volume, .u-ttsSetting .u-speed {height: 30px;line-height: 30px;padding: 10px 30px;}

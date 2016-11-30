@@ -13,7 +13,6 @@ if(typeof window !== 'undefined'){
 }
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
-	var Hammer = require('../modules/hammer');
 }
 
 var recentRead = React.createClass({
