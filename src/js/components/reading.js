@@ -784,7 +784,6 @@ var Reading = React.createClass({
 			this.setState({ttsIndex:isChapterEnd? -1:this.state.ttsIndex+1});
 			this.refs.ttsReading && this.state.ttsIndex>0  && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
-			console.log(content);
 			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
 			// this.player.oncanplay = ()=>{
@@ -800,7 +799,6 @@ var Reading = React.createClass({
 		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
 			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
-			console.log(content);
 			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
 			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
