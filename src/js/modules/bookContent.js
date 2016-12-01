@@ -105,8 +105,14 @@ var BookContent = (function() {
 		var getContent =  function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			// console.log(sourceConfig)
-			var totalUrl = sourceConfig.source_host.replace('http://','https://') + sourceConfig.chapter_content;
+			var totalUrl;
+			if(sourceConfig.source_host.indexOf('192.168.0')>=0) {
+				totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+			} else {
+				totalUrl = sourceConfig.source_host.replace('http://','https://') + sourceConfig.chapter_content;
+			}
 			// var totalUrl = 'https://readapi.imread.com' + sourceConfig.chapter_content;
+
 			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 							.replace(/\?*/, '')
 						      .replace('$bid', options.book_id)

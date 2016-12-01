@@ -153,7 +153,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .m-self-build .m-block.m-block-top{margin-top: 0px;}
 .m-block > .title {display:block;padding: 8px 10px 0 10px;/*border-bottom: 1px solid #EEE;*/line-height: 42px;background-color: #FFFFFF;color: #0196aa}
 .m-block > .title h2{font-size: 17px;color: #000;}
-.m-block.m-block-catgory > .title h2{text-align: center;font-size: 16px;}
+.m-block.m-block-catgory > .title h2{text-align: center;font-size: 17px;}
 .m-block > .title h2.style-2{color: #EA2510;}
 .m-block > .title h2 .iconfont{margin-right: 12px;font-weight: 100;font-size: 15px;}
 .m-block > .title .batchChange{}
