@@ -277,7 +277,7 @@ var Login = React.createClass({
 	},
 	switchCode: function(){
 		this.refs.key.value = '';
-		this.refs.vcode.src = 'https:i.imread.com/vcode?date='+ new Date().getTime();
+		this.refs.vcode.src = 'https://i.imread.com/vcode?date='+ new Date().getTime();
 	},
 	do_result: function(data,type){
 		var that = this;
@@ -366,7 +366,7 @@ var Login = React.createClass({
 									<div className="u-inputline-2 f-clearfix f-fl" style={{width:'50%'}}>
 										<input className="u-input-2" placeholder="验证码" type="tele" maxLength="6" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
 									</div>
-									<img className="f-fl" ref="vcode" src="https:i.imread.com/vcode" />
+									<img className="f-fl" ref="vcode" src="https://i.imread.com/vcode" />
 									<div className="f-fr switch" onClick={this.switchCode}>
 										<p>看不清</p>
 										<p>换一张</p>
