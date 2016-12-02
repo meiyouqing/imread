@@ -191,7 +191,7 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .subCat-5 .swipe{overflow: hidden;visibility: hidden;position: relative;}
 .subCat-5 .swipe .swipe-wrap{ overflow: hidden;position: relative;}
 .subCat-5 .swipe .swipe-wrap .swipe-ad{ width:100%;position: relative;}
-.subCat-5 .swipe .swipe-wrap .swipe-ad > img{display: block;}
+.subCat-5 .swipe .swipe-wrap .swipe-ad > img{display: block;width: 100%;height: 100%;}
 .subCat-5 .swipe-nav{position: absolute;bottom: 0px;left: 0;right: 0;height: 16px;line-height: 16px;text-align: center;}
 .subCat-5 .swipe-nav-wrap{display: inline-block;margin: 0 auto;}
 .subCat-5 .swipe-nav-item{display:block;width: 8px;height: 8px;margin-right: 5px;border-radius: 4px;background: rgba(244, 244, 244, 0.5);}

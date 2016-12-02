@@ -16,11 +16,9 @@ if(typeof window !== 'undefined'){
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	getNav: function(){
-		var config_id = (GLOBAL.cookie('group_id') == undefined) ?1: GLOBAL.cookie('group_id');
-		AJAX.go('group',{
-			group_id: '1',
-			config_id: config_id
-		},this.ajaxHandle, this.getNavFaile);
+		var group_id = GLOBAL.cookie('group_id') || 1;
+		AJAX.init('group.1.'+group_id)
+		AJAX.get(this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
 		this.subnav = 'page.'+data.pagelist[0].pgid;
@@ -90,7 +88,7 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(/(\/|mall\/?|page\.\d+)$/.test(location.pathname)){
+		if(/(^\/|mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
 
@@ -110,7 +108,7 @@ var Mall = React.createClass({
 	},
 	componentDidUpdate: function(nextProp,nextState){	
 
-		if(!this.state.navList && /(\/|mall\/?|page\.\d+)$/.test(location.pathname)) this.getNav();
+		if(!this.state.navList && /(^\/|mall\/?|page\.\d+)$/.test(location.pathname)) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;

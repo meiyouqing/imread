@@ -482,7 +482,7 @@ var Reading = React.createClass({
 			if(res.content)	{
 				this.getAD_xp(res);
 			}
-		}.bind(this));
+		}.bind(this),GLOBAL.noop);
 	},
 	getAd_hc: function(bid){
 		AJAX.go('adHc',{bid: bid},function(res){
@@ -774,7 +774,6 @@ var Reading = React.createClass({
 		const speed = this.state.speed*2-1;
 		
 		doinsert.bind(this)();
-		
 		this.player.onended = this.player.onerror = (e)=>{
 			const isChapterEnd = this.state.ttsIndex >= len;
 			if(isChapterEnd){

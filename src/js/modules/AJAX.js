@@ -127,7 +127,7 @@ function getGETUrl(url, postdata) {
 //getJSON接口
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
-	//var urlBase = 'http://192.168.0.34:9090';
+	// var urlBase = 'http://192.168.0.34:9090';
 	// var urlBase = 'http://192.168.0.252:8080';
 
 
@@ -283,7 +283,6 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeade
 		request.withCredentials = true;
 		if(!noHeader) setRequestHeaders(request);
 		if(postdata.formdata){
-			//request.setRequestHeader("Content-Type", "multipart/form-data");
 			postdata = postdata.formdata;
 		}else{
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -291,12 +290,6 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeade
 		}
 		request.send(postdata);
 	} else {
-		// var isYulan = false;
-		// var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
-		// for (var i = 0; i < yulanUrls.length; i++) {
-		// 	isYulan |= new RegExp(yulanUrls[i]).test(url);
-		// }
-		// isYulan = isYulan && /yulan=1/.test(window.location.search);
 		request.open(method, getGETUrl(url, postdata));
 		request.withCredentials = true;
 		if(!noHeader) setRequestHeaders(request);

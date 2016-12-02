@@ -88,7 +88,7 @@ var Login = React.createClass({
 	},
 	checkVcode: function(callback){
 		if(!this.refs.key.value)	return;
-		AJAX.private_go('GET','https:i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
+		AJAX.private_go('GET','//i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
 			if(data.code !== 200){
 				POP._alert('验证码错误');
 				this.switchCode();
@@ -273,10 +273,11 @@ var Login = React.createClass({
 			   		that.do_result(res,'wb');
 			   },that.onloginErr)
 		}
+
 	},
 	switchCode: function(){
 		this.refs.key.value = '';
-		this.refs.vcode.src = 'https:i.imread.com/vcode?date='+ new Date().getTime()
+		this.refs.vcode.src = 'https:i.imread.com/vcode?date='+ new Date().getTime();
 	},
 	do_result: function(data,type){
 		var that = this;
@@ -289,12 +290,15 @@ var Login = React.createClass({
 			// browserHistory.push('/')
 			// return;
 			//判断登陆后的跳转
-			if(that.from && that.from.skipurl){
-				window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+			if(that.from){
+				if(that.from.skipurl){
+					window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
+				}else if(that.from.redirectPath){
+					browserHistory.replace(decodeURIComponent(that.from.redirectPath));
+				}
 			}else{
-				browserHistory.push('/')
+				browserHistory.replace('/');
 			}
-			return;
 		} else {
 			that.onloginErr();
 		}
@@ -321,17 +325,22 @@ var Login = React.createClass({
 		document.body.appendChild(sr);
 		sr.onload = ()=>{setTimeout(()=>{cb()},200)};
     },
+	getRedirectPath:function(){
+		return encodeURIComponent(location.pathname.replace(/\/login$/,''));
+	},
 	QQ_login: function(){
+		var redirectPath = encodeURIComponent('redirectPath='+this.getRedirectPath()); //双重编码
         this.QQ_prefly(goQQ);
 		 function goQQ(){
 			if(navigator.userAgent.indexOf('QQ')>-1)
-					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin'+encodeURIComponent(location.search), 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
+					return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F'+ redirectPath + encodeURIComponent(location.search), 'oauth2Login_10076' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
 			else 
-				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin"+encodeURIComponent(location.search);			
+				window.location.href = "http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F"+ redirectPath + encodeURIComponent(location.search);			
 		}
   	},
   	WB_login: function(){
-  		  window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin"+encodeURIComponent(location.search);
+		var redirectPath = encodeURIComponent('redirectPath='+this.getRedirectPath()); //双重编码
+		window.location.href = "https://api.weibo.com/oauth2/authorize?client_id=2053392206&response_type=code&scope=follow_app_official_microblog&forcelogin=false&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9.3%2Flogin%3F"+ redirectPath + encodeURIComponent(location.search);
 
   	},
 	gowinLogin:function(){
@@ -354,7 +363,7 @@ var Login = React.createClass({
 										<input className="u-input-2" placeholder="密码" type="password" ref="password" onClick={this.handleFocus} onBlur={this.handleBlur} />
 								</div>
 								<div className="u-vcode">
-									<div className="u-inputline-2 f-clearfix w-120 f-fl">
+									<div className="u-inputline-2 f-clearfix f-fl" style={{width:'50%'}}>
 										<input className="u-input-2" placeholder="验证码" type="tele" maxLength="6" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
 									</div>
 									<img className="f-fl" ref="vcode" src="https:i.imread.com/vcode" />
