@@ -88,7 +88,7 @@ var Login = React.createClass({
 	},
 	checkVcode: function(callback){
 		if(!this.refs.key.value)	return;
-		AJAX.private_go('GET','//i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
+		AJAX.private_go('GET','https//i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
 			if(data.code !== 200){
 				POP._alert('验证码错误');
 				this.switchCode();

@@ -29,7 +29,7 @@ app.disable('x-powered-by');
 
 
 
-app.use(express.static(path.join(__dirname, '../public'), {setHeaders:setHeader}))
+app.use(express.static(path.join(__dirname, '../../public'), {setHeaders:setHeader}))
 //语音朗读api
 app.get('/baiduClientCredentials',(req,res)=>{
   const token = global.access_token || fs.readFileSync(path.join(__dirname, './access_token.json'),'utf8');

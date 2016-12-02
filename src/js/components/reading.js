@@ -10,7 +10,7 @@ import Loading from './loading'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
-	var Finger = require('alloyfinger')
+	// var Finger = require('alloyfinger')
 	var isHidden = require('../modules/isHidden');
 }
 if(typeof window !== 'undefined'){
@@ -857,31 +857,36 @@ var Reading = React.createClass({
 		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
 		}
+
 		if(this.state.showSetting || this.state.showChapterlist){
-			new Finger(this.refs.mask,{
-				tap:this.toggleSettings
-			});
+			var hammerTime = new Hammer(this.refs.mask);
+			hammerTime.on('tap', this.toggleSettings);
+			// new Finger(this.refs.mask,{
+			// 	tap:this.toggleSettings
+			// });
 		}
 		if(this.state.showSetting_tts){
-			new Finger(this.refs.mask,{
-				tap:this.toggleSettings_tts
-			});
+			var hammerTime = new Hammer(this.refs.mask);
+			hammerTime.on('tap', this.toggleSettings_tts);
+			// new Finger(this.refs.mask,{
+			// 	tap:this.toggleSettings_tts
+			// });
 		}
 
 		if(this.refs.swiper) {
-			new Finger(this.refs.swiper,{
-				swipe:(e)=>{
-					if(e.direction=='left'||e.direction=='right'){
-						this.setState({showIntercutXp: false});
-					}
-				}
-			});
-			// this.hammer = new Hammer(this.refs.swiper);
-			// this.hammer.off('swipeup swipeleft swiperight');
-		    // 	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-		    // 	this.hammer.on("swipeleft swiperight", function (ev) {
-		    // 		this.setState({showIntercutXp: false});
-		    // 	}.bind(this));
+			// new Finger(this.refs.swiper,{
+			// 	swipe:(e)=>{
+			// 		if(e.direction=='left'||e.direction=='right'){
+			// 			this.setState({showIntercutXp: false});
+			// 		}
+			// 	}
+			// });
+			this.hammer = new Hammer(this.refs.swiper);
+			this.hammer.off('swipeup swipeleft swiperight');
+		    	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+		    	this.hammer.on("swipeleft swiperight", function (ev) {
+		    		this.setState({showIntercutXp: false});
+		    	}.bind(this));
 		}
 
 		var scrollarea = this.refs.scrollarea;
