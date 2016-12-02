@@ -14,7 +14,7 @@ var List = React.createClass({
 	isLoading: false,
 	getList: function(param){
 		if(!this.isMounted()) return;
-		var hash = param?param:this.props.params.listId;
+		var hash = param?param:this.getListId();
 		AJAX.init(hash);
 		AJAX.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
@@ -31,7 +31,7 @@ var List = React.createClass({
 		});
 	},
 	ajaxHandle:function(data){
-		if(!this.isMounted()) return;
+		// if(!this.isMounted()) return;
 		this.isLoading = false;
 		var pathname = this.props.location.pathname.split('/');
 		if(/^search\./.test(pathname[pathname.length-1])){
@@ -54,20 +54,17 @@ var List = React.createClass({
 				empty:false,
 				scrollUpdate: false
 			})
-			//设置GLOBAL book name
 		}else{
 			if (!data || !data.content.length) {
 				this.setState({
 					noMore:true
 				})
 			}
-
 			this.setState({
 				recommend: data,
 				bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
 				scrollUpdate: false
 			});				
-			//设置GLOBAL book name
 		}
 	},
 	goSearch: function(){
@@ -95,14 +92,23 @@ var List = React.createClass({
 		}
 	},
 	componentWillMount:function(){
-		this.usePreload(this.props.params.listId);
+		this.usePreload(this.getListId());
+	},
+	getListId: function(){
+		var listId = this.props.params.listId;
+		if(typeof listId === 'string')
+			return listId;
+		else 
+			return listId[listId.length-1]
 	},
 	componentDidMount: function(){
+		// console.log(this.state.bookList)
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
+		if(location.pathname.match(/\/alist./)){GLOBAL.title = this.APIParts('listId')[1]}
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProps,nextState) {
-		
+		console.log(this.state.bookList, '/', nextState.bookList)
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props))  {
 			if(!this.state.bookList){
@@ -120,6 +126,9 @@ var List = React.createClass({
 			this.isLoading = true;
 			this.getList(nextProps.params.listId);
 		}
+	},
+	componentWillUnmount: function(){
+		delete GLOBAL.title;
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.bookList !== nextState.bookList 

@@ -70,6 +70,7 @@ var Header = React.createClass({
 			this.path = '/mall';
 
 		var from = parseQuery(location.search);
+
 		if(this.props.skipurl && from.skipurl){
 			this.setState({
 				skipurl:from.skipurl

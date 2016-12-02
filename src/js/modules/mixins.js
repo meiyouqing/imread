@@ -85,6 +85,8 @@ var mixins = function() {
                     n = this.props.route.path;
             } else
                 n = window.location.pathname.split('/').pop().split('.')[0];
+
+            if(typeof n !== 'string') n = n[n.length-1];
             n = n.split('.')[0];
 
             var p = AJAX.API[n].param['pages'] ? 'pages' : 'page';
