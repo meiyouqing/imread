@@ -7,9 +7,6 @@ import Mixins from '../modules/mixins'
 import React from 'react'
 var Header = require('./header');
 var Book1 = require('./book1');
-if(typeof window !== 'undefined'){
-	var Hammer = require('../modules/hammer');
-}
 
 var Purchased = React.createClass({
 	mixins: [Mixins()],

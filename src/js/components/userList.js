@@ -81,6 +81,7 @@ var UserList = React.createClass({
 			user: GLOBAL.user,
 			needUpdate: 0,
 			userInfo: null,
+			aidou: null
 		};
 	},
 	login: function(e) {
@@ -90,7 +91,13 @@ var UserList = React.createClass({
 			this.state.userInfo && browserHistory.push({pathname:GLOBAL.setHref('userInfo'),state:{data:this.state.userInfo}});
 		}
 	},
+	getInfo: function(){
+		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
+			this.setState({aidou:data[1].default_balance});
+		}.bind(this));
+	},
 	componentDidMount: function() {
+
 		const search = parseQuery(location.search);
 		if(search.token){
 			GLOBAL.cookie('token',search.token,{expires:7,path:'/',domain:'.imread.com'});
@@ -123,6 +130,7 @@ var UserList = React.createClass({
 					GLOBAL.removeCookie('token', '/', '.imread.com');
 			});
 		}else{
+			that.getInfo();
 			that.setState({
 				userInfo: null
 			});
@@ -153,6 +161,7 @@ var UserList = React.createClass({
 	shouldComponentUpdate: function(nextProp, nextState) {
 		return this.state.user.phone !== nextState.user.phone 
 		    || this.state.needUpdate !== nextState.needUpdate
+		    || this.state.aidou !== nextState.aidou
 		    || this.props.children !== nextProp.children
 		    || this.props.path !== nextProp.path
 		    || this.state.userInfo !== nextState.userInfo;
@@ -209,7 +218,7 @@ var UserList = React.createClass({
 		if(!this.state.userInfo){
 			userCard = (<div onClick={this.login}>
 							<div className="avatar-wrap"><span className="iconfont icon-shu_1"></span></div>
-							<div className="username"><p>登录/注册</p><p>新用户注册送10艾豆</p></div>
+							<div className="username"><p>登录/注册</p><p>新用户注册送{this.state.aidou || ''}艾豆</p></div>
 						</div>)
 		}else{
 			userCard = (<div>

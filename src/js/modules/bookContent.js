@@ -34,6 +34,7 @@ var BookContent = (function() {
 				if(res.success){
 					res.success['cm'] = sourceConfig.cm;
 					if(res.success.loginSubmitUrl){
+						
 						gotoMigu(sourceConfig);
 					}else{
 						options.callback(res,true);
@@ -41,8 +42,7 @@ var BookContent = (function() {
 				}
 					
 			}, function(err) {
-				// console.log(err)
-				if(options.noCross){return} //不要跳转
+				// console.log(err);return;
 				gotoMigu(sourceConfig);
 			});
 		};
@@ -51,6 +51,8 @@ var BookContent = (function() {
 
 
 		var gotoMigu = function(sourceConfig){
+			if(options.noCross){return} //不要跳转
+
 			//跳转之前先回到书籍详情，不然会循环跳转
 			var path = location.pathname;
 			path = path.replace(/\/reading.*$/,'');
@@ -105,8 +107,14 @@ var BookContent = (function() {
 		var getContent =  function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			// console.log(sourceConfig)
-			var totalUrl = sourceConfig.source_host.replace('http://','https://') + sourceConfig.chapter_content;
+			var totalUrl;
+			if(sourceConfig.source_host.indexOf('192.168.0')>=0) {
+				totalUrl = sourceConfig.source_host + sourceConfig.chapter_content;
+			} else {
+				totalUrl = sourceConfig.source_host.replace('http://','https://') + sourceConfig.chapter_content;
+			}
 			// var totalUrl = 'https://readapi.imread.com' + sourceConfig.chapter_content;
+
 			var url = totalUrl.replace('/api/chapter','/api/v1/chapter')
 							.replace(/\?*/, '')
 						      .replace('$bid', options.book_id)

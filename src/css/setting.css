@@ -2,7 +2,7 @@
 .m-settingblock .u-line{border-bottom: 1px solid #eee;}
 .m-settingblock .u-line:last-child{border: 0}
 .m-settingblock .u-lines .u-line{line-height: 44px;height: 44px;}
-.m-settingblock .u-lines .u-line a{line-height: 44px;height: 44px;font-size: 15px;color: #000}
+.m-settingblock .u-lines .u-line a{line-height: 44px;height: 44px;font-size: 15px;color: #000;overflow: hidden;}
 .m-settingblock .m-set-footer img{width: 100%;position: absolute; bottom: 0;left: 0;}
 .m-settingblock .m-list{position: relative;z-index: 1;}
 .m-settingblock .u-lines .u-line a span{display: inline-block;line-height: 44px;vertical-align: baseline;}

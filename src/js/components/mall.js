@@ -16,7 +16,8 @@ if(typeof window !== 'undefined'){
 var Mall = React.createClass({
 	mixins: [Mixins()],
 	getNav: function(){
-		AJAX.init('group.1');
+		var group_id = GLOBAL.cookie('group_id') || 1;
+		AJAX.init('group.1.'+group_id)
 		AJAX.get(this.ajaxHandle, this.getNavFaile);
 	},
 	ajaxHandle:function(data){
@@ -26,7 +27,7 @@ var Mall = React.createClass({
 			navList:data.pagelist
 		});
 		if(typeof window === 'undefined') return;
-		if(!/mall\/?$/.test(location.pathname)) return;
+		if(!/mall\/?$/.test(location.pathname) && !this.state.firstTime) return;
 		browserHistory.replace('/mall/'+this.subnav);	
 	},
 	getNavFaile: function(){
@@ -40,8 +41,26 @@ var Mall = React.createClass({
 			navList: null,
 			showUser:false,
 			onerror:false,
-			path:'/'
+			path:'/',
+			firstTime: true,
+			selected: 0,
+			show: false
 		}
+	},
+	listId: [1,2,3,0],
+	chooseFavor: function(i){
+		this.id = this.listId[i];
+		this.setState({selected: i})
+	},
+	gotoMall: function(){
+		this.refs.selector.style.opacity = 0;
+		this.id = this.id===undefined?1:this.id;
+		GLOBAL.cookie('group_id',this.id,{expires: 1000});
+		this.getNav();
+
+		setTimeout(function(){
+			this.setState({firstTime: false});
+		}.bind(this),800);
 	},
 	hideUser: function(){
 		this.setState({
@@ -60,12 +79,20 @@ var Mall = React.createClass({
 		this.usePreload('mallNav');
 	},
 	componentDidMount: function(){
+		try{
+			this.setState({firstTime: GLOBAL.cookie('group_id')?false:true,show: true})
+		}catch(e){
+			this.setState({firstTime: false,show: true})
+		}
+
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(/(\/|mall\/?|page\.\d+)$/.test(location.pathname)){
+		if(/(^\/|mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
 		}
+
+		document.addEventListener('resetMall',this.getNav);	
 	},
 	upApp: function(page){
 		var obj = parseQuery(location.search);
@@ -80,21 +107,28 @@ var Mall = React.createClass({
 		}
 	},
 	componentDidUpdate: function(nextProp,nextState){	
-		if(!this.state.navList && /(\/|mall\/?|page\.\d+)$/.test(location.pathname)) this.getNav();
+
+		if(!this.state.navList && /(^\/|mall\/?|page\.\d+)$/.test(location.pathname)) this.getNav();
 		if(this.state.showUser) {
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
 		}
-		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){console.log(this.subnav)
+		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){
 			browserHistory.replace('/mall/'+this.subnav);	
 		}
+	},
+	componentWillUnmount: function(){
+		 document.removeEventListener('resetMall',this.getNav,false);
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
 		return this.state.navList !== nextState.navList
 				|| this.state.showUser !== nextState.showUser
 				|| this.state.onerror !== nextState.onerror
 				|| this.props.children !== nextProp.children
-				|| this.props.params.subnav !== nextProp.params.subnav;
+				|| this.props.params.subnav !== nextProp.params.subnav
+				|| this.state.firstTime !== nextState.firstTime
+				|| this.state.selected !== nextState.selected
+				|| this.state.show !== nextState.show;
 	},
 	reload: function(){
 		location.pathname = '/';
@@ -102,10 +136,34 @@ var Mall = React.createClass({
 	},
 
 	render:function(){
+
 		const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} ></div>,
 			middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
-		let main = (
+		let main ;
+
+		if(this.state.firstTime){
+			main = (
+				<div>
+					<div className="g-main g-main-4">
+						<div className="m-welcome g-scroll" ref="selector">
+						<header>选择你的阅读偏好</header>
+						<ul>
+						{
+							['男生网文','女生网文','出版图书','随便看看'].map(function(v,i){
+								return (
+									<li key={i}><div className={"selected"+(this.state.selected===i?' active':'')}></div><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i}></a><span>{v}</span></li>
+									)
+							}.bind(this))
+						}
+						</ul>
+						<a className="u-btn-4" onClick={this.gotoMall}>立即体验</a>
+						</div>
+					</div>
+				</div>
+			)
+		} else {
+			main = (
 				<div className="g-mall" style={{top:0}}>
 					<MallNav navList={this.state.navList || []} />
 					<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
@@ -115,14 +173,24 @@ var Mall = React.createClass({
 					{this.props.children}
 				</div>
 			)
+		}
+
 		if(this.state.onerror){									
 			main = <div className="g-main"><NoData type="UFO" /></div>;
 		}
 
+		var content;
+		if(this.state.show)
+			content = (
+				<div>
+					<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
+					{main}
+				</div>)
+
+
 		return (
 			<div>
-				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
-				{main}
+				{content}
 			</div>
 			)
 	}

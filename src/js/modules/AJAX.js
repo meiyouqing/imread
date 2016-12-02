@@ -9,7 +9,7 @@ var Config = {
 };
 var API={
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
-	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1}},
+	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id: 1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
@@ -40,7 +40,7 @@ var API={
 	adXp: {method:'GET', base:'/api/v1/book/intercut/list', param:{bid: 0,page:1,page_size:0,order_type:'asrc',vt:9}},
 	adHc: {method:'GET', base:'/api/v1/book/breathe', param:{bid: 0}},
 	// pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
-	pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,mobileNum:0}},
+	pay:{method:'POST', base:'/api/v3/pay', param:{productId:0,mobileNum:0}},
 	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
@@ -64,7 +64,10 @@ var API={
 	login_qq: {method: 'POST', base: '/api/v1/auth/login/sso', param:{user_identifier:null,promot:'H5',channel:'3',nick_name:null}},
 	login_wx: {method: 'POST', base: '/api/v1/auth/login/wechat/sso', param:{appid:null,secret:null,code:null,grant_type:null}},
 	login_wb: {method: 'POST', base: '/api/v1/auth/login/weibo/sso', param:{code:null,grant_type:null}},
-	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}}
+	sdk:{method: 'GET', base: '/api/v2/postion/content', param:{post_id:1,channel:1}},
+	datails: {method: 'GET',base:'/api/v2/me/particulars',param:{pages:1,contents:20}},
+	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}},
+	setConfig: {method: 'POST',base: '/api/v2/readperference/update',param:{config_id:3,config_value:''}}
 };
 
 //接口缓存机制
@@ -125,7 +128,9 @@ function getGETUrl(url, postdata) {
 function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	var urlBase = 'https://readapi.imread.com';
 	// var urlBase = 'http://192.168.0.34:9090';
-	// var urlBase = 'http://192.168.0.251:8080';
+	// var urlBase = 'http://192.168.0.252:8080';
+
+
 
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
@@ -149,13 +154,45 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
 	// console.log(headers)
 	// console.log(method)
-		
-	const promise = method === 'GET'?
-				fetch(getGETUrl(url,postdata)):
-				fetch(url,{
-					method,
-					body:postdata.formdata?postdata.formdata:transformRequest(postdata)
-				});
+
+	//request object
+	const headers = new Headers({
+		'Info-Imsi': '',
+		'Info-Imei': '',
+		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
+		'Info-appid' : GLOBAL.header.appid ||'7',
+		'Info-Version': '1.0.1',
+		'Info-Model': '',
+		'Info-Os': '',
+		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
+		'Info-Vcode': '101',
+		'Info-Userid': GLOBAL.header.userId || '',
+		'Info-Uuid': '',
+		'Info-Resolution': 1,
+		'Curtime': new Date().Format('yyyyMMddhhmmss'),
+		'WidthHeight': 1
+	})
+
+	const request = method === 'GET'?
+					 new Request(getGETUrl(url,postdata),{
+						method,
+						headers,
+						mode:'cors'
+					}):
+					 new Request(url,{
+						method,
+						headers,
+						mode:'cors',
+						body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+					})
+	const promise = fetch(request);
+
+	// const promise = method === 'GET'?
+	// 			fetch(getGETUrl(url,postdata)):
+	// 			fetch(url,{
+	// 				method,
+	// 				body:postdata.formdata?postdata.formdata:transformRequest(postdata)
+	// 			});
 	let timeoutId = 0;
 	const timeout = (ms,promise) => {
 		return new Promise((resolve,reject)=>{
@@ -165,7 +202,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 			promise.then(resolve,reject);
 		})
 	};	
-	timeout(5000,promise).then(function(response) {
+	timeout(50000,promise).then(function(response) {
 		clearTimeout(timeoutId);
 		if (response.status >= 200 && response.status < 300) {
 		    return response.json();
@@ -188,7 +225,7 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
     	onError(error)
   	})
 }
-function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
+function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader) {
 	method = method || 'POST';
 	var time = 10000;
 	var timeout = false;
@@ -244,9 +281,8 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 	if (method === 'POST') {
 		request.open(method, url);
 		request.withCredentials = true;
-		setRequestHeaders(request);
+		if(!noHeader) setRequestHeaders(request);
 		if(postdata.formdata){
-			//request.setRequestHeader("Content-Type", "multipart/form-data");
 			postdata = postdata.formdata;
 		}else{
 			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -254,15 +290,9 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson) {
 		}
 		request.send(postdata);
 	} else {
-		// var isYulan = false;
-		// var yulanUrls = ['/api/v1/group/page', '/api/v1/page/content'];
-		// for (var i = 0; i < yulanUrls.length; i++) {
-		// 	isYulan |= new RegExp(yulanUrls[i]).test(url);
-		// }
-		// isYulan = isYulan && /yulan=1/.test(window.location.search);
 		request.open(method, getGETUrl(url, postdata));
 		request.withCredentials = true;
-		setRequestHeaders(request);
+		if(!noHeader) setRequestHeaders(request);
 		request.send(null);
 	}
 }
@@ -320,6 +350,9 @@ var AJAX = {
 	},
 	go: function(n,param,callback,onerror,isJson){
 		GETJSON(this.API[n].method, this.API[n].base, param, callback, onerror,isJson)
+	},
+	private_go: function(method, url, postdata, callback, onError,isJson,noHeader){
+		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader)
 	},
 	getJSON: GETJSON
 }

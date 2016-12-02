@@ -148,7 +148,7 @@ var Balance = React.createClass({
 	render: function () {
 		
 		var content,wxPayLoading=null;
-		var right = null;
+		var right = <Link className="u-btn-font f-fr" to={'/pay/recharge_details/datails.1.20'}>明细</Link>;
 		if(this.state.payLoading)	wxPayLoading = <Loading />;
 // console.log(this.state.loading)
 		if (this.state.loading) {
@@ -158,10 +158,9 @@ var Balance = React.createClass({
 				<div>
 					{wxPayLoading}
 					<div className="u-balance">
-						<div className="i-icon-large iconfont icon-aidou"></div>
+						<div className="title">账户余额</div>
 						<div className="count"><span>{(this.state.balance/100).toFixed(2)}</span><span className="iconfont icon-aidou"></span></div>
 					</div>
-					<div className="u-divider"></div>
 					<ul className="pay-list f-clearfix">
 					{	
 							(this.state.list.length%2===0? this.state.list:this.state.list.slice(0,-1)).map(function(item, i) {
@@ -192,6 +191,13 @@ var Balance = React.createClass({
 						<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWx)?'':' f-hide')} onClick={this.zfbPay} >支付宝充值</a>
 						{/*<a className={"u-btn u-btn-full u-btn-2" + ((!this.state.isWx && this.isMoblie())?'':' f-hide')} onClick={this.WxOrder} >微信充值</a>*/}
 						<a className={"u-btn u-btn-full u-btn-3"+ (this.state.isWx?'':' f-hide')}  onClick={this.WxInsideOrder} >确认充值</a>
+					</div>
+					<div className="hint">
+						<dl>
+							<dt>温馨提示</dt>
+							<dd><span className="point"></span><span>艾豆不支持购买咪咕书籍</span></dd>
+							<dd><span className="point"></span><span>如遇支付问题请联系400-967-9897</span></dd>
+						</dl>
 					</div>
 				</div>
 			);

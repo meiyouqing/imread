@@ -4,6 +4,7 @@
 .u-bookIntroduce .bookinfo{margin-left: 115px;position: relative;}
 .u-bookIntroduce .title{color: #000;font-size: 15px;margin-bottom: 5px;}
 .u-bookIntroduce .author, .u-bookIntroduce .wordCount, .u-bookIntroduce .bookSource{font-size: 13px;color: #777777;line-height: 20px;}
+.u-bookIntroduce .bookinfo .author{color: #0196aa}
 .u-bookIntroduce .bookSource span, .u-bookIntroduce .bookSource b{display: inline-block;vertical-align: middle;}
 .u-bookIntroduce .sourceIcon{width: 16px;height: 16px;margin-right: 8px;}
 .u-bookIntroduce .sourceIcon img{width: 100%;height: auto;}
@@ -21,7 +22,7 @@
 .u-tabs{margin-top: 25px;}
 .g-body-3 .u-fixTabbar{left: 100%;}
 .g-body-3.active .u-fixTabbar{left: 0;transition: left 0.3s;}
-.u-fixTabbar{position: fixed;left: 0px;right: 0px;top: 42px;background: #FFFFFF;}
+.u-fixTabbar{position: fixed;left: 0px;right: 0px;top: 42px;background: #FFFFFF;z-index: 1}
 .u-tabbar .tab{display: inline-block;box-sizing: border-box;width: 33.333%;height: 44px;line-height: 44px;text-align: center;color: #777777;font-size: 17px;}
 .u-tabbar .tab.active{color: #000;border-bottom: 1px solid #999999;}
 .u-tabs .contents{border-top: 1px solid #cccccc;}

@@ -35,6 +35,9 @@ var Detail = React.createClass({
 		}];
 		this.shelfAdding(param,this.props.onShelf);
 	},
+	gotoAuthor: function(){
+		browserHistory.push(GLOBAL.setHref('author/alist.'+encodeURIComponent(this.props.book.author)))
+	},
 	gotoDownload: function(){
 		window.location.replace("https://readapi.imread.com/api/upgrade/download?channel=imread");
 	},
@@ -63,9 +66,9 @@ var Detail = React.createClass({
 					</div>	
 					<div className="bookinfo">
 						<div className="title">{this.props.book.book_name}</div>
-						<div className="author">{this.props.book.author}</div>
+						<div className="author" onClick={this.gotoAuthor}>{this.props.book.author}</div>
 						<div className="wordCount">{this.props.book.word_count + "字/"+ (this.props.book.status == "0" ? "连载中" : "已完本")}</div>
-						<div className="bookSource"><span>{this.props.book.source_name}</span></div>
+						<div className="bookSource"><span>来源：{this.props.book.source_name}</span></div>
 						<div className="buttons f-clearfix">
 							<a className="readButton button f-fl" onClick={this.startReading}>开始阅读</a>
 							<button className={"button f-fr"} onClick={this.props.isOnshelf?this.gotoDownload:this.addBook}>{val}</button>
@@ -221,18 +224,6 @@ var Introduce = React.createClass({
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
 	},
-	componentWillUpdate: function(nextProps) {
-		//if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children){
-	
-		if(this.props.params.introduceId !== nextProps.params.introduceId || (!nextProps.children && this.props.children) ){
-			this.getBook(nextProps.params.introduceId);
-			this.isUpdate = false;
-			this.setState({
-				noMoreChapterlist: false
-			})
-		}
-			
-	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.book !== nextState.book 
 				|| this.state.chapterlist !== nextState.chapterlist
@@ -260,7 +251,7 @@ var Introduce = React.createClass({
 			header = <Header title='书籍详情' right={right}  path={this.props.route} />
 
 			detail = <Detail book={this.state.book} bid={this.state.bid} isOnshelf={this.state.isOnshelf} onShelf={this.onShelf} />
-			introduceTabs = <IntroduceTabs key="3" book={this.state.book} troggleChapterlist={this.troggleChapterlist} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.readList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
+			introduceTabs = <IntroduceTabs key="3" toHandle={this.getBook} book={this.state.book} troggleChapterlist={this.troggleChapterlist} source_id={this.state.book.source_id} source_bid={this.state.book.source_bid} bid={this.state.book.bid} readlist={this.state.book.readList} getChapterlist={this.getChapterlist} getChapterlistLoading={this.state.noMoreChapterlist} book_brief={this.state.book.book_brief} chapterlist={this.state.chapterlist}/>
 		}
 		return (
 			<div className="gg-body">
@@ -347,6 +338,10 @@ var IntroduceTabs = React.createClass({
 			this.lazyloadImage(container);
 		}
 	},
+	toHandle:function(arg){
+		this.setState({current:0});
+		this.props.toHandle(arg)
+	},
 	render: function() {
 		//console.log(this.props)
 		var fixTabbar = this.state.fixTabbar ? "u-fixTabbar" : "";
@@ -373,7 +368,7 @@ var IntroduceTabs = React.createClass({
 							<Chapterlist hrefBase={path+'/reading'} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading}/>
 						</div>
 						<div className={"content content-2" + (this.state.current == 2 ? ' active' : '')}>
-							<Readlist readlist={this.props.readlist} />
+							<Readlist readlist={this.props.readlist} toHandle={this.toHandle} />
 						</div>
 					</div>
 				</div>
@@ -386,7 +381,6 @@ var Readlist = React.createClass({
 		return this.props.readlist !== nextProps.readlist;
 	},
 	render: function() {
-		//console.log(this.props)
 		var loading, content;
 		if (!this.props.readlist) {
 			loading = <Loading />
@@ -394,8 +388,8 @@ var Readlist = React.createClass({
 			content = (
 				<ul>
 				{
-					this.props.readlist.map(function(book, i) {
-						return <Book1 key={i} pathname={typeof window === 'undefined'?global.pathname:location.pathname} data={book} fromIntroduce="1" />
+					this.props.readlist.map((book, i) => {
+						return <Book1 key={i} toHandle={this.props.toHandle} data={book} />
 					})
 				}
 				</ul>
