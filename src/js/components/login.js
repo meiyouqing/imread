@@ -88,7 +88,7 @@ var Login = React.createClass({
 	},
 	checkVcode: function(callback){
 		if(!this.refs.key.value)	return;
-		AJAX.private_go('GET','//i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
+		AJAX.private_go('GET','https://i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
 			if(data.code !== 200){
 				POP._alert('验证码错误');
 				this.switchCode();
@@ -236,7 +236,7 @@ var Login = React.createClass({
 		//判断来源from
 		this.from = parseQuery(location.search);
 
-		var  that = this;
+		var  that = this; 
 
 		//判断并赋值全局QC，执行qq登录.
 		if(/^#access_token=.+/.test(location.hash)){
@@ -277,7 +277,7 @@ var Login = React.createClass({
 	},
 	switchCode: function(){
 		this.refs.key.value = '';
-		this.refs.vcode.src = 'https:i.imread.com/vcode?date='+ new Date().getTime();
+		this.refs.vcode.src = 'https://i.imread.com/vcode?date='+ new Date().getTime();
 	},
 	do_result: function(data,type){
 		var that = this;
@@ -366,7 +366,7 @@ var Login = React.createClass({
 									<div className="u-inputline-2 f-clearfix f-fl" style={{width:'50%'}}>
 										<input className="u-input-2" placeholder="验证码" type="tele" maxLength="6" ref="key" onClick={this.handleFocus} onBlur={this.handleBlur} />
 									</div>
-									<img className="f-fl" ref="vcode" src="https:i.imread.com/vcode" />
+									<img className="f-fl" ref="vcode" src="https://i.imread.com/vcode" />
 									<div className="f-fr switch" onClick={this.switchCode}>
 										<p>看不清</p>
 										<p>换一张</p>
