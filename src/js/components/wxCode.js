@@ -19,11 +19,10 @@ var WxCode = React.createClass({
         }
         if(this.isWx() && this.from  && this.from.code && this.from.state == 'wxPay') {
                 if(this.from.callback){
-                    alert(this.from.callback+location.search)
                     location.href = this.from.callback+location.search;
                 }
                 else
-                    location.href="http://223.95.81.227:8082/pay/wxauth"
+                    location.href="https://phonepay.imread.com/pay/wxauth"+location.search
         }
     },
     render:function(){
