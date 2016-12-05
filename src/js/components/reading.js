@@ -10,6 +10,7 @@ import Loading from './loading'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 	var Hammer = require('../modules/hammer');
+	var Finger = require('alloyfinger')
 	var isHidden = require('../modules/isHidden');
 }
 if(typeof window !== 'undefined'){
@@ -190,7 +191,7 @@ var Reading = React.createClass({
 	getInitialState: function() {
 		return {
 			ttsModer:false,
-			ttsIndex:0,
+			ttsIndex:-1,
 			showSetting_tts:false,
 			playing:false,
 			femaleVoice:true,
@@ -281,6 +282,11 @@ var Reading = React.createClass({
 		myEvent.execCallback('reading' + bid + '-fromReading', true);
 	},
 	componentWillUnmount: function() {
+		//停止语音朗读
+		if(this.state.ttsModer){
+			document.body.removeChild(this.player);
+		}
+
 		uploadLog.sending('intercut');
 		this.addRecentRead(this.book_id, this.chapterid);
 		document.removeEventListener && document.removeEventListener('visibilitychange',this.onVisibilitychange);
@@ -322,8 +328,9 @@ var Reading = React.createClass({
 
 		//按段落处理引号，防止错误一个所有的配对出错，这样最多影响一段
 		for (var i = 0; i < passages.length; i++) {
-			if(!passages[i].length) { //去掉空内容
+			if(!passages[i].trim().length) { //去掉空内容
 				passages.splice(i,1);
+				i--
 				continue;
 			}
 			passages[i] = passages[i].replace(/&quot;([^(&quot;)]*)&quot;/g, function($1, $2) {
@@ -456,16 +463,14 @@ var Reading = React.createClass({
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
-		// setTimeout(function(){
 			that.setState({
 				data: data,
 				loading: false,
-				//page: currentPage,
 				pages: currentPage,
 				order: false
 			}, that.getChapterlist);
 			if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
-		// }.bind(this),800);
+			if(myEvent.callback['autoPlayNext']) myEvent.execCallback('autoPlayNext');
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
@@ -636,6 +641,12 @@ var Reading = React.createClass({
 		if (scrollarea.scrollTop < 10 && offset < 0) {
 			return this.prevChapter();
 		} else if (scrollarea.scrollTop > scrollHeight - document.body.offsetHeight - 10 && offset > 0) {
+			if(this.state.ttsModer && this.state.playing){
+				this.player.pause();
+				myEvent.setCallback('autoPlayNext',()=>{
+					this.setState({ttsIndex:-1},this.audioRead);
+				})
+			}
 			return this.nextChapter();
 		}
 		scrollarea.scrollTop = Math.max(0, Math.min(scrollarea.scrollTop + height, scrollHeight - height));
@@ -723,20 +734,25 @@ var Reading = React.createClass({
 				// console.log(this.refs.scrollarea.scrollTop,' / ',ps[i].offsetTop)
 				if(ps[i].offsetTop > this.refs.scrollarea.scrollTop){
 					this.setState({
-						ttsIndex:i-1
+						ttsIndex:i-1,
+						playing:true
 					},this.audioRead);
 					break;
 				}
 			}
 		}else{
-			this.audioRead();
+			this.setState({
+				ttsIndex:-1,
+				playing:true
+			},this.audioRead);
 		}
 	},
 	quitTtsHandle:function(){
 		this.player.pause();
 		this.setState({
 			ttsModer:false,
-			showSetting_tts:false				
+			showSetting_tts:false,
+			playing:false				
 		})
 		POP._alert('退出语音朗读模式')
 	},
@@ -746,7 +762,7 @@ var Reading = React.createClass({
 		},this.togglePlay.bind(this,this.state.playing));
 	},
 	voiceHandle:function(){
-		this.setState({femaleVoice:!this.state.femaleVoice, playing:true},this.playHandle);
+		this.setState({femaleVoice:!this.state.femaleVoice},this.playHandle);
 	},
 	audioRead:function(){
 		//audio reading 
@@ -765,9 +781,10 @@ var Reading = React.createClass({
 				this.goToChapter(this.state.data.nextChapterId);
 				// return;
 			}
-			this.setState({ttsIndex:isChapterEnd? 0:this.state.ttsIndex+1});
-			this.refs.ttsReading && !isChapterEnd && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
-			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			this.setState({ttsIndex:isChapterEnd? -1:this.state.ttsIndex+1});
+			this.refs.ttsReading && this.state.ttsIndex>0  && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
+			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
 			// this.player.oncanplay = ()=>{
 				if(!this.state.playing) {
@@ -778,11 +795,11 @@ var Reading = React.createClass({
 				this.player.play();
 			// }
 		}
-			
 
-		function doinsert(){console.log(this.state.data.content[this.state.ttsIndex])
+		function doinsert(){
 			if(this.player) document.body.removeChild(this.player);
-			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${this.state.data.content[this.state.ttsIndex]}`;
+			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
+			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
 			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
@@ -790,7 +807,7 @@ var Reading = React.createClass({
 			this.player.setAttribute('autoPay','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
-			this.refs.ttsReading && this.state.ttsIndex!==0 && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
+			this.refs.ttsReading && this.state.ttsIndex>0 && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			this.player.load();
 			this.player.play();
 		}
@@ -842,21 +859,30 @@ var Reading = React.createClass({
 			this.getContent();
 		}
 		if(this.state.showSetting || this.state.showChapterlist){
-			var hammer = new Hammer(this.refs.mask);
-			hammer.on('tap',this.toggleSettings)
+			new Finger(this.refs.mask,{
+				tap:this.toggleSettings
+			});
 		}
 		if(this.state.showSetting_tts){
-			var hammer = new Hammer(this.refs.mask);
-			hammer.on('tap',this.toggleSettings_tts)
+			new Finger(this.refs.mask,{
+				tap:this.toggleSettings_tts
+			});
 		}
 
 		if(this.refs.swiper) {
-			this.hammer = new Hammer(this.refs.swiper);
-			this.hammer.off('swipeup swipeleft swiperight');
-		    	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
-		    	this.hammer.on("swipeleft swiperight", function (ev) {
-		    		this.setState({showIntercutXp: false});
-		    	}.bind(this));
+			new Finger(this.refs.swiper,{
+				swipe:(e)=>{
+					if(e.direction=='left'||e.direction=='right'){
+						this.setState({showIntercutXp: false});
+					}
+				}
+			});
+			// this.hammer = new Hammer(this.refs.swiper);
+			// this.hammer.off('swipeup swipeleft swiperight');
+		    // 	//this.hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+		    // 	this.hammer.on("swipeleft swiperight", function (ev) {
+		    // 		this.setState({showIntercutXp: false});
+		    // 	}.bind(this));
 		}
 
 		var scrollarea = this.refs.scrollarea;
@@ -1201,7 +1227,7 @@ var Reading = React.createClass({
 					{this.state.source_id==='1'?<i className="u-miguLogo"></i>:null}
 					<button className="u-btn-1 f-hide" ref="tip_top">点击阅读上一章</button>
 					
-					<section className="u-chapterName">{this.state.data.name}</section>
+					<section className={"u-chapterName"+(this.state.ttsModer && this.state.ttsIndex===-1? ' ttsReading':'')}>{this.state.data.name}</section>
 					<section className="u-readingContent" ref="reading">
 						{
 							this.state.data.content.map(function(p, i) {
