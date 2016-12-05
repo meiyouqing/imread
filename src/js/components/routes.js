@@ -36,6 +36,7 @@ import SelfBuild from './selfbuild'
 //import MRecharge from './mRecharge'
 //import MBinder from './mBinder'
 import WxLogin from './wxLogin'
+import WxPay from './wxCode'
 import SDK from './sdk'
 import AlyPay from './alyPay'
 import RechargeDetails from './recharge_details'
@@ -124,6 +125,7 @@ var topWrap = (
 	)
 var payWrap = (
 		<Route path="pay" component={Balance} >
+			<Route path="portal/:wxcode" component={WxPay} />
 			<Route path="alyPay" component={AlyPay} />
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />
