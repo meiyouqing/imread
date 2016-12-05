@@ -203,7 +203,7 @@ var Introduce = React.createClass({
 	componentWillReceiveProps: function(nextProps){
 		if(!this.isMounted()){return;}
 		this.setState({
-			chapterlist: null,
+			//chapterlist: null,
 			page:0
 		})
 	},
