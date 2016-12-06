@@ -203,7 +203,7 @@ var Introduce = React.createClass({
 	componentWillReceiveProps: function(nextProps){
 		if(!this.isMounted()){return;}
 		this.setState({
-			chapterlist: null,
+			// chapterlist: null,
 			page:0
 		})
 	},
@@ -219,13 +219,13 @@ var Introduce = React.createClass({
 	    if(GLOBAL.isRouter(this.props)&&!this.state.book) this.getBook();
 		myEvent.setCallback('updateShelfBtn',this.onShelf);
 	},
-	componentDidUpdate: function(){
+	componentDidUpdate: function(nextProps, nextState){
 
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props) && !this.state.book)	this.getBook();
+		if(GLOBAL.isRouter(this.props) && this.props.params.introduceId !== nextProps.params.introduceId)	{this.setState({book:null});this.getBook();}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
-		return this.state.book !== nextState.book 
+		return this.state.book !== nextState.book
 				|| this.state.chapterlist !== nextState.chapterlist
 				|| this.state.isOnshelf !== nextState.isOnshelf
 				|| this.state.getChapterlistLoading !== nextState.getChapterlistLoading

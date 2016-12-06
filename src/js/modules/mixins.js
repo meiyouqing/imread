@@ -15,6 +15,7 @@ var mixins = function() {
         },
         usePreload: function(n){
             if(typeof window !== 'undefined' &&　!window.__PRELOADED_STATE__) return;
+            if(typeof n !== 'string')   n = n[n.length-1];
             n = n.replace(/\./g,'_');
             n = encodeURIComponent(n);
             if(typeof window === 'undefined'){

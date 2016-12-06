@@ -34,6 +34,7 @@ var Header = React.createClass({
 		};
 	},
 	goBack: function(){
+		this.getBacks();
 		var search = parseQuery(location.search);
 		if(search.skipurl)	{
 			location.href = search.skipurl;
@@ -62,9 +63,21 @@ var Header = React.createClass({
 			skipurl:''
 		}
 	},
+	getBacks: function(){
+		var route = this.props.path.path.replace(/:([^\"]*)/,'');
+		var arrs = window.location.pathname.split('/'+route);
+		if(arrs.length>2){
+			this.path = arrs[0];
+			for(var i=1;i<arrs.length-1;i++){
+				this.path+='/'+route+arrs[i]
+			}
+		} else{
+			this.path = arrs[0];
+		}
+		return this.path;
+	},
 	componentDidMount:function(){
-		this.path = this.props.path.path.replace(/:([^\"]*)/,'');
-		this.path = window.location.pathname.split('/'+this.path)[0];
+		this.getBacks();
 
 		if(this.props.path.path.split('/')[1] == 'self')
 			this.path = '/mall';
