@@ -123,9 +123,9 @@ var mixins = function() {
                         POP._alert('成功加入书架');
                         (typeof callback === 'function') && callback(data);
                     } else {
-                        that.ajaxError(data);
+                        GLOBAL.defaultOnError(data);
                     }
-                }, GLOBAL.noop);
+                });
             }
         },
         ajaxError: function(data) {
