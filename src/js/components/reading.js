@@ -283,8 +283,8 @@ var Reading = React.createClass({
 	},
 	componentWillUnmount: function() {
 		//停止语音朗读
-		if(this.state.ttsModer){
-			document.body.removeChild(this.player);
+		if(this.state.ttsModer && this.player){
+			this.removePlayer();
 		}
 
 		uploadLog.sending('intercut');
@@ -327,13 +327,14 @@ var Reading = React.createClass({
 							.split(/<br\s*\/?>/);
 
 		//按段落处理引号，防止错误一个所有的配对出错，这样最多影响一段
-		for (var i = 0; i < passages.length; i++) {
-			if(!passages[i].trim().length) { //去掉空内容
+		for (let i = 0; i < passages.length; i++) {
+			let v = passages[i].trim();
+			if(!v.length || /^[…]+$/.test(v)) { //去掉空内容和省略号
 				passages.splice(i,1);
 				i--
 				continue;
 			}
-			passages[i] = passages[i].replace(/&quot;([^(&quot;)]*)&quot;/g, function($1, $2) {
+			v = v.replace(/&quot;([^(&quot;)]*)&quot;/g, function($1, $2) {
 				return '“' + $2 + '”';
 			})
 		}
@@ -463,14 +464,14 @@ var Reading = React.createClass({
 		data.content = that.getFormatContent(data.content);
 		var currentPage = Math.ceil(+data.chapterSort / that.state.page_size);
 
-			that.setState({
-				data: data,
-				loading: false,
-				pages: currentPage,
-				order: false
-			}, that.getChapterlist);
-			if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
-			if(myEvent.callback['autoPlayNext']) myEvent.execCallback('autoPlayNext');
+		that.setState({
+			data: data,
+			loading: false,
+			pages: currentPage,
+			order: false
+		}, that.getChapterlist);
+		if(this.refs.scrollarea) this.refs.scrollarea.scrollTop = 0;
+		this.execNextPlay && this.execNextPlay();
 
 		this.getAd_xp(this.book_id,data.chapterSort);
 
@@ -505,10 +506,11 @@ var Reading = React.createClass({
 
 		if(!this.isMounted()){return;}
 		var nextChapter = GLOBAL._nextChapter_;
-		if(nextChapter && (nextChapter.nextChapterId-1)==this.chapterid){
+		if(nextChapter && (nextChapter.preChapterId)==this.chapterid){
 			this.gotContent(nextChapter);
 			return;
 		}
+
 		this.setState({
 			loading: true
 		});
@@ -532,8 +534,8 @@ var Reading = React.createClass({
 		});
 	},
 	getNextContent: function(data) {
-
 		if(!this.isMounted()){return;}
+		
 		var that = this;
 		bookContent.get({
 			noCross:true,
@@ -541,9 +543,17 @@ var Reading = React.createClass({
 			cid: data.nextChapterId,
 			source_id : this.source_id,
 			book_id: this.book_id,
-			callback: function(data){
+			callback: (data)=>{
+				var that = this;
+				if(data.success.pageType==='order'){
+					if(storage.get(that.bid,'string')==='autoPay'){
+						that.autoPay(data.success,true);
+						return;
+					}
+				}
+				
 				GLOBAL._nextChapter_ = data.success;
-			}.bind(this),
+			},
 			onError: GLOBAL.noop
 		});
 	},	
@@ -565,13 +575,15 @@ var Reading = React.createClass({
 			that.setState({order: true,orderData: data})					
 		}
 	},
-	autoPay: function(orderData) {
+	autoPay: function(orderData,isNext) {
 		var that = this;
 		if(!this.state.fromId){
 			if(that.isLogin()){
 				pay();
 			}else{
-				that.goLogin(pay);
+				if(!isNext){
+					that.goLogin(pay);
+				}
 			}
 		} else {
 			pay_m();
@@ -579,16 +591,19 @@ var Reading = React.createClass({
 		function pay(){	
 			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
-				//console.log(aidou,orderData.marketPrice)
+				// console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
 					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
 						if(data.code !== 200)
 							POP._alert('支付失败');
 						else {
-			
+							if(isNext){
+								GLOBAL._nextChapter_ = data.success;
+								return;
+							}
 							that.storeBookOrdered(that.chapterid);
 							that.disPatch('updateUser');
-							that.gotContent(data);
+							that.gotContent(data);							
 							//that.goBack();
 						}
 					});
@@ -642,10 +657,9 @@ var Reading = React.createClass({
 			return this.prevChapter();
 		} else if (scrollarea.scrollTop > scrollHeight - document.body.offsetHeight - 10 && offset > 0) {
 			if(this.state.ttsModer && this.state.playing){
-				this.player.pause();
-				myEvent.setCallback('autoPlayNext',()=>{
-					this.setState({ttsIndex:-1},this.audioRead);
-				})
+				const sync = !!GLOBAL._nextChapter_ && GLOBAL._nextChapter_.pageType === null && GLOBAL._nextChapter_.preChapterId === this.chapterid;
+				this.pause();
+				this.setNextPlay(!sync);
 			}
 			return this.nextChapter();
 		}
@@ -691,11 +705,13 @@ var Reading = React.createClass({
 	},
 	togglePlay:function(condition){
 		if(this.state.ttsModer){
-			if(condition){
-				this.player.pause();
-			}else{
-				this.player.play();
-			}
+			try{
+				if(condition){
+					this.pause();
+				}else{
+					this.play();
+				}
+			}catch(e){}
 		}				
 	},
 	onVisibilitychange: function(){
@@ -748,7 +764,8 @@ var Reading = React.createClass({
 		}
 	},
 	quitTtsHandle:function(){
-		this.player.pause();
+		this.pause();
+		this.removePlayer();
 		this.setState({
 			ttsModer:false,
 			showSetting_tts:false,
@@ -774,42 +791,89 @@ var Reading = React.createClass({
 		const speed = this.state.speed*2-1;
 		
 		doinsert.bind(this)();
-		this.player.onended = this.player.onerror = (e)=>{
-			const isChapterEnd = this.state.ttsIndex >= len;
+		this.player.onended = this.player.onerror = ()=>{
+			
+			const isChapterEnd = this.state.ttsIndex > len-1;
 			if(isChapterEnd){
-				this.goToChapter(this.state.data.nextChapterId);
-				// return;
+				var book_info = this.APIParts('readingId');
+				this.bid = book_info[1];
+				this.chapterid = book_info[2];
+				// console.log(!!GLOBAL._nextChapter_ , GLOBAL._nextChapter_.pageType === null , GLOBAL._nextChapter_.preChapterId === this.chapterid)
+				if(!!GLOBAL._nextChapter_ && GLOBAL._nextChapter_.pageType === null && GLOBAL._nextChapter_.preChapterId === this.chapterid){
+					this.goToChapter(this.state.data.nextChapterId);
+				}else{
+					this.setNextPlay(true);
+					this.goToChapter(this.state.data.nextChapterId);
+					return;
+				}
 			}
+			if(this.state.order) {
+				this.pause();
+				return;
+			};
 			this.setState({ttsIndex:isChapterEnd? -1:this.state.ttsIndex+1});
 			this.refs.ttsReading && this.state.ttsIndex>0  && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
+			
 			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
-			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`			
+			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`;			
 			// this.player.oncanplay = ()=>{
 				if(!this.state.playing) {
-					this.player.pause();
+					this.pause();
 					return;
 				};
 				this.player.load();
-				this.player.play();
+				this.play();
 			// }
 		}
 
 		function doinsert(){
-			if(this.player) document.body.removeChild(this.player);
+			if(this.player) this.removePlayer();
+			if(this.state.order) return;
 			const content = this.state.ttsIndex===-1? this.state.data.name : this.state.data.content[this.state.ttsIndex];
 			const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
 			this.player = document.createElement('audio');
 			this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`
 			this.player.setAttribute('type','audio/mp3');
 			this.player.setAttribute('preload','');
-			this.player.setAttribute('autoPay','');
+			this.player.setAttribute('autoPlay','');
 			this.player.id = 'audioRead';
 			document.body.appendChild(this.player);
 			this.refs.ttsReading && this.state.ttsIndex>0 && this.refs.ttsReading.scrollIntoView({behavior:'smooth'});
 			this.player.load();
 			this.player.play();
 		}
+	},
+	play:function(){
+		try{
+			this.player.play()
+		}catch(e){}
+	},
+	pause:function(){
+		try{
+			this.player.pause()
+		}catch(e){}
+	},
+	setNextPlay:function(isAsync){
+		if(!this.isMounted()) return;
+
+		if(isAsync){
+			this.execNextPlay = ()=>{
+				POP.confirm('继续语音朗读吗？',()=>{
+					this.setState({ttsIndex:-1},this.audioRead);
+				},()=>{
+					this.setState({ttsModer:false,playing:false},this.removePlayer)
+				})
+				this.execNextPlay = null;
+			}
+		}else{
+			this.setState({ttsIndex:-1},this.audioRead);
+		}
+	},
+	removePlayer:function(){
+		try{
+			document.body.removeChild(this.player)
+		}catch(e){}
 	},
 	componentDidMount:function(){
 		this.startTime = Date.now();
@@ -857,6 +921,13 @@ var Reading = React.createClass({
 		if((this.props.params.readingId !== nextProps.params.readingId) || (nextProps.routes.length>this.props.routes.length)){
 			this.getContent();
 		}
+
+		//如果购买页面正在语音阅读
+		if(this.state.ttsModer  && this.state.order){
+			if(this.player) this.pause();
+			// this.setNextPlay(true);
+		}
+
 
 		if(this.state.showSetting || this.state.showChapterlist){
 			var hammerTime = new Hammer(this.refs.mask);
@@ -938,35 +1009,10 @@ var Reading = React.createClass({
 			this.offsetPage(1);
 		}
 	},
-	// handleScroll: function(e) {		
-	// 	if(this.showDownload) {
-	// 		var scroller = this.refs.scrollarea,
-	// 			reader = this.refs.reading;
-
-	// 		if(scroller.scrollTop+document.body.clientHeight >= reader.offsetHeight) {
-	// 			if(this.state.download)	  this.setState({download: false});
-	// 		} else {
-	// 			if(!this.state.download)	  this.setState({download: true});
-	// 		}
-	// 	}	//下载客户端提示
-	// 	console.log(111)
-	// 	if (this.state.showSetting) {
-	// 		this.toggleSettings();
-	// 	}
-	// },
 	changeOrder: function(){
 		//this.setState({orderSeq: !this.state.orderSeq});
 		this.troggleChapterlist();
 	},
-	// isdownLoad: function(){
-	// 	var book_isload = ['440081548','407221400','401859267','405795359','640377097','408622858'];
-	// 	var index = book_isload.indexOf(this.APIParts('readingId')[1])>=0;
-	// 	this.showDownload = index;
-	// 	if(index)	
-	// 		setTimeout(function(){
-	// 			this.setState({download: true});
-	// 		}.bind(this),500);
-	// },
 	orderedBook: [],
 	storeBookOrdered: function(cid,isBuyAll){
 		if(isBuyAll)
