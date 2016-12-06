@@ -130,7 +130,7 @@ var payWrap = (
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />
 			</Route>
-			<Route path="recharge_details/:details" component={RechargeDetails} />
+			<Route path="recharge_details/:details" onLeave={scrollResetHandle} component={RechargeDetails} />
 		</Route>
 	)
 
