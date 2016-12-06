@@ -108,7 +108,6 @@ var List = React.createClass({
 		this.lazyloadImage(this.refs.container);
 	},
 	componentDidUpdate: function(nextProps,nextState) {
-		console.log(this.state.bookList, '/', nextState.bookList)
 		GLOBAL.isAd();
 		if(GLOBAL.isRouter(this.props))  {
 			if(!this.state.bookList){
@@ -135,13 +134,15 @@ var List = React.createClass({
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
 				|| this.state.UFO !== nextState.UFO
 				|| this.state.empty !== nextState.empty
+				|| this.state.recommend !== nextState.recommend
 				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProps.children
 				|| this.props.params.listId !== nextProps.params.listId;
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
-		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;				
+		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;		
+
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
 		}

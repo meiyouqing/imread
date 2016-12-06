@@ -15,6 +15,7 @@ var mixins = function() {
         },
         usePreload: function(n){
             if(typeof window !== 'undefined' &&　!window.__PRELOADED_STATE__) return;
+            if(typeof n !== 'string')   n = n[n.length-1];
             n = n.replace(/\./g,'_');
             n = encodeURIComponent(n);
             if(typeof window === 'undefined'){
@@ -122,9 +123,9 @@ var mixins = function() {
                         POP._alert('成功加入书架');
                         (typeof callback === 'function') && callback(data);
                     } else {
-                        that.ajaxError(data);
+                        GLOBAL.defaultOnError(data);
                     }
-                }, GLOBAL.noop);
+                });
             }
         },
         ajaxError: function(data) {

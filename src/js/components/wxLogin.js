@@ -26,7 +26,7 @@ var WxLogin = React.createClass({
                 grant_type: 'authorization_code'
             },function(res){
                 that.do_result(res);
-            })
+            },function(){window.history.go(-1)})
 		}
     },
 	do_result: function(data){
