@@ -28,7 +28,7 @@ var Mall = React.createClass({
 		});
 		if(typeof window === 'undefined') return;
 		if(!/mall\/?$/.test(location.pathname) && !this.state.firstTime) return;
-		browserHistory.replace('/mall/'+this.subnav);	
+		browserHistory.replace('/mall/'+this.subnav+location.search);	
 	},
 	getNavFaile: function(){
 		this.setState({onerror:true})
@@ -113,8 +113,8 @@ var Mall = React.createClass({
 			if(!this.userFlag) this.hideUser();
 			this.userFlag = false;
 		}
-		if(!/page\.\d/.test(location.pathname) && !!this.state.navList && this.subnav){
-			browserHistory.replace('/mall/'+this.subnav);	
+		if(!/page\.\d+/.test(location.pathname) && !!this.state.navList && this.subnav){
+			browserHistory.replace('/mall/'+this.subnav+location.search);	
 		}
 	},
 	componentWillUnmount: function(){
