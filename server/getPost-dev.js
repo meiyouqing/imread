@@ -5,6 +5,8 @@ const getPost =  function(req,callback,onError){
   const url = req.url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
+  console.log(req.query)
+  global.query = req.query;
  console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
@@ -19,7 +21,6 @@ const getPost =  function(req,callback,onError){
     },(err)=>{onError(err,true)})
     return;
   }
-
   if(path.length<3 && /(^\/|mall\/?|page\.\d+)$/.test(url)){
     const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
     const group_id = (match && match[1]) || 1;

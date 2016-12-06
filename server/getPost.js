@@ -5,6 +5,7 @@ const getPost =  function(req,callback,onError){
   const url = req.url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
+  global.query = req.query;
  //console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];

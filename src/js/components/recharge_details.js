@@ -68,7 +68,7 @@ var RechageDetail = React.createClass({
 		AJAX.get(function(data){
 
 			if(data.content.length<1)	{
-				this.setState({noMore: true});
+				this.setState({noMore: true,scrollUpdate: false});
 				return;
 			}
 			this.setState({
@@ -76,9 +76,6 @@ var RechageDetail = React.createClass({
 				scrollUpdate: false
 			});
 		}.bind(this),this.onerror)
-	},
-	scrollData: function(e){
-		this.scrollHandle(e);
 	},
 	componentDidMount: function(){
 		AJAX.init('datails.1.20');
@@ -95,7 +92,7 @@ var RechageDetail = React.createClass({
 			<div>
 				<Header right={null} title={'艾豆明细'} path={this.props.route}/>
 				<div className="g-main g-main-1">
-					<div className="g-scroll m-recharge-detail" onScroll={this.scrollData} ref="container">
+					<div className="g-scroll m-recharge-detail" onScroll={this.scrollHandle} ref="container">
 						<div className="content">
 						<ul>
 						{
