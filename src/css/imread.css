@@ -29,6 +29,8 @@ html, body, #app-container{background: #FFFFFF;}
 textarea::-moz-placeholder ,input::-moz-placeholder { color: #777777;}
 textarea::-webkit-input-placeholder,input::-webkit-input-placeholder { color:#777777; }
 textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
+
+#appContainer{position: absolute;top:0;left: 0;right: 0;bottom: 0;overflow: hidden;}
 /* /reset */
 
 /* function */

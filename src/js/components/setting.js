@@ -114,7 +114,7 @@ var Setting = React.createClass({
 			}
 		];
 		//微信不需要 ‘修改密码’
-		if(this.state.isWx) blockData.shift();
+		if(this.state.isWx) blockData.splice(1,1);
 		var back = <Link className="f-fl iconfont icon-left" to='/'></Link>
 		return (
 			<div className="g-ggWraper gg-body">
