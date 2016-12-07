@@ -5,7 +5,8 @@ const getPost =  function(req,callback,onError){
   const url = req.url.replace(/\?.*$/,'') //移出微信有时自带字符
   global.pathname = url;
   global.imdata = {};
- console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+url)
+  global.query = req.query;
+ console.log('url>>>>>>>>>>>'+url)
   const path = url.replace(/^\//,'').replace(/\/$/,'').split('/');
   let param = path[path.length-1];
 
@@ -19,15 +20,13 @@ const getPost =  function(req,callback,onError){
     },(err)=>{onError(err,true)})
     return;
   }
-
   if(path.length<3 && /(^\/|mall\/?|page\.\d+)$/.test(url)){
     const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
-    const group_id = (match && match[1]) || 1;
-    console.log(group_id)
-    AJAX.init('group.1.'+group_id);
-    console.log('pathpathpathpathpath>>> '+path)
+    const config_id = (match && match[1]) || 1;
+    console.log('config_id>>>>>>>>>>> '+config_id)
+    AJAX.init('group.1.'+config_id);
     AJAX.get(data=>{
-      param = 'page.'+data.pagelist[0].pgid;
+      param = path.length===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
      if( path.length !== 2) global.pathname += '/'+param;
       goRend();
@@ -50,7 +49,7 @@ const getPost =  function(req,callback,onError){
     }
     console.log('param>>>>>>>>>>: '+param);
     const n = param.replace(/\./g,'_');
-    AJAX.init(param);
+    AJAX.init(decodeURI(param));
     AJAX.get(function(data){
       global.imdata[n] = data;
       callback();

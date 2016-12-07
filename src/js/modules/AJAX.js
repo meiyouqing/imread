@@ -159,8 +159,8 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 	const headers = new Headers({
 		'Info-Imsi': '',
 		'Info-Imei': '',
-		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
-		'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
+		'Info-Channel': global.query.channel || 'ImreadH5',
+		'Info-appid' : global.query.appid ||'ImreadH5',
 		'Info-Version': '1.0.1',
 		'Info-Model': '',
 		'Info-Os': '',

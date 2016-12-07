@@ -26,7 +26,6 @@ var Loading = React.createClass({
 		return (
 			<div className={this.props.cls}>
 				<div className={this.state.cls}><i className="ball-2"></i></div>
-				<i>{this.props.text}</i>
 			</div>
 			);
 	}

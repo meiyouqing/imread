@@ -126,8 +126,8 @@ var topWrap = (
 	)
 var payWrap = (
 		<Route path="pay" component={Balance} >
-			<Route path="portal/:wxcode" component={WxPay} />
-			<Route path="portal_test/:wxcode" component={WxPayTest} />
+			<Route path="wxweb_redirect" component={WxPay} />
+			<Route path="wxweb_redirect_test" component={WxPayTest} />
 			<Route path="alyPay" component={AlyPay} />
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />

@@ -20,12 +20,12 @@ var mixins = function() {
             n = encodeURIComponent(n);
             if(typeof window === 'undefined'){
                 if(global.imdata[n]){
-                    //console.log(global.imdata[n])
+                    // console.log(global.imdata[n])
                     this.ajaxHandle(global.imdata[n]);
                 }
             }else{
                 if(window.__PRELOADED_STATE__[n]){
-                    //console.log(window.__PRELOADED_STATE__[n])
+                    // console.log(window.__PRELOADED_STATE__[n])
                     this.ajaxHandle(window.__PRELOADED_STATE__[n]);
                 }
             }            
