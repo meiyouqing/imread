@@ -222,7 +222,8 @@ var Introduce = React.createClass({
 	componentDidUpdate: function(nextProps, nextState){
 
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props) && this.props.params.introduceId !== nextProps.params.introduceId)	{this.setState({book:null});this.getBook();}
+		if(GLOBAL.isRouter(this.props)) 
+			if(this.props.params.introduceId !== nextProps.params.introduceId || this.props.children !== nextProps.children)	{this.setState({book:null});this.getBook();}
 	},
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.state.book !== nextState.book
