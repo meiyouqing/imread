@@ -39,6 +39,7 @@ var Mall = React.createClass({
 		this.refs.selector.style.opacity = 0;
 		this.id = this.id===undefined?1:this.id;
 		GLOBAL.cookie('group_id',this.id,{expires: 1000});
+		GLOBAL.FirstTime = true;
 		this.disPatch('resetMall');
 
 		setTimeout(function(){
@@ -150,9 +151,12 @@ var Mall = React.createClass({
 						<header>选择你的阅读偏好</header>
 						<ul>
 						{
-							['男生网文','女生网文','出版图书','随便看看'].map(function(v,i){
+							[{title:'男生网文',img_src:'/src/img/back/man.png'},
+							{title:'女生网文',img_src:'/src/img/back/woman.png'},
+							{title:'出版图书',img_src:'/src/img/back/chuban.png'},
+							{title:'随便看看',img_src:'/src/img/back/suibian.png'}].map(function(v,i){
 								return (
-									<li key={i}><div className={"selected"+(this.state.selected===i?' active':'')}></div><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i}></a><span>{v}</span></li>
+									<li key={i}><div className={"selected"+(this.state.selected===i?' active':'')}><span className="iconfont icon-duihao"></span></div><img src={v.img_src} onClick={this.chooseFavor.bind(this,i)} className={'select-'+i} /><span>{v.title}</span></li>
 									)
 							}.bind(this))
 						}

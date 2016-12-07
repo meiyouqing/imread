@@ -28,7 +28,7 @@ var Mall = React.createClass({
 		});
 		if(typeof window === 'undefined') return;
 
-		if(!/mall\/?$/.test(location.pathname)) return;
+		if(!GLOBAL.FirstTime && !/mall\/?$/.test(location.pathname))  return;
 		browserHistory.replace('/mall/'+this.subnav+location.search);	
 	},
 	getNavFaile: function(){
