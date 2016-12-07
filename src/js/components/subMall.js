@@ -21,13 +21,29 @@ var Mall = React.createClass({
 			noMore:false,
 			scrollUpdate:false,
 			onerror:false,
-			list:null
+			list:null,
+			firstTime: false,
+			selected: 0,
 		}
 	},
-
 	getList: function (Update){
 		AJAX.init(this.APIparam);
 		AJAX.get(this.ajaxHandle ,this.onerror);
+	},
+	listId: [1,2,3,0],
+	chooseFavor: function(i){
+		this.id = this.listId[i];
+		this.setState({selected: i})
+	},
+	gotoMall: function(){
+		this.refs.selector.style.opacity = 0;
+		this.id = this.id===undefined?1:this.id;
+		GLOBAL.cookie('group_id',this.id,{expires: 1000});
+		this.disPatch('resetMall');
+
+		setTimeout(function(){
+			this.setState({firstTime: false});
+		}.bind(this),800);
 	},
 	ajaxHandle: function(data){
 		if(!data.blocklist){return}
@@ -68,6 +84,9 @@ var Mall = React.createClass({
 			this.lazyloadImage(this.refs.container);
 			this.disPatch('scroll',this.refs.container);
 		}
+
+		if(!GLOBAL.cookie('group_id'))
+			this.setState({firstTime: GLOBAL.cookie('group_id')?false:true})
 	},
 	componentDidUpdate: function(nextProp) {
 		const isRouter = GLOBAL.isRouter(this.props);
@@ -77,6 +96,7 @@ var Mall = React.createClass({
 		}else{
 			this.navChanged = true;//重置数据,修正nav切换bug
 		}
+
 		if(!this.state.list || !this.state.list.length){return;}
 		if(isRouter){
 			this.lazyloadImage(this.refs.container);
@@ -88,7 +108,9 @@ var Mall = React.createClass({
 		return this.state.noMore !== nextState.noMore
 				|| this.state.list !== nextState.list
 				|| this.state.onerror !== nextState.onerror
-				|| this.props.children !== nextProp.children;
+				|| this.props.children !== nextProp.children
+				|| this.state.firstTime !== nextState.firstTime
+				|| this.state.selected !== nextState.selected;
 	},
 	render:function(){
 		var list;
@@ -119,6 +141,28 @@ var Mall = React.createClass({
 		if(this.state.onerror){
 			list = (<div className="g-main"><NoData type="UFO" /></div>);
 		}
+
+		if(this.state.firstTime){
+			list = (
+				<div>
+					<div className="g-main g-main-4">
+						<div className="m-welcome g-scroll" ref="selector">
+						<header>选择你的阅读偏好</header>
+						<ul>
+						{
+							['男生网文','女生网文','出版图书','随便看看'].map(function(v,i){
+								return (
+									<li key={i}><div className={"selected"+(this.state.selected===i?' active':'')}></div><a onClick={this.chooseFavor.bind(this,i)} className={'select-'+i}></a><span>{v}</span></li>
+									)
+							}.bind(this))
+						}
+						</ul>
+						<a className="u-btn-4" onClick={this.gotoMall}>立即体验</a>
+						</div>
+					</div>
+				</div>
+			)
+		} 
 		return (
 			<div className="g-subMall">
 				{list}

@@ -16,9 +16,11 @@ var Book1 = React.createClass({
 	},
 	render: function() {
 		var hrefStr;	
-		var cludeIntro = location.pathname.match(/\/book\/introduce./);
+		var path = typeof window === 'undefined'?global.pathname:location.pathname;
+
+		var cludeIntro = path.match(/\/book\/introduce./);
 		if(cludeIntro){
-			hrefStr = location.pathname.split(cludeIntro)[0]+cludeIntro+this.props.data.content_id;
+			hrefStr = path.split(cludeIntro)[0]+cludeIntro+this.props.data.content_id;
 		}
 		else
 			hrefStr = GLOBAL.typeHref(this.props.data);
