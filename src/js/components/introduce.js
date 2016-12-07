@@ -228,7 +228,6 @@ var Introduce = React.createClass({
 				this.getBook();
 			}
 			if(this.props.params.introduceId !== nextProps.params.introduceId )	{
-				this.setState({book:null});
 				this.getBook();
 			}
 		}
