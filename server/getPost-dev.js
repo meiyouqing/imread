@@ -27,7 +27,7 @@ const getPost =  function(req,callback,onError){
     AJAX.init('group.1.'+group_id);
     console.log('pathpathpathpathpath>>> '+path)
     AJAX.get(data=>{
-      param = 'page.'+data.pagelist[0].pgid;
+      param = path.length===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
      if( path.length !== 2) global.pathname += '/'+param;
       goRend();
