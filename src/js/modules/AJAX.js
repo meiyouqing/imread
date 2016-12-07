@@ -172,7 +172,6 @@ function GETJSON(method, url, postdata={}, callback, onError,isJson) {
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
 		'WidthHeight': 1
 	})
-	console.log(headers)
 	const request = method === 'GET'?
 					 new Request(getGETUrl(url,postdata),{
 						method,
