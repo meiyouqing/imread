@@ -2,6 +2,8 @@ import Link from 'react-router/lib/Link';
 var Swipe = require('../modules/swipe').swipe;
 var uploadLog = require('../modules/uploadLog');
 import storage from '../modules/storage'
+import React from 'react'
+import GLOBAL from '../modules/global'
 
 var Block9 = React.createClass({
 	getWidthAndHeight: function() {
@@ -82,10 +84,10 @@ var Block9 = React.createClass({
 		if(isNaN(type)) return '';
 
 		function setHref(url){
-			var link = location.pathname.match(/self\/page.\d+.\d+.\d/);
+			var link = location.pathname.match(/self\/page.\d+.\d+/);
 			if(link) return location.pathname+'/'+url;
 			// return url;
-			return location.pathname.match(/\/mall\/page.\d+.\d/)[0] +'/'+url;
+			return location.pathname.match(/\/mall\/page.\d+/)[0] +'/'+url;
 		};
 
 		switch(type){
@@ -186,7 +188,7 @@ var Block9 = React.createClass({
 			                		
 									var hrefObj = this.typeHref(v);
 									var search=this.props.fromReading?
-										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(pathname):
+										"?devicetoken="+GLOBAL.getUuid()+'&comeFrom='+encodeURIComponent(location.pathname):
 										'';
 									if(!hrefObj.url)  hrefObj = {url: hrefObj,target:null};
 
