@@ -7,13 +7,6 @@ var Book1 = React.createClass({
 	shouldComponentUpdate: function(nextProps, nextState) {
 		return this.props.data !== nextProps.data;
 	},
-	toHandle:function(){
-		if(typeof this.props.toHandle === 'function'){
-			this.props.toHandle('introduce.'+this.props.data.content_id);
-			return false;
-		}
-		return true;
-	},
 	render: function() {
 		var hrefStr;	
 		var path = typeof window === 'undefined'?global.pathname:location.pathname;
@@ -28,7 +21,7 @@ var Book1 = React.createClass({
 		return (
 			
 			<li className="u-book-1 f-clearfix">
-				<Link to={hrefStr} onClick={this.toHandle}>
+				<Link to={hrefStr} >
 					<Img src={this.props.data.image_url} />
 					<div className="info">
 						<span className="f-ellipsis-2 title">{this.props.data.name || this.props.data.book_name}</span>

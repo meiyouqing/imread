@@ -57,8 +57,10 @@ var List = React.createClass({
 		}else{
 			if (!data || !data.content.length) {
 				this.setState({
-					noMore:true
+					noMore:true,
+					scrollUpdate: false
 				})
+				return;
 			}
 			this.setState({
 				recommend: data,
@@ -104,7 +106,9 @@ var List = React.createClass({
 	componentDidMount: function(){
 		// console.log(this.state.bookList)
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
-		if(/\/alist\./.test(location.pathname)){GLOBAL.title = this.APIParts('listId')[1]}
+		if(/\/alist\./.test(location.pathname)){
+			this.setState({recommend:{name:this.APIParts('listId')[1]}})
+		}
 		this.lazyloadImage(this.refs.container);
 		this.disPatch('scroll',this.refs.container)
 	},
@@ -126,9 +130,6 @@ var List = React.createClass({
 			this.isLoading = true;
 			this.getList(nextProps.params.listId);
 		}
-	},
-	componentWillUnmount: function(){
-		delete GLOBAL.title;
 	},
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.bookList !== nextState.bookList 
