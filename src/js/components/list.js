@@ -104,8 +104,9 @@ var List = React.createClass({
 	componentDidMount: function(){
 		// console.log(this.state.bookList)
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
-		if(location.pathname.match(/\/alist./)){GLOBAL.title = this.APIParts('listId')[1]}
+		if(/\/alist\./.test(location.pathname)){GLOBAL.title = this.APIParts('listId')[1]}
 		this.lazyloadImage(this.refs.container);
+		this.disPatch('scroll',this.refs.container)
 	},
 	componentDidUpdate: function(nextProps,nextState) {
 		GLOBAL.isAd();
