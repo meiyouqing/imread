@@ -36,6 +36,7 @@ var Detail = React.createClass({
 		this.shelfAdding(param,this.props.onShelf);
 	},
 	gotoAuthor: function(){
+		GLOBAL.title = this.props.book.author;
 		browserHistory.push(GLOBAL.setHref('author/alist.'+encodeURIComponent(this.props.book.author)))
 	},
 	gotoDownload: function(){
