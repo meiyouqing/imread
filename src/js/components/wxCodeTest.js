@@ -22,7 +22,7 @@ var WxCode = React.createClass({
                     location.href = this.from.callback+location.search;
                 }
                 else
-                    location.href="https://phonepay.imread.com/pay/web/order"+location.search
+                    location.href="http://223.95.81.227:8082/pay/web/order"+location.search
         }
     },
     render:function(){

@@ -28,7 +28,13 @@ var Mall = React.createClass({
 		});
 		if(typeof window === 'undefined') return;
 		if(!/mall\/?$/.test(location.pathname) && !this.state.firstTime) return;
-		browserHistory.replace('/mall/'+this.subnav+location.search);	
+
+		browserHistory.replace('/mall/'+this.subnav+location.search);		
+
+		if(!GLOBAL.cookie('group_id'))
+			this.setState({firstTime: GLOBAL.cookie('group_id')?false:true,show: true})
+		else 
+			this.setState({firstTime: false,show: true})
 	},
 	getNavFaile: function(){
 		this.setState({onerror:true})
@@ -79,11 +85,6 @@ var Mall = React.createClass({
 		this.usePreload('mallNav');
 	},
 	componentDidMount: function(){
-		try{
-			this.setState({firstTime: GLOBAL.cookie('group_id')?false:true,show: true})
-		}catch(e){
-			this.setState({firstTime: false,show: true})
-		}
 
 		document.ontouchmove = function(e){
 			e.stopPropagation();
