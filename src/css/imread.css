@@ -29,6 +29,8 @@ html, body, #app-container{background: #FFFFFF;}
 textarea::-moz-placeholder ,input::-moz-placeholder { color: #777777;}
 textarea::-webkit-input-placeholder,input::-webkit-input-placeholder { color:#777777; }
 textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
+
+#appContainer{position: absolute;top:0;left: 0;right: 0;bottom: 0;overflow: hidden;}
 /* /reset */
 
 /* function */
@@ -76,23 +78,20 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 /* /function */
 
 /* first time */
-.m-welcome{position:absolute;width:100%;height: 100%;background: #fff;z-index: 9999;text-align: center;opacity: 1;transition: all 1s;-webkit-transition: all 1s;z-index: 1000}
+.m-welcome{position:absolute;width:100%;height: 100%;background: #fff;z-index: 9999;text-align: center;opacity: 1;transition: all 1s;-webkit-transition: all 1s;z-index: 99999}
 .m-welcome  header{margin: 45px 0 10px;font-size: 21px;color: #333;}
 .m-welcome  ul{width: 80%;overflow: hidden;margin-left: 10%;}
 .m-welcome  ul > li{width: 50%;float: left;margin-top: 30px;position: relative;}
-.m-welcome  ul > li a{width: 100px;height: 100px;display: inline-block;background: #eee;line-height: 80px;}
-.m-welcome  ul > li span{display: block;font-size: 16px;margin-top: 5px;}
-.m-welcome ul > li a.select-0{background: url('../img/back/man.png') no-repeat;background-size: cover}
-.m-welcome ul > li a.select-1{background: url('../img/back/woman.png') no-repeat;background-size: cover}
-.m-welcome ul > li a.select-2{background: url('../img/back/chuban.png') no-repeat;background-size: cover}
-.m-welcome ul > li a.select-3{background: url('../img/back/suibian.png') no-repeat;background-size: cover}
-.m-welcome .selected{position:absolute;top:0;width:100px;height:100px;display:none;background: url('../img/back/selected.png') no-repeat;background-size: cover;left: 50%;margin-left: -50px;}
+.m-welcome  ul > li img{width: 100px;height: 100px;display: inline-block;line-height: 80px;}
+.m-welcome  ul > li > span{display: block;font-size: 16px;margin-top: 5px;}
+.m-welcome .selected{position:absolute;top:0;width:100px;height:100px;display:none;background: rgba(0,0,0,.3);color:#fff;left: 50%;border-radius: 50%;margin-left: -50px;line-height: 100px;overflow: hidden;}
+.m-welcome .selected > span{font-size: 28px;font-weight: bold;}
 .m-welcome .selected.active{display: inline-block;}
 
 @media screen and (max-width: 360px) {
 	.m-welcome  header{margin: 30px 0 10px;}
-	.m-welcome  ul > li a{width: 80px;height: 80px;line-height: 80px;}
-	.m-welcome .selected{width:80px;height:80px;margin-left: -40px;}
+	.m-welcome  ul > li img{width: 80px;height: 80px;line-height: 80px;}
+	.m-welcome .selected{width:80px;height:80px;margin-left: -40px;line-height: 80px;}
 	.u-btn-4{height: 40px!important;width: 140px!important;line-height: 40px!important;font-size: 20px!important;margin: 30px 0!important;}
 }
 
