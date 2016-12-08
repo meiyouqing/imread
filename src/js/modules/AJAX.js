@@ -121,7 +121,6 @@ var API={
 
 
 function getGETUrl(url, postdata) {
-	// return 'http://192.168.0.251:8080/nonono';
 	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
 }
 //getJSON接口

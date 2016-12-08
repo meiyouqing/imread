@@ -66,9 +66,9 @@ var Mall = React.createClass({
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
-		if(/(^\/|mall\/?|page\.\d+)$/.test(location.pathname)){
+		// if(/(^\/|mall\/?|page\.\d+)$/.test(location.pathname)){
 			if(!this.state.navList) this.getNav();
-		}
+		// }
 		document.addEventListener('resetMall',this.getNav);	
 	},
 	upApp: function(page){
@@ -114,9 +114,7 @@ var Mall = React.createClass({
 		const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} ></div>,
 			middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch}></a>,
 			left = <div className="i-logo" onClick={this.reload}></div>;
-		let main ;
-
-			main = (
+		let main = (
 				<div className="g-mall" style={{top:0}}>
 					<MallNav navList={this.state.navList || []} />
 					<section className={"m-wrapper"+(this.state.showUser? ' show':'')} onClick={this.hideUser}></section>
