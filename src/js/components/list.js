@@ -68,15 +68,15 @@ var List = React.createClass({
 				scrollUpdate: false
 			});	
 
-			if(AJAX.API._param)
-				if(data.content.length < AJAX.API._param.contents) {
-					this.setState({
-						noMore:true,
-						scrollUpdate: false
-					})
-					return;
-				}		
-		}
+
+			if(data.content.length < AJAX.API.alist.param.contents) {
+				this.setState({
+					noMore:true,
+					scrollUpdate: false
+				})
+				return;
+			}	
+		}	
 	},
 	goSearch: function(){
 		if(!this.isMounted()) return;
@@ -115,9 +115,6 @@ var List = React.createClass({
 	componentDidMount: function(){
 		// console.log(this.state.bookList)
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
-		if(/\/alist\./.test(location.pathname)){
-			this.setState({recommend:{name:this.APIParts('listId')[1]}})
-		}
 		this.lazyloadImage(this.refs.container);
 		//this.disPatch('scroll',this.refs.container)
 	},
@@ -126,17 +123,18 @@ var List = React.createClass({
 		this.lazyloadImage(this.refs.container);
 		if(GLOBAL.isRouter(this.props))  {
 			if(!this.state.bookList){
+				console.log(1)
 				this.getList();
 			}else{
+				console.log(0)
 				this.lazyloadImage(this.refs.container);
 				this.disPatch('scroll',this.refs.container)
 			}
 		}
 	},
 	componentWillReceiveProps: function(nextProps){
-		var isSearch = /searchList/.test(this.props.route.path);
-
-		if(this.props.params.listId !== nextProps.params.listId && isSearch){
+		// var isSearch = /searchList/.test(this.props.route.path);
+		if(this.props.params.listId !== nextProps.params.listId ){
 			this.isLoading = true;
 			this.getList(nextProps.params.listId);
 		}
@@ -153,7 +151,9 @@ var List = React.createClass({
 	},
 	render:function(){
 		var header,noData,content,sLoading,result_count;
-		header = <Header title={this.state.recommend.name || GLOBAL.title}  right={null} path={this.props.route}  />;		
+		let title, match;
+		if(match = this.getListId().match(/^alist\.(.+)/)) title = match[1];
+		header = <Header title={this.state.recommend.name || title || GLOBAL.title}  right={null} path={this.props.route} />;		
 
 		if(/^searchList/.test(this.props.route.path)){
 			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
