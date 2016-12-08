@@ -124,14 +124,14 @@ var List = React.createClass({
 	componentDidUpdate: function(nextProps,nextState) {
 		GLOBAL.isAd();
 		this.lazyloadImage(this.refs.container);
-		// if(GLOBAL.isRouter(this.props))  {
-		// 	if(!this.state.bookList){
-		// 		this.getList();
-		// 	}else{
-		// 		this.lazyloadImage(this.refs.container);
-		// 		this.disPatch('scroll',this.refs.container)
-		// 	}
-		// }
+		if(GLOBAL.isRouter(this.props))  {
+			if(!this.state.bookList){
+				this.getList();
+			}else{
+				this.lazyloadImage(this.refs.container);
+				this.disPatch('scroll',this.refs.container)
+			}
+		}
 	},
 	componentWillReceiveProps: function(nextProps){
 		var isSearch = /searchList/.test(this.props.route.path);
