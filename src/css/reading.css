@@ -135,19 +135,18 @@
 .m-reading-body .icon-font{width: 24px;height: 50px;}
 
 .m-slidBar{width: 80%;height:30px;line-height:30px;padding:5px 10%;}
-.m-slidBar .label{width: 20%;text-align: left;font-size: 16px;line-height: 30px; color: #0096aa;}
+.m-slidBar .label{width: 18%;text-align: left;font-size: 16px;line-height: 30px; color: #0096aa;}
 .m-slidBar .u-slidBar{width: 80%; position: relative;overflow: visible;}
-.m-slidBar .u-slidBar .f-fl{width: calc(20% - 2px);}
-.m-slidBar .u-slidBar .circle{ width: 6px;height: 6px;background: #fff;border-radius: 4px;border: 1px solid #0096aa;-webkit-opacity:0.5;opacity: 0.5;}
-.m-slidBar .u-slidBar .line{width: calc(100% - 8px); height: 2px;background: #0096aa;-webkit-opacity:0.5;opacity: 0.5;}
+.m-slidBar .u-slidBar .f-fl{position: relative;width: 20%;height: 30px;}
+.m-slidBar .u-slidBar .circle{position: absolute;top: 12px;right: 0; width: 6px;height: 6px;background: #fff;border-radius: 4px;border: 1px solid rgba(0, 150, 170, .5);}
+.m-slidBar .u-slidBar .line{position: absolute;top: 15px; width: 100%; height: 2px;background: #0096aa;-webkit-opacity:0.5;opacity: 0.5;}
 /*.m-slidBar .u-slidBar .circle:first-child{position: absolute;left: -7px; top:calc(50% - 3px)}*/
-.m-slidBar .u-slidBar .active .circle{background: #0096aa;border: 1px solid #0096aa;-webkit-opacity:1;opacity: 1;}
+.m-slidBar .u-slidBar .active .circle{background: #0096aa;border-radius: 4px;border: 1px solid rgba(0, 150, 170, 1);}
 .m-slidBar .u-slidBar .active .line{-webkit-opacity:1;opacity: 1;background: #0096aa;}
 .setting-fontsize.m-slidBar {padding:15px 5%;width: 90%;}
 .u-slidBar span{display: inline-block;vertical-align: middle;}
 
-.m-slidBar .u-slidBar .f-fl:first-child{width: calc(20% + 6px);}
-.m-slidBar .u-slidBar .f-fl:first-child .line{width: calc(100% - 16px)}
+.m-slidBar .u-slidBar .f-fl:first-child .circle:first-child{left: -6px;}
 
 
 .u-readingsetting .m-block{background: transparent;}
@@ -342,10 +341,10 @@
 .u-readingsetting .u-playBtn{position: fixed;z-index:1000;bottom: 100px;right: 33px;width: 65px;height: 65px;font-size: 29px;border-radius: 100%;background: white;color: #0096aa;}
 .u-ttsSetting{position: fixed;width: 100%;height: 225px;bottom:0;z-index: 999;background: white;}
 
-.u-ttsSetting .btnWrap{display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;justify-content: space-around;align-items: center;padding:0 10%;margin-top: 25px;}
-.u-ttsSetting .u-pauseBtn {font-size: 70px;line-height:1;padding-top:3px;color: #32ABBD;}
+.u-ttsSetting .btnWrap{padding:0 10%;margin-top: 25px;}
+.u-ttsSetting .u-pauseBtn {display: inline-block;vertical-align: middle;width: 40%;text-align: center;font-size: 70px;line-height:1;padding-top:3px;color: #32ABBD;}
 .u-ttsSetting .u-pauseBtn:active{color: #0faabe;}
-.u-ttsSetting .u-quitTtsBtn, .u-ttsSetting .u-voiceBtn {font-size: 50px;line-height:1;color: #0096aa;}
+.u-ttsSetting .u-quitTtsBtn, .u-ttsSetting .u-voiceBtn {display: inline-block;vertical-align: middle;width: 30%;text-align: center;font-size: 50px;line-height:70px;color: #0096aa;}
 .u-ttsSetting .u-quitTtsBtn:active, .u-ttsSetting .u-voiceBtn:active{color:#0faabe;}
 
 .u-ttsSetting .m-slidBar{margin-top: 12px;}
