@@ -68,8 +68,8 @@ var List = React.createClass({
 				scrollUpdate: false
 			});	
 
-			if(AJAX.API._param)
-				if(data.content.length < AJAX.API._param.contents) {
+			var cLength = AJAX.API[this.getListId().split('.')[0]].param.contents;
+				if(data.content.length < cLength) {
 					this.setState({
 						noMore:true,
 						scrollUpdate: false
@@ -103,6 +103,7 @@ var List = React.createClass({
 		}
 	},
 	componentWillMount:function(){
+		if(typeof this.props.params.listId !== 'string' && !/author/.test(this.props.route.path))	return;
 		this.usePreload(this.getListId());
 	},
 	getListId: function(){
@@ -113,7 +114,8 @@ var List = React.createClass({
 			return listId[listId.length-1]
 	},
 	componentDidMount: function(){
-		// console.log(this.state.bookList)
+
+		if(typeof this.props.params.listId !== 'string' && !/author/.test(this.props.route.path))	return;
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 		if(/\/alist\./.test(location.pathname)){
 			this.setState({recommend:{name:this.APIParts('listId')[1]}})
@@ -124,6 +126,12 @@ var List = React.createClass({
 	componentDidUpdate: function(nextProps,nextState) {
 		GLOBAL.isAd();
 		this.lazyloadImage(this.refs.container);
+
+		if(GLOBAL.isRouter(this.props) && typeof this.props.params.listId === 'string')  {
+			if(!this.state.bookList && this.props.children !== nextProps.children){
+				this.getList();
+			}
+		}
 		// if(GLOBAL.isRouter(this.props))  {
 		// 	if(!this.state.bookList){
 		// 		this.getList();
@@ -133,14 +141,14 @@ var List = React.createClass({
 		// 	}
 		// }
 	},
-	componentWillReceiveProps: function(nextProps){
-		var isSearch = /searchList/.test(this.props.route.path);
+	// componentWillReceiveProps: function(nextProps){
+	// 	var isSearch = /searchList/.test(this.props.route.path);
 
-		if(this.props.params.listId !== nextProps.params.listId && isSearch){
-			this.isLoading = true;
-			this.getList(nextProps.params.listId);
-		}
-	},
+	// 	if(this.props.params.listId !== nextProps.params.listId && isSearch){
+	// 		this.isLoading = true;
+	// 		this.getList(nextProps.params.listId);
+	// 	}
+	// },
 	shouldComponentUpdate: function(nextProps,nextState){
 		return this.state.bookList !== nextState.bookList 
 				|| this.state.scrollUpdate !== nextState.scrollUpdate
