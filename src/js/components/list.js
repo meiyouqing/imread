@@ -66,7 +66,16 @@ var List = React.createClass({
 				recommend: data,
 				bookList:this.state.scrollUpdate? this.state.bookList.concat(data.content):data.content,
 				scrollUpdate: false
-			});				
+			});	
+
+			if(AJAX.API._param)
+				if(data.content.length < AJAX.API._param.contents) {
+					this.setState({
+						noMore:true,
+						scrollUpdate: false
+					})
+					return;
+				}		
 		}
 	},
 	goSearch: function(){
@@ -110,18 +119,19 @@ var List = React.createClass({
 			this.setState({recommend:{name:this.APIParts('listId')[1]}})
 		}
 		this.lazyloadImage(this.refs.container);
-		this.disPatch('scroll',this.refs.container)
+		//this.disPatch('scroll',this.refs.container)
 	},
 	componentDidUpdate: function(nextProps,nextState) {
 		GLOBAL.isAd();
-		if(GLOBAL.isRouter(this.props))  {
-			if(!this.state.bookList){
-				this.getList();
-			}else{
-				this.lazyloadImage(this.refs.container);
-				this.disPatch('scroll',this.refs.container)
-			}
-		}
+		this.lazyloadImage(this.refs.container);
+		// if(GLOBAL.isRouter(this.props))  {
+		// 	if(!this.state.bookList){
+		// 		this.getList();
+		// 	}else{
+		// 		this.lazyloadImage(this.refs.container);
+		// 		this.disPatch('scroll',this.refs.container)
+		// 	}
+		// }
 	},
 	componentWillReceiveProps: function(nextProps){
 		var isSearch = /searchList/.test(this.props.route.path);

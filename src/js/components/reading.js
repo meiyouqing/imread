@@ -1175,9 +1175,9 @@ var Reading = React.createClass({
 								}.bind(this))
 							}
 						</div>*/}
-						<div className="setting-fontsize setting-font-line f-flexbox m-slidBar">
-							<span className="iconfont icon-font label"></span>
-							<div className="u-slidBar f-fr f-clearfix">
+						<div className="setting-fontsize setting-font-line m-slidBar f-clearfix">
+							<span className="iconfont icon-font label f-fl"></span>
+							<div className="u-slidBar f-clearfix f-fr">
 									{
 
 										[1, 2, 3, 4,5].map(function(dataid, i) {
