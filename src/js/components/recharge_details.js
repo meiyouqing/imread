@@ -75,12 +75,20 @@ var RechageDetail = React.createClass({
 				list: this.state.scrollUpdate? this.state.list.concat(data.content):data.content,
 				scrollUpdate: false
 			});
+
+			if(AJAX.API._param)
+				if(data.content.length < AJAX.API._param.contents) {
+					this.setState({
+						noMore:true,
+						scrollUpdate: false
+					})
+					return;
+				}	
 		}.bind(this),this.onerror)
 	},
 	componentDidMount: function(){
 		AJAX.init('datails.1.20');
 		this.getList();
-		this.disPatch('scroll',this.refs.container);
 	},
 	render: function() {
 		 var sLoading = <Loading cls='u-sLoading transparent' />,list=null;
