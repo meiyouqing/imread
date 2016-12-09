@@ -62,7 +62,6 @@ var Mall = React.createClass({
 		this.usePreload('mallNav');
 	},
 	componentDidMount: function(){
-
 		document.ontouchmove = function(e){
 			e.stopPropagation();
 		};
@@ -130,7 +129,7 @@ var Mall = React.createClass({
 		}
 
 		return (
-			<div>
+			<div className="g-body">
 				<Header title="" left={left} right={right} middle={middle} path={this.props.route}/>
 				{main}
 			</div>
