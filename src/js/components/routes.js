@@ -11,7 +11,7 @@ import Top from './top' //TODO:load on demand
 import Search from './search'
 import List from './list'
 import Login from './login'
-import Logintest from './login_test'
+// import Logintest from './login_test'
 import Register from './register'
 import Introduce from './introduce'
 import Balance from './balance'
@@ -165,7 +165,6 @@ module.exports = (
 		{loginWrap}
 		{selfWrap}
 		{payWrap}
-		<Route path="/login_test" component={Logintest}/>
 		<Route path="/mall" component={Mall}>
 			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
 				{selfWrap}

@@ -115,6 +115,7 @@ app.listen(port, (error) => {
 
 //fetch handle
 function goSend(res,props){
+  console.log(props)
     try{
       const appHtml = renderToString(<RouterContext {...props}/>)
       res.send(renderFullPage(appHtml,global.imdata))
