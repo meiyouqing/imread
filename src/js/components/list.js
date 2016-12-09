@@ -11,7 +11,6 @@ var Block7 = require('./block7');
 
 var List = React.createClass({
 	mixins: [Mixins()],
-	isLoading: false,
 	getList: function(param){
 		if(!this.isMounted()) return;
 		var hash = param?param:this.getListId();
@@ -32,7 +31,6 @@ var List = React.createClass({
 	},
 	ajaxHandle:function(data){
 		// if(!this.isMounted()) return;
-		this.isLoading = false;
 		var pathname = this.props.location.pathname.split('/');
 		if(/^search\./.test(pathname[pathname.length-1])){
 			if (!data.contentlist.length) {
@@ -68,15 +66,15 @@ var List = React.createClass({
 				scrollUpdate: false
 			});	
 
-
-			if(data.content.length < AJAX.API.alist.param.contents) {
-				this.setState({
-					noMore:true,
-					scrollUpdate: false
-				})
-				return;
-			}	
-		}	
+			var cLength = AJAX.API[this.getListId().split('.')[0]].param.contents;
+				if(data.content.length < cLength) {
+					this.setState({
+						noMore:true,
+						scrollUpdate: false
+					})
+					return;
+				}		
+		}
 	},
 	goSearch: function(){
 		if(!this.isMounted()) return;
@@ -103,6 +101,7 @@ var List = React.createClass({
 		}
 	},
 	componentWillMount:function(){
+		if(typeof this.props.params.listId !== 'string' && !/author/.test(this.props.route.path))	return;
 		this.usePreload(this.getListId());
 	},
 	getListId: function(){
@@ -113,29 +112,26 @@ var List = React.createClass({
 			return listId[listId.length-1]
 	},
 	componentDidMount: function(){
-		// console.log(this.state.bookList)
+
+		if(typeof this.props.params.listId !== 'string' && !/author/.test(this.props.route.path))	return;
 		if(GLOBAL.isRouter(this.props) && !this.state.bookList) this.getList();
 		this.lazyloadImage(this.refs.container);
 		//this.disPatch('scroll',this.refs.container)
 	},
 	componentDidUpdate: function(nextProps,nextState) {
 		GLOBAL.isAd();
-		this.lazyloadImage(this.refs.container);
 		if(GLOBAL.isRouter(this.props))  {
 			if(!this.state.bookList){
-				console.log(1)
 				this.getList();
 			}else{
-				console.log(0)
 				this.lazyloadImage(this.refs.container);
-				this.disPatch('scroll',this.refs.container)
 			}
 		}
 	},
 	componentWillReceiveProps: function(nextProps){
 		// var isSearch = /searchList/.test(this.props.route.path);
-		if(this.props.params.listId !== nextProps.params.listId ){
-			this.isLoading = true;
+		if(this.props.params.listId !== nextProps.params.listId && this.props.children === nextProps.children ){
+			this.setState({bookList:null});
 			this.getList(nextProps.params.listId);
 		}
 	},
@@ -159,8 +155,8 @@ var List = React.createClass({
 			header = <Header_s goSearch={this.goSearch} route={this.props.route} params={this.props.params} keyValue={this.props.location.state} />;
 		}
 		//定义content
-		if(!this.state.bookList || this.isLoading){
-			//if(GLOBAL.isRouter(this.props))	//兼容低端安卓
+		if(!this.state.bookList){
+			// if(GLOBAL.isRouter(this.props))	//兼容低端安卓
 				content = <Loading />;
 		}else{
 			if(!this.state.bookList.length){

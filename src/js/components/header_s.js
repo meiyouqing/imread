@@ -7,7 +7,10 @@ var Header_s = React.createClass({
 	getInitialState: function(){
 		var key = '';
 		if(/^searchList/.test(this.props.route.path)){
-			key = this.props.params['listId'].split('.')[1] || '';
+			var list = this.props.params['listId'];
+			if(typeof list !== 'string')
+				list = list[0];
+			key = list.split('.')[1] || '';
 		}
 		return{
 			key: key,
