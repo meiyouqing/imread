@@ -21,12 +21,12 @@ var mixins = function() {
             if(typeof window === 'undefined'){
                 if(global.imdata[n]){
                     // console.log(global.imdata[n])
-                    this.ajaxHandle(global.imdata[n]);
+                    this.ajaxHandle(global.imdata[n],true);
                 }
             }else{
                 if(window.__PRELOADED_STATE__[n]){
                     // console.log(window.__PRELOADED_STATE__[n])
-                    this.ajaxHandle(window.__PRELOADED_STATE__[n]);
+                    this.ajaxHandle(window.__PRELOADED_STATE__[n],true);
                 }
             }            
         },
@@ -81,7 +81,8 @@ var mixins = function() {
             })
 
             if (this.props.route) {
-                n = this.props.params[(this.props.route.path.split(':')[1])];
+                const match = this.props.route.path.match(/\:([^\)]+)/);
+                n = this.props.params[(match && match[1])];
                 if (!n)
                     n = this.props.route.path;
             } else
@@ -89,7 +90,6 @@ var mixins = function() {
 
             if(typeof n !== 'string') n = n[n.length-1];
             n = n.split('.')[0];
-
             var p = AJAX.API[n].param['pages'] ? 'pages' : 'page';
             AJAX.API[n].param[p]++;
             this.getList();
