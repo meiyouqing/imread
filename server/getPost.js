@@ -22,8 +22,8 @@ const getPost =  function(req,callback,onError){
 
   if(path.length<3 && /(^\/|mall\/?|page\.\d+)$/.test(url)){
     const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
-    const group_id = (match && match[1]) || 1;
-    AJAX.init('group.1.'+group_id);
+    const config_id = (match && match[1]) || 1;
+    AJAX.init('group.1.'+config_id);
     AJAX.get(data=>{
       param = path.length===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
