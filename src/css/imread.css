@@ -99,9 +99,10 @@ textarea:-ms-input-placeholder,input:-ms-input-placeholder { color:#777777; }
 .g-wraper{position: absolute;left:0;width: 100%;height: 100%;overflow: hidden;background: #FFFFFF;}
 .g-body, .gg-body{position: absolute;left:0;top: 0;width: 100%;height: 100%;overflow: hidden;background: #FFFFFF;}
 .gg-body{z-index: 3000;}
-.gg-body.m-reading-body{z-index: 5000;}
+.gg-body.m-reading-body{z-index: 5000;opacity: 1;}
 .gg-body > div > .m-bar-nav{z-index: 12}
 .gg-body > div > .m-bar-nav + .g-main-list{top: 44px;}
+.gg-body.fade-out{transition: opacity 1s; opacity: 0;}
 
 .g-nav{height: 36px;margin-top: 44px;}
 .g-nav.g-top{height: 44px;}

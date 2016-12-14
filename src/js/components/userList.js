@@ -20,13 +20,13 @@ var ULine = React.createClass({
 		return {isWx:false}
 	},
 	componentDidMount: function(){
+		if(!this.isMounted()) return;
 		if(this.isWx()){
 			this.setState({isWx:true})
 		}
 	},
 	render: function() {
-		const arr = GLOBAL.getLocation().split('/');
-		let Src = '/'+arr[1]+'/'+arr[2]+'/'+this.props.line.href;
+		let Src = this.props.path+'/'+this.props.line.href;
 
 		if(this.props.line.href === 'pay'){
 			Src = '/pay?backUrl=' + encodeURIComponent(this.props.path);
@@ -92,6 +92,7 @@ var UserList = React.createClass({
 		}
 	},
 	getInfo: function(){
+		if(!this.isMounted()) return;
 		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
 			this.setState({aidou:data[1].default_balance});
 		}.bind(this));
@@ -111,7 +112,8 @@ var UserList = React.createClass({
 		 document.removeEventListener("updateUser", this.getUserInfo.bind(this,null), false);
 		 document.removeEventListener('rechargeSuccess',this.getUserInfo.bind(this,null),false);
 	},
-	getUserInfo: function() { //获取个人信息		
+	getUserInfo: function() { //获取个人信息	
+		if(!this.isMounted()) return;	
 		var that = this;
 			//POP.alert(this.isLogin)
 		if (this.isLogin()) {

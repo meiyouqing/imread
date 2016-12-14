@@ -16,25 +16,7 @@ var BookSheet = React.createClass({
 	 mixins: [Mixins()],
 	getList: function(){
 		AJAX.init(this.props.params.sheetId);
-		AJAX.get(function(data){
-			GLOBAL.title = data.sheet_name;
-			if(!data.content){return;}
-			if (!data.content.length) {
-				this.setState({
-					noMore:true
-				})
-				return;
-			}
-			if(this.state.scrollUpdate){
-				data.content = this.state.data.content.concat(data.content);
-			}
-			this.setState({
-				data: data,
-				collected: +data.collection,
-				scrollUpdate: false
-			});	
-			//设置GLOBAL book name
-		}.bind(this), function(error){
+		AJAX.get(this.ajaxHandle, function(error){
 			if(this.state.scrollUpdate){
 				this.setState({
 					scrollUpdate:false,
@@ -47,6 +29,25 @@ var BookSheet = React.createClass({
 			});
 			//console.log(error);
 		}.bind(this));
+	},
+	ajaxHandle:function(data){
+		GLOBAL.title = data.sheet_name;
+		if(!data.content){return;}
+		if (!data.content.length) {
+			this.setState({
+				noMore:true
+			})
+			return;
+		}
+		if(this.state.scrollUpdate){
+			data.content = this.state.data.content.concat(data.content);
+		}
+		this.setState({
+			data: data,
+			collected: +data.collection,
+			scrollUpdate: false
+		});	
+		//设置GLOBAL book name
 	},
 	addFavaHandle:function(){
 		var that = this;
@@ -79,13 +80,22 @@ var BookSheet = React.createClass({
 			UFO:false
 		}
 	},
+	componentWillMount:function(){
+		this.usePreload(this.props.params.sheetId);
+	},
 	componentDidMount: function(){
 		var obj = parseQuery(location.search);
 	      if(obj.action && obj.action=='openapp'){
 	      	var p = "detail/" + encodeURI('[{"detail":[{"sheetid":"'+ obj.sheet_id +'","type":"10"}],"pushcmd":"10"}]');
 			window.location.href = 'imread://'+p;
 	      }
-		if(GLOBAL.isRouter(this.props))	this.getList();
+		if(GLOBAL.isRouter(this.props)){
+			if(!this.state.data){
+				this.getList();
+			}else{
+				this.lazyloadImage(this.refs.container);
+			}
+		}
 	},
 	componentDidUpdate: function() {
 		GLOBAL.isAd();

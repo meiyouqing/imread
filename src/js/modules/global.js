@@ -64,30 +64,35 @@ const GLOBAL = {
 		}
 	},
 	isRouter: function(route){
-		var route_id = null,
-			route_arr = route.route.path.replace(/\//,'').split(':'),
-			route_key = route_arr[route_arr.length-1];
+		return route.children === null;
+		// var route_id = null,
+		// 	route_arr = route.route.path.match(/\:([^\)]+)/);
+		// if(!route_arr){
+		// 	var	route_key = route.route.path;
+		// }else{
+		// 	var	route_key = route_arr[1];
+		// }
+		
 
-		if(route.routeParams[route_key]){
-			route_id = route.routeParams[route_key];
-			if(typeof route_id !== 'string')
-				route_id = route_id[route_id.length-1];
-			route_id = encodeURIComponent(route_id);
-		}
-		else 
-			route_id = route_key;
-		var route_path;
-		if(typeof window === 'undefined') {
-			return true;
-			route_path = global.requestURL.split('/');
-		}else{			
-			route_path = window.location.pathname.split('/');
-		}
-		if(route_path[route_path.length-1] == route_id)	return true;
-		else return false;			
+		// if(route.params[route_key]){
+		// 	route_id = route.params[route_key];
+		// 	if(typeof route_id !== 'string')
+		// 		route_id = route_id[route_id.length-1];
+		// 	route_id = encodeURIComponent(route_id);
+		// }
+		// else 
+		// 	route_id = route_key;
+		// var route_path;
+		// if(typeof window === 'undefined') {
+		// 	return true;
+		// 	route_path = global.pathname.split('/');
+		// }else{			
+		// 	route_path = window.location.pathname.split('/');
+		// }
+		// console.log(route,route_path[route_path.length-1] == route_id)
+		// if(route_path[route_path.length-1] == route_id)	return true;
+		// else return false;			
 
-		// var path = route.route.path.replace(/:([^\"]*)/,'');
-		// return window.location.pathname.split('/'+path)[0];
 	},
 	typeHref: function(data){
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;

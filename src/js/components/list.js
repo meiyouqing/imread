@@ -13,6 +13,7 @@ var List = React.createClass({
 	mixins: [Mixins()],
 	getList: function(param){
 		if(!this.isMounted()) return;
+		// if(this.state.empty || this.state.noMore) return;
 		var hash = param?param:this.getListId();
 		AJAX.init(hash);
 		AJAX.get(this.ajaxHandle, error => {
@@ -35,7 +36,7 @@ var List = React.createClass({
 		if(/^search\./.test(pathname[pathname.length-1])){
 			if (!data.contentlist.length) {
 				if(!this.state.bookList){
-					this.setState({empty:true});
+					this.setState({empty:true,bookList:[]});
 					return;
 				}
 				this.setState({

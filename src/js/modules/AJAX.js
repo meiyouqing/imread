@@ -7,6 +7,7 @@ var Config = {
 	payURLBase: 'https://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
+
 var API={
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
 	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id: 1}},
@@ -265,18 +266,19 @@ function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeade
 					onError(new Error('服务器返回为空'));
 				}else if(res.error){
 					onError(res);
-				}else{
-					callback(res);
 				}			
 			} catch (e) {
 				//res = '连接超时！';
 				onError(e);
 			}
+			
+			callback(res);
 		}else {
 			onError(request.status+' '+request.responseText)
 		}
 	};
 
+	if(!url) return;
 	if (method === 'POST') {
 		request.open(method, url);
 		request.withCredentials = true;
@@ -323,6 +325,7 @@ function setRequestHeaders(request) {
 var AJAX = {
 	API: API,
 	init: function(now){
+		// console.log('now >> ',now)
 		if(!now) return;
 		if(GLOBAL.isArray(now)){
 			now = now[now.length-1];
