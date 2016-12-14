@@ -104,7 +104,7 @@ app.get('*', (req, res) => {
   })
 })
 
-const port = process.argv[2] || 80
+const port = process.argv[2] || 8080
 app.listen(port, (error) => {
   if (error) {
     console.error(error)
@@ -115,7 +115,7 @@ app.listen(port, (error) => {
 
 //fetch handle
 function goSend(res,props){
-  console.log(props)
+  // console.log(props)
     try{
       const appHtml = renderToString(<RouterContext {...props}/>)
       res.send(renderFullPage(appHtml,global.imdata))

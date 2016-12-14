@@ -74,12 +74,13 @@ var Top = React.createClass({
 		GLOBAL.setBlocklist(data.blocklist);
 	},			
 	componentWillMount:function(){
-		if(typeof window === 'undefined') return;
-		if(window.__PRELOADED_STATE__ && window.__PRELOADED_STATE__.topNav){
-			const data = window.__PRELOADED_STATE__.topNav;
-			const n = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1';
-			this.usePreload(n);
-		}
+		if(!GLOBAL.isRouter(this.props)) return;
+		const topnav = typeof window === 'undefined'?
+						global.imdata.topNav:
+						window.__PRELOADED_STATE__ && window.__PRELOADED_STATE__.topNav;
+		if(!topnav) return;
+		const n = 'page.'+topnav.pagelist[0].pgid+'.'+topnav.pagelist[0].blocks+'.1';
+		this.usePreload(n);
 	},
 	componentDidMount: function(){
 		if(GLOBAL.isRouter(this.props) && !this.state.list)	{

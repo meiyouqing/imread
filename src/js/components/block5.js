@@ -143,8 +143,8 @@ var Block5 = React.createClass({
 			var link = pathname.match(/self\/page.\d+\.\d+\.\d/);
 			if(link) return pathname+'/'+url;
 			// return url;
-			var match = pathname.match(/\/mall\/page\.\d+/);
-			var base = match? match[0] : '//m.imread.com/mall/page.9'
+			var match = pathname.match(/\/mall(\/page\.\d+)?/);
+			var base = match? match[0] : '//m.imread.com/mall'
 			return base +'/'+url;
 		};
 		// console.log(type)
@@ -169,7 +169,7 @@ var Block5 = React.createClass({
 			case 16: //to home
 				return {url:'//m.imread.com',target}
 			case 17: //to shelf
-				return {url:'//m.imread.com/mall/page.9/shelf',target}
+				return {url:'//m.imread.com/mall/shelf',target}
 			default: return null;
 		}
 	},
@@ -215,8 +215,9 @@ var Block5 = React.createClass({
 
 									if(this.adlist.length<2) 
 										imger = <img src={imgSrc} className="u-adimg" style={{width: '100%'}}/>;
+
 			                		return (
-			                			<Link style={{backgroundColor: '#e3e3e3',height: this.state.height}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id=		{v.content_id}>
+			                			<Link style={{backgroundColor: '#e3e3e3',height: this.state.height}} to={hrefObj.url+search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
 			                				{imger}
 			                			</Link>
 			                		);

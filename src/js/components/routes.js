@@ -6,7 +6,6 @@ import Route from 'react-router/lib/Route'
 import App from './app'
 // import Shelf from './shelf' //TODO:load on demand
 import Mall from './mall'
-import SubMall from './subMall'
 import Top from './top' //TODO:load on demand
 import Search from './search'
 import List from './list'
@@ -165,8 +164,7 @@ module.exports = (
 		{loginWrap}
 		{selfWrap}
 		{payWrap}
-		<Route path="/mall" component={Mall}>
-			<Route path="/mall/:subnav" onLeave={scrollResetHandle} component={SubMall}>
+			<Route path="/mall(/:subnav)" onLeave={scrollResetHandle} component={Mall}>
 				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
@@ -236,7 +234,6 @@ module.exports = (
 					{searchWrap}
 				</Route>
 			</Route>
-		</Route>		
 	</Route>
 
 )
