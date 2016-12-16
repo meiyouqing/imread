@@ -1,6 +1,6 @@
 import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import storage from '../modules/storage'
 import Mixins from '../modules/mixins'
@@ -93,7 +93,8 @@ var UserList = React.createClass({
 	},
 	getInfo: function(){
 		if(!this.isMounted()) return;
-		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
+		const AJAX = new Ajax();
+		new Ajax().getJSON('GET', '/api/v1/read/config', {}, function(data) {
 			this.setState({aidou:data[1].default_balance});
 		}.bind(this));
 	},
@@ -117,7 +118,7 @@ var UserList = React.createClass({
 		var that = this;
 			//POP.alert(this.isLogin)
 		if (this.isLogin()) {
-			AJAX.init('me');
+			const AJAX = new Ajax('me');
 			AJAX.get(function(data) {
 				if(data.code != 200) {
 					storage.rm('userToken');

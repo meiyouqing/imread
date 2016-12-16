@@ -1,5 +1,5 @@
 import NoData from './noData'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import Mixins from '../modules/mixins'
 import React from 'react'
 import Link from 'react-router/lib/Link';
@@ -34,13 +34,13 @@ var List = React.createClass({
 		},this.onerror);
 	},
 	scrollData: function(e){
-		AJAX.init('block');
+		const AJAX = new Ajax('block');
 		this.scrollHandle(e);
 	},
 	componentDidMount: function(){
 		this.setState({list: this.props.data.contentlist});
 		var pid = this.props.data.id;
-		AJAX.init('block.'+pid+'.6.1');
+		const AJAX = new Ajax('block.'+pid+'.6.1');
 	},
 	componentDidUpdate: function(nextProp) {
 		this.lazyloadImage(this.refs.contain,true);
@@ -86,12 +86,12 @@ var Guess = React.createClass({
 	componentDidUpdate: function(nextProp) {
 		this.lazyloadImage(this.refs.contain,true);
 		// if(this.props.data.contentlist.length !== nextProp.data.contentlist.length){
-		// 	AJAX.init('block.'+this.props.data.id+'.10.1');
+		// 	const AJAX = new Ajax('block.'+this.props.data.id+'.10.1');
 		// 	this.getList();
 		// }
 	},
 	getList: function(){
-		AJAX.init('block.'+this.props.data.id+'.10.1');	
+		const AJAX = new Ajax('block.'+this.props.data.id+'.10.1');	
 		AJAX.get((data)=>{
 			if(data.content.length<1)	{
 				this.setState({

@@ -1,7 +1,7 @@
 import parseQuery from '../modules/parseQuery'
 import Loading from './loading'
 import NoData from './noData'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -14,8 +14,9 @@ if(typeof window !== 'undefined'){
 
 var BookSheet = React.createClass({
 	 mixins: [Mixins()],
+	 scrollPagesNo:1,
 	getList: function(){
-		AJAX.init(this.props.params.sheetId);
+		const AJAX = new Ajax(`${this.props.params.sheetId}.-.${this.scrollPagesNo}`);
 		AJAX.get(this.ajaxHandle, function(error){
 			if(this.state.scrollUpdate){
 				this.setState({
@@ -64,11 +65,12 @@ var BookSheet = React.createClass({
 			}
 		}
 		function goAjax(which){
-			AJAX.go(which,{sheet_id:that.state.data.sheet_id}, function(){
+			const AJAX = new Ajax(which)
+			AJAX.go({sheet_id:that.state.data.sheet_id}, function(){
 				that.setState({
 					collected: which==='collectionAdd'
 				});
-			},null,'collection');
+			});
 		}
 	},
 	getInitialState: function(){

@@ -4,7 +4,7 @@ if(typeof window !== 'undefined'){
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import Link from 'react-router/lib/Link';
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'
@@ -41,7 +41,8 @@ var mLogin = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		AJAX.go('mLogin',postData, function(data) {
+		const AJAX = new Ajax('mLogin');
+		AJAX.go(postData, function(data) {
 			that.loading = false;
 			// var options = {
 			// 	expires: 1000
@@ -96,7 +97,8 @@ var mLogin = React.createClass({
 				return;
 			};
 			n++;
-			AJAX.go('mSms',{
+		const AJAX = new Ajax('mSms');
+			AJAX.go({
 				cm: this.state.login_data.cm,
 				smsContent:content,
 				bookId: this.state.login_data.book_id,

@@ -1,8 +1,10 @@
-import AJAX from '../src/js/modules/AJAX'
+import Ajax from '../src/js/modules/AJAX'
+import getCookie from '../src/js/modules/getCookie'
 import React from 'react'
 
 const getPost =  function(req,callback,onError){
   const url = req.url.replace(/\?.*$/,'') //移出微信有时自带字符
+  global.cookie = getCookie(req.headers.cookie);
   global.pathname = url;
   global.imdata = {};
   global.query = req.query;
@@ -13,7 +15,7 @@ const getPost =  function(req,callback,onError){
   //sdk
   if(/sdk\/sdk\.\d+/.test(url)){
     console.log('sdk param >>>>>>> '+param)
-    AJAX.init(param);
+    const AJAX = new Ajax(param);
     AJAX.get(function(data){
       global.imdata.sdk = data;
       callback(true,param);
@@ -21,10 +23,10 @@ const getPost =  function(req,callback,onError){
     return;
   }
   if(path.length<3 && /(^\/|mall\/?|page\.\d+)$/.test(url)){
-    const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
-    const config_id = (match && match[1]) || 1;
+    // const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
+    const config_id = global.cookie.group_id || 1;
     console.log('config_id>>>>>>>>>>> '+config_id)
-    AJAX.init('group.1.'+config_id);
+    const AJAX = new Ajax('group.1.'+config_id);
     AJAX.get(data=>{
       param = path.length===2?param:'page.'+data.pagelist[0].pgid;
       global.imdata['mallNav'] = data;
@@ -33,7 +35,7 @@ const getPost =  function(req,callback,onError){
     },onError);
     return;
   }else if(/top\/block\.\d$/.test(url)){
-    AJAX.init('group.6');
+    const AJAX = new Ajax('group.6');
     AJAX.get(data=>{
       param = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1';
       global.imdata['topNav'] = data;
@@ -49,7 +51,7 @@ const getPost =  function(req,callback,onError){
     }
     console.log('param>>>>>>>>>>: '+param);
     const n = param.replace(/\./g,'_');
-    AJAX.init(decodeURI(param));
+    const AJAX = new Ajax(decodeURI(param));
     AJAX.get(function(data){
       global.imdata[n] = data;
       callback();

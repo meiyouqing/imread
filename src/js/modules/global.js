@@ -1,6 +1,7 @@
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
 import parseQuery from '../modules/parseQuery'
+import getCookie from './getCookie'
 
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
@@ -31,11 +32,10 @@ const GLOBAL = {
 	orderLIst:{},
 	pushLinks:{},
 	getUuid: function () {
-		var uuid = storage.get('InfoUuid', 'string');
+		var uuid = GLOBAL.cookie('InfoUuid');
 		if (!uuid) {
 			uuid = '' + (+new Date) + Math.random();
-			GLOBAL.header['InfoUuid'] = uuid;
-			storage.set('InfoUuid', uuid);
+			GLOBAL.cookie('InfoUuid', uuid, {expires:1000});
 		}
 		return uuid;
 	},
@@ -65,34 +65,6 @@ const GLOBAL = {
 	},
 	isRouter: function(route){
 		return route.children === null;
-		// var route_id = null,
-		// 	route_arr = route.route.path.match(/\:([^\)]+)/);
-		// if(!route_arr){
-		// 	var	route_key = route.route.path;
-		// }else{
-		// 	var	route_key = route_arr[1];
-		// }
-		
-
-		// if(route.params[route_key]){
-		// 	route_id = route.params[route_key];
-		// 	if(typeof route_id !== 'string')
-		// 		route_id = route_id[route_id.length-1];
-		// 	route_id = encodeURIComponent(route_id);
-		// }
-		// else 
-		// 	route_id = route_key;
-		// var route_path;
-		// if(typeof window === 'undefined') {
-		// 	return true;
-		// 	route_path = global.pathname.split('/');
-		// }else{			
-		// 	route_path = window.location.pathname.split('/');
-		// }
-		// console.log(route,route_path[route_path.length-1] == route_id)
-		// if(route_path[route_path.length-1] == route_id)	return true;
-		// else return false;			
-
 	},
 	typeHref: function(data){
 		var bid = data.content_id || data.book_id || data.sheet_id || 0;
@@ -205,22 +177,7 @@ const GLOBAL = {
                 ].join(''));				
         }
         // read
-        var cookies = document.cookie.split('; ');
-        var result = key ? undefined : {};
-        for (var i = 0, l = cookies.length; i < l; i++) {
-                var parts = cookies[i].split('=');
-                var name = GLOBAL.decoded(parts.shift());
-                var cookie = GLOBAL.decoded(parts.join('='));
-
-                if (key && key === name) {
-                        result = cookie;
-                        break;
-                }else if (!key) {
-                        result[name] = cookie;
-                }
-        }
-
-        return result;
+        return getCookie(document.cookie,key);
 	},
 	removeCookie: function(key,path,domain) {
 		path = path || '/';

@@ -4,7 +4,7 @@ if(typeof window !== 'undefined'){
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import GLOBAL from '../modules/global'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import storage from '../modules/storage'
 import React from 'react'
 var Header = require('./header');
@@ -41,7 +41,7 @@ var Register = React.createClass({
 		}
 
 		that.loading = true;
-		AJAX.getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {
+		new Ajax().getJSON('POST','/api/v1/auth/reset/password', postData, function(data) {
 			that.loading = false;
 			// var options = {
 			// 	expires: 1000
@@ -81,7 +81,7 @@ var Register = React.createClass({
 
 		var inter;
 		clearInterval(inter);
-		AJAX.getJSON('GET', '/api/auth/key?', {
+		new Ajax().getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
 			type: 'reset'
 		}, function(data) {

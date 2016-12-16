@@ -1,5 +1,5 @@
 import storage from '../modules/storage'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 
 var parseQuery = require('../modules/parseQuery');
@@ -14,7 +14,7 @@ var parseQuery = require('../modules/parseQuery');
 // 	}
 // 	//首次加载时更新
 // 	if (update) {
-// 		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
+// 		new Ajax().getJSON('GET', '/api/v1/read/config', {}, function(data) {
 // 			var queryParams = parseQuery(window.location.search);
 // 			for (var i = 0 ; i < data.length; i++) {
 // 				_config['config-' + data[i]['source_id']] = data[i];
@@ -43,7 +43,7 @@ var ReadConfig = function(callback) {
 	}
 	//首次加载时更新
 	if (update) {
-		AJAX.getJSON('GET', '/api/v1/read/config', {}, function(data) {
+		new Ajax().getJSON('GET', '/api/v1/read/config', {}, function(data) {
 			var queryParams = parseQuery(window.location.search);
 			for (var i = 0 ; i < data.length; i++) {
 				_config['config-' + data[i]['source_id']] = data[i];

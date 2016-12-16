@@ -1,6 +1,6 @@
 import parseQuery from '../modules/parseQuery'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -19,7 +19,7 @@ var Selfbuild = React.createClass({
 		return this.state.data !== nextState.data;
 	},
 	getList: function(){
-		AJAX.init(this.props.params.selfId);
+		const AJAX = new Ajax(this.props.params.selfId);
 		AJAX.get(function(res) {
 			this.setState({data: res.blocklist,title:res.name})
 		}.bind(this));

@@ -1,7 +1,7 @@
 import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -88,21 +88,22 @@ var StoreList = React.createClass({
 		        	});
 	            }
 	      }
-	      AJAX.go('collectionDelete', {
+		const AJAX = new Ajax('collectionDelete');
+	      AJAX.go({
 	           sheet_id: bid
 	      }, ui_callback);
     	},
 	scrollData: function(e){
-		AJAX.init('bookstore');
+		const AJAX = new Ajax('bookstore');
 		this.scrollHandle(e);
 	},
 	initData: function(bool){
-		AJAX.init('bookstore.1.'+this.pageSize);
+		const AJAX = new Ajax('bookstore.1.'+this.pageSize);
 		this.getList(bool);
 	},
 	componentDidMount: function(){
 		if(this.checkLogin(this.props.route)){
-			AJAX.init('bookstore.1.'+this.pageSize);
+			const AJAX = new Ajax('bookstore.1.'+this.pageSize);
 			if(GLOBAL.isRouter(this.props))	this.getList();
 			myEvent.setCallback('updateTopList',this.getList);
 		}

@@ -3,7 +3,7 @@ import NoData from './noData'
 import Loading from './loading'
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -120,7 +120,7 @@ var Introduce = React.createClass({
 	getBook: function(param){
 		if(!this.isMounted()){return;}
 		var hash = param?param:this.props.params.introduceId;
-		AJAX.init(hash);
+		const AJAX = new Ajax(hash);
 		AJAX.get(this.ajaxHandle, function(error){
 			this.setState({
 				UFO:true
@@ -161,7 +161,7 @@ var Introduce = React.createClass({
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+page);
+		const AJAX = new Ajax('chapterlist.'+ this.state.book.bid+'.'+this.state.page_size+'.9.asc.'+page);
 
 		AJAX.get(function(data) {
 			this.setState({

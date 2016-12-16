@@ -1,7 +1,7 @@
 import NoData from './noData'
 import Loading from './loading'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -11,12 +11,13 @@ var Block7 = require('./block7');
 
 var List = React.createClass({
 	mixins: [Mixins()],
+	scrollPagesNo:1,
 	getList: function(param){
 		if(!this.isMounted()) return;
 		// if(this.state.empty || this.state.noMore) return;
-		var hash = param?param:this.getListId();
-		AJAX.init(hash);
-		AJAX.get(this.ajaxHandle, error => {
+		param = param || this.getListId();
+		this.getListAjax = new Ajax(param);
+		this.getListAjax.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
 				this.setState({
 					scrollUpdate:false,
@@ -27,7 +28,7 @@ var List = React.createClass({
 			this.setState({
 				UFO:true
 			});
-			//console.log(error);
+			console.log(error);
 		});
 	},
 	ajaxHandle:function(data){
@@ -67,8 +68,7 @@ var List = React.createClass({
 				scrollUpdate: false
 			});	
 
-			var cLength = AJAX.API[this.getListId().split('.')[0]].param.contents;
-				if(data.content.length < cLength) {
+				if(data.content.length < this.getListAjax.param.contents) {
 					this.setState({
 						noMore:true,
 						scrollUpdate: false
@@ -103,6 +103,7 @@ var List = React.createClass({
 	},
 	componentWillMount:function(){
 		if(typeof this.props.params.listId !== 'string' && !/author/.test(this.props.route.path))	return;
+		this.getListAjax = new Ajax(this.getListId())
 		this.usePreload(this.getListId());
 	},
 	getListId: function(){

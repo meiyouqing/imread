@@ -1,4 +1,4 @@
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
 	var isHidden = require('./isHidden');
@@ -26,11 +26,11 @@ var uploadLog = {
 	},
 	sending: function(page) {
 		if(Object.getOwnPropertyNames && Object.getOwnPropertyNames(this.result).length==0) return;
-		AJAX.getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
+		new Ajax().getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
 		this.result = {};
 	},
 	readlog: function (page, params) {
-		AJAX.getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
+		new Ajax().getJSON(config[page].method, config[page].url, params, GLOBAL.noop, GLOBAL.noop);
 	}
 };
 

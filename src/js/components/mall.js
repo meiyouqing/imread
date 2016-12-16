@@ -2,7 +2,7 @@ import NoData from './noData'
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import Mixins from '../modules/mixins'
@@ -18,17 +18,18 @@ if(typeof window !== 'undefined'){
 
 var Mall = React.createClass({
 	mixins: [Mixins()],
+	scrollPagesNo:1,
 	getNav: function(FROM){
 		// console.log('getnav>> '+FROM)
 		var group_id = GLOBAL.cookie('group_id') || 1;
-		AJAX.init('group.1.'+group_id)
-		AJAX.get(this.ajaxHandle, this.getNavFaile,'getNav');
+		const AJAX = new Ajax('group.1.'+group_id)
+		AJAX.get(this.ajaxHandle, this.getNavFaile);
 	},
-	getList: function (FROM){
+	getList: function (){
 		// console.log(FROM)
 		if(!this.APIparam) return;
-		AJAX.init(this.APIparam);
-		AJAX.get(this.ajaxHandle ,this.onerror,'getList');
+		const AJAX = new Ajax(`${this.APIparam}.-.${this.scrollPagesNo}`);
+		AJAX.get(this.ajaxHandle ,this.onerror);
 	},
 	ajaxHandle:function(data,isPrelod){
 		if(typeof data.pgid !== 'undefined'){
@@ -42,7 +43,7 @@ var Mall = React.createClass({
 		});
 		this.APIparam = this.props.params.subnav || (this.props.params.subnav = 'page.'+data.pagelist[0].pgid);
 		if(!isPrelod) {
-			this.getList('ajaxHandle');
+			this.getList();
 		}else{
 			this.usePreload(this.APIparam);
 		}
@@ -94,6 +95,7 @@ var Mall = React.createClass({
 			
 	},
 	reset: function(){
+		this.scrollPagesNo = 1;
 		this.setState({
 			list:null,
 			noMore:false
@@ -135,7 +137,7 @@ var Mall = React.createClass({
 		if(nextProp.params.subnav && nextProp.params.subnav !== this.props.params.subnav && isRouter){
 			this.reset();
 			this.APIparam = nextProp.params.subnav;
-			this.getList('componentWillReceiveProps');
+			this.getList();
 		}
 	},
 	//for the server rending
@@ -166,12 +168,6 @@ var Mall = React.createClass({
 			this.userFlag = false;
 		}
 		
-		// if(nextProp.params.subnav === this.props.params.subnav){
-		// 	// console.log(this.state.list)
-		// 	if(isRouter && !this.state.list) this.getList('componentDidUpdate');
-		// }
-
-		// if(!this.state.list || !this.state.list.length) return;
 		if(isRouter){
 			if(!this.state.navList) this.getNav('componentDidUpdate');
 			this.lazyloadImage(this.refs.container);
@@ -184,6 +180,7 @@ var Mall = React.createClass({
 				|| this.state.firstTime !== nextState.firstTime
 				|| this.state.showUser !== nextState.showUser
 				|| this.state.onerror !== nextState.onerror
+				|| this.state.noMore !== nextState.noMore
 				|| this.props.children !== nextProp.children;
 	},
 	reload: function(){

@@ -1,6 +1,6 @@
 import myEvent from '../modules/myEvent'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -55,6 +55,7 @@ var Lister =  React.createClass({
 var RechageDetail = React.createClass({
 	times: 0,
 	mixins: [Mixins()],
+	scrollPagesNo:1,
 	getInitialState: function() {
 		return {
 			noMore:false,
@@ -64,9 +65,8 @@ var RechageDetail = React.createClass({
 		};
 	},
 	getList: function(){
-
+		const AJAX = new Ajax(`datails.${this.scrollPagesNo}`);
 		AJAX.get(function(data){
-
 			if(data.content.length<1)	{
 				this.setState({noMore: true,scrollUpdate: false});
 				return;
@@ -76,18 +76,14 @@ var RechageDetail = React.createClass({
 				scrollUpdate: false
 			});
 
-			if(AJAX.API._param)
-				if(data.content.length < AJAX.API._param.contents) {
-					this.setState({
-						noMore:true,
-						scrollUpdate: false
-					})
-					return;
-				}	
+			if(data.content.length < AJAX.param.contents) {
+				this.setState({
+					noMore:true
+				})
+			}	
 		}.bind(this),this.onerror)
 	},
 	componentDidMount: function(){
-		AJAX.init('datails.1.20');
 		this.getList();
 	},
 	render: function() {

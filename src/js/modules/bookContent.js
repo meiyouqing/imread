@@ -1,7 +1,7 @@
 import myEvent from '../modules/myEvent'
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
 	var ReadConfig = require('../modules/readConfig');	
@@ -30,7 +30,7 @@ var BookContent = (function() {
 		var getContent = function(sourceConfig){
 			var sourceConfig = sourceConfig['config-' + options.source_id];
 			var url = a_url+'/api/v1/chapter/1/'+options.book_id+'/'+ options.cid+'/index?cm='+sourceConfig.cm;
-			AJAX.getJSON('GET', url, {}, function(res){
+			new Ajax().getJSON('GET', url, {}, function(res){
 				if(res.success){
 					res.success['cm'] = sourceConfig.cm;
 					if(res.success.loginSubmitUrl){
@@ -78,7 +78,7 @@ var BookContent = (function() {
 	// 	var param = totalUrl.replace(/(.*\?)/, '')
 	// 						.replace('$cm', sourceConfig.cm);
 	// 	//TODO 错误直接在这里跳转到移动咪咕阅读，不需要传onError
-	// 	AJAX.getJSON('GET', '/api/crossDomain', {
+	// 	new Ajax().getJSON('GET', '/api/crossDomain', {
 	// 		url : url,
 	// 		type: 'post',
 	// 		param: param
@@ -120,7 +120,7 @@ var BookContent = (function() {
 						      .replace('$bid', options.book_id)
 						      .replace('$cid', options.cid)
 						      .replace('$cm', sourceConfig.cm);
-			AJAX.getJSON('GET', url, {}, options.callback, options.onError);
+			new Ajax().getJSON('GET', url, {}, options.callback, options.onError);
 		};
 		ReadConfig(getContent);
 
@@ -139,7 +139,7 @@ var BookContent = (function() {
 	// 				      .replace('$bid', options.book_id)
 	// 				      .replace('$cid', options.cid)
 	// 				      .replace('$cm', sourceConfig.cm);
-	// 	AJAX.getJSON('GET', url, {}, options.callback, options.onError);
+	// 	new Ajax().getJSON('GET', url, {}, options.callback, options.onError);
 	// }
 
 	//千马阅读

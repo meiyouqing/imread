@@ -1,7 +1,7 @@
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
 }
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -20,7 +20,8 @@ var Modifypwd = React.createClass({
 		if(new_pwd !== new_pwd_s) {POP._alert('新密码不一致');  return;}
 
 		var pramas = {oldPasswd: old_pwd,password:new_pwd};
-		AJAX.go('pwd',pramas,function(data){
+		const AJAX = new Ajax('pwd');
+		AJAX.go(pramas,function(data){
 			if(data.code === 200) {
 				POP._alert('密码修改成功');
 				setTimeout(function(){

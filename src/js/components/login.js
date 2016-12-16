@@ -5,7 +5,7 @@ import browserHistory from 'react-router/lib/browserHistory'
 import Loading from './loading'
 import parseQuery from '../modules/parseQuery'
 import Link from 'react-router/lib/Link';
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'
@@ -41,8 +41,8 @@ var Login = React.createClass({
 		if (!GLOBAL.assertNotEmpty(vcode, '请输入验证码')) {return ;}
 		that.loading = true;
  		this.checkVcode(function(){
- 		
-			AJAX.go('login',postData, function(data) {
+			const AJAX = new Ajax('login');
+			AJAX.go(postData, function(data) {
 				that.loading = false;
 				// var options = {
 				// 	expires: 1000
@@ -87,8 +87,8 @@ var Login = React.createClass({
 
 	},
 	checkVcode: function(callback){
-		if(!this.refs.key.value)	return;
-		AJAX.private_go('GET','https://i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
+		if(!this.refs.key.value) return;
+		new Ajax().getJSON('GET','https://i.imread.com/vcode/verify',{vcode: this.refs.key.value}, function(data) {
 			if(data.code !== 200){
 				POP._alert('验证码错误');
 				this.switchCode();
@@ -98,7 +98,7 @@ var Login = React.createClass({
 			}
 		}.bind(this),function(res){
 			this.loading = false;
-		}.bind(this),false,true);
+		}.bind(this),{noHeaders:true});
 	},
 	setLogin: function(){
 		this.setState({status: true});
@@ -124,11 +124,8 @@ var Login = React.createClass({
 		if (!GLOBAL.assertNotEmpty(postData.password, '请输入密码')) {return ;}
 
 		that.loading = true;
-		AJAX.getJSON('POST', '/api/v1/auth/register', postData, function(data) {
+		new Ajax().getJSON('POST', '/api/v1/auth/register', postData, function(data) {
 			that.loading = false;
-			// var options = {
-			// 	expires: 1000
-			// };
 			
 			GLOBAL.setUser({
 				phone: postData.mobile_num,
@@ -183,7 +180,7 @@ var Login = React.createClass({
 		
 		var inter;
 		clearInterval(inter);
-		AJAX.getJSON('GET', '/api/auth/key?', {
+		new Ajax().getJSON('GET', '/api/auth/key?', {
 			phone: mobile_num,
 			type: 'register'
 		}, function(data) {
@@ -247,12 +244,14 @@ var Login = React.createClass({
                     var paras = {};
                     that.setState({QQ_loading: true});
                     QC.Login.getMe(function(openId, accessToken){  
-                            AJAX.go('login_qq',{
+							const AJAX = new Ajax('login_qq');
+                            AJAX.go({
                                 user_identifier:openId,
                                 promot:'H5',
                                 channel:'3',
                                 img_url: reqData.figureurl_qq_2,
-                                nick_name:reqData.nickname},function(data){
+                                nick_name:reqData.nickname
+							},function(data){
                             that.do_result(data,'qq');
                         });
                     });  
@@ -265,7 +264,8 @@ var Login = React.createClass({
 		//微博登录
 		if(this.from  && this.from.code) {
 			this.setState({WX_loading: true});
-			   AJAX.go('login_wb',{
+				const AJAX = new Ajax('login_wb');
+			   AJAX.go({
         			code: this.from.code,
         			grant_type: 'authorization_code',
         			redirect_uri: encodeURIComponent('https://m.imread.com/mall/page.9/login'+location.search)

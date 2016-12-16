@@ -1,5 +1,5 @@
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import myEvent from '../modules/myEvent'
@@ -45,8 +45,8 @@ var Recharge = React.createClass({
 		// that.params = {trade_no:"d1258ca57d9f42ec-123",trade_day:20160811,order_no:1788352850130944,verify_code:691554}
 		// browserHistory.push({pathname:GLOBAL.setHref('recharge_result'),state:that.params});
 
-
-		AJAX.go('payConfirm', this.params, success, null);
+		const AJAX = new Ajax('payConfirm');
+		AJAX.go(this.params, success);
 		function success(data){
 			myEvent.setCallback('recharge',function(){
 				browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/,''));	
@@ -78,57 +78,10 @@ var Recharge = React.createClass({
 			POP._alert('暂不支持电信号码');
 			return;
 		}
-		//this.params_init.mobileNum = mobile_num;
-		// var countDown = function(){
-		// 	this.setState({
-		// 		s: 60
-		// 	});
-		// 	var inter = setInterval(function() {
-		// 		if (this.state.s > 0 && this.isMounted()) {
-		// 			this.setState({
-		// 				s: this.state.s - 1
-		// 			});
-		// 		} else {
-		// 			clearInterval(inter);
-		// 		}
-		// 	}.bind(this), 1000);
-		// }.bind(this);
-		// var initError = function (res){
-		// 	// console.log(res)
-		// 	this.setState({
-		// 		s: 0
-		// 	});
-		// 	POP.alert((res.reason+', 错误码：'+res.code));
-		// }.bind(this);
-
-
-		// var gotInit = function(data,again){
-		// 	this.initData = data;
-		// 	this.refs.key.focus();
-		// 	storage.set('payUser',this.params_init.mobileNum);
-		// 	if(again){
-		// 		var postData = {
-		// 			mobileNum: this.params_init.mobileNum,
-		// 			orderNo: this.params_init.orderNo,
-		// 			r: data.vcurl
-		// 		}
-		// 		AJAX.go('payVcurl', postData, gotInit, initError, 'recharge');
-		// 	}
-		// }.bind(this);
 		if(!this.params.trade_no || (this.prv_num != mobile_num))	this.getPay();
 		else this.rePay();
 
 		this.prv_num = mobile_num;
-		//countDown();
-		// if(!this.initData||storage.get('payUser')!==mobile_num){
-		// 	AJAX.go('paySign', this.params_init, function(data) {
-		// 		// console.log(data)
-		// 		this.params_init.sign = data.content;
-		// 		AJAX.go('payInit', this.params_init, gotInit, initError, 'recharge');
-		// 	}.bind(this), initError, 'recharge');
-		// }else{
-		// 	gotInit(this.initData,true);
-		// }
 	},
 	getPay: function(){
 		var that = this;
@@ -137,8 +90,8 @@ var Recharge = React.createClass({
 			mobileNum:that.refs.mobile_num.value,
 			callback: 'https://m.imread.com/pay'+location.search //encodeURIComponent('https://m.imread.com/pay'+location.search)
 		}
-
-		AJAX.go('pay',postData,function(data){
+		const AJAX = new Ajax('pay');
+		AJAX.go(postData,function(data){
 			
 			if(data.code == 200){
 				that.params = {
@@ -164,7 +117,8 @@ var Recharge = React.createClass({
 			trade_day:this.params.trade_day
 		};
 		var that = this;
-		AJAX.go('repay',params,function(data){
+		const AJAX = new Ajax('repay');
+		AJAX.go(params,function(data){
 			if(data.code == 200){
 				that.setState({showKey: true});
 				POP._alert('重新发送成功');
@@ -175,7 +129,8 @@ var Recharge = React.createClass({
 	},
 	getFee: function(){
 		var _this = this;
-		AJAX.go('balance',null,function(data){
+		const AJAX = new Ajax('balance');
+		AJAX.go(null,function(data){
 			data.success.list.map(function(v,i){
 				if(v.productId == _this.props.params.rechargeId){
 					_this.setState({

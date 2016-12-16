@@ -4,7 +4,7 @@ import Loading from './loading'
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -164,7 +164,8 @@ var Shelf = React.createClass({
 			param.push(o);
 		});
 		param = JSON.stringify(param);
-		AJAX.go('deleteBook',{param:param},function(data){
+		const AJAX = new Ajax('deleteBook');
+		AJAX.go({param:param},function(data){
 			this.getList();
 			this.compClick();
 		}.bind(this))
@@ -289,8 +290,8 @@ var Shelf = React.createClass({
 		}
 	},
 	getList: function (){
-		// AJAX.init('block.156.100.1');
-		AJAX.init('shelf');
+		// const AJAX = new Ajax('block.156.100.1');
+		const AJAX = new Ajax('shelf');
 		
 		AJAX.get(this.ajaxHandle,this.onerror);
 	},

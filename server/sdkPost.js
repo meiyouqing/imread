@@ -1,4 +1,4 @@
-import AJAX from '../src/js/modules/AJAX'
+import Ajax from '../src/js/modules/AJAX'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { RouterContext } from 'react-router'
@@ -13,7 +13,7 @@ const sdkPost =  function(url,res,props){
 
   //sdk
     console.log('sdk param >>>>>>> '+param)
-    AJAX.init(param);
+    const AJAX = new Ajax(param);
     AJAX.get(function(data){
         global.imdata.sdk = data;
         goSend(res,props,param,data.style);

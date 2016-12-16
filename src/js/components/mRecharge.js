@@ -1,5 +1,5 @@
 import React from 'react'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import Mixins from '../modules/mixins'
 var Header = require('./header');
 if(typeof window !== 'undefined'){
@@ -14,8 +14,7 @@ var mRecharge = React.createClass({
 		};
 	},
 	gotoRecharge: function(value){
-
-		AJAX.getJSON('GET','/api/v1/migu/rechange', {price: this.state.price}, function(data) {
+		new Ajax().getJSON('GET','/api/v1/migu/rechange', {price: this.state.price}, function(data) {
 			if(data.code === 200)
 				window.location.href = data.success.url;
 			else

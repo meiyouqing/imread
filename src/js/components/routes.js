@@ -1,4 +1,4 @@
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import React from 'react'
 import IndexRoute from 'react-router/lib/IndexRoute'
 import IndexRedirect from 'react-router/lib/IndexRedirect'
@@ -56,9 +56,9 @@ function getShelf(nextState, cb){
 
 var APImemory = {};
 const scrollResetHandle = function(){
-	if(!AJAX.API._param) return;
-	const p = AJAX.API._param['pages']? 'pages':'page';
-	AJAX.API._param[p] = 1;	
+	// if(!AJAX.API._param) return;
+	// const p = AJAX.API._param['pages']? 'pages':'page';
+	// AJAX.API._param[p] = 1;	
 }
 
 var loginWrap = (

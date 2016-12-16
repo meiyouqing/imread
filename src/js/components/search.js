@@ -1,6 +1,6 @@
 import NoData from './noData'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import Mixins from '../modules/mixins'
@@ -18,7 +18,7 @@ var Search = React.createClass({
 	},
 	getDate: function(){
 		if(!this.isMounted()) return;
-		AJAX.init(this.props.params.searchId);
+		const AJAX = new Ajax(this.props.params.searchId);
 		AJAX.get(this.ajaxHandle, function(error){
 			this.setState({
 				UFO:true

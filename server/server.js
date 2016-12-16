@@ -17,7 +17,7 @@ import { loadingHTML, renderFullPage } from './htmlContent'
 
 import routes from '../src/js/components/routes'
 
-import AJAX from '../src/js/modules/AJAX'
+import Ajax from '../src/js/modules/AJAX'
 // import { Provider } from 'react-redux'
 
 // import configureStore from '../src/js/store/configureStore'
@@ -38,11 +38,11 @@ app.get('/baiduClientCredentials',(req,res)=>{
     res.send(token);
     return;
   }
-  AJAX.getJSON('POST','https://openapi.baidu.com/oauth/2.0/token',{
+  new Ajax().getJSON('POST','https://openapi.baidu.com/oauth/2.0/token',{
     grant_type:'client_credentials',
     client_id:'RKGTGGGr2DHak0uBVHo7a6nO',
     client_secret:'fT9ebKBzjjZFn24aCihwM1DuoKRtEsIY'
-  },sec,err,true);
+  },sec,err);
   function sec(data){  
     data.lastTime = Date.now();
     global.access_token = JSON.stringify(data);

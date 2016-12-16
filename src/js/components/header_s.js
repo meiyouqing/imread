@@ -1,5 +1,5 @@
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 
@@ -32,7 +32,7 @@ var Header_s = React.createClass({
 			var	key = this.state.key;
 			if(!key) return;
 			if(GLOBAL.name==='searchList'){
-				AJAX.init('search.'+key);
+				const AJAX = new Ajax('search.'+key);
 				this.props.goSearch();
 			}else{
 				var tester = /searchList\/search.([^\"]*)/;

@@ -1,6 +1,6 @@
 import parseQuery from '../modules/parseQuery'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import React from 'react'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'

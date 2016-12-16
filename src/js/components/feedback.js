@@ -1,4 +1,4 @@
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 if(typeof window !== 'undefined'){
@@ -31,8 +31,8 @@ var Feedback = React.createClass({
 
 		if (!GLOBAL.assertNotEmpty(message, '请输入反馈意见')) {return ;}
 		//if (!GLOBAL.assertNotEmpty(contact, '请输入联系方式')) {return ;}  
-
-		AJAX.go("advice", {
+		const AJAX = new Ajax('advice');
+		AJAX.go({
 			'message': message,
 			'contact': contact,
 			'type': 'unEncode'

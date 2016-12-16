@@ -3,7 +3,7 @@ if(typeof window !== 'undefined'){
 }
 import Loading from './loading'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'
@@ -39,7 +39,7 @@ var UserInfo = React.createClass({
 		path = path.join('/')
 
 		POP.confirm('确定退出登录?',function() {
-			AJAX.init('loginout');
+			const AJAX = new Ajax('loginout');
 			AJAX.get(function(res){
 				storage.rm('userToken');
 				GLOBAL.removeCookie('token','/','.imread.com');
@@ -71,7 +71,8 @@ var UserInfo = React.createClass({
 			user_name:this.state.user_name
 		}
 
-		AJAX.go('edituser',pramas,function(res){
+		const AJAX = new Ajax('edituser');
+		AJAX.go(pramas,function(res){
 			if(res.code === 200){
 				//this.getData();
 				this.disPatch('updateUser');
@@ -104,7 +105,8 @@ var UserInfo = React.createClass({
 			formdata.append('file',file);
 			this.setState({formdata: formdata});
 
-			AJAX.go('upload',{formdata: formdata},function(res){
+			const AJAX = new Ajax('upload');
+			AJAX.go({formdata: formdata},function(res){
 				if(res.code !== 200)
 					POP._alert(JSON.stringify(res));
 				else
@@ -150,7 +152,7 @@ var UserInfo = React.createClass({
 		browserHistory.push({pathname:GLOBAL.setHref('editUserame'),state:{username:this.state.user_name}});
 	},
 	// getData: function() {
-	// 	AJAX.init('me');
+	// 	const AJAX = new Ajax('me');
 	// 	AJAX.get(function(data) {
 	// 		console.log('ooooooooooooo')
 	// 		this.switchSex(data.user_gender);

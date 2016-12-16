@@ -1,5 +1,5 @@
 import myEvent from '../modules/myEvent'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import Mixins from '../modules/mixins'
 import React from 'react'
 var Header = require('./header');
@@ -21,7 +21,7 @@ var tag = React.createClass({
 	},
 	getData: function() {
 		var that = this;
-		AJAX.init('listTag');
+		const AJAX = new Ajax('listTag');
 		AJAX.get(function(data) {
 			that.setState({
 				tagList: data.noChoice,
@@ -45,7 +45,8 @@ var tag = React.createClass({
 		if (this.state.myTagList.length >= 10) {
 			return POP.alert('最多选择10个标签');
 		}
-		AJAX.go('addTag', {
+		const AJAX = new Ajax('addTag');
+		AJAX.go({
 			id: this.state.tagList[index].category_id
 		}, function() {
 			this.toggleTag(index, this.state.tagList, this.state.myTagList);
@@ -53,7 +54,8 @@ var tag = React.createClass({
 	},
 	removeTag: function(e) {
 		var index = e.target.getAttribute('data-index');
-		AJAX.go('deleteTag', {
+		const AJAX = new Ajax('deleteTag');
+		AJAX.go({
 			id: this.state.myTagList[index].category_id
 		}, function() {
 			this.toggleTag(index, this.state.myTagList, this.state.tagList);

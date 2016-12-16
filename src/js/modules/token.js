@@ -1,4 +1,4 @@
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import storage from '../modules/storage'
 
@@ -7,7 +7,7 @@ var Token = {
 	refreshToken: function () {
 		// var oldToken = GLOBAL.cookie('userToken');
 		// if (oldToken) {
-			AJAX.getJSON('GET', '/api/v1/upToken', {
+			new Ajax().getJSON('GET', '/api/v1/upToken', {
 				//oldToken: encodeURIComponent(oldToken)
 			}, function(data) {
 				if(data.code==200){

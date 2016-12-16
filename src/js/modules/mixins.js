@@ -1,7 +1,7 @@
 import myEvent from '../modules/myEvent'
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 if(typeof window !== 'undefined'){
 	var POP = require('../modules/confirm')
@@ -69,7 +69,7 @@ var mixins = function() {
                 this.lazyloadImage(list);
                 // console.log(list.offsetHeight , list.scrollTop, list.scrollHeight)
                 // console.log(!this.state.noMore , !this.state.scrollUpdate ,  (list.offsetHeight + list.scrollTop + 50 > list.scrollHeight)||list.offsetHeight>=list.scrollHeight)
-                if (!this.state.noMore && !this.state.scrollUpdate && ((list.offsetHeight + list.scrollTop + 50 > list.scrollHeight) || list.offsetHeight >= list.scrollHeight)) {
+                if (!this.state.noMore && !this.state.scrollUpdate && ((list.offsetHeight + list.scrollTop + 60 > list.scrollHeight) || list.offsetHeight >= list.scrollHeight)) {
                     this.scrollHandleCallback();
                 }
             }.bind(this), 300);
@@ -80,18 +80,20 @@ var mixins = function() {
                 scrollUpdate: true
             })
 
-            if (this.props.route) {
-                const match = this.props.route.path.match(/\:([^\)]+)/);
-                n = this.props.params[(match && match[1])];
-                if (!n)
-                    n = this.props.route.path;
-            } else
-                n = window.location.pathname.split('/').pop().split('.')[0];
-
-            if(typeof n !== 'string') n = n[n.length-1];
-            n = n.split('.')[0];
-            var p = AJAX.API[n].param['pages'] ? 'pages' : 'page';
-            AJAX.API[n].param[p]++;
+            // if (this.props.route) {
+            //     const match = this.props.route.path.match(/\:([^\)]+)/);
+            //     n = this.props.params[(match && match[1])];
+            //     if (!n)
+            //         n = this.props.route.path;
+            // } else{
+            //     n = window.location.pathname.split('/').pop().split('.')[0];
+            // }
+                
+		    // if(!this.scrollAJAX) this.scrollAJAX = new Ajax(this.APIparam);
+            // if(typeof n !== 'string') n = n[n.length-1];
+            // n = n.split('.')[0];
+            // var p = this.scrollAJAX.param['pages'] ? 'pages' : 'page';
+            this.scrollPagesNo++;
             this.getList();
         },
         onerror: function(error) {
@@ -117,7 +119,8 @@ var mixins = function() {
 
             function addBookCallback() {
 
-                AJAX.go('addBook', { param: JSON.stringify(param) }, function(data) {
+			    const AJAX = new Ajax('addBook');
+                AJAX.go({ param: JSON.stringify(param) }, function(data) {
                     if (data.code === 200) {
                         GLOBAL.onShelf[param[0].bookId] = 1;
                         POP._alert('成功加入书架');

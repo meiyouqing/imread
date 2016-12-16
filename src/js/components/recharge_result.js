@@ -1,6 +1,6 @@
 import myEvent from '../modules/myEvent'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -43,7 +43,8 @@ var RechageRes = React.createClass({
 	},
 	checkCharge: function(){
 		var params = this.props.location.state || {};
-		AJAX.go('payCheck',params,function(data){
+		const AJAX = new Ajax('mOrder');
+		AJAX.go(params,function(data){
 			if(data.code === 200){
 				switch(data.status){
 					case 1: 

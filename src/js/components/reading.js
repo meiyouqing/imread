@@ -2,7 +2,7 @@ import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import storage from '../modules/storage'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import React from 'react'
 import Mixins from '../modules/mixins'
@@ -113,7 +113,7 @@ var chapterMixins = {
 			getChapterlistLoading: true
 		});
 
-		AJAX.init('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+page);
+		const AJAX = new Ajax('chapterlist.'+ this.APIParts('readingId')[3]+ '.' +this.state.page_size+'.9.asc.'+page);
 		AJAX.get(function(data) {
 			this.setState({
 				pages: Math.ceil(data.totalSize / this.state.page_size),
@@ -274,7 +274,7 @@ var Reading = React.createClass({
 		}];
 		if (this.isLogin()) {
 			uploadLog.readlog('read', {readLog:JSON.stringify(readLog)});
-			//AJAX.getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
+			//new Ajax().getJSON('POST', '/api/upload/log', {readLog:JSON.stringify(readLog)}, function(data) {}, GLOBAL.noop);
 		}
 		this.cacheReadLog(readLog[0]);
 		this.time = Date.now();
@@ -350,7 +350,7 @@ var Reading = React.createClass({
 	getIntroduce: function(callback){
 		var that = this;
 		if(!this.isMounted()){return;}
-		AJAX.getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts('readingId')[3]},function(data){
+		new Ajax().getJSON('GET','/api/v1/book/introduce',{bid:this.APIParts('readingId')[3]},function(data){
 			todo(data);
 		},GLOBAL.noop);			
 		function todo(data){
@@ -479,14 +479,16 @@ var Reading = React.createClass({
 			that.getNextContent(data);
 	},
 	getAd_xp: function(bid,page){
-		AJAX.go('adXp',{bid: bid,page:(Number(page)),page_size:1,order_type:'asrc',vt:9},function(res){
+		const AJAX = new Ajax('adXp');
+		AJAX.go({bid: bid,page:(Number(page)),page_size:1,order_type:'asrc',vt:9},function(res){
 			if(res.content)	{
 				this.getAD_xp(res);
 			}
 		}.bind(this),GLOBAL.noop);
 	},
 	getAd_hc: function(bid){
-		AJAX.go('adHc',{bid: bid},function(res){
+		const AJAX = new Ajax('adHc');
+		AJAX.go({bid: bid},function(res){
 			if(res.intercutList)	{
 				this.setState({Adhc: res});
 				if(!this.state.adHc)
@@ -589,11 +591,11 @@ var Reading = React.createClass({
 			pay_m();
 		}
 		function pay(){	
-			AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
+			new Ajax().getJSON('GET','/api/v1/auth/balance',{},function(data){
 				var aidou= data.success.balance/100;
 				// console.log(aidou,orderData.marketPrice)
 				if((aidou-orderData.marketPrice)>=0){
-					AJAX.getJSON('GET',orderData.orderUrl,{},function(data){
+					new Ajax().getJSON('GET',orderData.orderUrl,{},function(data){
 						if(data.code !== 200)
 							POP._alert('支付失败');
 						else {
@@ -620,7 +622,8 @@ var Reading = React.createClass({
 		};
 
 		function pay_m(){
-			AJAX.go('mOrder',{
+			const AJAX = new Ajax('mOrder');
+			AJAX.go({
 				book_id:that.book_id,
 				chapter_id:that.chapterid,
 				cm:orderData.cm,
@@ -898,7 +901,7 @@ var Reading = React.createClass({
 		this.path = window.location.pathname.split('/'+this.path)[0];
 
 		//为语音朗读准备access token
-		AJAX.getJSON('GET','/baiduClientCredentials',{},(data)=>{
+		new Ajax().getJSON('GET','/baiduClientCredentials',{},(data)=>{
 			this.access_token = data.access_token;
 		})		
 	},
@@ -1033,7 +1036,7 @@ var Reading = React.createClass({
 	logout: function(e) {
 		e.preventDefault && (e.preventDefault());
 		POP.confirm('确定退出登录?',function() {
-			AJAX.init('loginout');
+			const AJAX = new Ajax('loginout');
 			AJAX.get(function(res){
 			}.bind(this));
 			//GLOBAL.removeCookie('userPhone');

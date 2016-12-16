@@ -3,12 +3,14 @@ import GLOBAL from './global'
 import transformRequest from './transformRequest';
 import 'babel-polyfill'
 import fatch from 'isomorphic-fetch'
+import getCookie from './getCookie'
+
 var Config = {
 	payURLBase: 'https://pay.imread.com:8081',
 	ai: GLOBAL.isAndroid()? '1':'2'
 };
-
-var API={
+//ajax constructor
+Ajax.prototype.API = {
 	shelf:{method:'GET', base:'/api/v1/block/content', param:{block_id:156,contents:100,pages:1}},
 	group:{method:'GET', base:'/api/v1/group/page', param:{group_id:1,config_id: 1}},
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
@@ -46,7 +48,7 @@ var API={
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
 	wxPay:{method:'POST', base:'/api/v1/cert/pay', param:{productId:0}},
-	alyPay: {method: 'POST',base:'/api/v1/pay',param:{}},
+	alyPay: {method: 'POST',base:'/api/v1/pay',param:{productId:0,payType:4,callback:'/'}},
 	// payInit:{method:'POST', base:Config.payURLBase+'/order/web_init', param:{}},
 	// paySign:{method:'POST', base:Config.payURLBase+'/config/getsign', param:{}},
 	// payVcurl:{method:'POST', base:Config.payURLBase+'/order/web_vcurl', param:{}},
@@ -57,7 +59,7 @@ var API={
 	listTag:{method: 'GET', base: '/api/v1/me/label/list', param:{}},
 	addTag:{method: 'POST', base: '/api/v1/me/label/add', param:{id: ''}},
 	deleteTag:{method: 'POST', base: '/api/v1/me/label/delete', param:{id: ''}},
-	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 10}},
+	purchased: {method: 'GET', base: '/api/v1/purchased/list', param:{pages: 1,contents: 15}},
 	pwd: {method: 'POST', base: '/api/v1/auth/update/password', param:{oldPasswd: 0,password: 0}},
 	bookstore: {method: 'GET', base: '/api/v1/bookSheet/list/user', param:{pages: 1,contents: 6}},
 	upload: {method: 'POST', base: '/api/v1/file/portrait', param:{file:null}},
@@ -70,291 +72,133 @@ var API={
 	alist:{method: 'GET',base:'/api/v2/book/list',param:{author_name:'',pages:1,contents:10}},
 	setConfig: {method: 'POST',base: '/api/v2/readperference/update',param:{config_id:3,config_value:''}}
 };
-
-//接口缓存机制
-// var imCache = (function() {
-// 	var config = {
-// 		cacheUrl: ['/api/v1/group/page','/api/v1/page/content','/api/v1/book/introduce','/api/v1/book/chapterlist'],
-// 		needCache: false
-// 	};
-
-// 	var needCache = function(url) {
-// 		if (!config.needCache) {
-// 			return false;
-// 		}
-// 		for (var i = 0; i < config.cacheUrl.length; i++) {
-// 			if (new RegExp(config.cacheUrl[i]).test(url)) {
-// 				return true;
-// 			}
-// 		}
-// 		return false;
-// 	};
-
-// 	var getCacheKey = function(url) {
-// 		return 'ImCache-' + url;
-// 	};
-
-// 	var getFromCache = function(url) {
-// 		var key = getCacheKey(url);
-// 		var cacheStr = localStorage.getItem(key);
-// 		var result = false;
-// 		try {
-// 			if (cacheStr) {
-// 				result = JSON.parse(cacheStr);
-// 			}
-// 		} catch(e) {
-
-// 		}
-// 		return result;
-// 	};
-
-// 	var setCache = function(url, data) {
-// 		storage.set(getCacheKey(url), data);
-// 		return true;
-// 	};
-
-// 	return {
-// 		needCache: needCache,
-// 		getFromCache: getFromCache,
-// 		setCache: setCache
-// 	};
-// })();
-
-
-function getGETUrl(url, postdata) {
-	return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
-}
-//getJSON接口
-function GETJSON(method, url, postdata={}, callback, onError,isJson) {
+Ajax.prototype.setCache = function(url, data){
+	sessionStorage.setItem('__IMCache__'+url, data);
+};
+Ajax.prototype.getCache = function(url){
+	return sessionStorage.getItem('__IMCache__'+url);
+};
+Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=GLOBAL.defaultOnError, options={}) {
 	var urlBase = 'https://readapi.imread.com';
 	// var urlBase = 'http://192.168.0.34:9090';
 	// var urlBase = 'http://192.168.0.252:8080';
 
-
-
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
-	if(typeof window !== 'undefined'){
-		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson);
-		return;
-	}
+	const getGETUrl = function (url, postdata) {
+		return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
+	};
 
-	// var cacheUrl = getGETUrl(method + '-' + url, postdata);
-	// var cacheResponse = false;
-	// if (imCache.needCache(cacheUrl)) {
-	// 	cacheResponse = imCache.getFromCache(cacheUrl);
-	// 	if (cacheResponse) {
-	// 		// console.log('getFromCache-' + cacheUrl)
-	// 		setTimeout(function(){
-	// 			callback(cacheResponse)
-	// 		},0);
-	// 	}
-	// }
-	// GETJSONWITHAJAX(method, url, postdata, callback, onError, cacheResponse);
-	// console.log(headers)
-	// console.log(method)
-
-	//request object
+	const isNode = typeof window === 'undefined';
 	const headers = new Headers({
 		'Info-Imsi': '',
 		'Info-Imei': '',
-		'Info-Channel': global.query.channel || 'ImreadH5',
-		'Info-appid' : global.query.appid ||'ImreadH5',
-		'Info-Version': '1.0.1',
+		'Info-Channel': (isNode?global.query.channel : GLOBAL.header.channel) || 'ImreadH5',
+		'Info-appid' : (isNode?global.query.appid : GLOBAL.header.appid) ||'ImreadH5',
+		'Info-Version': '2.4.1',
 		'Info-Model': '',
 		'Info-Os': '',
-		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
+		'Info-Platform': 'ImreadH5',
 		'Info-Vcode': '101',
 		'Info-Userid': GLOBAL.header.userId || '',
-		'Info-Uuid': '',
-		'Info-Resolution': 1,
+		'Info-Uuid': isNode?(getCookie('InfoUuid',global.cookie) || '') : GLOBAL.getUuid(),
+		'Info-Resolution': isNode?1 : window.screen.width + '*' +  window.screen.height,
 		'Curtime': new Date().Format('yyyyMMddhhmmss'),
-		'WidthHeight': 1
+		'WidthHeight': isNode?1 : (window.screen.height / window.screen.width).toFixed(2)
 	})
-
 	const request = method === 'GET'?
-					 new Request(getGETUrl(url,postdata),{
+					new Request(getGETUrl(url,postdata),{
 						method,
-						headers,
-						mode:'cors'
-					}):
-					 new Request(url,{
-						method,
-						headers,
+						headers:!options.noHeaders?headers : new Headers({}),
 						mode:'cors',
+						credentials: 'include'
+					}):
+					new Request(url,{
+						method,
+						headers:!options.noHeaders?headers : new Headers({}),
+						mode:'cors',
+						credentials: 'include',
 						body:postdata.formdata?postdata.formdata:transformRequest(postdata)
 					})
 	const promise = fetch(request);
 
-	// const promise = method === 'GET'?
-	// 			fetch(getGETUrl(url,postdata)):
-	// 			fetch(url,{
-	// 				method,
-	// 				body:postdata.formdata?postdata.formdata:transformRequest(postdata)
-	// 			});
 	let timeoutId = 0;
 	const timeout = (ms,promise) => {
 		return new Promise((resolve,reject)=>{
 			timeoutId = setTimeout(()=>{
+				onError('链接超时');
 				reject(new Error('链接超时'));
 			},ms)
 			promise.then(resolve,reject);
 		})
 	};	
-	timeout(50000,promise).then(function(response) {
+	timeout(50000,promise)
+	.then(function(response) {
 		clearTimeout(timeoutId);
 		if (response.status >= 200 && response.status < 300) {
-		    return response.json();
-		  } else {
-		    const error = new Error(response.statusText)
-		    error.response = response;
-		    throw error
-			//onError(error)
-		  }
+			console.log(response)
+			return response.json();
+		} else {
+			const error = new Error(response.statusText)
+			error.response = response;
+			onError(error);
+			throw error;
+		}
 	})
 	.then(function(stories) {
 		if(stories.error){
-			onError("服务器错误")
+			onError(stories.error)
 		}else{
-	    	callback(stories)
+			callback(stories)
 		}
 	})
 	.catch(function(error) {
-    	//console.log('request failed', error)
-    	onError(error)
-  	})
-}
-function GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader) {
-	method = method || 'POST';
-	var time = 10000;
-	var timeout = false;
-	var request = null;
-	try {
-		if (window.XMLHttpRequest) {
-			request = new XMLHttpRequest();
-		} else if (window.ActiveXObject) {
-			request = new ActiveXObject("Msxml2.Xmlhttp");
-		}
-	} catch (err) {
-		request = new ActiveXObject("Microsoft.Xmlhttp");
-	}
-	if (!request) {
+		// console.log('request failed', error)
+		onError(error)
+	})
+};
+Ajax.prototype.get = function(callback, onerror){
+	if(this.errMsg){
+		onerror(this.errMsg);
 		return;
 	}
-
-	var timer = setTimeout(function() {
-		timeout = true;
-		request.abort();
-	}, time);
-	onError = onError || GLOBAL.defaultOnError;
-	request.onreadystatechange = function() {
-		if (request.readyState !== 4)
-			return;
-		if (timeout) {
-			onError('连接超时！');
-			return;
-		}
-		clearTimeout(timer);
-		if (request.status === 200) {
-			var res = false;
-			try {
-				res = !isJson?
-					JSON.parse(request.responseText):
-					request.responseText;
-				if(!res) {
-					onError(new Error('服务器返回为空'));
-				}else if(res.error){
-					onError(res);
-				}			
-			} catch (e) {
-				//res = '连接超时！';
-				onError(e);
-			}
-			
-			callback(res);
-		}else {
-			onError(request.status+' '+request.responseText)
-		}
-	};
-
-	if(!url) return;
-	if (method === 'POST') {
-		request.open(method, url);
-		request.withCredentials = true;
-		if(!noHeader) setRequestHeaders(request);
-		if(postdata.formdata){
-			postdata = postdata.formdata;
-		}else{
-			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			postdata = transformRequest(postdata);
-		}
-		request.send(postdata);
-	} else {
-		request.open(method, getGETUrl(url, postdata));
-		request.withCredentials = true;
-		if(!noHeader) setRequestHeaders(request);
-		request.send(null);
+	this.getJSON(this.method,this.base,this.param,callback,onerror);
+};
+Ajax.prototype.go = function(postData, callback, onerror, options){
+	if(this.errMsg){
+		onerror(this.errMsg);
+		return;
 	}
-}
-function setRequestHeaders(request) {
-	//console.log(GLOBAL.header)
-	var headers={
-		//'Referer': 'readapi.imread.com',
-		'Info-Imsi': '',
-		'Info-Imei': '',
-		'Info-Channel': GLOBAL.header.channel || 'ImreadH5',
-		'Info-appid' : GLOBAL.header.appid ||'ImreadH5',
-		'Info-Version': '1.0.1',
-		'Info-Model': '',
-		'Info-Os': '',
-		'Info-Platform': 'ImreadH5',//渠道，不能修改，记录阅读日志需要用到
-		'Info-Vcode': '101',
-		'Info-Userid': GLOBAL.header.userId || '',
-		'Info-Uuid': GLOBAL.header.uuid || GLOBAL.getUuid(),
-		'Info-Resolution': window.screen.width + '*' +  window.screen.height,
-		'Curtime': new Date().Format('yyyyMMddhhmmss'),
-		'WidthHeight': (window.screen.height / window.screen.width).toFixed(2),
-	};
+	this.getJSON(this.method, this.base, postData, callback, onerror, options)
+};
 
-	for (var k in headers) {
-		request.setRequestHeader(k, headers[k]);
-	} 
-}
+function Ajax(param, cache=false){
+	if(typeof param !== 'string' || !param.length) {
+		this.errMsg = `the param is "${param}"`;
+		return;
+	}
+	this.cache = cache;
 
-var AJAX = {
-	API: API,
-	init: function(now){
-		// console.log('now >> ',now)
-		if(!now) return;
-		if(GLOBAL.isArray(now)){
-			now = now[now.length-1];
+	const paramParts = param.split('.');
+	if(!this.API[paramParts[0]]) {
+		this.errMsg = `Ajax.API.${paramParts[0]} is undefined`;
+		return;
+	}
+	const api = {...this.API[paramParts[0]]};
+	//使用param参数的数据
+	if(paramParts.length>1){
+		let i = 0;
+		for(let n in api.param){
+			i++
+			if(paramParts[i] && paramParts[i] !== '-' && api.param.hasOwnProperty(n)){
+				api.param[n] = paramParts[i];
+			}
 		}
-		var parts = now.split('.');
-		this.API.now = parts[0];
-		var ao = API[parts[0]];
-		if(!ao){return}
-		var i = 1;
-		for (var n in ao.param){
-			if(parts[i] && parts[i] !== '0'){
-				ao.param[n] = parts[i];
-			}		
-			i++;
-			this.API.now += '.'+ao.param[n];
-		}
-		this.API._m = ao.method;
-		this.API._base = ao.base;
-		this.API._param = ao.param;
-	},
-	get: function(callback, onerror){
-		GETJSON(this.API._m,this.API._base,this.API._param,callback,onerror);
-	},
-	go: function(n,param,callback,onerror,isJson){
-		GETJSON(this.API[n].method, this.API[n].base, param, callback, onerror,isJson)
-	},
-	private_go: function(method, url, postdata, callback, onError,isJson,noHeader){
-		GETJSONWITHAJAX(method, url, postdata, callback, onError,isJson,noHeader)
-	},
-	getJSON: GETJSON
+	}
+	
+	this.method = api.method;
+	this.base = api.base;
+	this.param = api.param;
 }
-module.exports = AJAX;
+module.exports = Ajax;

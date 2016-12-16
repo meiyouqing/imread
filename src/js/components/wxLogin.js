@@ -1,6 +1,6 @@
 import parseQuery from '../modules/parseQuery'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import React from 'react'
 import Mixins from '../modules/mixins'
 import storage from '../modules/storage'
@@ -21,7 +21,8 @@ var WxLogin = React.createClass({
 
         }
 		if(this.isWx() && this.from  && this.from.code && this.from.state == '123') {
-            AJAX.go('login_wx',{
+			const AJAX = new Ajax('login_wx');
+            AJAX.go({
                 code: this.from.code,
                 grant_type: 'authorization_code'
             },function(res){

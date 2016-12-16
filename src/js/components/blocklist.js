@@ -1,6 +1,6 @@
 import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import myEvent from '../modules/myEvent'
@@ -274,7 +274,7 @@ var Block14 = React.createClass({
 	readMoreHandle: function(e){
 		var that = this;
 		this.pages++;
-		AJAX.init('block.'+this.props.data.id)
+		const AJAX = new Ajax('block.'+this.props.data.id)
 		AJAX.get(function(data){
 			if(!data && !data.length){
 				that.setState({
@@ -343,7 +343,7 @@ var Block15 = React.createClass({
 		callback();
 		function callback(){
 			//alert(that.isLogin());
-			AJAX.init('listTag');
+			const AJAX = new Ajax('listTag');
 			AJAX.get(function(data){
 				if(data.selected.length){
 					myEvent.execCallback('updateTopList');

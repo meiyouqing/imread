@@ -1,6 +1,6 @@
 import myEvent from '../modules/myEvent'
 import browserHistory from 'react-router/lib/browserHistory'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -34,7 +34,8 @@ var PayOrder = React.createClass({
 		var that = this;
 		if(this.props.isMigu){
 			if(!this.state.bind_phone || this.state.bind_phone=="未绑定手机"){this.gotoBind();return}
-			AJAX.go('mOrder',{
+			const AJAX = new Ajax('mOrder');
+			AJAX.go({
 				book_id:this.props.introduce.book_id,
 				chapter_id:this.props.chapterid,
 				cm:this.props.data.cm,
@@ -49,7 +50,7 @@ var PayOrder = React.createClass({
 			});
 		} else {
 			if((this.state.aidou-this.props.data.marketPrice)>=0){
-				AJAX.getJSON('GET',this.props.data.orderUrl,{},function(data){
+				new Ajax().getJSON('GET',this.props.data.orderUrl,{},function(data){
 					if(data.code == 403)
 						POP._alert('支付失败');
 					else {
@@ -70,7 +71,7 @@ var PayOrder = React.createClass({
 		}
 	},
 	getBalance: function(){
-		AJAX.getJSON('GET','/api/v1/auth/balance',{},function(data){
+		new Ajax().getJSON('GET','/api/v1/auth/balance',{},function(data){
 			this.setState({
 				aidou: data.success.balance/100
 			});
@@ -78,7 +79,8 @@ var PayOrder = React.createClass({
 
 	},
 	getBind: function(){
-		AJAX.go('mBind',{
+		const AJAX = new Ajax('mBind');
+		AJAX.go({
 				cm:this.props.data.cm
 			},function(data){
 			

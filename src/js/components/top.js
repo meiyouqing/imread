@@ -1,7 +1,7 @@
 import myEvent from '../modules/myEvent'
 import NoData from './noData'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -48,7 +48,7 @@ var Top = React.createClass({
 		}
 	},
 	getData: function(){
-		AJAX.init('group.6');
+		const AJAX = new Ajax('group.6');
 		AJAX.get((data)=>{
 			this.params = 'page.'+data.pagelist[0].pgid+'.'+data.pagelist[0].blocks+'.1'
 			// POP._alert(this.params)
@@ -56,7 +56,7 @@ var Top = React.createClass({
 		},this.onerror)
 	},
 	getLists: function (){
-		AJAX.init(this.params);
+		const AJAX = new Ajax(this.params);
 		AJAX.get(this.ajaxHandle,this.onerror);
 	},
 	ajaxHandle: function(data){

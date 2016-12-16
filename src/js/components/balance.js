@@ -2,7 +2,7 @@ import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
 import React from 'react'
 import Loading from './loading'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import parseQuery from '../modules/parseQuery'
@@ -20,7 +20,8 @@ var Balance = React.createClass({
 	mixins: [Mixins()],
 	getBalance:function(){
 		if(!this.isMounted()){return;}
-		AJAX.go('balance',{
+		const AJAX = new Ajax('balance');
+		AJAX.go({
 			payType: this.state.isWx?2:1
 		},function(data){
 			this.setState({
@@ -28,7 +29,7 @@ var Balance = React.createClass({
 				balance: data.success.balance,
 				list: data.success.list
 			});
-		}.bind(this),GLOBAL.defaultOnError)
+		}.bind(this))
 	},
 	getInitialState: function() {
 		var back;
@@ -68,7 +69,8 @@ var Balance = React.createClass({
 		browserHistory.push('/pay/recharge/'+ordered.productId+location.search);
 	},
 	WxOrder: function(){
-		AJAX.go('pay',{
+		const AJAX = new Ajax('pay')
+		AJAX.go({
 			productId:this.state.list[this.state.active].productId,
 			payType: '2',
 			callback: location.href
@@ -87,7 +89,8 @@ var Balance = React.createClass({
 	WxInsideOrder: function(){
 		var that = this;
 		this.setState({payLoading: true});
-		AJAX.go('pay',{
+		const AJAX = new Ajax('pay')
+		AJAX.go({
 			productId:this.state.list[this.state.active].productId,
 			payType: '3'
 		},function(data){

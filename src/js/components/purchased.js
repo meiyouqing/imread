@@ -1,7 +1,7 @@
 import NoData from './noData'
 import Loading from './loading'
 import storage from '../modules/storage'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
 import React from 'react'
@@ -10,6 +10,7 @@ var Book1 = require('./book1');
 
 var Purchased = React.createClass({
 	mixins: [Mixins()],
+	scrollPagesNo:1,
 	getInitialState: function () {
 		return {
 			list: null,
@@ -26,17 +27,10 @@ var Purchased = React.createClass({
 	getList: function(scrollUpdate) {
 		if (this.isLogin()) {
 			var that = this;
-			that.setState({
-				scrollUpdate: true
-			});
-			AJAX.init(this.props.route.path);
-			if(scrollUpdate){
-				var n = AJAX.API._param['pages']? 'pages':'page';
-				AJAX.API._param[n]++;			
-			}
-
+			const AJAX = new Ajax(`${this.props.route.path}.${this.scrollPagesNo}`);
 			AJAX.get(function(data) {
-				if (data.content.length < 10) {
+				if(!data.content) return;
+				if (data.content.length < AJAX.param.contents) {
 					that.setState({
 						noMore: true,
 						scrollUpdate: false
@@ -65,8 +59,11 @@ var Purchased = React.createClass({
 		}
 	},
 	componentDidUpdate: function() {
-		if(GLOBAL.isRouter(this.props) && !this.state.list) {this.getList();}
-		this.lazyloadImage(this.refs.container);
+		if(GLOBAL.isRouter(this.props)) {
+			if(!this.state.list) this.getList();
+			this.lazyloadImage(this.refs.container);
+			this.disPatch('scroll',this.refs.container)
+		}
 	},
 	shouldComponentUpdate: function(nextProp, nextState) {
 		return this.state.list !== nextState.list

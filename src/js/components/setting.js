@@ -2,7 +2,7 @@ import browserHistory from 'react-router/lib/browserHistory'
 import Link from 'react-router/lib/Link'
 import GLOBAL from '../modules/global'
 import Mixins from '../modules/mixins'
-import AJAX from '../modules/AJAX'
+import Ajax from '../modules/AJAX'
 import React from 'react'
 var Header = require('./header');
 if(typeof window !== 'undefined'){
