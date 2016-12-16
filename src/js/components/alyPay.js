@@ -18,12 +18,12 @@ var Balance = React.createClass({
 			payType:4,
 			callback:encodeURIComponent(this.search.callback)
 		},data=>{
-			console.log(data)
+			// console.log(data)
 			this.setState({html: data});
 			setTimeout(function(){
 				document.forms[0].submit();
 			},1000)
-		},err=>{console.log(err)})
+		},null,{isText:true})
 	},
 	getInitialState: function() {
 		return {

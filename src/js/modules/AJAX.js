@@ -16,14 +16,14 @@ Ajax.prototype.API = {
 	page:{method:'GET', base:'/api/v1/page/content/'+Config.ai, param:{page_id:1, blocks:3, pages:1}},
 	nav:{method:'GET', base:'/api/v1/page/block', param:{page_id:1, blocks:6, pages:1}},
 	block:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,contents:15,pages:1}},
-	blocks:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,page_id:0,contents:15,pages:1}},
-	category:{method:'GET', base:'/api/v1/category/content', param:{category_id:1, contents:15, pages:1}},
+	blocks:{method:'GET', base:'/api/v1/block/content', param:{block_id:1,page_id:0,pages:1,contents:15}},
+	category:{method:'GET', base:'/api/v1/category/content', param:{category_id:1, pages:1, contents:15}},
 	bookSheet:{method:'GET', base:'/api/v1/bookSheet/list', param:{sheet_id:1, contents:15, pages:1}},
 	collectionAdd:{method:'POST', base:'/api/v1/bookSheet/collection/add', param:{sheet_id:1}},
 	collectionDelete:{method:'POST', base:'/api/v1/bookSheet/collection/delete', param:{sheet_id:1}},
 	introduce:{method:'GET', base:'/api/v1/book/introduce', param:{bid:1 }},
 	chapterlist:{method:'GET', base:'/api/v1/book/chapterlist', param:{bid:1, page_size:1, vt:9, order_type:'asc', page:1}},
-	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',ot:1,it:1,st:6,ssr:'0',pages:1}},
+	search:{method:'GET', base:'/api/v1/book/search', param:{kw:'',pages:1,ot:1,it:1,st:6,ssr:'0'}},
 	mLogin:{method:'POST', base:'/api/v1/auth/login/sso', param:{user_identifier:'',nick_name:'',password:'',channel:6}},
 	mOrder:{method:'GET', base:'/api/v1/migu/order', param:{book_id:0,chapter_id:0,cm:0,firmnum:'',count:1}},
 	mBind:{method:'GET', base:'/api/v1/migu/check/bind', param:{cm:0}},
@@ -82,12 +82,24 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 	var urlBase = 'https://readapi.imread.com';
 	// var urlBase = 'http://192.168.0.34:9090';
 	// var urlBase = 'http://192.168.0.252:8080';
-
 	if (/^\/api/.test(url)) {
 		url = urlBase + url;
 	}
-	const getGETUrl = function (url, postdata) {
-		return url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
+
+	let cacheData;
+	//read data from session storage
+	if(this.cache){
+		cacheData = this.getCache(getGETUrl());
+		if(cacheData){
+			callback(JSON.parse(cacheData));
+			// return; //如果return，缓存数据就不会更新。
+		}
+	}
+
+	let GETUrl;
+	function getGETUrl () {
+		if(!GETUrl) GETUrl = url + (/\?/.test(url) ? "" : "?") + transformRequest(postdata);
+		return GETUrl;
 	};
 
 	const isNode = typeof window === 'undefined';
@@ -137,7 +149,10 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 	.then(function(response) {
 		clearTimeout(timeoutId);
 		if (response.status >= 200 && response.status < 300) {
-			console.log(response)
+			// console.log(response)
+			if(options.isText){
+				return response.text();
+			}
 			return response.json();
 		} else {
 			const error = new Error(response.statusText)
@@ -146,10 +161,17 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 			throw error;
 		}
 	})
-	.then(function(stories) {
+	.then((stories) => {
 		if(stories.error){
 			onError(stories.error)
 		}else{
+			if(this.cache){
+				//更新缓存数据
+				const stringStories = JSON.stringify(stories);
+				if(cacheData && cacheData == stringStories) return;
+				console.log('update cache and page')
+				this.setCache(getGETUrl(), stringStories);
+			}
 			callback(stories)
 		}
 	})
@@ -185,7 +207,10 @@ function Ajax(param, cache=false){
 		this.errMsg = `Ajax.API.${paramParts[0]} is undefined`;
 		return;
 	}
+
+	//深复制
 	const api = {...this.API[paramParts[0]]};
+	api.param = {...api.param}
 	//使用param参数的数据
 	if(paramParts.length>1){
 		let i = 0;

@@ -18,12 +18,13 @@ var Search = React.createClass({
 	},
 	getDate: function(){
 		if(!this.isMounted()) return;
-		const AJAX = new Ajax(this.props.params.searchId);
+		const AJAX = new Ajax(this.props.params.searchId,true);
+		
 		AJAX.get(this.ajaxHandle, function(error){
 			this.setState({
 				UFO:true
 			});
-				//console.log(error);
+				// console.log(error);
 		}.bind(this))
 	},
 	ajaxHandle:function(data){

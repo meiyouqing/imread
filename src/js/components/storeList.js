@@ -26,6 +26,7 @@ var StoreList = React.createClass({
 	getList: function(bool){
 		if(!this.isMounted()) return;
 		if(this.state.noMore === true && !bool) return;
+		const AJAX = new Ajax('bookstore.1.'+this.pageSize);
 		AJAX.get((data)=>{
 			var list;
 			if(!data || (data.success.length<this.pageSize)) {
@@ -98,7 +99,6 @@ var StoreList = React.createClass({
 		this.scrollHandle(e);
 	},
 	initData: function(bool){
-		const AJAX = new Ajax('bookstore.1.'+this.pageSize);
 		this.getList(bool);
 	},
 	componentDidMount: function(){

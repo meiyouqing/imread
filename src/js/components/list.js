@@ -16,7 +16,8 @@ var List = React.createClass({
 		if(!this.isMounted()) return;
 		// if(this.state.empty || this.state.noMore) return;
 		param = param || this.getListId();
-		this.getListAjax = new Ajax(param);
+		console.log(param)
+		this.getListAjax = new Ajax(`${param}.${this.scrollPagesNo}`,true);
 		this.getListAjax.get(this.ajaxHandle, error => {
 			if(this.state.scrollUpdate){
 				this.setState({

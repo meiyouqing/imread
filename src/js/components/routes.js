@@ -53,14 +53,6 @@ function getShelf(nextState, cb){
 	})
 }
 
-
-var APImemory = {};
-const scrollResetHandle = function(){
-	// if(!AJAX.API._param) return;
-	// const p = AJAX.API._param['pages']? 'pages':'page';
-	// AJAX.API._param[p] = 1;	
-}
-
 var loginWrap = (
 	<Route path="login" component={Login}>
 		<Route path="compact" component={Compact} />
@@ -80,7 +72,7 @@ var readWrap = (
 	)
 var bookWrap = (
 	<Route path="book/:introduceId" component={Introduce}>
-		<Route path="author/:listId"  onLeave={scrollResetHandle} component={List} />
+		<Route path="author/:listId" component={List} />
 		<Route path="shelf" getComponent={getShelf}>
 			<Route path="book/:introduceId" component={Introduce}>
 				{readWrap}
@@ -93,8 +85,8 @@ var bookWrap = (
 	</Route>
 	)
 var searchWrap = (
-	<Route path="search/:searchId" onLeave={scrollResetHandle} component={Search}>
-		<Route path="searchList/:listId" onLeave={scrollResetHandle} component={List}>
+	<Route path="search/:searchId" component={Search}>
+		<Route path="searchList/:listId" component={List}>
 			{bookWrap}
 		</Route>
 		{bookWrap}
@@ -104,15 +96,15 @@ var searchWrap = (
 var topWrap = (
 		<Route path="top/:topId" component={Top}>
 			<Route path="myTags" component={Tag}/>
-			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+			<Route path="more/:listId" component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+			<Route path="cat/:listId" component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+			<Route path="sheet/:sheetId" component={BookSheet}>
 				{loginWrap}
 				{bookWrap}
 				{searchWrap}
@@ -131,21 +123,21 @@ var payWrap = (
 			<Route path="recharge/:rechargeId" component={Recharge} >
 				<Route path="recharge_result" component={RechargeResult} />
 			</Route>
-			<Route path="recharge_details/:details" onLeave={scrollResetHandle} component={RechargeDetails} />
+			<Route path="recharge_details/:details" component={RechargeDetails} />
 		</Route>
 	)
 
 var selfWrap = (
 		<Route path="self/:selfId" component={SelfBuild}>
-			<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+			<Route path="more/:listId" component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="cat/:listId" onLeave={scrollResetHandle} component={List}>
+			<Route path="cat/:listId" component={List}>
 				{bookWrap}
 				{searchWrap}
 			</Route>
-			<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+			<Route path="sheet/:sheetId" component={BookSheet}>
 				{loginWrap}
 				{bookWrap}
 				{searchWrap}
@@ -164,20 +156,20 @@ module.exports = (
 		{loginWrap}
 		{selfWrap}
 		{payWrap}
-			<Route path="/mall(/:subnav)" onLeave={scrollResetHandle} component={Mall}>
+			<Route path="/mall(/:subnav)" component={Mall}>
 				{selfWrap}
 
 				<Route path="bookstore" component={StoreList} >
 					{loginWrap}
 					{topWrap}
-					<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+					<Route path="sheet/:sheetId" component={BookSheet}>
 						{loginWrap}
 						{bookWrap}
 						{searchWrap}
 					</Route>
 				</Route>
 
-				<Route path="sheet/:sheetId" onLeave={scrollResetHandle} component={BookSheet}>
+				<Route path="sheet/:sheetId" component={BookSheet}>
 						{loginWrap}
 						{bookWrap}
 						{searchWrap}
@@ -204,7 +196,7 @@ module.exports = (
 					</Route>
 				</Route>
 
-				<Route path="recentRead" onLeave={scrollResetHandle} component={RecentRead}>
+				<Route path="recentRead" component={RecentRead}>
 					{readWrap}
 				</Route>
 				<Route path="myTags" component={Tag}/>
@@ -221,7 +213,7 @@ module.exports = (
 					<Route path="compact" component={Compact} />
 				</Route>
 
-				<Route path="more/:listId" onLeave={scrollResetHandle} component={List}>
+				<Route path="more/:listId" component={List}>
 					{bookWrap}
 					{searchWrap}
 				</Route>

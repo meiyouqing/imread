@@ -219,10 +219,9 @@ const GLOBAL = {
 				| (rect.left > 0 && rect.left < window.innerWidth && 0x01)
 			   ) == 0x03;
 	},
-	defaultFunction: function() {},
 	loadImage: function(src, callback, onerror) {
-		callback = callback || GLOBAL.defaultFunction;
-		onerror = onerror || GLOBAL.defaultFunction;
+		callback = callback || GLOBAL.noop;
+		onerror = onerror || GLOBAL.noop;
 		var img = new Image();
 		img.src = src;
 		// if (img.complete) {

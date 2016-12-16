@@ -28,7 +28,7 @@ var Mall = React.createClass({
 	getList: function (){
 		// console.log(FROM)
 		if(!this.APIparam) return;
-		const AJAX = new Ajax(`${this.APIparam}.-.${this.scrollPagesNo}`);
+		const AJAX = new Ajax(`${this.APIparam}.-.${this.scrollPagesNo}`, true);
 		AJAX.get(this.ajaxHandle ,this.onerror);
 	},
 	ajaxHandle:function(data,isPrelod){
@@ -62,7 +62,7 @@ var Mall = React.createClass({
 		}
 		// console.log(this.state.scrollUpdate,' /',this.state.list)
 		this.setState({
-			list: this.state.scrollUpdate && this.state.list? this.state.list.concat(data.blocklist):data.blocklist,
+			list: this.state.list&&this.scrollPagesNo!=1? this.state.list.concat(data.blocklist):data.blocklist,
 			scrollUpdate: false
 		});
 		//设置GLOBAL.booklist/book
@@ -73,7 +73,7 @@ var Mall = React.createClass({
 		this.setState({onerror:true})
 	},
 	gotoSearch: function(){
-		browserHistory.push(GLOBAL.setHref('search/page.11.0.1'));
+		browserHistory.push(GLOBAL.setHref('search/page.11'));
 	},
 	hideUser: function(){
 		this.setState({
@@ -170,8 +170,10 @@ var Mall = React.createClass({
 		
 		if(isRouter){
 			if(!this.state.navList) this.getNav('componentDidUpdate');
+			if(!this.refs.container) return;
 			this.lazyloadImage(this.refs.container);
 			this.disPatch('scroll',this.refs.container);
+			if(this.scrollPagesNo===1) this.refs.container.scrollTop = 0;
 		}
 	},
 	shouldComponentUpdate: function(nextProp,nextState){
