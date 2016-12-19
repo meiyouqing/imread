@@ -90,6 +90,8 @@ var Balance = React.createClass({
 		var that = this;
 		this.setState({payLoading: true});
 		const AJAX = new Ajax('pay')
+		console.log(this.state.list)
+		console.log(this.state.active)
 		AJAX.go({
 			productId:this.state.list[this.state.active].productId,
 			payType: '3'
