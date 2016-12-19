@@ -137,6 +137,13 @@ var Balance = React.createClass({
 				that.setState({payLoading: false});
 				POP._alert(data.code + ' 获取信息失败');
 			}
+		},err=>{
+			that.setState({payLoading: false});
+			if(typeof err === 'string'){
+				POP._alert(err)
+			}else{
+				POP._alert(JSON.stringify(err))
+			}
 		});
 	},
 	shouldComponentUpdate: function(nextPros, nextState) {
