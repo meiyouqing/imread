@@ -91,7 +91,8 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 	if(this.cache){
 		cacheData = this.getCache(getGETUrl());
 		if(cacheData){
-			callback(JSON.parse(cacheData));
+			// console.log('use cache')
+			callback(JSON.parse(cacheData)); //使用缓存数据
 			// return; //如果return，缓存数据就不会更新。
 		}
 	}
@@ -167,11 +168,13 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 		}else{
 			if(this.cache){
 				//更新缓存数据
-				const stringStories = JSON.stringify(stories);
-				if(cacheData && cacheData == stringStories) return;
-				console.log('update cache and page')
-				this.setCache(getGETUrl(), stringStories);
+				// console.log(JSON.parse(cacheData),stories)
+				// if(this.compareObj(JSON.parse(cacheData),stories)) return;
+				// console.log('更新缓存数据')
+				this.setCache(getGETUrl(), JSON.stringify(stories));
+				if(cacheData) return;
 			}
+			// console.log('use api')
 			callback(stories)
 		}
 	})
@@ -180,6 +183,39 @@ Ajax.prototype.getJSON = function (method, url, postdata={}, callback, onError=G
 		onError(error)
 	})
 };
+// Ajax.prototype.compareObj = function(a,b){
+// 	if(!isObj(a)||!isObj(b)) return false;
+// 	console.log(Date.now())
+// 	function isObj(o){
+// 		return (Object.prototype.toString.call(o) === '[object Object]') || (!!o&&typeof o==='object'&&o.constructor===Array);
+// 	}
+// 	function getLen(o){
+// 		let count=0;
+// 		for (let key in o){
+// 			if(o.hasOwnProperty(key)) count++;
+// 		}
+// 		return count;
+// 	}
+// 	let flag = true;
+// 	function compare(a,b){
+// 		if(!getLen(a)===getLen(b)) {flag=false;return;}		
+// 		for (let key in a){
+// 			if(a.hasOwnProperty(key)){
+// 				if(!b.hasOwnProperty(key)) {flag=false;break;}
+// 				if(isObj(a[key]) && isObj(b[key])){
+// 					compare(a[key],b[key]);
+// 				}else if(!isObj(a[key]) && !isObj(b[key])){
+// 					if(a[key]!==b[key]) {flag=false;break;}
+// 				}else{
+// 					flag=false;break;
+// 				}
+// 			}
+// 		}
+// 	}
+// 	compare(a,b);
+// 	console.log(Date.now())
+// 	return flag;
+// };
 Ajax.prototype.get = function(callback, onerror){
 	if(this.errMsg){
 		onerror(this.errMsg);

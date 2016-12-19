@@ -120,7 +120,7 @@ var Introduce = React.createClass({
 	getBook: function(param){
 		if(!this.isMounted()){return;}
 		var hash = param?param:this.props.params.introduceId;
-		const AJAX = new Ajax(hash,true);
+		const AJAX = new Ajax(hash);
 		AJAX.get(this.ajaxHandle, function(error){
 			this.setState({
 				UFO:true
