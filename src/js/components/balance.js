@@ -68,20 +68,20 @@ var Balance = React.createClass({
 		var ordered = this.state.list[this.state.active];
 		browserHistory.push('/pay/recharge/'+ordered.productId+location.search);
 	},
-	WxOrder: function(){
-		const AJAX = new Ajax('pay')
-		AJAX.go({
-			productId:this.state.list[this.state.active].productId,
-			payType: '2',
-			callback: location.href
-		},function(data){
-			if(data.code == 200){
-				window.location.href = data.success.pay_info;
-			} else {
-				POP._alert('充值失败');
-			}
-		});
-	},
+	// WxOrder: function(){
+	// 	const AJAX = new Ajax('pay')
+	// 	AJAX.go({
+	// 		productId:this.state.list[this.state.active].productId,
+	// 		payType: '2',
+	// 		callback: location.href
+	// 	},function(data){
+	// 		if(data.code == 200){
+	// 			window.location.href = data.success.pay_info;
+	// 		} else {
+	// 			POP._alert('充值失败');
+	// 		}
+	// 	});
+	// },
 	zfbPay: function(){
 		//this.refs.zfb_form.submit();
 		browserHistory.push('/pay/alyPay?callback='+encodeURIComponent('https://m.imread.com/pay'+(this.search.backUrl?('?backUrl='+this.search.backUrl):''))+'&productId='+this.state.list[this.state.active].productId)

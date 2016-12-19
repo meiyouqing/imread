@@ -43,7 +43,7 @@ Ajax.prototype.API = {
 	adXp: {method:'GET', base:'/api/v1/book/intercut/list', param:{bid: 0,page:1,page_size:0,order_type:'asrc',vt:9}},
 	adHc: {method:'GET', base:'/api/v1/book/breathe', param:{bid: 0}},
 	// pay:{method:'POST', base:'/api/v1/pay', param:{productId:0,payType:0,spType:0,mobileNum:0,productName:0,productDesc:0,others:0}},
-	pay:{method:'POST', base:'/api/v3/pay', param:{productId:0,mobileNum:0}},
+	pay:{method:'POST', base:'/api/v3/pay', param:{productId:0,payType:0}},
 	repay:{method:'POST', base:'/api/v1/pay/impay/yzm', param:{trade_no:0,trade_day:0}},
 	payConfirm:{method:'POST', base:'/api/v1/pay/impay/verify', param:{trade_no:0,trade_day:0}},
 	payCheck:{method:'POST', base:'/api/v1/pay/impay/check', param:{trade_no:0,trade_day:0,order_no:0}},
