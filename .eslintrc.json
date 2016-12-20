@@ -1,0 +1,7 @@
+{
+    "extends": "eslint-config-ais/react",
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "prefer-es6-class": ["warn", "always"]
+    }
+}
