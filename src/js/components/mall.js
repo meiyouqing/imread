@@ -189,7 +189,6 @@ var Mall = React.createClass({
 		location.pathname = '/';
 		window.location.reload();
 	},
-
 	render:function(){
 		const isRouter = GLOBAL.isRouter(this.props);
 

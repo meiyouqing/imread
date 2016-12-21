@@ -61,7 +61,6 @@ var Login = React.createClass({
 					that.disPatch('updateUser');
 					that.disPatch('updateMall');
 					GLOBAL.header.userId = data.userInfo.user_id;
-					storage.set('user_id',data.userInfo.user_id);
 					//判断登陆后的跳转
 					if(that.from && that.from.skipurl){
 						window.location.href = that.from.skipurl.replace(/\?devicetoken([^\"]*)/,'')+'?devicetoken='+(data.userInfo.uuid || GLOBAL.getUuid());
@@ -140,7 +139,6 @@ var Login = React.createClass({
 				that.disPatch('updateUser');
 				that.disPatch('updateMall');
 				GLOBAL.header.userId = data.userInfo.user_id;
-				storage.set('user_id',data.userInfo.user_id);
 				POP._alert('注册成功');
 				//判断登陆后的跳转
 				//var isneed = false;

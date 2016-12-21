@@ -22,9 +22,7 @@ Date.prototype.Format = function (fmt) {
 const GLOBAL = {
 	// state:1,
 	// historyPath: null,
-	header:{
-		userId:storage.get('user_id','string') || ''
-	},
+	header:{},
 	onShelf:{},
 	bookList:{},
 	book:{},
