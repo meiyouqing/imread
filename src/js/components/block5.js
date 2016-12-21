@@ -1,9 +1,8 @@
-import GLOBAL from '../modules/global';
 import React from 'react';
-import storage from '../modules/storage';
 import Link from 'react-router/lib/Link';
-const Swipe = require('../modules/swipe').swipe;
-const uploadLog = require('../modules/uploadLog');
+import GLOBAL from '../modules/global';
+import Swipe from '../modules/swipe';
+import uploadLog from '../modules/uploadLog';
 
 const Block5 = React.createClass({
   getWidthAndHeight() {
@@ -40,8 +39,8 @@ const Block5 = React.createClass({
     this.swipe && (this.swipe.kill());
 
     const swipeCallback = function (index, ele) {
-      var index = index % that.props.data.contentlist.length;
-      if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
+      index %= that.props.data.contentlist.length;
+      if (GLOBAL.name === 'mall' || (GLOBAL.name == 'reading' && that.props.fromReading)) {
 				// 判断是否在书城
         setTimeout(() => {
           if (!ele || GLOBAL.isElementVisible(ele)) {
@@ -50,7 +49,7 @@ const Block5 = React.createClass({
         }, 50);
       }
       ele = ele || that.refs.swipe.querySelector('a');
-      if (ele &&　ele.querySelector('img')) {
+      if (ele && ele.querySelector('img')) {
         const img = ele.querySelector('img');
         if (!img.getAttribute('data-load-state')) {
           const src = img.getAttribute('data-src');
@@ -76,7 +75,7 @@ const Block5 = React.createClass({
     });
     this.toggleSwipeNav(0);
   },
-  handleResize(e) {
+  handleResize() {
     if (!this.isMounted()) return;
     this.setState(this.getWidthAndHeight());
   },
@@ -163,7 +162,7 @@ const Block5 = React.createClass({
       case 13:// 跳内部网页
       case 14: // 跳外部网页
       case 15:// app to H5
-        return { url: data.redirect_url || 'javascript:void(0)', target };
+        return { url: data.redirect_url || '#', target };
       case 16: // to home
         return { url: '//m.imread.com', target };
       case 17: // to shelf
@@ -201,11 +200,12 @@ const Block5 = React.createClass({
 										(`?devicetoken=${GLOBAL.getUuid()}&comeFrom=${encodeURIComponent(pathname)}`) :
 										'';
                   let imgSrc = v.intercut_url || v.image_url;
+                  let imger;
                   if (typeof window === 'undefined' && /sdk\/sdk\.\d+/.test(pathname)) {
-                    var imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
+                    imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
                   } else {
-                    imgSrc = imgSrc.replace(/^http\:\/\//, 'https://');
-                    var imger = <img data-src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
+                    imgSrc = imgSrc.replace(/^http:\/\//, 'https://');
+                    imger = <img data-src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
                   }
 
 

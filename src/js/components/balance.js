@@ -3,11 +3,9 @@ import Link from 'react-router/lib/Link';
 import React from 'react';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import parseQuery from '../modules/parseQuery';
-const Header = require('./header');
-const Recharge = require('./recharge');
+import Header from './header';
 
 if (typeof window !== 'undefined') {
   require('../../css/pay.css');
@@ -18,19 +16,6 @@ if (typeof window !== 'undefined') {
 
 const Balance = React.createClass({
   mixins: [mixins()],
-  getBalance() {
-    if (!this.isMounted()) { return; }
-    const AJAX = new Ajax('balance');
-    AJAX.go({
-      payType: this.state.isWx ? 2 : 1
-    }, (data) => {
-      this.setState({
-        loading: false,
-        balance: data.success.balance,
-        list: data.success.list
-      });
-    });
-  },
   getInitialState() {
     let back;
     const from = parseQuery(location.search);
@@ -59,6 +44,19 @@ const Balance = React.createClass({
   },
   componentWillUnmount() {
 		 document.removeEventListener('rechargeSuccess', this.getBalance, false);
+  },
+  getBalance() {
+    if (!this.isMounted()) { return; }
+    const AJAX = new Ajax('balance');
+    AJAX.go({
+      payType: this.state.isWx ? 2 : 1
+    }, (data) => {
+      this.setState({
+        loading: false,
+        balance: data.success.balance,
+        list: data.success.list
+      });
+    });
   },
   handleClick(e) {
     this.setState({
@@ -91,8 +89,6 @@ const Balance = React.createClass({
     const that = this;
     this.setState({ payLoading: true });
     const AJAX = new Ajax('pay');
-    console.log(this.state.list);
-    console.log(this.state.active);
     AJAX.go({
       productId: this.state.list[this.state.active].productId,
       payType: '3'
@@ -100,40 +96,16 @@ const Balance = React.createClass({
       if (data.code == 200) {
         if (typeof WeixinJSBridge === 'undefined') {
 				   if (document.addEventListener) {
-				   	 document.removeEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-				       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+              document.removeEventListener('WeixinJSBridgeReady', onBridgeReady.bind(null, data), false);
+               document.addEventListener('WeixinJSBridgeReady', onBridgeReady.bind(null, data), false);
 				   } else if (document.attachEvent) {
-				   	 document.detachEvent('WeixinJSBridgeReady', onBridgeReady);
-				       document.detachEvent('onWeixinJSBridgeReady', onBridgeReady);
-				       document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-				       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+				   	 document.detachEvent('WeixinJSBridgeReady', onBridgeReady.bind(null, data));
+				       document.detachEvent('onWeixinJSBridgeReady', onBridgeReady.bind(null, data));
+				       document.attachEvent('WeixinJSBridgeReady', onBridgeReady.bind(null, data));
+				       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady.bind(null, data));
 				   }
         } else {
-				   onBridgeReady();
-        }
-
-        function onBridgeReady() {
-          WeixinJSBridge.invoke(
-					       'getBrandWCPayRequest', {
-					           appId: data.success.appid,     // 公众号名称，由商户传入
-					           timeStamp: data.success.timestamp,         // 时间戳，自1970年以来的秒数
-					           nonceStr: data.success.noncestr, // 随机串
-					           package: data.success.package_,
-					           signType: data.success.signType,         // 微信签名方式：
-					           paySign: data.success.paySign // 微信签名
-					       },
-					       (res) => {
-					           that.setState({ payLoading: false });
-					           if (res.err_msg == 'get_brand_wcpay_request:ok') {
-					           		that.getBalance();
-					           		// that.disPatch('updateUser');
-					           		// that.disPatch('rechargeSuccess');
-					           		POP._alert('支付完成');
-					           } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
-					           		POP._alert('支付失败');
-					           }
-					       }
-					   );
+				   onBridgeReady(data);
         }
       } else {
         that.setState({ payLoading: false });
@@ -147,6 +119,29 @@ const Balance = React.createClass({
         POP._alert(JSON.stringify(err));
       }
     });
+      function onBridgeReady(data) {
+        window.WeixinJSBridge.invoke(
+              'getBrandWCPayRequest', {
+                  appId: data.success.appid,     // 公众号名称，由商户传入
+                  timeStamp: data.success.timestamp,         // 时间戳，自1970年以来的秒数
+                  nonceStr: data.success.noncestr, // 随机串
+                  package: data.success.package_,
+                  signType: data.success.signType,         // 微信签名方式：
+                  paySign: data.success.paySign // 微信签名
+              },
+              (res) => {
+                  that.setState({ payLoading: false });
+                  if (res.err_msg == 'get_brand_wcpay_request:ok') {
+                    that.getBalance();
+                    // that.disPatch('updateUser');
+                    // that.disPatch('rechargeSuccess');
+                    POP._alert('支付完成');
+                  } else if (res.err_msg == 'get_brand_wcpay_request:fail') {
+                    POP._alert('支付失败');
+                  }
+              }
+          );
+    }
   },
   shouldComponentUpdate(nextPros, nextState) {
     return nextState.balance != this.state.balance
@@ -158,8 +153,8 @@ const Balance = React.createClass({
 			    || nextState.payLoading != this.state.payLoading;
   },
   render() {
-    let content,
-      wxPayLoading = null;
+    let content;
+    let wxPayLoading = null;
     const right = <Link className="u-btn-font f-fr" to={'/pay/recharge_details/datails.1.20'}>明细</Link>;
     if (this.state.payLoading)	wxPayLoading = <Loading />;
 // console.log(this.state.loading)

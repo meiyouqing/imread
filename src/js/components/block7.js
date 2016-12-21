@@ -1,5 +1,5 @@
 import React from 'react';
-const Book1 = require('./book1');
+import Book1 from './book1';
 
 const Recommend = React.createClass({
   render() {

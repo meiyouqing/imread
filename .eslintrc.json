@@ -2,6 +2,18 @@
     "extends": "eslint-config-ais/react",
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-        "prefer-es6-class": ["warn", "always"]
+        "react/prefer-es6-class": ["error", "never"],
+        "react/sort-comp": 0,
+        "react/no-did-mount-set-state": 0,
+        "react/no-is-mounted": 0,
+        "react/no-string-refs": 0,
+        "react/no-multi-comp": 0,
+        "no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "block-scoped-var": 0,
+        "indent": 0,
+        "no-mixed-spaces-and-tabs": 0,
+        "no-tabs": 0,
+        "no-var": 0
     }
 }

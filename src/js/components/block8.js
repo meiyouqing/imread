@@ -1,5 +1,6 @@
 import React from 'react';
-const Book1 = require('./book1');
+import Book1 from './book1';
+
 const Block8 = React.createClass({
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.bookList !== nextProps.data;
