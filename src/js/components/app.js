@@ -1,16 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-if(typeof window !== 'undefined'){
-	require('../../css/iconfont.css');
-	require('../../css/imread.css');
+if (typeof window !== 'undefined') {
+  require('../../css/iconfont.css');
+  require('../../css/imread.css');
 }
 
 export default React.createClass({
-	render:function(){
-		return (
-			<div>
-				{this.props.children}
-			</div>
-		);				
-	}
+  render() {
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    );
+  }
 });

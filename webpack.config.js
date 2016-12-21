@@ -50,13 +50,13 @@ module.exports = {
 
 		// new webpack.ProvidePlugin({
 		// 	React: 'react',
-		// 	AJAX: '../modules/AJAX',
+		// 	AJAX: '../modules/ajax',
 		// 	GLOBAL: '../modules/global',
 		// 	storage: '../modules/storage',
 		// 	Loading: './loading',
 		// 	NoData: './noData',
 		// 	Token: '../modules/token',
-		// 	Mixins: '../modules/mixins',
+		// 	mixins: '../modules/mixins',
 		// 	myEvent: '../modules/myEvent',
 		// 	parseQuery: '../modules/parseQuery'
 		// })

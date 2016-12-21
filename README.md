@@ -1,2 +1,2 @@
 ##艾美阅读H5版
-官方网址：http://m.imread.com
+官方网址：https://m.imread.com
