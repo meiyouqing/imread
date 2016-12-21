@@ -156,7 +156,7 @@ var mixins = function() {
             POP._alert('请先登录');
             myEvent.setCallback('login', callback);
         },
-        isWx: function(){return true;
+        isWx: function(){
              var ua = window.navigator.userAgent.toLowerCase();
             if(ua.match(/MicroMessenger/i) == 'micromessenger')  return true;
             else return false;
