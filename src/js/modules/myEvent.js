@@ -12,7 +12,6 @@ const myEvent = {
       try {
         setTimeout(data.func.bind(null, data.params), 0);
       } catch (e) {
-
       }
       if (!keep) {
         myEvent.callback[page] = null;

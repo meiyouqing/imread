@@ -9,6 +9,7 @@ const parseQuery = function (search) {
     if (key) {
       params[key] = value;
     }
+    return true;
   });
 
   return params;

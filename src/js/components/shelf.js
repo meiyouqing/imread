@@ -146,7 +146,8 @@ const Shelf = React.createClass({
 					// this.startReading(null,v);
 
           this.compClick();
-          browserHistory.push(GLOBAL.typeHref(v));
+
+          browserHistory.push(location.pathname.replace(/\/book\/introduce\.([^"]*)/,'')+'/book/introduce.'+v.content_id);
         }
       });
     }
