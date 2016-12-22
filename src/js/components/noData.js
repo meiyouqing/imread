@@ -1,9 +1,9 @@
-import myEvent from '../modules/myEvent';
-import browserHistory from 'react-router/lib/browserHistory';
+import React from 'react';
 import Link from 'react-router/lib/Link';
+import browserHistory from 'react-router/lib/browserHistory';
+import myEvent from '../modules/myEvent';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
 
 const NoData = React.createClass({
   mixins: [mixins()],
@@ -28,9 +28,9 @@ const NoData = React.createClass({
   },
 
   render() {
-    let src = '/src/img/pic1@2x.png',
-      text = '抱歉!没有找到相关数据..',
-      btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
+    let src = '/src/img/pic1@2x.png';
+    let text = '抱歉!没有找到相关数据..';
+    let btn = <Link className="u-btn" to="/mall">去书城逛逛</Link>;
     switch (this.props.type) {
       case 'emptyShelf':
         text = '亲，书架还空空荡荡哦';
@@ -56,6 +56,8 @@ const NoData = React.createClass({
         break;
       case 'emptySearch':
         text = '抱歉，查无此书';
+        break;
+      default:
         break;
     }
     return (

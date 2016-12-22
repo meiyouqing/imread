@@ -1,11 +1,11 @@
+import React from 'react';
 import parseQuery from '../modules/parseQuery';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Blocklist2 = require('./blocklist');
-const Header = require('./header');
+import Blocklist2 from './blocklist';
+import Header from './header';
 
 const Selfbuild = React.createClass({
   mixins: [mixins()],
@@ -14,9 +14,6 @@ const Selfbuild = React.createClass({
       data: null,
       title: null
     };
-  },
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.data !== nextState.data;
   },
   getList() {
     const AJAX = new Ajax(this.props.params.selfId);
@@ -41,9 +38,9 @@ const Selfbuild = React.createClass({
   render() {
 		// console.log(this.props.data)
 		// var hrefStr = Router.setAPI(this.props.data,this.props.spm);
-    let skipurl = '',
-      loading,
-      content;
+    let loading;
+    let content;
+    let skipurl = '';
     if (this.from && this.from.skipurl) {
       skipurl = this.from.skipurl;
     }

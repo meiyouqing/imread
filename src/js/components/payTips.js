@@ -1,4 +1,5 @@
 import React from 'react';
+
 const PayTips = React.createClass({
   render() {
     return (

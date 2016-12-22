@@ -1,10 +1,10 @@
+import React from 'react';
 import myEvent from '../modules/myEvent';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
+
 if (typeof window !== 'undefined') {
   require('../../css/pay.css');
 }
@@ -48,7 +48,7 @@ const RechageRes = React.createClass({
       if (data.code === 200) {
         switch (data.status) {
           case 1:
-            this.times++;
+            this.times += 1;
             if (this.times >= 10) {
               this.failed();
               break;

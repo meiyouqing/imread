@@ -1,14 +1,12 @@
-if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
-}
-import Loading from './loading';
-import parseQuery from '../modules/parseQuery';
+import React from 'react';
 import GLOBAL from '../modules/global';
 import Ajax from '../modules/ajax';
 import storage from '../modules/storage';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
 
+if (typeof window !== 'undefined') {
+  var POP = require('../modules/confirm');
+}
 
 const Register = React.createClass({
   getInitialState() {
@@ -109,38 +107,8 @@ const Register = React.createClass({
       GLOBAL.defaultOnError(res);
     });
   },
-  componentDidMount() {
-		// this.refs.mobile_num.focus();
-		// 判断来源from
-		// this.from = parseQuery(location.search);
-  },
   render() {
-    { /* <div className="gg-body">
-				<Header right={null} path={this.props.route}/>
-				<div className="m-registerblock m-userblocks">
-					<form className="u-registerform u-userform">
-						<div className="u-inputline">
-							<input className="u-input" placeholder="手机号" type="tel" ref="mobile_num" />
-						</div>
-						<div className="u-inputline f-clearfix">
-							<div className="u-inputc f-fl">
-								<input className="u-input" placeholder="验证码" type="tel" ref="key" />
-							</div>
-							<div className="u-buttonc f-fl">
-								<a className={"u-btn u-btn-full"+(this.state.s?' u-btn-disabled':'')} type="button" onClick={this.getCode}>{this.state.s && ('重新获取(' + this.state.s + ')') || '获取验证码'}</a>
-							</div>
-						</div>
-						<div className="u-inputline">
-							<input className="u-input" placeholder={this.props.forget && '新密码' || '密码'} type="password" ref="password" />
-						</div>
-						<div className="u-inputline">
-							<a className="u-btn u-btn-full" onClick={this.handleSubmit}>完成</a>
-						</div>
-					</form>
-				</div>
-    </div>*/ }
     return (
-
       <div className="g-ggWraper  gg-body">
         <Header right={null} title={'忘记密码'} path={this.props.route} />
         <div className="g-main">
@@ -148,7 +116,7 @@ const Register = React.createClass({
             <div className="u-inputline-2">
               <input className="u-input-2 phone" type="tel" ref="mobile_num" placeholder="手机号" />
               <div className="f-fr">
-                <a className={`u-ymz u-n-bg ${this.state.s ? ' u-btn-disabled' : ''}`} type="button" onClick={this.getCode}>{this.state.s && (`重新获取(${this.state.s})`) || '获取验证码'}</a>
+                <a className={`u-ymz u-n-bg ${this.state.s ? ' u-btn-disabled' : ''}`} type="button" onClick={this.getCode}>{(this.state.s && (`重新获取(${this.state.s})`)) || '获取验证码'}</a>
               </div>
             </div>
             <div className="u-inputline-2">

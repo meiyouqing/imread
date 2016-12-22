@@ -6,7 +6,7 @@ import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import React from 'react';
 const Blocklist = require('./blocklist');
-const Header = require('./header');
+import Header from './header';
 const BookStore = require('./bookStore');
 import MallNavLink from './mallNavLink';
 if (typeof window !== 'undefined') {

@@ -1,8 +1,7 @@
-import Link from 'react-router/lib/Link';
-const Swipe = require('../modules/swipe').swipe;
-const uploadLog = require('../modules/uploadLog');
-import storage from '../modules/storage';
 import React from 'react';
+import Link from 'react-router/lib/Link';
+import Swipe from '../modules/swipe';
+import uploadLog from '../modules/uploadLog';
 import GLOBAL from '../modules/global';
 
 const Block9 = React.createClass({
@@ -31,17 +30,17 @@ const Block9 = React.createClass({
     this.swipe && (this.swipe.kill());
 
     const swipeCallback = function (index, ele) {
-      var index = index % that.props.data.contentlist.length;
-      if (GLOBAL.name === 'mall' || GLOBAL.name == 'reading' && that.props.fromReading) {
+      index %= that.props.data.contentlist.length;
+      // if (GLOBAL.name === 'mall' || (GLOBAL.name == 'reading' && that.props.fromReading)) {
 				// 判断是否在书城
 				// setTimeout(function() {
 				// 	if (!ele || GLOBAL.isElementVisible(ele)) {
 				// 		that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
 				// 	}
 				// }, 50);
-      }
+      // }
       ele = ele || that.refs.swipe.querySelector('a');
-      if (ele &&　ele.querySelector('img')) {
+      if (ele && ele.querySelector('img')) {
         const img = ele.querySelector('img');
         if (!img.getAttribute('data-load-state')) {
           const src = img.getAttribute('data-src');
@@ -106,7 +105,9 @@ const Block9 = React.createClass({
 	    		case 13:// 跳内部网页
 	    		case 14: // 跳外部网页
 	    		case 15:// app to H5
-	    			return { url: data.redirect_url || 'javascript:void(0)', target };
+	    			return { url: data.redirect_url || '#', target };
+      default:
+          return { url: data.redirect_url || '#', target };
     }
   },
   handleResize(e) {
@@ -122,10 +123,6 @@ const Block9 = React.createClass({
 		// window.addEventListener('resize', this.handleResize, false);
 
 		// document.addEventListener('updateMall',this.updateIndex);
-  },
-  componentWillUnmount() {
-		 // document.removeEventListener("updateMall", this.updateIndex, false);
-		 // window.removeEventListener('resize', this.handleResize, false);
   },
   componentDidUpdate() {
 		// alert('update')

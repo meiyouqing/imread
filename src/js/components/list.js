@@ -1,22 +1,24 @@
+import React from 'react';
 import NoData from './noData';
 import Loading from './loading';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
-const Header_s = require('./header_s');
-const Block7 = require('./block7');
+import Header from './header';
+import Header_s from './header_s';
+import Block7 from './block7';
 
 const List = React.createClass({
   mixins: [mixins()],
   scrollPagesNo: 1,
-  getList(param) {
+  getList(param, key) {
     if (!this.isMounted()) return;
-		// if(this.state.empty || this.state.noMore) return;
-    param = param || this.getListId();
-    this.getListAjax = new Ajax(`${param}.${this.scrollPagesNo}`, true);
+		if (key) {
+        this.getListAjax = new Ajax(`search.${key}`);
+    } else {
+      param = param || this.getListId();
+      this.getListAjax = new Ajax(`${param}.${this.scrollPagesNo}`, true);
+    }
     this.getListAjax.get(this.ajaxHandle, (error) => {
       if (this.state.scrollUpdate) {
         this.setState({
@@ -76,7 +78,7 @@ const List = React.createClass({
       }
     }
   },
-  goSearch() {
+  goSearch(key) {
     if (!this.isMounted()) return;
     if (!this.state.scrollUpdate) {
       this.refs.container.scrollTop = 0;
@@ -86,7 +88,7 @@ const List = React.createClass({
         resultCount: null
       });
     }
-    this.getList();
+    this.getList(null, key);
   },
   getInitialState() {
     return {
@@ -145,14 +147,14 @@ const List = React.createClass({
 				|| this.props.params.listId !== nextProps.params.listId;
   },
   render() {
-    let header,
-      noData,
-      content,
-      sLoading,
-      result_count;
-    let title,
-      match;
-    if (match = this.getListId().match(/^alist\.(.+)/)) title = match[1];
+    let header;
+    let noData;
+    let content;
+    let sLoading;
+    let result_count;
+    let title;
+    const match = this.getListId().match(/^alist\.(.+)/);
+    if (match) title = match[1];
     header = <Header title={this.state.recommend.name || title || GLOBAL.title} right={null} path={this.props.route} />;
 
     if (/^searchList/.test(this.props.route.path)) {

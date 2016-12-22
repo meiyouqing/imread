@@ -1,17 +1,17 @@
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import Link from 'react-router/lib/Link';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import Ajax from '../modules/ajax';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
+
 if (typeof window !== 'undefined') {
   require('../../css/setting.css');
 }
 const ULine = React.createClass({
   render() {
-    let src_href = !this.props.line.target ? GLOBAL.setHref(this.props.line.href) : this.props.line.href,
-      target = this.props.line.target ? this.props.line.target : null;
+    const src_href = !this.props.line.target ? GLOBAL.setHref(this.props.line.href) : this.props.line.href;
+    const target = this.props.line.target ? this.props.line.target : null;
 
     return (
       <li className="u-line">

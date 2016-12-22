@@ -1,12 +1,12 @@
+import React from 'react';
 import NoData from './noData';
 import Loading from './loading';
 import storage from '../modules/storage';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
-const Book1 = require('./book1');
+import Header from './header';
+import Book1 from './book1';
 
 const Purchased = React.createClass({
   mixins: [mixins()],
@@ -49,7 +49,7 @@ const Purchased = React.createClass({
       for (const n in readLog) {
         list.push(readLog[n]);
       }
-      list.sort((a, b) => a.recent_time < b.recent_time ? 1 : -1);
+      list.sort((a, b) => (a.recent_time < b.recent_time ? 1 : -1));
       this.setState({
         list,
         noMore: true

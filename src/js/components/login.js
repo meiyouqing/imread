@@ -1,17 +1,17 @@
-if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
-}
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
+import Link from 'react-router/lib/Link';
 import Loading from './loading';
 import parseQuery from '../modules/parseQuery';
-import Link from 'react-router/lib/Link';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import storage from '../modules/storage';
-import React from 'react';
-const Header = require('./header');
-const myEvent = require('../modules/myEvent');
+import myEvent from '../modules/myEvent';
+
+if (typeof window !== 'undefined') {
+  var POP = require('../modules/confirm');
+}
 if (typeof window !== 'undefined') {
   require('../../css/login.css');
 }
@@ -63,7 +63,7 @@ const Login = React.createClass({
        GLOBAL.header.userId = data.userInfo.user_id;
 					// 判断登陆后的跳转
        if (that.from && that.from.skipurl) {
-         window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^\"]*)/, '')}?devicetoken=${data.userInfo.uuid || GLOBAL.getUuid()}`;
+         window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^"]*)/, '')}?devicetoken=${data.userInfo.uuid || GLOBAL.getUuid()}`;
        } else {
          GLOBAL.goBack(location.pathname.replace(/\/login$/, ''));
          setTimeout(() => { myEvent.execCallback('login'); }, 10);
@@ -139,7 +139,7 @@ const Login = React.createClass({
 				// var isneed = false;
         if (that.from && that.from.skipurl) {
 					// isneed = /\?/.test(that.from.skipurl);
-          window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^\"]*)/, '')}?devicetoken=${GLOBAL.getUuid()}`;
+          window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^"]*)/, '')}?devicetoken=${GLOBAL.getUuid()}`;
         } else {
 					// that.setState({status: true});
           GLOBAL.goBack(location.pathname.replace(/\/login$/, ''));
@@ -231,12 +231,11 @@ const Login = React.createClass({
 		// 判断并赋值全局QC，执行qq登录.
     if (/^#access_token=.+/.test(location.hash)) {
       this.QQ_prefly(() => {
-        QC.Login({
+        window.QC.Login({
                         // btnId: "qqLoginBtn"
         }, (reqData, opts) => { // 登录成功
-          const paras = {};
           that.setState({ QQ_loading: true });
-          QC.Login.getMe((openId, accessToken) => {
+          window.QC.Login.getMe((openId, accessToken) => {
             const AJAX = new Ajax('login_qq');
             AJAX.go({
               user_identifier: openId,
@@ -284,7 +283,7 @@ const Login = React.createClass({
 			// 判断登陆后的跳转
       if (that.from) {
         if (that.from.skipurl) {
-          window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^\"]*)/, '')}?devicetoken=${data.userInfo.uuid || GLOBAL.getUuid()}`;
+          window.location.href = `${that.from.skipurl.replace(/\?devicetoken([^"]*)/, '')}?devicetoken=${data.userInfo.uuid || GLOBAL.getUuid()}`;
         } else if (that.from.redirectPath) {
           browserHistory.replace(decodeURIComponent(that.from.redirectPath));
         }
@@ -386,7 +385,7 @@ const Login = React.createClass({
           <div className="u-inputline-2">
             <input className="u-input-2 u-inputc" placeholder="手机号" type="tel" ref="mobile_num" onClick={this.handleFocus} onBlur={this.handleBlur} />
             <div className="f-fr">
-              <a className={`u-ymz u-n-bg ${this.state.s ? ' u-btn-disabled' : ''}`} type="button" onClick={this.getCode}>{this.state.s && (`重新获取(${this.state.s})`) || '获取验证码'}</a>
+              <a className={`u-ymz u-n-bg ${this.state.s ? ' u-btn-disabled' : ''}`} type="button" onClick={this.getCode}>{(this.state.s && `重新获取(${this.state.s})`) || '获取验证码'}</a>
             </div>
           </div>
           <div className="u-b-pass">

@@ -1,8 +1,8 @@
-import Loading from './loading';
 import browserHistory from 'react-router/lib/browserHistory';
 import React from 'react';
+import Loading from './loading';
 import storage from '../modules/storage';
-const myEvent = require('../modules/myEvent');
+import myEvent from '../modules/myEvent';
 
 const Chapterlist = React.createClass({
   getCurrentChapterId(bid) {
@@ -57,8 +57,8 @@ const Chapterlist = React.createClass({
 				|| this.props.order !== nextProps.order;
   },
   render() {
-    let loading,
-      content;
+    let loading;
+    let content;
 
     const store = this.props.store ? this.props.store : [];
 

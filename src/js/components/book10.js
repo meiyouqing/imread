@@ -1,6 +1,6 @@
-import browserHistory from 'react-router/lib/browserHistory';
 import React from 'react';
-const Img = require('./img');
+import browserHistory from 'react-router/lib/browserHistory';
+
 const Book10 = React.createClass({
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.data !== nextProps.data
@@ -8,7 +8,7 @@ const Book10 = React.createClass({
   },
   clickHandle() {
     if (this.props.icon)	return;
-    const hrefStr = `${location.pathname.replace(/\/sheet([^\"]*)/, '')}/sheet/bookSheet.${this.props.data.sheet_id || this.props.data.content_id}`;
+    const hrefStr = `${location.pathname.replace(/\/sheet([^"]*)/, '')}/sheet/bookSheet.${this.props.data.sheet_id || this.props.data.content_id}`;
     browserHistory.push(hrefStr);
   },
   render() {

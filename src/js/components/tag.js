@@ -2,7 +2,7 @@ import myEvent from '../modules/myEvent';
 import Ajax from '../modules/ajax';
 import mixins from '../modules/mixins';
 import React from 'react';
-const Header = require('./header');
+import Header from './header';
 if (typeof window !== 'undefined') {
   require('../../css/tag.css');
 }

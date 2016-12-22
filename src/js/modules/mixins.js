@@ -160,9 +160,9 @@ const mixins = function () {
       else return false;
     },
     getBackUrl(path) {
-      var path = path.path.replace(/:([^\"]*)/, '');
+      var path = path.path.replace(/:([^"]*)/, '');
       path = location.pathname.split(`/${path}`)[0];
-      path = path.replace(/\/reading([^\"]*)/, '');
+      path = path.replace(/\/reading([^"]*)/, '');
       return path;
     },
     goBackUrl(path) {

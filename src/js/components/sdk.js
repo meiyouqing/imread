@@ -1,9 +1,4 @@
-import Loading from './loading';
-import parseQuery from '../modules/parseQuery';
-import browserHistory from 'react-router/lib/browserHistory';
-import Ajax from '../modules/ajax';
 import React from 'react';
-import mixins from '../modules/mixins';
 import Blocklist from './blocklist';
 
 export default React.createClass({

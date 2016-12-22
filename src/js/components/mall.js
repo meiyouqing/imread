@@ -1,20 +1,16 @@
+import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
 import NoData from './noData';
 import Loading from './loading';
 import parseQuery from '../modules/parseQuery';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
-import React from 'react';
 import mixins from '../modules/mixins';
-const Header = require('./header');
-const MallNav = require('./mallNav');
-const UserList = require('./userList');
-const Blocklist = require('./blocklist');
-const Favorite = require('./favorite');
-
-if (typeof window !== 'undefined') {
-  const POP = require('../modules/confirm');
-}
+import Header from './header';
+import MallNav from './mallNav';
+import UserList from './userList';
+import Blocklist from './blocklist';
+import Favorite from './favorite';
 
 const Mall = React.createClass({
   mixins: [mixins()],
@@ -190,15 +186,10 @@ const Mall = React.createClass({
 
   render() {
     const isRouter = GLOBAL.isRouter(this.props);
-
-    const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} />,
-			  middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch} />,
-			  left = <div className="i-logo" onClick={this.reload} />;
-
-    const scrollLoading = this.state.noMore ?
-							null :
-							<Loading cls="u-sLoading" />;
-
+    const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} />;
+		const middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch} />;
+		const left = <div className="i-logo" onClick={this.reload} />;
+    const scrollLoading = this.state.noMore ? null : <Loading cls="u-sLoading" />;
     let list = <Loading />;
 
     if (this.state.list) {

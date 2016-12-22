@@ -6,7 +6,7 @@ import storage from '../modules/storage';
 import mixins from '../modules/mixins';
 import React from 'react';
 import parseQuery from '../modules/parseQuery';
-const myEvent = require('../modules/myEvent');
+import myEvent from '../modules/myEvent';
 
 if (typeof window !== 'undefined') {
   require('../../css/user.css');

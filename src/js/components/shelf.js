@@ -13,7 +13,7 @@ if (typeof window !== 'undefined') {
   var POP = require('../modules/confirm');
 }
 const Header = require('./header_f');
-const Img = require('./img');
+import Img from './img';
 
 const Shelf = React.createClass({
   mixins: [mixins()],

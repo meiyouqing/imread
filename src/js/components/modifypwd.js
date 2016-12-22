@@ -1,17 +1,18 @@
-if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
-}
+import React from 'react';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
+
+if (typeof window !== 'undefined') {
+  var POP = require('../modules/confirm');
+}
 const Modifypwd = React.createClass({
   mixins: [mixins()],
   clickHandle() {
-    let old_pwd = this.refs.old_pwd.value,
-      new_pwd = this.refs.new_pwd.value,
-      new_pwd_s = this.refs.new_pwd_s.value;
+    const old_pwd = this.refs.old_pwd.value;
+    const new_pwd = this.refs.new_pwd.value;
+    const new_pwd_s = this.refs.new_pwd_s.value;
 
     if (!this.showNotice(old_pwd, '请输入旧密码')) return;
     if (!this.showNotice(new_pwd, '请输入新密码')) return;

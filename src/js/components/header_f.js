@@ -1,7 +1,6 @@
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import GLOBAL from '../modules/global';
-import React from 'react';
-import parseQuery from '../modules/parseQuery';
 
 const Header = React.createClass({
   getDefaultProps() {
@@ -22,7 +21,7 @@ const Header = React.createClass({
 	// 	GLOBAL.goBack(this.path);
 	// },
 	// componentDidMount: function(){
-	// 	this.path = this.props.path.path.replace(/:([^\"]*)/,'');
+	// 	this.path = this.props.path.path.replace(/:([^"]*)/,'');
 	// 	this.path = window.location.pathname.split('/'+this.path)[0];
 	// },
   shouldComponentUpdate(nextProps, nextState) {

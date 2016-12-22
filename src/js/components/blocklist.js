@@ -1,18 +1,18 @@
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import Link from 'react-router/lib/Link';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import myEvent from '../modules/myEvent';
-import React from 'react';
-const Book1 = require('./book1');
-const Book2 = require('./book2');
-const Book3 = require('./book3');
-const Book5 = require('./book5');
-const Book6 = require('./book6');
-const Book7 = require('./book7_mallSubject');
-const Book8 = require('./book8_bookSheet');
-const Block5 = require('./block5');
+import Book1 from './book1';
+import Book2 from './book2';
+import Book3 from './book3';
+import Book5 from './book5';
+import Book6 from './book6';
+import Book7 from './book7_mallSubject';
+import Book8 from './book8_bookSheet';
+import Block5 from './block5';
 
 const Recommend = React.createClass({
   render() {
@@ -36,7 +36,7 @@ const Block1 = React.createClass({
         <div className="content">
           <ul className="subCat-1 f-clearfix">
             {
-						this.props.data.contentlist.slice(0, (this.props.data.contentlist.length - this.props.data.contentlist.length % 3)).map((v, i) => <Book2 key={i} data={v} />)
+						this.props.data.contentlist.slice(0, (this.props.data.contentlist.length - (this.props.data.contentlist.length % 3))).map((v, i) => <Book2 key={i} data={v} />)
 					}
           </ul>
           {this.props.recommend}
@@ -88,19 +88,21 @@ const Block3 = React.createClass({
               {
 							this.props.data.contentlist.map((v, i) => {
 								// if(i > 4) return;
-  if (i < 3) {
-    return <Book2 key={i} data={v} />;
-  }
-})
+                if (i < 3) {
+                  return <Book2 key={i} data={v} />;
+                }
+                return null;
+              })
 						}
             </div>
             {
 							this.props.data.contentlist.map((v, i) => {
 								// if(i > 4) return;
-  if (i >= 3) {
-    return <Book3 key={i} data={v} />;
-  }
-})
+                if (i >= 3) {
+                  return <Book3 key={i} data={v} />;
+                }
+                return null;
+              })
 						}
           </ul>
           {this.props.recommend}
@@ -124,13 +126,13 @@ const Block4 = React.createClass({
           <ul className="subCat-4 f-clearfix">
             {
 						this.props.data.contentlist.map((v, i) => {
-  if (i > 3) return;
-  if (i < 1) {
-    return <Book1 key={i} data={v} />;
-  } else {
-    return <Book3 key={i} data={v} />;
-  }
-})
+              if (i < 1) {
+                return <Book1 key={i} data={v} />;
+              } else if (i < 3) {
+                return <Book3 key={i} data={v} />;
+              }
+              return null;
+            })
 					}
           </ul>
           {this.props.recommend}
@@ -178,7 +180,7 @@ const Block7 = React.createClass({
   batchChange() {
     this.setState({
       contentlist: this.state.contentlist.sort(randomSort),
-      needUpdate: this.state.needUpdate++
+      needUpdate: this.state.needUpdate += 1
     });
     function randomSort(a, b) {
       return Math.random() > 0.5 ? 1 : -1;
@@ -200,17 +202,17 @@ const Block7 = React.createClass({
           <ul className={`subCat-${this.props.data.style} f-clearfix`}>
             {
 						this.state.contentlist.map((v, i) => {
-  if (i > 5) return;
-  const handle = 	function (e) {
-    e.preventDefault();
-    browserHistory.push({ pathname: GLOBAL.setHref(`searchList/search.${v.name}`), state: v.name });
-  };
-  return (
-    <li key={i}>
-      <a onClick={handle} href="#" className={this.props.data.style == 7 ? (`style-${i + 1}`) : 'u-btn2'}>{v.name}</a>
-    </li>
-  );
-})
+              if (i > 5) return null;
+              const handle = 	function (e) {
+                e.preventDefault();
+                browserHistory.push({ pathname: GLOBAL.setHref(`searchList/search.${v.name}`), state: v.name });
+              };
+              return (
+                <li key={i}>
+                  <a onClick={handle} href="#" className={this.props.data.style == 7 ? (`style-${i + 1}`) : 'u-btn2'}>{v.name}</a>
+                </li>
+              );
+            })
 					}
           </ul>
           {this.props.recommend}
@@ -265,7 +267,7 @@ const Block14 = React.createClass({
   mixins: [mixins()],
   readMoreHandle(e) {
     const that = this;
-    this.pages++;
+    this.pages += 1;
     const AJAX = new Ajax(`block.${this.props.data.id}`);
     AJAX.get((data) => {
       if (!data && !data.length) {
@@ -287,15 +289,14 @@ const Block14 = React.createClass({
   getInitialState() {
     return {
       contentList: this.props.data.contentlist,
-      noMore: this.props.data.contentlist.length < 6 ? true : false
+      noMore: this.props.data.contentlist.length < 6
     };
   },
   componentDidUpdate() {
     this.lazyloadImage(this.refs.container);
   },
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.contentList !== nextState.contentList;
-    this.state.noMore !== nextState.noMore;
+    return this.state.contentList !== nextState.contentList || this.state.noMore !== nextState.noMore;
   },
   render() {
     let more;
@@ -392,12 +393,12 @@ const Blocklist = React.createClass({
     };
   },
   getUpdate(blockList) {
-    let that = this,
-      hrefStr;
+    const that = this;
+    let hrefStr;
     const comps = blockList.map((block, i) => {
 			// console.log('风格' + block.style)
       if (block.style != 15 && (!block.contentlist || !block.contentlist.length)) {
-        return;
+        return null;
       }
 
       hrefStr = GLOBAL.setHref(`more/blocks.${block.id}`);
@@ -409,7 +410,6 @@ const Blocklist = React.createClass({
 
       switch (block.style) {
         case 1 :
-					// return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
         case 24 : // 24 横排三图
           return <Block1 key={i} data={block} href={hrefStr} recommend={recommend} />;
         case 2 :
@@ -436,7 +436,10 @@ const Blocklist = React.createClass({
           return <Block14 key={i} data={block} href={hrefStr} recommend={recommend} />;
         case 15 : // 15 猜你喜欢风格
           return <Block15 key={i} data={block} href={hrefStr} recommend={recommend} />;
+        default:
+          break;
       }
+      return null;
     });
     return comps;
   },

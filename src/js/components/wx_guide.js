@@ -1,5 +1,5 @@
 import React from 'react';
-const Header = require('./header');
+import Header from './header';
 if (typeof window !== 'undefined') {
   require('../../css/login.css');
 }

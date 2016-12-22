@@ -1,10 +1,8 @@
-import myEvent from '../modules/myEvent';
+import React from 'react';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
 
 const Lister = React.createClass({
   toTimes(date) {
@@ -19,10 +17,10 @@ const Lister = React.createClass({
     const current = new Date();
     const deltaSecond = (current.getTime() - date) / 1000;
 
-    if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
+    if (new Date(current.getTime() - (24 * 60 * 60 * 1000)).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
       return '昨天';
     }
-    if (deltaSecond < 15 * 60) {
+    if (deltaSecond < (15 * 60)) {
       return '刚刚';
     }
     if (deltaSecond < 60 * 60) {
@@ -87,8 +85,7 @@ const RechageDetail = React.createClass({
     this.getList();
   },
   render() {
-		 let sLoading = <Loading cls="u-sLoading transparent" />,
-   list = null;
+		 let sLoading = <Loading cls="u-sLoading transparent" />;
 
 		 if (this.state.noMore) { sLoading = (<div className="u-none"> 没有更多了</div>); }
 

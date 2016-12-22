@@ -1,18 +1,15 @@
+import React from 'react';
 import NoData from './noData';
 import Ajax from '../modules/ajax';
 import mixins from '../modules/mixins';
-import React from 'react';
-import Link from 'react-router/lib/Link';
-const Img = require('./img');
-const Book10 = require('./book10');
-const Block7 = require('./block7');
-const Loading = require('./loading');
-const Book7 = require('./book7_mallSubject');
-import GLOBAL from '../modules/global';
-
+import Book10 from './book10';
+import Block7 from './block7';
+import Loading from './loading';
+import Book7 from './book7_mallSubject';
 
 const List = React.createClass({
   mixins: [mixins()],
+  scrollPagesNo: 1,
   getInitialState() {
     return {
       noMore: false,
@@ -22,6 +19,8 @@ const List = React.createClass({
     };
   },
   getList() {
+    const pid = this.props.data.id;
+    const AJAX = new Ajax(`block.${pid}.6.${this.scrollPagesNo}`);
     AJAX.get((data) => {
       if (data.content.length < 1)	{
         this.setState({ noMore: true });
@@ -33,28 +32,21 @@ const List = React.createClass({
       });
     }, this.onerror);
   },
-  scrollData(e) {
-    const AJAX = new Ajax('block');
-    this.scrollHandle(e);
-  },
   componentDidMount() {
     this.setState({ list: this.props.data.contentlist });
-    const pid = this.props.data.id;
-    const AJAX = new Ajax(`block.${pid}.6.1`);
   },
   componentDidUpdate(nextProp) {
     this.lazyloadImage(this.refs.contain, true);
   },
   render() {
-    let sLoading = <Loading cls="u-sLoading transparent" />,
-      list = null;
+    let sLoading = <Loading cls="u-sLoading transparent" />;
 
     if (this.state.noMore) {
       sLoading = null;
     }
 
     return (
-      <section className="m-block  g-scroll" onScroll={this.scrollData} ref="contain">
+      <section className="m-block  g-scroll" onScroll={this.scrollHandle} ref="contain">
         <div className="content">
           <ul className={`f-clearfix subCat-${this.props.data.style}`}>
             {
@@ -72,6 +64,7 @@ const List = React.createClass({
 
 const Guess = React.createClass({
   mixins: [mixins()],
+  scrollPagesNo: 1,
   getInitialState() {
     return {
       noMore: false,
@@ -91,9 +84,9 @@ const Guess = React.createClass({
 		// }
   },
   getList() {
-    const AJAX = new Ajax(`block.${this.props.data.id}.10.1`);
+    const AJAX = new Ajax(`block.${this.props.data.id}.10.${this.scrollPagesNo}`);
     AJAX.get((data) => {
-      if (data.content.length < 1)	{
+      if (data.content.length < 1) {
         this.setState({
           noMore: true,
           list: this.state.scrollUpdate ? this.state.list.concat(data.content) : data.content
@@ -107,8 +100,8 @@ const Guess = React.createClass({
     }, this.onerror);
   },
   render() {
-    let sLoading = null,
-      list = null;
+    let sLoading = null;
+    let list = null;
     if (!this.state.list) {
       list = <Loading />;
     } else if (!this.state.list.length) {
@@ -149,10 +142,6 @@ const Paihang = React.createClass({
   }
 });
 
-if (typeof window !== 'undefined') {
-  const POP = require('../modules/confirm');
-}
-
 const BookStore = React.createClass({
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.data !== nextProps.data
@@ -163,8 +152,8 @@ const BookStore = React.createClass({
     blocks[this.props.order].display = true;
     let list;
 
-    const sLoading = <Loading cls="u-sLoading" />;
-    this.props.data.map((v, i) => {
+    // const sLoading = <Loading cls="u-sLoading" />;
+    this.props.data.forEach((v, i) => {
       if (v.display) {
         switch (v.style) {
           case 14:
@@ -176,6 +165,8 @@ const BookStore = React.createClass({
           case 15:
           case 3:
             list = <Guess data={v} />;
+            break;
+          default:
             break;
         }
       }

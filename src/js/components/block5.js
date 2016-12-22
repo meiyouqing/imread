@@ -40,14 +40,14 @@ const Block5 = React.createClass({
 
     const swipeCallback = function (index, ele) {
       index %= that.props.data.contentlist.length;
-      if (GLOBAL.name === 'mall' || (GLOBAL.name == 'reading' && that.props.fromReading)) {
-				// 判断是否在书城
-        setTimeout(() => {
-          if (!ele || GLOBAL.isElementVisible(ele)) {
-            that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
-          }
-        }, 50);
-      }
+      // if (GLOBAL.name === 'mall' || (GLOBAL.name == 'reading' && that.props.fromReading)) {
+			// 	// 判断是否在书城
+      //   setTimeout(() => {
+      //     if (!ele || GLOBAL.isElementVisible(ele)) {
+      //       that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
+      //     }
+      //   }, 50);
+      // }
       ele = ele || that.refs.swipe.querySelector('a');
       if (ele && ele.querySelector('img')) {
         const img = ele.querySelector('img');

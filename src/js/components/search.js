@@ -1,8 +1,8 @@
+import React from 'react';
 import NoData from './noData';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
-import React from 'react';
 import mixins from '../modules/mixins';
 
 const Header_s = require('./header_s');

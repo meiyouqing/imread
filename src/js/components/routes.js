@@ -1,8 +1,7 @@
-import Ajax from '../modules/ajax';
 import React from 'react';
-import IndexRoute from 'react-router/lib/IndexRoute';
 import IndexRedirect from 'react-router/lib/IndexRedirect';
 import Route from 'react-router/lib/Route';
+// import IndexRoute from 'react-router/lib/IndexRoute';
 import App from './app';
 // import Shelf from './shelf' //TODO:load on demand
 import Mall from './mall';
@@ -22,7 +21,7 @@ import RecentRead from './recentRead';
 import ReadHistory from './readHistory';
 import Feedback from './feedback';
 // import Reading from './reading' //TODO:load on demand
-import Order from './order';
+// import Order from './order';
 import Compact from './compact';
 import Purchased from './purchased';
 import Setting from './setting';

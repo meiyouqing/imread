@@ -5,9 +5,9 @@ import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import React from 'react';
-const Img = require('./img');
-const Book10 = require('./book10');
-const Header = require('./header');
+import Img from './img';
+import Book10 from './book10';
+import Header from './header';
 
 const StoreList = React.createClass({
   mixins: [mixins()],
