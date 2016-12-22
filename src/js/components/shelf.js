@@ -1,17 +1,19 @@
+import browserHistory from 'react-router/lib/browserHistory';
+import React from 'react';
 import myEvent from '../modules/myEvent';
 import NoData from './noData';
 import Loading from './loading';
 import storage from '../modules/storage';
-import browserHistory from 'react-router/lib/browserHistory';
-import Link from 'react-router/lib/Link';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
+
 // import Order from '../modules/order' //by required
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
+
 const Header = require('./header_f');
 const Img = require('./img');
 
@@ -63,24 +65,24 @@ const Shelf = React.createClass({
     }
     const index = Number(e.target.getAttribute('data-index'));
     const completion = <button className="f-fr textBtn" onClick={this.compClick} >确定</button>;
-    let setting = false,
-      selected = [],
-      icon = null,
-      left = null,
-      middle = null,
-      reading = false;
+    let setting = false;
+    const selected = [];
+    let icon = null;
+    let left = null;
+    let seAll;
+    let seNone;
+    const middle = null;
+    const reading = false;
 
     switch (index) {
       case 1:
-        var seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
-        var seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
+        seAll = <button className="f-fl textBtn no-ml" onClick={this.seAllClick} >全选</button>;
+        seNone = <button className="f-fl textBtn no-ml" onClick={this.seNoneClick} >取消全选</button>;
         setting = true;
         icon = <i className="iconfont icon-duihao" />;
         left = this.state.toggle ? seNone : seAll;
         break;
-      case 2:
-        break;
-      case 3:
+      default:
         break;
     }
 
@@ -146,8 +148,7 @@ const Shelf = React.createClass({
 					// this.startReading(null,v);
 
           this.compClick();
-
-          browserHistory.push(location.pathname.replace(/\/book\/introduce\.([^"]*)/,'')+'/book/introduce.'+v.content_id);
+          browserHistory.push(location.pathname.replace(/\/book\/introduce\.([^"]*)/, '') + '/book/introduce.' + v.content_id);
         }
       });
     }
@@ -190,8 +191,8 @@ const Shelf = React.createClass({
           this.isReverse_s('reading_order');
         } else {
           arr = arr.sort((a, b) => {
-            let x = a.playorder / a.count,
-              y = b.playorder / b.count;
+            const x = a.playorder / a.count;
+            const y = b.playorder / b.count;
             return y - x;
           });
           if (this.models.reading_order == 1)						{
@@ -224,8 +225,8 @@ const Shelf = React.createClass({
           this.isReverse_s('recent_order');
         } else {
           arr.sort((a, b) => {
-            let x = Number(a.mark_time),
-              y = Number(b.mark_time);
+            const x = Number(a.mark_time);
+            const y = Number(b.mark_time);
             return y - x;
           });
           if (this.models.recent_order == 1)						{
@@ -234,16 +235,16 @@ const Shelf = React.createClass({
         }
     }
     doAasycFunction.call(this, arr);
-    function doAasycFunction(arr) {
+    function doAasycFunction(arrs) {
       this.models.order_model = i;
-      this.setState({ order_model: i, recent_order: this.models.recent_order, reading_order: this.models.reading_order, book_order: this.models.book_order, shelfList: arr });
+      this.setState({ order_model: i, recent_order: this.models.recent_order, reading_order: this.models.reading_order, book_order: this.models.book_order, shelfList: arrs });
       try {
         localStorage.setItem('models', JSON.stringify(this.models));
       } catch (e) {}
     }
   },
   isExist(n) {
-    return n ? n : '0';
+    return n || '0';
   },
   isReverse_s(key) {
     const bool = Number(this.models[key]);
@@ -346,16 +347,16 @@ const Shelf = React.createClass({
   },
   render() {
     const header = <Header title={this.state.title} left={this.state.left} right={this.state.right} middle={this.state.middle} path={this.props.route} />;
-    let icon,
-      content;
+    let icon;
+    let content;
     let curClass = '';
 		// var add = <li className="u-book-0"><Link className="add f-pr" to="/mall"><img src="/src/img/defaultCover.png"/><i className="iconfont icon-add f-pa"></i></Link></li>;
 		// var addBook = this.state.setting? null:add;
 
 		// 获取最近阅读的时间和
 		// var recent = 0;
-    const maxCurrentTime = 0;
-    const readLogs = storage.get('readLogNew');
+    // const maxCurrentTime = 0;
+    // const readLogs = storage.get('readLogNew');
     let nav = null;
 
     const modelList = <ul className={`u-model-list ${this.state.showModelList ? 'active' : ''}`}><li onClick={this.settingClick} data-index={1}>管理书本</li><li onClick={this.settingClick} data-index={2}>排列方式</li><li onClick={this.settingClick} data-index={3}>封面/列表</li></ul>;
@@ -402,7 +403,7 @@ const Shelf = React.createClass({
             {icon}
             <Img src={v.image_url} />
             <div className="progress p-div">
-              <div style={{ width: `${v.playorder / v.count * 100}%` }} />
+              <div style={{ width: `${(v.playorder / v.count) * 100}%` }} />
             </div>
           </div>
           <span className="f-ellipsis-2">{v.name}</span>
@@ -410,8 +411,8 @@ const Shelf = React.createClass({
       </li>
     );
   } else {
-    let per = Number((v.playorder / v.count).toFixed(2)),
-      notice = '';
+    let per = Number((v.playorder / v.count).toFixed(2));
+    let notice = '';
     per = per > 1 ? 1 : per;
     switch (per) {
       case 1:
@@ -434,7 +435,7 @@ const Shelf = React.createClass({
             <div className="progress-box">
               <span>{notice}</span>
               <div className="progress p-div">
-                <div style={{ width: `${v.playorder / v.count * 100}%` }} />
+                <div style={{ width: `${(v.playorder / v.count) * 100}%` }} />
               </div>
             </div>
           </div>

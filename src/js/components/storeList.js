@@ -1,11 +1,11 @@
+import React from 'react';
 import myEvent from '../modules/myEvent';
 import NoData from './noData';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Img = require('./img');
+
 const Book10 = require('./book10');
 const Header = require('./header');
 
@@ -81,7 +81,7 @@ const StoreList = React.createClass({
 	                    break;
 	                }
 	            }
-	            if (that.state.list.length == 0) {
+	            if (that.state.list.length === 0) {
 	            	that.initData(true);
 		    	    that.setState({
 		            	left: <a className="f-fl iconfont icon-left" onClick={that.goBack} />
@@ -124,8 +124,8 @@ const StoreList = React.createClass({
 		|| this.props.children !== nextProps.children;
   },
   render() {
-    let sLoading = <Loading cls="u-sLoading transparent" />,
-      list = null;
+    let sLoading = <Loading cls="u-sLoading transparent" />;
+    let list = null;
 
     if (this.state.noMore) {
       sLoading = null;

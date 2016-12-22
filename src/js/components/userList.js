@@ -1,19 +1,18 @@
 import browserHistory from 'react-router/lib/browserHistory';
+import React from 'react';
 import Link from 'react-router/lib/Link';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import storage from '../modules/storage';
 import mixins from '../modules/mixins';
-import React from 'react';
 import parseQuery from '../modules/parseQuery';
-const myEvent = require('../modules/myEvent');
 
 if (typeof window !== 'undefined') {
   require('../../css/user.css');
 }
-if (typeof window !== 'undefined') {
-  const POP = require('../modules/confirm');
-}
+// if (typeof window !== 'undefined') {
+//   const POP = require('../modules/confirm');
+// }
 const ULine = React.createClass({
   mixins: [mixins()],
   getInitialState() {
@@ -36,7 +35,7 @@ const ULine = React.createClass({
       return (
         <li className="u-line">
           <a href={Src} data-href={Src} className="f-cb">
-            <span className={`${'iconfont icon-user' + ' '}${this.props.line.icon}`} />
+            <span className={`${'iconfont icon-user '}${this.props.line.icon}`} />
             <span className="title">{this.props.line.title}</span>
             <span className="s-title">{this.props.line.s_title}</span>
           </a>
@@ -46,7 +45,7 @@ const ULine = React.createClass({
       return (
         <li className="u-line">
           <Link to={Src} className="f-cb" data-href={Src} onClick={this.props.line.requireLogin}>
-            <span className={`${'iconfont icon-user' + ' '}${this.props.line.icon}`} />
+            <span className={`${'iconfont icon-user '}${this.props.line.icon}`} />
             <span className="title">{this.props.line.title}</span>
             <span className="s-title">{this.props.line.s_title}</span>
           </Link>
@@ -91,7 +90,6 @@ const UserList = React.createClass({
   },
   getInfo() {
     if (!this.isMounted()) return;
-    const AJAX = new Ajax();
     new Ajax().getJSON('GET', '/api/v1/read/config', {}, (data) => {
       this.setState({ aidou: data[1].default_balance });
     });

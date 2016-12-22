@@ -28,14 +28,14 @@ const confirm = function () {
 
 
   this._alert = function (msg) {
-    const UI_confirm = document.createElement('div');
-    UI_confirm.innerHTML = template__alert.replace('$content', msg);
-    UI_confirm.className = 'UI_confirm_auto';
-    document.body.appendChild(UI_confirm);
+    const UI_confirm_s = document.createElement('div');
+    UI_confirm_s.innerHTML = template__alert.replace('$content', msg);
+    UI_confirm_s.className = 'UI_confirm_auto';
+    document.body.appendChild(UI_confirm_s);
     setTimeout(() => {
-      UI_confirm.classList.add('dispear');
+      UI_confirm_s.classList.add('dispear');
       setTimeout(() => {
-        document.body.removeChild(UI_confirm);
+        document.body.removeChild(UI_confirm_s);
       }, 300);
     }, 2000);
   };
@@ -63,8 +63,8 @@ const confirm = function () {
     }
     document.body.appendChild(UI_confirm);
   };
-  this.onConfirmBtn = function (UI_confirm, callback) {
-    const confirmBtn = UI_confirm.querySelector('.confirmBtn');
+  this.onConfirmBtn = function (UI_confirms, callback) {
+    const confirmBtn = UI_confirms.querySelector('.confirmBtn');
     confirmBtn.onclick = function (e) {
       if (typeof callback === 'function') { callback(); }
       e.stopPropagation && (e.stopPropagation)();

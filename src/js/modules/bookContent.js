@@ -1,33 +1,51 @@
-import myEvent from '../modules/myEvent';
-import storage from '../modules/storage';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
+
+var readConfig;
 if (typeof window !== 'undefined') {
-  var ReadConfig = require('../modules/readConfig');
-  const POP = require('../modules/confirm');
+  readConfig = require('../modules/readConfig');
+  // const POP = require('../modules/confirm');
 }
 
-const goto_mlogin = function (options, callback) {
-  const hash = `${location.pathname}/m_login`;
-  browserHistory.push({ pathname: hash, state: options });
-      // POP._alert('请先登录');
-      // myEvent.setCallback('m_login', callback);
-};
+// const goto_mlogin = function (options, callback) {
+//   const hash = `${location.pathname}/m_login`;
+//   browserHistory.push({ pathname: hash, state: options });
+//       // POP._alert('请先登录');
+//       // myEvent.setCallback('m_login', callback);
+// };
 
-const a_url = 'https://readapi.imread.com';
- // a_url = 'https://m.imread.com';
-// a_url = 'http://192.168.0.34:9090';
-// a_url = 'http://192.168.0.252:8080';
+const aUrl = 'https://readapi.imread.com';
+ // aUrl = 'https://m.imread.com';
+// aUrl = 'http://192.168.0.34:9090';
+// aUrl = 'http://192.168.0.252:8080';
 
 
 const BookContent = (function () {
 	// 移动咪咕阅读
 	// @source_id 1
   function getContent1(options) {
-    const getContent = function (sourceConfig) {
-      var sourceConfig = sourceConfig[`config-${options.source_id}`];
-      const url = `${a_url}/api/v1/chapter/1/${options.book_id}/${options.cid}/index?cm=${sourceConfig.cm}`;
+    const getContent = function (sourceConfigs) {
+      var sourceConfig = sourceConfigs[`config-${options.source_id}`];
+
+      const gotoMigu = function (_sourceConfig) {
+        if (options.noCross) { return; } // 不要跳转
+
+        // 跳转之前先回到书籍详情，不然会循环跳转
+        let path = location.pathname;
+        path = path.replace(/\/reading.*$/, '');
+        GLOBAL.goBack(path);
+        // 去掉referrer
+        const meta = document.createElement('meta');
+        meta.name = 'referrer';
+        meta.content = 'no-referrer';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        setTimeout(() => {
+          window.location = (_sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid)
+            .replace('&vt=2', '&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+        }, 200);
+      };
+
+      const url = `${aUrl}/api/v1/chapter/1/${options.book_id}/${options.cid}/index?cm=${sourceConfig.cm}`;
       new Ajax().getJSON('GET', url, {}, (res) => {
         if (res.success) {
           res.success.cm = sourceConfig.cm;
@@ -43,25 +61,7 @@ const BookContent = (function () {
       });
     };
 
-    ReadConfig(getContent);
-
-
-    let gotoMigu = function (sourceConfig) {
-      if (options.noCross) { return; } // 不要跳转
-
-			// 跳转之前先回到书籍详情，不然会循环跳转
-      let path = location.pathname;
-      path = path.replace(/\/reading.*$/, '');
-      GLOBAL.goBack(path);
-			// 去掉referrer
-      const meta = document.createElement('meta');
-      meta.name = 'referrer';
-      meta.content = 'no-referrer';
-      document.getElementsByTagName('head')[0].appendChild(meta);
-      setTimeout(() => {
-        window.location = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2', '&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
-      }, 200);
-    };
+    readConfig(getContent);
   }
 
 	// function getContent1(options) {
@@ -87,7 +87,8 @@ const BookContent = (function () {
 	// 			meta.name = "referrer";
 	// 			meta.content = "no-referrer";
 	// 			document.getElementsByTagName('head')[0].appendChild(meta);
-	// 			window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3').replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
+	// 			window.location.href = (sourceConfig.cmcc_chapter_url.replace('$bid', options.bid).replace('$cid', options.cid).replace('&vt=2','&vt=3')
+    //              .replace('$cmcc_h5_charging', sourceConfig.cmcc_h5_charging));
 	// 		// } else {
 	// 		// 	GLOBAL.goBack();
 	// 		// }
@@ -98,8 +99,8 @@ const BookContent = (function () {
 	// 原文阅读
 	// @source_id 2
   function getContent2(options) {
-    const getContent = function (sourceConfig) {
-      var sourceConfig = sourceConfig[`config-${options.source_id}`];
+    const getContent = function (sourceConfigs) {
+      var sourceConfig = sourceConfigs[`config-${options.source_id}`];
 			// console.log(sourceConfig)
       let totalUrl;
       if (sourceConfig.source_host.indexOf('192.168.0') >= 0) {
@@ -116,7 +117,7 @@ const BookContent = (function () {
 						      .replace('$cm', sourceConfig.cm);
       new Ajax().getJSON('GET', url, {}, options.callback, options.onError);
     };
-    ReadConfig(getContent);
+    readConfig(getContent);
 
 		// var sourceConfig = ReadConfig()['config-' + options.source_id];
   }

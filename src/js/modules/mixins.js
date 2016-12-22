@@ -160,7 +160,6 @@ const mixins = function () {
     },
     getBackUrl(paths) {
       var path = paths.path.replace(/:([^"]*)/, '');
-      console.log('path:',path)
       path = location.pathname.split(`/${path}`)[0];
       path = path.replace(/\/reading([^"]*)/, '');
       return path;

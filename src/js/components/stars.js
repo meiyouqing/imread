@@ -9,9 +9,11 @@ const Stars = React.createClass({
 		// scrole = a.b
 		// star width 15px
 		// margin-left 5px
-    const a = Math.floor(this.props.score);
-    const b = this.props.score - a;
-    const width = a * (15 + 5) + b * 15;
+    let a = Math.floor(this.props.score);
+    let b = this.props.score - a;
+    a *= 20;
+    b *= 15;
+    const width = a + b;
     return (
       <div className="u-stars">
         <ul className="stars f-clearfix">

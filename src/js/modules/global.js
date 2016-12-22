@@ -2,8 +2,9 @@ import browserHistory from 'react-router/lib/browserHistory';
 import parseQuery from '../modules/parseQuery';
 import getCookie from './get_cookie';
 
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
 Date.prototype.Format = function (fmt) {
   const o = {
@@ -262,8 +263,8 @@ const GLOBAL = {
 
     const current = new Date();
     const deltaSecond = (current.getTime() - d.getTime()) / 1000;
-
-    if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
+    const overday = 24 * 60 * 60 * 1000;
+    if (new Date(current.getTime() - overday).Format('yyyyMd') == d.Format('yyyyMd')) {
       return '昨天';
     }
 
