@@ -144,9 +144,8 @@ const Shelf = React.createClass({
       this.state.shelfList.forEach((v, i) => {
         if (v.content_id == this.state.selected[0]) {
 					// this.startReading(null,v);
-
           this.compClick();
-          browserHistory.push(GLOBAL.typeHref(v));
+          browserHistory.push(location.pathname.replace(/\/book\/introduce\..*$/,'')+'/book/introduce.'+v.content_id);
         }
       });
     }

@@ -125,6 +125,7 @@ const UserList = React.createClass({
         that.setState({
           userInfo: data,
         });
+        GLOBAL.header.userId = data.user_id;
       }, (err) => {
         storage.rm('userToken');
         GLOBAL.removeCookie('token', '/', '.imread.com');

@@ -190,7 +190,6 @@ const Mall = React.createClass({
 
   render() {
     const isRouter = GLOBAL.isRouter(this.props);
-
     const right = <div className="iconfont icon-menu f-fr icon-s" onClick={this.showUser} />,
 			  middle = <a className="iconfont icon-sousuo f-fr icon-s" onClick={this.gotoSearch} />,
 			  left = <div className="i-logo" onClick={this.reload} />;
