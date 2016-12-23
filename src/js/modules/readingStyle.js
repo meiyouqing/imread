@@ -1,4 +1,5 @@
 import storage from '../modules/storage';
+
 const ReadingStyle = {
   defaultStyle: {
     style: 0,

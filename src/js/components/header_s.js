@@ -1,7 +1,6 @@
-import browserHistory from 'react-router/lib/browserHistory';
-import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
 import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
+import GLOBAL from '../modules/global';
 
 const Header_s = React.createClass({
   getInitialState() {
@@ -32,14 +31,11 @@ const Header_s = React.createClass({
     if (this.state.search) {
       const	key = this.state.key;
       if (!key) return;
-      if (GLOBAL.name === 'searchList') {
-        const AJAX = new Ajax(`search.${key}`);
-        this.props.goSearch();
+      const tester = /searchList\/search.([^"]*)/;
+      if (tester.test(location.pathname))	{
+        browserHistory.replace(`${location.pathname.replace(tester, '')}searchList/search.${key}`);
       } else {
-        const tester = /searchList\/search.([^\"]*)/;
-        if (tester.test(location.pathname))					{
-          browserHistory.replace(`${location.pathname.replace(tester, '')}searchList/search.${key}`);
-        } else					{ browserHistory.push({ pathname: GLOBAL.setHref(`searchList/search.${key}`), state: this.state.key }); }
+        browserHistory.push({ pathname: GLOBAL.setHref(`searchList/search.${key}`), state: this.state.key });
       }
       if (this.props.from === 'search') {
         this.setState({
@@ -70,7 +66,7 @@ const Header_s = React.createClass({
     } else if (typeof this.props.keyValue === 'string') {
       this.setState({ key: this.props.keyValue });
     }
-    this.path = this.props.route.path.replace(/:([^\"]*)/, '');
+    this.path = this.props.route.path.replace(/:([^"]*)/, '');
     this.path = window.location.pathname.split(`/${this.path}`)[0];
   },
   shouldComponentUpdate(nextProps, nextState) {

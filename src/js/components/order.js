@@ -1,14 +1,14 @@
-import myEvent from '../modules/myEvent';
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
+import myEvent from '../modules/myEvent';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
+import Loading from './loading';
+
 if (typeof window !== 'undefined') {
   var POP = require('../modules/confirm');
 }
-const Header = require('./header');
-
 if (typeof window !== 'undefined') {
   require('../../css/pay.css');
 }
@@ -128,9 +128,8 @@ const PayOrder = React.createClass({
   render() {
     const isMigu = this.props.isMigu;
     const twenty = (isMigu && this.props.data.twentyPrice) ? <div className="yhui" onClick={this.payHandle.bind(this, 20)}>20章优惠价<span className="f-fc-EF5">{this.props.data.twentyPrice}</span>元</div> : null;
-    let baseQuestion = null,
-      code = null,
-      telephoneBlock = null;
+    const code = null;
+    let telephoneBlock = null;
     let list = null;
 
     if (isMigu) {

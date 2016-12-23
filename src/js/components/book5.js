@@ -1,6 +1,6 @@
-import GLOBAL from '../modules/global';
 import React from 'react';
 import Link from 'react-router/lib/Link';
+import GLOBAL from '../modules/global';
 
 const Book5 = React.createClass({
   shouldComponentUpdate(nextProps, nextState) {

@@ -1,7 +1,5 @@
 import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
 import storage from '../modules/storage';
-
 
 const Token = {
   refreshToken() {
@@ -10,7 +8,7 @@ const Token = {
     new Ajax().getJSON('GET', '/api/v1/upToken', {
 				// oldToken: encodeURIComponent(oldToken)
     }, (data) => {
-      if (data.code == 200) {
+      if (data.code === 200) {
 					// GLOBAL.cookie('token', data.token, {
 					// 	expires: 1000
 					// });

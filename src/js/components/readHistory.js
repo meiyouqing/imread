@@ -1,7 +1,7 @@
+import React from 'react';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
 
 const readHistory = React.createClass({
   mixins: [mixins()],

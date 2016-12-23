@@ -1,12 +1,11 @@
+import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
+import mixins from '../modules/mixins';
+import Header from './header';
+
 if (typeof window !== 'undefined') {
   var POP = require('../modules/confirm');
 }
-import browserHistory from 'react-router/lib/browserHistory';
-import Ajax from '../modules/ajax';
-import GLOBAL from '../modules/global';
-import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
 if (typeof window !== 'undefined') {
   require('../../css/userinfo.css');
 }

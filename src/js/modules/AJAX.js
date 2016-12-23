@@ -1,8 +1,7 @@
-import storage from './storage';
+import 'babel-polyfill';
+import fetch from 'isomorphic-fetch';
 import GLOBAL from './global';
 import transformRequest from './transformRequest';
-import 'babel-polyfill';
-import fatch from 'isomorphic-fetch';
 import getCookie from './get_cookie';
 
 const Config = {
@@ -137,12 +136,12 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
   const promise = fetch(request);
 
   let timeoutId = 0;
-  const timeout = (ms, promise) => new Promise((resolve, reject) => {
+  const timeout = (ms, promiser) => new Promise((resolve, reject) => {
     timeoutId = setTimeout(() => {
       onError('链接超时');
       reject(new Error('链接超时'));
     }, ms);
-    promise.then(resolve, reject);
+    promiser.then(resolve, reject);
   });
   timeout(50000, promise)
 	.then((response) => {
@@ -213,8 +212,9 @@ function Ajax(param, cache = false) {
   if (paramParts.length > 1) {
     let i = 0;
     for (const n in api.param) {
-      i++;
-      if (paramParts[i] && paramParts[i] !== '-' && api.param.hasOwnProperty(n)) {
+      if (!Object.prototype.hasOwnProperty.call(api.param, n)) continue;
+      i += 1;
+      if (paramParts[i] && paramParts[i] !== '-') {
         api.param[n] = paramParts[i];
       }
     }

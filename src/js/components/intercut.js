@@ -1,7 +1,7 @@
-import GLOBAL from '../modules/global';
 import React from 'react';
 import Link from 'react-router/lib/Link';
-const uploadLog = require('../modules/uploadLog');
+import GLOBAL from '../modules/global';
+import uploadLog from '../modules/uploadLog';
 
 const Intercut = React.createClass({
   getInitialState() {

@@ -1,13 +1,13 @@
+import React from 'react';
 import parseQuery from '../modules/parseQuery';
 import Loading from './loading';
 import NoData from './noData';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
-// var Block7 = require('./block7');
-const Book1 = require('./book1');
+import Header from './header';
+import Book1 from './book1';
+
 if (typeof window !== 'undefined') {
   require('../../css/bookSheet.css');
 }
@@ -98,14 +98,14 @@ const BookSheet = React.createClass({
         this.lazyloadImage(this.refs.container);
       }
     }
+    if (!this.isLogin()) {
+      this.setState({ collected: false });
+    }
   },
   componentDidUpdate() {
     GLOBAL.isAd();
     if (GLOBAL.isRouter(this.props) && !this.state.data)	this.getList();
     this.lazyloadImage(this.refs.container);
-    if (!this.isLogin()) {
-      this.setState({ collected: false });
-    }
   },
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.data !== nextState.data
@@ -116,58 +116,56 @@ const BookSheet = React.createClass({
 					|| this.props.children !== nextProps.children;
   },
   render() {
-    let noData,
-      content,
-      sLoading;
+    let noData;
+    let content;
+    let sLoading;
 	// 定义content
 	// console.log(this.state.noMore,this.state.scrollUpdate)
     if (!this.state.data) {
       if (GLOBAL.isRouter(this.props))				{
         content = <Loading />;
       }
-    } else {
+    } else if (!this.state.data.content.length) {
 			// var m_time = this.state.data.modify_time.substr(0,4)+'.'+this.state.data.modify_time.substr(4,2)+'.'+this.state.data.modify_time.substr(6,2);
-      if (!this.state.data.content.length) {
         noData = (<div className="g-main g-main-1"><NoData /></div>);
         content = null;
-      } else {
-        sLoading = this.state.noMore ? null : (<Loading cls="u-sLoading" />);
-        content = (
-          <div>
-            <section className="m-block m-sheet">
-              <div className="content">
-                <div className="m-sheet-header">
-                  <div className="iconfont icon-tag u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
-                  <img src={this.state.data.image_url} />
-                  <div className="m-b-footer">
-                    <span className="iconfont icon-heart i-s-m" />
-                    <span className="u-sc">{this.state.data.collect_uv || 0}</span>
-                    <span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
-                  </div>
-                  <div className="u-m-store" onClick={this.addFavaHandle} >
-                    <span className={`iconfont ${this.state.collected ? 'active icon-heart' : 'icon-xin'}`} />
-                  </div>
+    } else {
+      sLoading = this.state.noMore ? null : (<Loading cls="u-sLoading" />);
+      content = (
+        <div>
+          <section className="m-block m-sheet">
+            <div className="content">
+              <div className="m-sheet-header">
+                <div className="iconfont icon-tag u-sheet-c"><p>{this.state.data.content_cnt}</p><p>本</p></div>
+                <img src={this.state.data.image_url} />
+                <div className="m-b-footer">
+                  <span className="iconfont icon-heart i-s-m" />
+                  <span className="u-sc">{this.state.data.collect_uv || 0}</span>
+                  <span className="u-sc">{GLOBAL.prettyDate(this.state.data.modify_time)}</span>
                 </div>
-                <div className="u-sheet-detail">
-                  <h2>{this.state.data.sheet_name}</h2>
-                  <div className="brief">{this.state.data.sheet_brief}</div>
+                <div className="u-m-store" onClick={this.addFavaHandle} >
+                  <span className={`iconfont ${this.state.collected ? 'active icon-heart' : 'icon-xin'}`} />
                 </div>
               </div>
-            </section>
-            <div className="m-device" />
-            <section className="m-block m-sheet-s">
-              <div className="content">
-                <ul className="bsList">
-                  {
-										this.state.data.content.map((v, i) => <Book1 key={i} data={v} />)
-									}
-                </ul>
+              <div className="u-sheet-detail">
+                <h2>{this.state.data.sheet_name}</h2>
+                <div className="brief">{this.state.data.sheet_brief}</div>
               </div>
-              {sLoading}
-            </section>
-          </div>
-				);
-      }
+            </div>
+          </section>
+          <div className="m-device" />
+          <section className="m-block m-sheet-s">
+            <div className="content">
+              <ul className="bsList">
+                {
+                  this.state.data.content.map((v, i) => <Book1 key={i} data={v} />)
+                }
+              </ul>
+            </div>
+            {sLoading}
+          </section>
+        </div>
+      );
     }
     if (this.state.UFO) {
       noData = (<div className="g-main g-main-1"><NoData type="UFO" /></div>);

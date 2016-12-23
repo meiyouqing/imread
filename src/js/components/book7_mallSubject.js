@@ -1,7 +1,6 @@
+import React from 'react';
 import Link from 'react-router/lib/Link';
 import GLOBAL from '../modules/global';
-import React from 'react';
-// var Img = require('./img');
 
 const Subject = React.createClass({
   getInitialState() {
@@ -9,7 +8,7 @@ const Subject = React.createClass({
   },
   componentDidMount() {
     const height = this.props.style == 12 ?
-					(document.body.offsetWidth) / 2 * 0.38
+					((document.body.offsetWidth) / 2) * 0.38
 					: (document.body.offsetWidth - 27) / 2;
     this.setState({ height });
   },
@@ -20,10 +19,8 @@ const Subject = React.createClass({
   render() {
     const cls = this.props.style == 12 ? 'u-book-8 u-book-8-small' : 'u-book-8';
     let hrefStr = GLOBAL.typeHref(this.props.data);
-    let target = '_self';
     if (typeof hrefStr === 'object') {
       hrefStr = hrefStr.url;
-      target = hrefStr.target;
     }
     return (
       <li className={cls}>

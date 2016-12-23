@@ -1,7 +1,9 @@
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
+
+var isHidden;
 if (typeof window !== 'undefined') {
-  var isHidden = require('./isHidden');
+  isHidden = require('./isHidden');
 }
 
 const config = {
@@ -17,7 +19,7 @@ const uploadLog = {
     const id = params.intercut_id || params.content_id;
     if (config[page] && !isHidden()) {
       if (this.result[id]) {
-        this.result[id].count++;
+        this.result[id].count += 1;
       } else {
         this.result[id] = params;
         this.result[id].count = 1;
@@ -25,7 +27,7 @@ const uploadLog = {
     }
   },
   sending(page) {
-    if (Object.getOwnPropertyNames && Object.getOwnPropertyNames(this.result).length == 0) return;
+    if (Object.getOwnPropertyNames && Object.getOwnPropertyNames(this.result).length === 0) return;
     new Ajax().getJSON(config[page].method, config[page].url, this.result, GLOBAL.noop, GLOBAL.noop);
     this.result = {};
   },

@@ -1,7 +1,7 @@
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import GLOBAL from '../modules/global';
-import React from 'react';
-const Img = require('./img');
+import Img from './img';
 
 const Book9 = React.createClass({
   prettyDate(date) {
@@ -10,7 +10,7 @@ const Book9 = React.createClass({
     const current = new Date();
     const deltaSecond = (current.getTime() - date) / 1000;
 
-    if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
+    if (new Date(current.getTime() - (24 * 60 * 60 * 1000)).Format('yyyyMd') == new Date(date).Format('yyyyMd')) {
       return '昨天';
     }
     if (deltaSecond < 15 * 60) {

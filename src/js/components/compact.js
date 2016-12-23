@@ -1,5 +1,6 @@
 import React from 'react';
-const Header = require('./header');
+import Header from './header';
+
 const Conpact = React.createClass({
   getInitialState() {
     return { height: 600 };

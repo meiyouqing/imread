@@ -1,8 +1,7 @@
-import Ajax from '../modules/ajax';
 import React from 'react';
-import IndexRoute from 'react-router/lib/IndexRoute';
 import IndexRedirect from 'react-router/lib/IndexRedirect';
 import Route from 'react-router/lib/Route';
+// import IndexRoute from 'react-router/lib/IndexRoute';
 import App from './app';
 // import Shelf from './shelf' //TODO:load on demand
 import Mall from './mall';
@@ -22,12 +21,12 @@ import RecentRead from './recentRead';
 import ReadHistory from './readHistory';
 import Feedback from './feedback';
 // import Reading from './reading' //TODO:load on demand
-import Order from './order';
+// import Order from './order';
 import Compact from './compact';
 import Purchased from './purchased';
 import Setting from './setting';
 import Modifypwd from './modifypwd';
-import StoreList from './storeList';
+import MyStore from './my_store';
 import UserInfo from './userInfo';
 import EditUserame from './editUserame';
 import SelfBuild from './selfbuild';
@@ -35,8 +34,6 @@ import SelfBuild from './selfbuild';
 // import MRecharge from './mRecharge'
 // import MBinder from './mBinder'
 import WxLogin from './wxLogin';
-import WxPay from './wxCode';
-import WxPayTest from './wxCodeTest';
 import SDK from './sdk';
 import AlyPay from './alyPay';
 import RechargeDetails from './recharge_details';
@@ -117,8 +114,6 @@ const topWrap = (
 	);
 const payWrap = (
   <Route path="pay" component={Balance} >
-    <Route path="wxweb_redirect" component={WxPay} />
-    <Route path="wxweb_redirect_test" component={WxPayTest} />
     <Route path="alyPay" component={AlyPay} />
     <Route path="recharge/:rechargeId" component={Recharge} >
       <Route path="recharge_result" component={RechargeResult} />
@@ -159,7 +154,7 @@ module.exports = (
     <Route path="/mall(/:subnav)" component={Mall}>
       {selfWrap}
 
-      <Route path="bookstore" component={StoreList} >
+      <Route path="bookstore" component={MyStore} >
         {loginWrap}
         {topWrap}
         <Route path="sheet/:sheetId" component={BookSheet}>

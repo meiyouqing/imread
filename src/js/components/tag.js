@@ -1,13 +1,15 @@
+import React from 'react';
 import myEvent from '../modules/myEvent';
 import Ajax from '../modules/ajax';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
+import Header from './header';
+
 if (typeof window !== 'undefined') {
   require('../../css/tag.css');
 }
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
 
 const tag = React.createClass({
@@ -82,7 +84,7 @@ const tag = React.createClass({
                 <div className="content f-clearfix">
                   {tips}
                   {
-										this.state.myTagList.map((tag, i) => (<span className="tag selected f-fl" key={i} onClick={this.removeTag} data-index={i}>{tag.category_name}</span>))
+										this.state.myTagList.map((tags, i) => (<span className="tag selected f-fl" key={i} onClick={this.removeTag} data-index={i}>{tags.category_name}</span>))
 									}
                 </div>
               </div>
@@ -90,7 +92,7 @@ const tag = React.createClass({
                 <div className="title">可选择的标签</div>
                 <div className="content f-clearfix">
                   {
-										this.state.tagList.map((tag, i) => (<span className="tag f-fl" key={i} onClick={this.addTag} data-index={i}>{tag.category_name}</span>))
+										this.state.tagList.map((tags, i) => (<span className="tag f-fl" key={i} onClick={this.addTag} data-index={i}>{tags.category_name}</span>))
 									}
                 </div>
               </div>

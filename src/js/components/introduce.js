@@ -1,16 +1,17 @@
+import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
 import myEvent from '../modules/myEvent';
 import NoData from './noData';
 import Loading from './loading';
 import storage from '../modules/storage';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Header = require('./header');
-const Book1 = require('./book1');
-const Chapterlist = require('./chapterlist');
-const parseQuery = require('../modules/parseQuery');
+import Header from './header';
+import Book1 from './book1';
+import Chapterlist from './chapterlist';
+import parseQuery from '../modules/parseQuery';
+
 if (typeof window !== 'undefined') {
   require('../../css/introduce.css');
 }
@@ -24,14 +25,14 @@ const Detail = React.createClass({
   },
   addBook() {
     if (this.props.isOnshelf) return;
-    let cId = this.props.book.current_chapter_id,
-      cOffset = this.props.book.current_chapter_offest;
+    const cId = this.props.book.current_chapter_id;
+    const cOffset = this.props.book.current_chapter_offest;
     const param = [{
       bookId: this.props.book.bid,
       type: 3,
       time: new Date().getTime(),
-      chapter_id: cId ? cId : 0,
-      chapter_offset: cOffset ? cOffset : 0
+      chapter_id: cId || 0,
+      chapter_offset: cOffset || 0
     }];
     this.shelfAdding(param, this.props.onShelf);
   },
@@ -44,10 +45,10 @@ const Detail = React.createClass({
   },
   startReading() {
     const readLog = storage.get('readLogNew');
-    let chapterid = this.props.book.current_chapter_id,
-      sourcebid = this.props.book.source_bid,
-      localid = this.props.book.bid,
-      source_id = this.props.book.source_id;
+    const sourcebid = this.props.book.source_bid;
+    const localid = this.props.book.bid;
+    const source_id = this.props.book.source_id;
+    let chapterid = this.props.book.current_chapter_id;
     if (readLog[this.props.book.bid]) {
       chapterid = readLog[this.props.book.bid].current_chapterid;
     }
@@ -119,7 +120,7 @@ const Introduce = React.createClass({
   },
   getBook(param) {
     if (!this.isMounted()) { return; }
-    const hash = param ? param : this.props.params.introduceId;
+    const hash = param || this.props.params.introduceId;
     const AJAX = new Ajax(hash);
     AJAX.get(this.ajaxHandle, (error) => {
       this.setState({
@@ -178,7 +179,7 @@ const Introduce = React.createClass({
     });
   },
   gotoShelf() {
-    const href = `${location.pathname.replace(/\/shelf([^\"]*)/, '')}/shelf`;
+    const href = `${location.pathname.replace(/\/shelf([^"]*)/, '')}/shelf`;
     if (this.isLogin())			{ browserHistory.push(href); } else {
       this.goLogin(() => {
         browserHistory.push(href);
@@ -189,7 +190,7 @@ const Introduce = React.createClass({
     this.setState({ seq: !this.state.seq, chapterlist: [], noMoreChapterlist: false });
     let page = 0;
     if (this.state.seq)			{
-      page = Math.ceil(this.state.book.chapter_count / this.state.page_size + 1);
+      page = Math.ceil((this.state.book.chapter_count / this.state.page_size) + 1);
     }
     this.setState({ page });
 
@@ -238,15 +239,14 @@ const Introduce = React.createClass({
 				|| this.props.params.introduceId !== nextProps.params.introduceId;
   },
   render() {
-    let header,
-      loading,
-      introduceTabs,
-      detail;
+    let header;
+    let loading;
+    let introduceTabs;
+    let detail;
     const right = <span onClick={this.gotoShelf} className="iconfont icon-shujia f-fr" />;
     if (!this.state.book || !this.isUpdate) {
       header = <Header title={null} right={right} path={this.props.route} />;
-      if (GLOBAL.isRouter(this.props))	// 兼容低端安卓
-  {
+      if (GLOBAL.isRouter(this.props)) {	// 兼容低端安卓
         loading = <Loading />;
       }
       if (this.state.noData) {
@@ -387,8 +387,8 @@ const Readlist = React.createClass({
     return this.props.readlist !== nextProps.readlist;
   },
   render() {
-    let loading,
-      content;
+    let loading;
+    let content;
     if (!this.props.readlist) {
       loading = <Loading />;
     } else {

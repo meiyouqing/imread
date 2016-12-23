@@ -1,16 +1,14 @@
-if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
-}
-import Loading from './loading';
-import parseQuery from '../modules/parseQuery';
-import Link from 'react-router/lib/Link';
+import React from 'react';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import storage from '../modules/storage';
-import React from 'react';
-const Header = require('./header');
-const myEvent = require('../modules/myEvent');
+import Header from './header';
+import myEvent from '../modules/myEvent';
+
+if (typeof window !== 'undefined') {
+  var POP = require('../modules/confirm');
+}
 if (typeof window !== 'undefined') {
   require('../../css/login.css');
 }
@@ -90,12 +88,12 @@ const mLogin = React.createClass({
     this.setState({ onlogin: true });
     const times = setInterval(() => {
       if (n >= 5) {
-        clearInterval(time);
+        clearInterval(times);
         POP._alert('登录失败');
         this.setState({ onlogin: false });
         return;
       }
-      n++;
+      n += 1;
       const AJAX = new Ajax('mSms');
       AJAX.go({
         cm: this.state.login_data.cm,
@@ -167,7 +165,7 @@ const mLogin = React.createClass({
               <li><a onClick={this.checkSms.bind(this, this.state.login_data.cmccRm)} href={`sms:${this.state.login_data.smsTo}${isAndroid ? '?' : '&'}body=${this.state.login_data.cmccContent}`}>中国移动</a></li>
               <li><a onClick={this.checkSms.bind(this, this.state.login_data.noCmccRm)} href={`sms:${this.state.login_data.ltSmsto}${isAndroid ? '?' : '&'}body=${this.state.login_data.noCmccContent}`}>中国联通</a></li>
             </ul>
-            <button onClick={this.closeSex} className="UI-cancel" onClick={this.showPhone}>取消</button>
+            <button className="UI-cancel" onClick={this.showPhone}>取消</button>
           </div>
         </section>
 

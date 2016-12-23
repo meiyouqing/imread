@@ -1,12 +1,20 @@
+import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
 import myEvent from '../modules/myEvent';
 import NoData from './noData';
 import storage from '../modules/storage';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
-import React from 'react';
 import mixins from '../modules/mixins';
 import Loading from './loading';
+import Header from './header';
+import Chapterlist from './chapterlist';
+import readingStyle from '../modules/readingStyle';
+import bookContent from '../modules/bookContent';
+import uploadLog from '../modules/uploadLog';
+import Intercut from './intercut';
+import PayOrder from './order';
+
 if (typeof window !== 'undefined') {
   var POP = require('../modules/confirm');
   var Hammer = require('../modules/hammer');
@@ -16,15 +24,6 @@ if (typeof window !== 'undefined') {
 if (typeof window !== 'undefined') {
   require('../../css/reading.css');
 }
-
-const Header = require('./header');
-
-const Chapterlist = require('./chapterlist');
-const readingStyle = require('../modules/readingStyle');
-const bookContent = require('../modules/bookContent');
-const uploadLog = require('../modules/uploadLog');
-const Intercut = require('./intercut');
-const PayOrder = require('./order');
 
 const styleMixins = {
   cloneStyle(style) {
@@ -310,7 +309,7 @@ const Reading = React.createClass({
   getFormatContent(content) {
     const passages = content
 							.replace(/&amp;/g, '&')
-							.replace(/(&\#160;){2,4}|\s{2,4}/g, '<br/>')
+							.replace(/(&#160;){2,4}|\s{2,4}/g, '<br/>')
 							.replace(/&ldquo;/g, '“')
 							.replace(/&rdquo;/g, '”')
 							.replace(/&nbsp;/g, '')
@@ -323,7 +322,7 @@ const Reading = React.createClass({
       let v = passages[i].trim();
       if (!v.length || /^[…]+$/.test(v)) { // 去掉空内容和省略号
         passages.splice(i, 1);
-        i--;
+        i -= 1;
         continue;
       }
       v = v.replace(/&quot;([^(&quot;)]*)&quot;/g, ($1, $2) => `“${$2}”`);
@@ -539,15 +538,13 @@ const Reading = React.createClass({
       cid: data.nextChapterId,
       source_id: this.source_id,
       book_id: this.book_id,
-      callback: (data) => {
-        const that = this;
-        if (data.success.pageType === 'order') {
-          if (storage.get(that.bid, 'string') === 'autoPay') {
-            that.autoPay(data.success, true);
+      callback: (bookData) => {
+        if (bookData.success.pageType === 'order') {
+          if (storage.get(this.bid, 'string') === 'autoPay') {
+            this.autoPay(bookData.success, true);
             return;
           }
         }
-
         GLOBAL._nextChapter_ = data.success;
       },
       onError: GLOBAL.noop
@@ -587,17 +584,17 @@ const Reading = React.createClass({
         const aidou = data.success.balance / 100;
 				// console.log(aidou,orderData.marketPrice)
         if ((aidou - orderData.marketPrice) >= 0) {
-          new Ajax().getJSON('GET', orderData.orderUrl, {}, (data) => {
-            if (data.code !== 200)							{
+          new Ajax().getJSON('GET', orderData.orderUrl, {}, (dataO) => {
+            if (dataO.code !== 200)							{
               POP._alert('支付失败');
             } else {
               if (isNext) {
-                GLOBAL._nextChapter_ = data.success;
+                GLOBAL._nextChapter_ = dataO.success;
                 return;
               }
               that.storeBookOrdered(that.chapterid);
               that.disPatch('updateUser');
-              that.gotContent(data);
+              that.gotContent(dataO);
 							// that.goBack();
             }
           });
@@ -782,8 +779,8 @@ const Reading = React.createClass({
     const len = this.state.data.content.length;
     const cuid = 'ewfwiiw883';
     const voice = this.state.femaleVoice ? 0 : 1;
-    const volum = this.state.volum * 2 - 1;
-    const speed = this.state.speed * 2 - 1;
+    const volum = (this.state.volum * 2) - 1;
+    const speed = (this.state.speed * 2) - 1;
 
     doinsert.bind(this)();
     this.player.onended = this.player.onerror = () => {
@@ -888,7 +885,7 @@ const Reading = React.createClass({
     }
 		// 扉页信息
     this.states = this.props.location.state;
-    this.path = this.props.route.path.replace(/:([^\"]*)/, '');
+    this.path = this.props.route.path.replace(/:([^"]*)/, '');
     this.path = window.location.pathname.split(`/${this.path}`)[0];
 
 		// 为语音朗读准备access token
@@ -908,6 +905,8 @@ const Reading = React.createClass({
         break;
       case 'panend':
         break;
+      default:
+        break;
     }
   },
   componentDidUpdate(nextProps, nextState) {
@@ -922,16 +921,16 @@ const Reading = React.createClass({
 			// this.setNextPlay(true);
     }
 
-
+    let hammerTime;
     if (this.state.showSetting || this.state.showChapterlist) {
-      var hammerTime = new Hammer(this.refs.mask);
+      hammerTime = new Hammer(this.refs.mask);
       hammerTime.on('tap', this.toggleSettings);
 			// new Finger(this.refs.mask,{
 			// 	tap:this.toggleSettings
 			// });
     }
     if (this.state.showSetting_tts) {
-      var hammerTime = new Hammer(this.refs.mask);
+      hammerTime = new Hammer(this.refs.mask);
       hammerTime.on('tap', this.toggleSettings_tts);
 			// new Finger(this.refs.mask,{
 			// 	tap:this.toggleSettings_tts
@@ -968,7 +967,7 @@ const Reading = React.createClass({
 		// scrollarea.addEventListener('touchstart',this.handleClick);
     if (scrollarea.getAttribute('data-events') != '1') {
       scrollarea.setAttribute('data-events', '1');
-      var hammerTime = new Hammer(scrollarea);
+      hammerTime = new Hammer(scrollarea);
       hammerTime.on('tap', this.handleClick);
       hammerTime.on('pandown panend', this.handlePullToRrefresh);
     }
@@ -1066,8 +1065,7 @@ const Reading = React.createClass({
     const ChapterlistHrefBase = currentRoute.join('/');
     const head = <Header title={this.state.bookName} right={null} path={this.props.route} />;
     const classNames = readingStyle.getClass(this.state.style);
-    let intercut,
-      loading = null;
+    let intercut;
 
 		// 防止排序时候的绑定
     const chapterlist = {};
@@ -1123,10 +1121,6 @@ const Reading = React.createClass({
       </div>);
     }
 
-    if (this.state.loading) {
-      loading = <Loading />;
-    }
-
     if (this.state.intercut) {
       intercut = <Intercut data={this.state.intercut} />;
       if (!this.uploadLogIntercut) {
@@ -1146,7 +1140,7 @@ const Reading = React.createClass({
         </div>
         <div className={`style ${classNames}`}>
           <div ref="mask" className={`u-hideChapterlist${(this.state.showChapterlist || this.state.showSetting || this.state.showSetting_tts) ? ' active' : ''}`} />
-          <div className={`u-readingsetting${!this.state.showSetting && ' f-hide' || ''}`}>
+          <div className={`u-readingsetting${(!this.state.showSetting && ' f-hide') || ''}`}>
             <button type="button" className="u-playBtn iconfont icon-erji" onClick={this.playHandle} />
             <div className="u-settings u-settings-top">
               <span className="iconfont icon-left f-fl" onClick={this.goOut} />
@@ -1161,7 +1155,7 @@ const Reading = React.createClass({
             </div>
 
 
-            <div className={`u-settings u-settings-font${!this.state.showSettingFont && ' f-hide' || ''}`}>
+            <div className={`u-settings u-settings-font${(!this.state.showSettingFont && ' f-hide') || ''}`}>
               {/* <div className="setting-fontfamily setting-font-line f-flexbox">
 							<div className="title">字体</div>
 							{
@@ -1245,7 +1239,7 @@ const Reading = React.createClass({
               <button type="button" className="u-quitTtsBtn iconfont icon-quit" onClick={this.quitTtsHandle} />
             </div>
           </div>
-          <section className={`u-chapterlistc${this.state.showChapterlist && ' active' || ''}`}>
+          <section className={`u-chapterlistc${(this.state.showChapterlist && ' active') || ''}`}>
             <div className="u-chapterlist">
               <div className="u-bookname f-ellipsis">
                 <span>目录</span>

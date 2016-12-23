@@ -1,10 +1,12 @@
+import browserHistory from 'react-router/lib/browserHistory';
 import myEvent from '../modules/myEvent';
 import storage from '../modules/storage';
-import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
+
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
 const mixins = function () {
   return {
@@ -14,7 +16,7 @@ const mixins = function () {
       return parts.split('.');
     },
     usePreload(n) {
-      if (typeof window !== 'undefined' &&　!window.__PRELOADED_STATE__) return;
+      if (typeof window !== 'undefined' && !window.__PRELOADED_STATE__) return;
       if (typeof n !== 'string') n = n[n.length - 1];
       n = n.replace(/\./g, '_');
       n = encodeURIComponent(n);
@@ -31,14 +33,12 @@ const mixins = function () {
     lazyloadImage(container) {
       if (!container) return;
       const imgs = container.querySelectorAll('.u-lazyload-img');
-      const that = this;
       for (let i = 0; i < imgs.length; i++) {
-        (function (i) {
+        (function () {
           const img = imgs[i];
           const src = img.getAttribute('data-lazyload-src');
-          if (src != 'loading' && src != 'loaded' && GLOBAL.isElementVisible(img)) {
-            function callback(_src) {
-              if (img.nodeName == 'A') {
+          function callback(_src) {
+              if (img.nodeName === 'A') {
                 img.style.backgroundImage = `url(${src})`;
               } else {
                 img.src = _src;
@@ -51,6 +51,7 @@ const mixins = function () {
             function onerror() {
               img.setAttribute('data-lazyload-src', 'error');
             }
+          if (src !== 'loading' && src !== 'loaded' && GLOBAL.isElementVisible(img)) {
             img.setAttribute('data-lazyload-src', 'loading');
                         // GLOBAL.loadImage(src, callback.bind(null, src), callback.bind('error', 'https://m.imread.com/src/img/defaultCover.png'));
             GLOBAL.loadImage(src, callback.bind(null, src), onerror);
@@ -73,7 +74,6 @@ const mixins = function () {
       }, 300);
     },
     scrollHandleCallback() {
-      let n;
       this.setState({
         scrollUpdate: true
       });
@@ -91,7 +91,7 @@ const mixins = function () {
             // if(typeof n !== 'string') n = n[n.length-1];
             // n = n.split('.')[0];
             // var p = this.scrollAJAX.param['pages'] ? 'pages' : 'page';
-      this.scrollPagesNo++;
+      this.scrollPagesNo += 1;
       this.getList();
     },
     onerror(error) {
@@ -113,7 +113,6 @@ const mixins = function () {
         return;
       }
       addBookCallback();
-      const that = this;
 
       function addBookCallback() {
 			    const AJAX = new Ajax('addBook');
@@ -157,12 +156,12 @@ const mixins = function () {
     isWx() {
       const ua = window.navigator.userAgent.toLowerCase();
       if (ua.match(/MicroMessenger/i) == 'micromessenger') return true;
-      else return false;
+      return false;
     },
     getBackUrl(path) {
-      var path = path.path.replace(/:([^\"]*)/, '');
+      path = path.path.replace(/:([^"]*)/, '');
       path = location.pathname.split(`/${path}`)[0];
-      path = path.replace(/\/reading([^\"]*)/, '');
+      path = path.replace(/\/reading([^"]*)/, '');
       return path;
     },
     goBackUrl(path) {
@@ -181,14 +180,16 @@ const mixins = function () {
     },
     disPatch(event, dom) {
             // console.log('<<<<<<<<<<<<<<<<<<<<<'+event+'>>>>>>>>>>>>>>>>>>>')
-      dom = dom ? dom : document;
+      dom = dom || document;
       try {
                 // document.dispatchEvent(new Event('updateUser'));
         const events = document.createEvent('HTMLEvents');
         events.initEvent(event, true, true);
         events.eventType = 'message';
         dom.dispatchEvent(events);
-      } catch (e) {}
+      } catch (e) {
+        alert('No support disPatch!');
+      }
     }
   };
 };

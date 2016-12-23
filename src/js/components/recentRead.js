@@ -1,19 +1,18 @@
+import React from 'react';
 import storage from '../modules/storage';
-import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
 import Loading from './loading';
-const Header = require('./header');
-const Book9 = require('./book9_recentRead');
-const NoData = require('./noData');
+import Header from './header';
+import Book9 from './book9_recentRead';
+import NoData from './noData';
 
 if (typeof window !== 'undefined') {
   require('../../css/recentRead.css');
 }
-if (typeof window !== 'undefined') {
-  const POP = require('../modules/confirm');
-}
+// if (typeof window !== 'undefined') {
+//   const POP = require('../modules/confirm');
+// }
 
 const recentRead = React.createClass({
   mixins: [mixins()],
@@ -56,7 +55,7 @@ const recentRead = React.createClass({
     for (const n in readLog) {
       list.push(readLog[n]);
     }
-    list.sort((a, b) => a.recent_time < b.recent_time ? 1 : -1);
+    list.sort((a, b) => (a.recent_time < b.recent_time ? 1 : -1));
     this.setState({
       list,
       right: list.length ? <a className="f-fr iconfont icon-shezhi-1" onClick={this.troggle} /> : null,

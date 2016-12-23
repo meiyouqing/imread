@@ -501,8 +501,5 @@ function Swipe(container, options) {
   };
 }
 
-const swipe = {
-  swipe: Swipe
-};
 
-module.exports = swipe;
+module.exports = Swipe;

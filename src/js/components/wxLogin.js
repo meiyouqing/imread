@@ -1,11 +1,13 @@
-import parseQuery from '../modules/parseQuery';
-import browserHistory from 'react-router/lib/browserHistory';
-import Ajax from '../modules/ajax';
 import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
+import parseQuery from '../modules/parseQuery';
+import Ajax from '../modules/ajax';
 import mixins from '../modules/mixins';
 import storage from '../modules/storage';
+
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
 
 const WxLogin = React.createClass({
@@ -19,7 +21,7 @@ const WxLogin = React.createClass({
       browserHistory.replace('/');
       return;
     }
-    if (this.isWx() && this.from && this.from.code && this.from.state == '123') {
+    if (this.isWx() && this.from && this.from.code && this.from.state === '123') {
       const AJAX = new Ajax('login_wx');
       AJAX.go({
         code: this.from.code,
@@ -30,8 +32,7 @@ const WxLogin = React.createClass({
     }
   },
   do_result(data) {
-    const that = this;
-    if (data.code == 200) {
+    if (data.code === 200) {
       storage.set('userToken', 'loaded');
       if (this.from.callback) {
         window.location = decodeURIComponent(this.from.callback);

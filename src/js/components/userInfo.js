@@ -1,14 +1,16 @@
-if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
-}
-import Loading from './loading';
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import storage from '../modules/storage';
-import React from 'react';
-const Header = require('./header');
+import Loading from './loading';
+import Header from './header';
+
+var POP;
+if (typeof window !== 'undefined') {
+  POP = require('../modules/confirm');
+}
 if (typeof window !== 'undefined') {
   require('../../css/userinfo.css');
 }
@@ -93,7 +95,7 @@ const UserInfo = React.createClass({
 
       try {
         this.setState({ portraitUrl: window.URL.createObjectURL(file) });
-      } catch (e) {
+      } catch (err) {
         this.setState({ portraitUrl: window.webkitURL.createObjectURL(file) });
       }
 

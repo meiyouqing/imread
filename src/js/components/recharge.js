@@ -1,12 +1,12 @@
+import React from 'react';
 import browserHistory from 'react-router/lib/browserHistory';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
 import myEvent from '../modules/myEvent';
-import React from 'react';
-const Header = require('./header');
-const PayTips = require('./payTips');
-const Recharge_result = require('./recharge_result');
+import Header from './header';
+import PayTips from './payTips';
+
 if (typeof window !== 'undefined') {
   require('../../css/pay.css');
 }
@@ -49,7 +49,7 @@ const Recharge = React.createClass({
     AJAX.go(this.params, success);
     function success(data) {
       myEvent.setCallback('recharge', () => {
-        browserHistory.push(window.location.pathname.replace(/\/recharge\/([^\"]*)/, ''));
+        browserHistory.push(window.location.pathname.replace(/\/recharge\/([^"]*)/, ''));
       });
 
       that.loading = false;
@@ -130,7 +130,7 @@ const Recharge = React.createClass({
     const _this = this;
     const AJAX = new Ajax('balance');
     AJAX.go(null, (data) => {
-      data.success.list.map((v, i) => {
+      data.success.list.forEach((v, i) => {
         if (v.productId == _this.props.params.rechargeId) {
           _this.setState({
             aidou: v.fee / 100,

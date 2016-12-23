@@ -1,7 +1,7 @@
-import myEvent from '../modules/myEvent';
-import browserHistory from 'react-router/lib/browserHistory';
-import GLOBAL from '../modules/global';
 import React from 'react';
+import browserHistory from 'react-router/lib/browserHistory';
+import myEvent from '../modules/myEvent';
+import GLOBAL from '../modules/global';
 import parseQuery from '../modules/parseQuery';
 
 const Header = React.createClass({
@@ -63,7 +63,7 @@ const Header = React.createClass({
     };
   },
   getBacks() {
-    const route = this.props.path.path.replace(/:([^\"]*)/, '');
+    const route = this.props.path.path.replace(/:([^"]*)/, '');
     const arrs = window.location.pathname.split(`/${route}`);
     if (arrs.length > 2) {
       this.path = arrs[0];
@@ -95,7 +95,7 @@ const Header = React.createClass({
       <header className="m-bar m-bar-head">
         {
 					this.state.skipurl ?
-  <a className="f-fl icon-left iconfont" href={this.state.skipurl} /> :
+          <a className="f-fl icon-left iconfont" href={this.state.skipurl} /> :
 					(this.props.left ? this.props.left : <a className="f-fl iconfont icon-left" onClick={this.goBack} />)
 				}
         {this.props.right}

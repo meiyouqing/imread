@@ -1,7 +1,8 @@
-import GLOBAL from '../modules/global';
 import React from 'react';
 import Link from 'react-router/lib/Link';
-const Img = require('./img');
+import GLOBAL from '../modules/global';
+import Img from './img';
+
 const Book2 = React.createClass({
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.data !== nextProps.data;

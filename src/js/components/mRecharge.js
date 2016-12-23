@@ -1,9 +1,13 @@
 import React from 'react';
 import Ajax from '../modules/ajax';
 import mixins from '../modules/mixins';
-const Header = require('./header');
+import Header from './header';
+
 if (typeof window !== 'undefined') {
   require('../../css/pay.css');
+}
+if (typeof window !== 'undefined') {
+  var POP = require('../modules/confirm');
 }
 
 const mRecharge = React.createClass({

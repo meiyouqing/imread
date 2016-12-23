@@ -1,10 +1,10 @@
-import storage from '../modules/storage';
 import browserHistory from 'react-router/lib/browserHistory';
 import parseQuery from '../modules/parseQuery';
 import getCookie from './get_cookie';
 
+var POP;
 if (typeof window !== 'undefined') {
-  var POP = require('../modules/confirm');
+  POP = require('../modules/confirm');
 }
 Date.prototype.Format = function (fmt) {
   const o = {
@@ -91,11 +91,13 @@ const GLOBAL = {
       case 7:// 书单
         return this.setHref(`sheet/bookSheet.${bid}`);
       case 11:// 跳h5下载游戏
-	    		case 12:// 跳下载apk
-	    		case 13:// 跳内部网页
-	    		case 14: // 跳外部网页
-	    		case 15:// app to H5
-	    			return { url: data.redirect_url || 'javascript:void(0)', target };
+      case 12:// 跳下载apk
+      case 13:// 跳内部网页
+      case 14: // 跳外部网页
+      case 15:// app to H5
+	    			return { url: data.redirect_url || '#', target };
+      default:
+        break;
     }
   },
   setBlocklist(data) {
@@ -207,7 +209,7 @@ const GLOBAL = {
   user: {},
   setUser(user) {
     for (const i in user) {
-      if (user.hasOwnProperty(i)) {
+      if (Object.prototype.hasOwnProperty.call(user, i)) {
         GLOBAL.user[i] = user[i];
       }
     }
@@ -263,8 +265,8 @@ const GLOBAL = {
 
     const current = new Date();
     const deltaSecond = (current.getTime() - d.getTime()) / 1000;
-
-    if (new Date(current.getTime() - 24 * 60 * 60 * 1000).Format('yyyyMd') == d.Format('yyyyMd')) {
+    const overday = 24 * 60 * 60 * 1000;
+    if (new Date(current.getTime() - overday).Format('yyyyMd') == d.Format('yyyyMd')) {
       return '昨天';
     }
 

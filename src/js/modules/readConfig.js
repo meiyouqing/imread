@@ -2,7 +2,7 @@ import storage from '../modules/storage';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 
-const parseQuery = require('../modules/parseQuery');
+import parseQuery from '../modules/parseQuery';
 
 // var ReadConfig = (function(callback) {
 // 	var _config = storage.get('readConfig');
