@@ -99,7 +99,7 @@ app.get('*', (req, res) => {
   });
 });
 
-const port = process.argv[2] || 80;
+const port = process.argv[2] || 8080;
 app.listen(port, (error) => {
   if (error) {
     console.error(error);
