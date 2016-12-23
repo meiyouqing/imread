@@ -14,7 +14,7 @@ const storage = {
     let ret;
     try {
       ret = localStorage.getItem(item) || '';
-      if (type != 'string') {
+      if (type !== 'string') {
         ret = JSON.parse(ret);
       }
     } catch (e) {

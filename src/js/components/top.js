@@ -1,17 +1,16 @@
-import myEvent from '../modules/myEvent';
+import React from 'react';
 import NoData from './noData';
 import Loading from './loading';
 import Ajax from '../modules/ajax';
 import GLOBAL from '../modules/global';
 import mixins from '../modules/mixins';
-import React from 'react';
-const Blocklist = require('./blocklist');
-import Header from './header';
-const BookStore = require('./bookStore');
 import MallNavLink from './mallNavLink';
-if (typeof window !== 'undefined') {
-  const POP = require('../modules/confirm');
-}
+import Header from './header';
+import BookStore from './bookStore';
+
+// if (typeof window !== 'undefined') {
+//   var POP = require('../modules/confirm');
+// }
 
 const MallNav = React.createClass({
   render() {
@@ -21,14 +20,14 @@ const MallNav = React.createClass({
         <div className="m-nav f-flexbox" >
           {
 						this.props.navList.map((v, i) => {
-  const path = typeof window === 'undefined' ?
-										global.pathname :
-										location.pathname;
-  const hrefStr = path.replace(/top\/block\.\d/, `top/block.${i}`);
-  return (
-    <MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
-  );
-})
+              const path = typeof window === 'undefined' ?
+                                global.pathname :
+                                location.pathname;
+              const hrefStr = path.replace(/top\/block\.\d/, `top/block.${i}`);
+              return (
+                <MallNavLink to={hrefStr} key={i} className="f-flex1">{v.name}</MallNavLink>
+              );
+            })
 					}
         </div>
       </nav>
@@ -104,8 +103,7 @@ const Top = React.createClass({
   render() {
     this.pid = this.props.params.topId.split('.').pop();
 
-    let list,
-      arr = [];
+    let list;
     if (!this.state.list) {
       if (GLOBAL.isRouter(this.props)) { list = <Loading />; }
     } else if (this.state.list.length) {

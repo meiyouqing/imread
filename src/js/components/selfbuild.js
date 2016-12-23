@@ -40,10 +40,6 @@ const Selfbuild = React.createClass({
 		// var hrefStr = Router.setAPI(this.props.data,this.props.spm);
     let loading;
     let content;
-    let skipurl = '';
-    if (this.from && this.from.skipurl) {
-      skipurl = this.from.skipurl;
-    }
 
     if (!this.state.data) {
       if (GLOBAL.isRouter(this.props)) { loading = <Loading />; }
