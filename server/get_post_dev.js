@@ -6,7 +6,7 @@ const getPost = function (req, callback, onError) {
   global.cookie = getCookie(req.headers.cookie);
   global.pathname = url;
   global.imdata = {};
-  global.query = req.query;
+  global.query = req.query || {};
   console.log(`url>>>>>>>>>>>${url}`);
   const path = url.replace(/^\//, '').replace(/\/$/, '').split('/');
   let param = path[path.length - 1];
@@ -21,7 +21,7 @@ const getPost = function (req, callback, onError) {
     }, (err) => { onError(err, true); });
     return;
   }
-  if (path.length < 3 && /(^\/|mall\/?|page\.\d+)$/.test(url)) {
+  if (/^(\/|\/mall|\/mall\/page.\d+)$/.test(url)) {
     // const match = req.headers.cookie && req.headers.cookie.match(/group_id=(\d)/);
     const configId = global.cookie.group_id || 1;
     console.log(`configId>>>>>>>>>>> ${configId}`);

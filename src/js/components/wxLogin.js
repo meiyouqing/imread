@@ -21,7 +21,7 @@ const WxLogin = React.createClass({
       browserHistory.replace('/');
       return;
     }
-    if (this.isWx() && this.from && this.from.code && this.from.state === '123') {
+    if (this.isWx() && this.from && this.from.code && this.from.state == '123') {
       const AJAX = new Ajax('login_wx');
       AJAX.go({
         code: this.from.code,
@@ -32,7 +32,7 @@ const WxLogin = React.createClass({
     }
   },
   do_result(data) {
-    if (data.code === 200) {
+    if (+data.code === 200) {
       storage.set('userToken', 'loaded');
       if (this.from.callback) {
         window.location = decodeURIComponent(this.from.callback);

@@ -38,6 +38,7 @@ app.use(express.static(path.join(__dirname, '../public'), { setHeaders: setHeade
 
 // 语音朗读api
 app.get('/baiduClientCredentials', (req, res) => {
+  global.query = req.query || {};
   const token = global.access_token || fs.readFileSync(path.join(__dirname, './access_token.json'), 'utf8');
   const token_ = token && JSON.parse(token);
   if (token_ && token_.lastTime + token_.expires_in >= Date.now()) { // access_token does not expired

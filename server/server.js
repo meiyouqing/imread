@@ -30,7 +30,10 @@ app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, '../../public'), { setHeaders: setHeader }));
 // 语音朗读api
 app.get('/baiduClientCredentials', (req, res) => {
-  const token = global.access_token || fs.readFileSync(path.join(__dirname, './access_token.json'), 'utf8');
+    global.query = req.query || {};
+
+  // const token = global.access_token || (fs.existsSync(path.join(__dirname, './access_token.json')) && fs.readFileSync(path.join(__dirname, './access_token.json')), 'utf8');
+  const token = global.access_token;
   const token_ = token && JSON.parse(token);
   if (token_ && token_.lastTime + token_.expires_in >= Date.now()) { // access_token does not expired
     res.send(token);
@@ -44,7 +47,7 @@ app.get('/baiduClientCredentials', (req, res) => {
   function sec(data) {
     data.lastTime = Date.now();
     global.access_token = JSON.stringify(data);
-    fs.writeFileSync(path.join(__dirname, './access_token.json'), JSON.stringify(data));
+    // fs.writeFileSync(path.join(__dirname, './access_token.json'), JSON.stringify(data));
     res.send(JSON.stringify(data));
   }
   function err(error) {

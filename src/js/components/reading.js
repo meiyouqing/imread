@@ -500,7 +500,7 @@ const Reading = React.createClass({
     }
 
     if (!this.isMounted()) { return; }
-    const nextChapter = GLOBAL._nextChapter_;
+    const nextChapter = this._nextChapter_;
     if (nextChapter && (nextChapter.preChapterId) == this.chapterid) {
       this.gotContent(nextChapter);
       return;
@@ -531,10 +531,9 @@ const Reading = React.createClass({
   getNextContent(data) {
     if (!this.isMounted()) { return; }
 
-    const that = this;
     bookContent.get({
       noCross: true,
-      bid: that.bid,
+      bid: this.bid,
       cid: data.nextChapterId,
       source_id: this.source_id,
       book_id: this.book_id,
@@ -545,7 +544,7 @@ const Reading = React.createClass({
             return;
           }
         }
-        GLOBAL._nextChapter_ = data.success;
+        this._nextChapter_ = bookData.success;
       },
       onError: GLOBAL.noop
     });
@@ -589,7 +588,7 @@ const Reading = React.createClass({
               POP._alert('支付失败');
             } else {
               if (isNext) {
-                GLOBAL._nextChapter_ = dataO.success;
+                that._nextChapter_ = dataO.success;
                 return;
               }
               that.storeBookOrdered(that.chapterid);
@@ -649,7 +648,7 @@ const Reading = React.createClass({
       return this.prevChapter();
     } else if (scrollarea.scrollTop > scrollHeight - document.body.offsetHeight - 10 && offset > 0) {
       if (this.state.ttsModer && this.state.playing) {
-        const sync = !!GLOBAL._nextChapter_ && GLOBAL._nextChapter_.pageType === null && GLOBAL._nextChapter_.preChapterId === this.chapterid;
+        const sync = !!this._nextChapter_ && this._nextChapter_.pageType === null && this._nextChapter_.preChapterId === this.chapterid;
         this.pause();
         this.setNextPlay(!sync);
       }
@@ -784,13 +783,13 @@ const Reading = React.createClass({
 
     doinsert.bind(this)();
     this.player.onended = this.player.onerror = () => {
-      const isChapterEnd = this.state.ttsIndex > len - 1;
+      const isChapterEnd = this.state.ttsIndex >= len - 1;
       if (isChapterEnd) {
         const book_info = this.APIParts('readingId');
         this.bid = book_info[1];
         this.chapterid = book_info[2];
-				// console.log(!!GLOBAL._nextChapter_ , GLOBAL._nextChapter_.pageType === null , GLOBAL._nextChapter_.preChapterId === this.chapterid)
-        if (!!GLOBAL._nextChapter_ && GLOBAL._nextChapter_.pageType === null && GLOBAL._nextChapter_.preChapterId === this.chapterid) {
+				// console.log(!!this._nextChapter_ && this._nextChapter_.pageType !== 'order' && this._nextChapter_.preChapterId === this.chapterid)
+        if (!!this._nextChapter_ && this._nextChapter_.pageType !== 'order' && this._nextChapter_.preChapterId === this.chapterid) {
           this.goToChapter(this.state.data.nextChapterId);
         } else {
           this.setNextPlay(true);
@@ -804,7 +803,7 @@ const Reading = React.createClass({
       }
       this.setState({ ttsIndex: isChapterEnd ? -1 : this.state.ttsIndex + 1 });
       this.refs.ttsReading && this.state.ttsIndex > 0 && this.refs.ttsReading.scrollIntoView({ behavior: 'smooth' });
-      const content = this.state.ttsIndex === -1 ? this.state.data.name : this.state.data.content[this.state.ttsIndex];
+      const content = this.state.ttsIndex === -1 ? this._nextChapter_.name : this.state.data.content[this.state.ttsIndex];
 
       const params = `lan=zh&tok=${this.access_token}&ctp=1&cuid=${cuid}&spd=${speed}&pit=5&vol=${volum}&per=${voice}&tex=${content}`;
       this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`;
@@ -827,7 +826,7 @@ const Reading = React.createClass({
       this.player.src = `http://tsn.baidu.com/text2audio?${encodeURI(encodeURI(params))}`;
       this.player.setAttribute('type', 'audio/mp3');
       this.player.setAttribute('preload', '');
-      this.player.setAttribute('autoPlay', '');
+      // this.player.setAttribute('autoPlay', '');
       this.player.id = 'audioRead';
       document.body.appendChild(this.player);
       this.refs.ttsReading && this.state.ttsIndex > 0 && this.refs.ttsReading.scrollIntoView({ behavior: 'smooth' });
