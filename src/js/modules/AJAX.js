@@ -64,6 +64,7 @@ Ajax.prototype.API = {
   upload: { method: 'POST', base: '/api/v1/file/portrait', param: { file: null } },
   edituser: { method: 'POST', base: '/api/v1/auth/edit/info', param: { user_gender: 0, user_birthday: null, user_name: null } },
   login_qq: { method: 'POST', base: '/api/v1/auth/login/sso', param: { user_identifier: null, promot: 'H5', channel: '3', nick_name: null } },
+  login_qq_oauth: { method: 'POST', base: '/api/v1/auth/login/qq/sso', param: { access_token: null } },
   login_wx: { method: 'POST', base: '/api/v1/auth/login/wechat/sso', param: { appid: null, secret: null, code: null, grant_type: null } },
   login_wb: { method: 'POST', base: '/api/v1/auth/login/weibo/sso', param: { code: null, grant_type: null } },
   sdk: { method: 'GET', base: '/api/v2/postion/content', param: { post_id: 1, channel: 1 } },
@@ -79,8 +80,8 @@ Ajax.prototype.getCache = function (url) {
 };
 Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError = GLOBAL.defaultOnError, options = {}) {
   const urlBase = 'https://readapi.imread.com';
-	// var urlBase = 'http://192.168.0.34:9090';
-	// var urlBase = 'http://192.168.0.252:8080';
+	//const urlBase = 'http://192.168.0.34:9090';
+	//const urlBase = 'http://192.168.0.252:8080';
   if (/^\/api/.test(url)) {
     url = urlBase + url;
   }
