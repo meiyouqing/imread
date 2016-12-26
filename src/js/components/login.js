@@ -230,27 +230,15 @@ const Login = React.createClass({
 
 		// 判断并赋值全局QC，执行qq登录.
     if (/^#access_token=.+/.test(location.hash)) {
-      this.QQ_prefly(() => {
-        window.QC.Login({
-                        // btnId: "qqLoginBtn"
-        }, (reqData, opts) => { // 登录成功
-          that.setState({ QQ_loading: true });
-          window.QC.Login.getMe((openId, accessToken) => {
-            const AJAX = new Ajax('login_qq');
+      this.setState({ WX_loading: true });
+      const token = parseQuery(location.hash.replace('#',''));
+
+            const AJAX = new Ajax('login_qq_oauth');
             AJAX.go({
-              user_identifier: openId,
-              promot: 'H5',
-              channel: '3',
-              img_url: reqData.figureurl_qq_2,
-              nick_name: reqData.nickname
+              access_token: token.access_token
             }, (data) => {
               that.do_result(data, 'qq');
             });
-          });
-        }, function (opts) {
-          this.setState({ WX_loading: false, QQ_loading: false });
-        });
-      });
     }
 
 		// 微博登录
@@ -300,35 +288,14 @@ const Login = React.createClass({
       browserHistory.push('/mall/page.9/login');
     });
   },
-  QQ_prefly(cb) {
-    if (typeof QC !== 'undefined') {
-      cb();
-      return;
-    }
-        // 加载qq登录所需js
-    const sr = document.createElement('script');
-    sr.setAttribute('src', 'https://qzonestyle.gtimg.cn/qzone/openapi/qc-1.0.1.js');
-    sr.setAttribute('data-appid', '101354986');
-    sr.setAttribute('data-redirecturi', 'https://m.imread.com/mall/page.9/login');
-    sr.setAttribute('data-callback', 'true');
-    sr.setAttribute('type', 'text/javascript');
-    sr.setAttribute('charset', 'utf-8');
-    document.body.appendChild(sr);
-    sr.onload = () => { setTimeout(() => { cb(); }, 200); };
-  },
   getRedirectPath() {
     return encodeURIComponent(location.pathname.replace(/\/login$/, ''));
   },
   QQ_login() {
     const redirectPath = encodeURIComponent(`redirectPath=${this.getRedirectPath()}`); // 双重编码
-    this.QQ_prefly(goQQ);
-		 function goQQ() {
-   if (navigator.userAgent.indexOf('QQ') > -1)					{
-     return window.open(`https://graph.qq.com/oauth2.0/authorize?client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F${redirectPath}${encodeURIComponent(location.search)}`, 'oauth2Login_10076', 'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');
-   } else				{
-     window.location.href = `http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F${redirectPath}${encodeURIComponent(location.search)}`;
-   }
- }
+
+     window.location.href = `https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F${redirectPath}${encodeURIComponent(location.search)}`;
+
   	},
   	WB_login() {
     const redirectPath = encodeURIComponent(`redirectPath=${this.getRedirectPath()}`); // 双重编码
