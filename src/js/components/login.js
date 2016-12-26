@@ -231,7 +231,7 @@ const Login = React.createClass({
 		// 判断并赋值全局QC，执行qq登录.
     if (/^#access_token=.+/.test(location.hash)) {
       this.setState({ WX_loading: true });
-      const token = parseQuery(location.hash.replace('#',''));
+      const token = parseQuery(location.hash.replace('#', ''));
 
             const AJAX = new Ajax('login_qq_oauth');
             AJAX.go({
@@ -293,9 +293,7 @@ const Login = React.createClass({
   },
   QQ_login() {
     const redirectPath = encodeURIComponent(`redirectPath=${this.getRedirectPath()}`); // 双重编码
-
-     window.location.href = `https://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F${redirectPath}${encodeURIComponent(location.search)}`;
-
+     window.location.href = `http://xui.ptlogin2.qq.com/cgi-bin/xlogin?appid=716027609&pt_3rd_aid=101354986&daid=383&pt_skey_valid=1&style=35&s_url=http%3A%2F%2Fconnect.qq.com&refer_cgi=authorize&which=&client_id=101354986&response_type=token&scope=all&redirect_uri=https%3A%2F%2Fm.imread.com%2Fmall%2Fpage.9%2Flogin%3F${redirectPath}${encodeURIComponent(location.search)}`;
   	},
   	WB_login() {
     const redirectPath = encodeURIComponent(`redirectPath=${this.getRedirectPath()}`); // 双重编码
