@@ -14,12 +14,6 @@ const Block5 = React.createClass({
     };
   },
   getInitialState() {
-		// 筛除不支持的广告类型
-    this.adlist = this.props.data.contentlist.filter((v) => {
-      const hrefObj = this.typeHref(v);
-      if (!hrefObj) return false;
-      return true;
-    });
     return { update: 0, width: '100%', height: 'auto', height11: 'auto' };
   },
   logIntercut(intercut_id, event) {
@@ -37,11 +31,10 @@ const Block5 = React.createClass({
     const that = this;
     const swipeNav = this.refs['swipe-nav'];
     this.swipe && (this.swipe.kill());
-
     const swipeCallback = function (index, ele) {
-      index %= that.props.data.contentlist.length;
+      index %= that.props.data.length;
       // if (GLOBAL.name === 'mall' || (GLOBAL.name == 'reading' && that.props.fromReading)) {
-			// 	// 判断是否在书城
+      // 	// 判断是否在书城
       //   setTimeout(() => {
       //     if (!ele || GLOBAL.isElementVisible(ele)) {
       //       that.logIntercut(that.props.data.contentlist[index].content_id, 1, that.props.data.contentlist[index].show_class);
@@ -49,15 +42,15 @@ const Block5 = React.createClass({
       //   }, 50);
       // }
       ele = ele || that.refs.swipe.querySelector('a');
-      if (ele && ele.querySelector('img')) {
+      if (ele) {
         const img = ele.querySelector('img');
-        if (!img.getAttribute('data-load-state')) {
+        if (img && img.getAttribute('data-src') !== 'loaded') {
           const src = img.getAttribute('data-src');
-          img.setAttribute('data-load-state', 'loading');
+          img.setAttribute('data-src', 'loading');
           GLOBAL.loadImage(src, () => {
             img.src = src;
             img.style.height = that.props.style !== 11 ? that.state.height : `${70}px`;
-            img.setAttribute('data-load-state', 'loaded');
+            img.setAttribute('data-src', 'loaded');
           });
         }
       }
@@ -68,7 +61,7 @@ const Block5 = React.createClass({
     if (!swipeNav) {
       return;
     }
-		// var swipeNavs = swipeNav.children;
+    // var swipeNavs = swipeNav.children;
     this.swipe = new Swipe(this.refs.swipe, {
       auto: 3000,
       callback: swipeCallback
@@ -84,24 +77,24 @@ const Block5 = React.createClass({
     this.setState({ update: this.state.update + 1 });
   },
   componentDidMount() {
-		// alert('mount')
+    // alert('mount')
     this.initSwipe();
     this.setState(this.getWidthAndHeight());
-		// 横竖屏切换 重新计算高度
+    // 横竖屏切换 重新计算高度
     window.addEventListener('resize', this.handleResize, false);
 
     document.addEventListener('updateMall', this.updateIndex);
   },
   componentWillUnmount() {
-		 // document.removeEventListener("updateMall", this.updateIndex, false);
-		 // window.removeEventListener('resize', this.handleResize, false);
-		// console.log(uploadLog.result)
+    // document.removeEventListener("updateMall", this.updateIndex, false);
+    // window.removeEventListener('resize', this.handleResize, false);
+    // console.log(uploadLog.result)
     uploadLog.sending('intercut');
     this.swipe && (this.swipe.kill());
     window.removeEventListener('resize', this.handleResize, false);
   },
   componentDidUpdate() {
-		// alert('update')
+    // console.log('componentDidUpdate')
     this.initSwipe();
   },
   toggleSwipeNav(index) {
@@ -116,76 +109,27 @@ const Block5 = React.createClass({
     }
   },
   shouldComponentUpdate(nextProps, nextState) {
+    // console.log(this.state.height !== nextState.height , this.state.update !== nextState.update , this.props.data !== nextProps.data);
     return this.state.height !== nextState.height
-				|| this.state.update !== nextState.update;
-  },
-  typeHref(data) {
-    if (!data) return null;
-    const bid = data.content_id || data.book_id || data.sheet_id || 0;
-    const type = +data.type || +data.content_type;
-    let target = '_self';
-		// var nothing = {url:'',target:'_self'};
-    if (/2|3|4/.test(data.intercut_type)) {
-      target = '_blank';
-      if (GLOBAL.isAndroid() && (+data.intercut_type) === 4) {
-        target = 'download';
-      }
-    }
-    if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
-      data.redirect_url = data.redirect_url.replace(/referer=\d/, '');
-    }
-    if (isNaN(type)) return null;
-    function setHref(url) {
-      const pathname = GLOBAL.getLocation();
-      const link = pathname.match(/self\/page.\d+\.\d+\.\d/);
-      if (link) return `${pathname}/${url}`;
-			// return url;
-      const match = pathname.match(/\/mall(\/page\.\d+)?/);
-      const base = match ? match[0] : '//m.imread.com/mall';
-      return `${base}/${url}`;
-    }
-		// console.log(type)
-    switch (type) {
-      case 1:// 图书详情
-        return { url: setHref(`book/introduce.${bid}`), target };
-      case 3:// 搜索
-        return { url: setHref(`search/search.${data.name}`), target };
-      case 4:// 目录
-      case 5:// 分类
-        return { url: setHref(`cat/category.${bid}`), target };
-      case 6:// 书城的子页面
-        return { url: setHref(`self/page.${data.content_id}.6.1`), target };
-      case 7:// 书单
-        return { url: setHref(`sheet/bookSheet.${bid}`), target };
-      case 11:// 跳h5下载游戏
-      case 12:// 跳下载apk
-      case 13:// 跳内部网页
-      case 14: // 跳外部网页
-      case 15:// app to H5
-        return { url: data.redirect_url || '#', target };
-      case 16: // to home
-        return { url: '//m.imread.com', target };
-      case 17: // to shelf
-        return { url: '//m.imread.com/mall/shelf', target };
-      default: return null;
-    }
+      || this.state.update !== nextState.update
+      || this.props.data !== nextProps.data;
   },
   render() {
     let swipeNav;
-    if (this.adlist.length > 1) {
+    if (this.props.data.length > 1) {
       swipeNav = (
         <div className="swipe-nav">
           <div className="swipe-nav-wrap f-clearfix" ref="swipe-nav">
             {
-                		this.adlist.map((v, i) => (
-                  <a key={i} className="f-fl swipe-nav-item" />
-	                		))
-                	}
+              this.props.data.map((v, i) => (
+                <a key={i} className="f-fl swipe-nav-item" />
+              ))
+            }
           </div>
         </div>
-			);
+      );
     }
-    const visibility = this.adlist.length > 1 ? 'hidden' : 'visible';
+    const visibility = this.props.data.length > 1 ? 'hidden' : 'visible';
     const pathname = GLOBAL.getLocation();
     return (
       <section className="m-block-top m-block n-padding" style={{ border: 'none' }}>
@@ -194,30 +138,29 @@ const Block5 = React.createClass({
             <div className="swipe" ref="swipe" style={{ visibility, height: (this.props.style !== 11 ? this.state.height : this.state.height11) }}>
               <div className="swipe-wrap">
                 {
-			                	this.adlist.map((v, i) => {
-                  const hrefObj = this.typeHref(v);
-                  const search = this.props.fromReading ?
-										(`?devicetoken=${GLOBAL.getUuid()}&comeFrom=${encodeURIComponent(pathname)}`) :
-										'';
-                  let imgSrc = v.intercut_url || v.image_url;
-                  let imger;
-                  if (typeof window === 'undefined' && /sdk\/sdk\.\d+/.test(pathname)) {
-                    imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
-                  } else {
-                    imgSrc = imgSrc.replace(/^http:\/\//, 'https://');
-                    imger = <img data-src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
-                  }
+                  this.props.data.map((v, i) => {
+                    const hrefObj = GLOBAL.typeAdHref(v);
+                    const search = this.props.fromReading ?
+                      (`?devicetoken=${GLOBAL.getUuid()}&comeFrom=${encodeURIComponent(pathname)}`) :
+                      '';
+                    let imgSrc = v.intercut_url || v.image_url;
+                    let imger;
+                    if (typeof window === 'undefined' && /sdk\/sdk\.\d+/.test(pathname)) {
+                      imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
+                    } else {
+                      imgSrc = imgSrc.replace(/^http:\/\//, 'https://');
+                      imger = <img src="" data-src={imgSrc} className="u-adimg" style={{ width: '100%' }} />;
+                    }
 
+                    if (this.props.data.length < 2) { imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />; }
 
-                  if (this.adlist.length < 2) 										{ imger = <img src={imgSrc} className="u-adimg" style={{ width: '100%' }} />; }
-
-			                		return (
-  <Link style={{ backgroundColor: '#e3e3e3', height: this.state.height }} to={hrefObj.url + search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
-    {imger}
-  </Link>
-			                		);
-			                	})
-			                }
+                    return (
+                      <Link style={{ backgroundColor: '#e3e3e3', height: this.state.height }} to={hrefObj.url + search} target={hrefObj.target} className="swipe-ad f-fl" key={i} onClick={this.handleIntercurClick} data-intercut_id={v.content_id}>
+                        {imger}
+                      </Link>
+                    );
+                  })
+                }
               </div>
               {swipeNav}
             </div>

@@ -24,7 +24,7 @@ const Mall = React.createClass({
   getList() {
 		// console.log(FROM)
     if (!this.APIparam) return;
-    const AJAX = new Ajax(`${this.APIparam}.-.${this.scrollPagesNo}`);
+    const AJAX = new Ajax(`${this.APIparam}.-.${this.scrollPagesNo}`,true);
     AJAX.get(this.ajaxHandle, this.onerror);
   },
   ajaxHandle(data, isPrelod) {

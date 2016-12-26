@@ -420,6 +420,12 @@ const Blocklist = React.createClass({
           return <Block4 key={i} data={block} href={hrefStr} recommend={recommend} />;
         case 11: // banner不铺满
         case 5 : // banner铺满
+          // 筛除不支持的广告类型
+          block = block.contentlist.filter((v) => {
+            const hrefObj = GLOBAL.typeAdHref(v);
+            if (!hrefObj) return false;
+            return true;
+          });
           return <Block5 key={i} data={block} style={block.style} />;
 					// return <AdWrap key={i} data={block} style={block.style} />;
         case 6 :

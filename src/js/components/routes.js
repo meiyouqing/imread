@@ -142,6 +142,11 @@ const selfWrap = (
     {searchWrap}
   </Route>
 	);
+const recentReadWrap = (
+  <Route path="recentRead" component={RecentRead}>
+    {readWrap}
+  </Route>
+);
 
 module.exports = (
   <Route path="/" component={App}>
@@ -151,6 +156,7 @@ module.exports = (
     {loginWrap}
     {selfWrap}
     {payWrap}
+    {recentReadWrap}
     <Route path="/mall(/:subnav)" component={Mall}>
       {selfWrap}
 
@@ -191,9 +197,8 @@ module.exports = (
         </Route>
       </Route>
 
-      <Route path="recentRead" component={RecentRead}>
-        {readWrap}
-      </Route>
+      {recentReadWrap}
+
       <Route path="myTags" component={Tag} />
       <Route path="purchased" component={Purchased}>
         {bookWrap}

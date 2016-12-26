@@ -100,6 +100,57 @@ const GLOBAL = {
         break;
     }
   },
+  typeAdHref(data) {
+    if (!data) return null;
+    const bid = data.content_id || data.book_id || data.sheet_id || 0;
+    const type = +data.type || +data.content_type;
+    let target = '_self';
+		// var nothing = {url:'',target:'_self'};
+    if (/2|3|4/.test(data.intercut_type)) {
+      target = '_blank';
+      if (GLOBAL.isAndroid() && (+data.intercut_type) === 4) {
+        target = 'download';
+      }
+    }
+    if (/^http:\/\/m\.imread\.com.*referer=\d/.test(data.redirect_url)) {
+      data.redirect_url = data.redirect_url.replace(/referer=\d/, '');
+    }
+    if (isNaN(type)) return null;
+    function setHref(url) {
+      const pathname = GLOBAL.getLocation();
+      const link = pathname.match(/self\/page.\d+\.\d+\.\d/);
+      if (link) return `${pathname}/${url}`;
+			// return url;
+      const match = pathname.match(/\/mall(\/page\.\d+)?/);
+      const base = match ? match[0] : '//m.imread.com/mall';
+      return `${base}/${url}`;
+    }
+		// console.log(type)
+    switch (type) {
+      case 1:// 图书详情
+        return { url: setHref(`book/introduce.${bid}`), target };
+      case 3:// 搜索
+        return { url: setHref(`search/search.${data.name}`), target };
+      case 4:// 目录
+      case 5:// 分类
+        return { url: setHref(`cat/category.${bid}`), target };
+      case 6:// 书城的子页面
+        return { url: setHref(`self/page.${data.content_id}.6.1`), target };
+      case 7:// 书单
+        return { url: setHref(`sheet/bookSheet.${bid}`), target };
+      case 11:// 跳h5下载游戏
+      case 12:// 跳下载apk
+      case 13:// 跳内部网页
+      case 14: // 跳外部网页
+      case 15:// app to H5
+        return { url: data.redirect_url || '#', target };
+      case 16: // to home
+        return { url: '//m.imread.com', target };
+      case 17: // to shelf
+        return { url: '//m.imread.com/mall/shelf', target };
+      default: return null;
+    }
+  },
   setBlocklist(data) {
     if (!data.length || !this.isArray(data)) { return; }
     data.forEach((v, i) => {
