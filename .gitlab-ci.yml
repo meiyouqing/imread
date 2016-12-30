@@ -9,7 +9,6 @@ build:
    - rm -rf public/p
    - mkdir public/p
    - webpack -p
-   - ssh -t -t ebook_manager@182.92.184.171 "rm -r /opt/imread_new/public/p"
    - scp -r /opt/ci_www/imread/public/p ebook_manager@182.92.184.171:/opt/imread_new/public
    - scp -r /opt/ci_www/imread/src ebook_manager@182.92.184.171:/opt/imread_new/v3
    - ssh -t -t ebook_manager@182.92.184.171 "cd /opt/imread_new;python publish_real_cdn_dir.py 'http://m.imread.com/';python publish_real_cdn_file.py 'http://m.imread.com/p/bundle1.js'"
