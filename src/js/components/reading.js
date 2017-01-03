@@ -367,9 +367,7 @@ const Reading = React.createClass({
           const intercutList = (
             <div>
               <Block5
-                data={{
-                  contentlist: [data.intercutList[randIndex]]
-                }} type="11" fromReading
+                data={[data.intercutList[randIndex]]} type="11" fromReading
               />
               <span className="iconfont icon-cha" onClick={that.closeIntercut} />
             </div>
@@ -422,6 +420,7 @@ const Reading = React.createClass({
       fromId: from || false
     });
     data = data.success || data;
+
 		// 如果是付费章节，跳到确认订单
     if (data.errorMsg) {
       if (location.pathname.slice(-5) == 'login')	return;
