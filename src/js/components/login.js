@@ -199,6 +199,14 @@ const Login = React.createClass({
         }, 1000);
       }
     }, (res) => {
+      if (typeof res === 'string')         {
+          POP._alert(res);
+        } else          {
+          for (const key in res[0]) {
+            POP._alert(res[0][key]);
+          }
+        }
+
       this.setState({
         s: 0
       });
