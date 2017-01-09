@@ -369,7 +369,7 @@ const IntroduceTabs = React.createClass({
           </div>
         </div>
         <div className="contents" ref="contents">
-          <div className={`content content-0${this.state.current == 0 ? ' active' : ''}`}>{GLOBAL.htmlContent(this.props.book_brief)}</div>
+          <div className={`content content-0${this.state.current == 0 ? ' active' : ''}`} dangerouslySetInnerHTML={{ __html: this.props.book_brief }}></div>
           <div className={`content content-1${this.state.current == 1 ? ' active' : ''}`}>
             <Chapterlist hrefBase={`${path}/reading`} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading} />
           </div>
