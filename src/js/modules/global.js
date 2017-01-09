@@ -47,7 +47,7 @@ const GLOBAL = {
 		// else
 		// 	browserHistory.goBack();
     if (typeof path === 'string')			{
-      browserHistory.push(path);
+      browserHistory.push(path+location.search);
     } else			{
       browserHistory.goBack();
     }
@@ -60,7 +60,11 @@ const GLOBAL = {
       }
       return `${global.pathname}/${str}`;
     } else {
-      return `${location.pathname}/${str}`;
+      let appid = '';
+      let channel = '';
+      if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
+      if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
+      return `${location.pathname}/${str}${appid}${channel}`;
     }
   },
   isRouter(route) {
@@ -334,7 +338,7 @@ const GLOBAL = {
     }
   },
   htmlContent(str) {
-    return str.replace(/<br>/g, '\n');
+    return str.replace(/<\s*br\s*>|<\s*br\s*\/>/g, '\n');
   }
 };
 
