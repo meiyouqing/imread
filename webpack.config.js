@@ -24,9 +24,8 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: 'babel',
 				query:{
-				    presets: ['react', 'es2015'],
-				    plugins: ["transform-object-rest-spread"]
-				    }				
+				    presets: ['react', 'es2015', 'stage-2']
+				}				
 			},
 			{ 
 				test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") 
@@ -50,13 +49,13 @@ module.exports = {
 
 		// new webpack.ProvidePlugin({
 		// 	React: 'react',
-		// 	AJAX: '../modules/AJAX',
+		// 	AJAX: '../modules/ajax',
 		// 	GLOBAL: '../modules/global',
 		// 	storage: '../modules/storage',
 		// 	Loading: './loading',
 		// 	NoData: './noData',
 		// 	Token: '../modules/token',
-		// 	Mixins: '../modules/mixins',
+		// 	mixins: '../modules/mixins',
 		// 	myEvent: '../modules/myEvent',
 		// 	parseQuery: '../modules/parseQuery'
 		// })
