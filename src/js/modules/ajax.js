@@ -99,16 +99,21 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
 
   let GETUrl;
   function getGETUrl() {
+    //postdata && postdata.appid = (isNode ? global.query.appid : GLOBAL.header.appid) || 'ImreadH5';
+    //postdata && postdata.channel = (isNode ? global.query.channel : GLOBAL.header.channel) || 'ImreadH5';
     if (!GETUrl) GETUrl = url + (/\?/.test(url) ? '' : '?') + transformRequest(postdata);
     return GETUrl;
   }
 
   const isNode = typeof window === 'undefined';
+  if(isNode) console.log(global.query.appid)
   const headers = new Headers({
     'Info-Imsi': '',
     'Info-Imei': '',
-    'Info-Channel': (isNode ? global.query.channel : GLOBAL.header.channel) || 'ImreadH5',
-    'Info-appid': (isNode ? global.query.appid : GLOBAL.header.appid) || 'ImreadH5',
+    // 'Info-Channel': (isNode ? global.query.channel : GLOBAL.cookie('jndl_channel')) || 'ImreadH5',
+    // 'Info-appid': (isNode ? global.query.appid : GLOBAL.cookie('jndl_appid')) || '1',
+    'Info-Channel': (isNode ? global.query.channel : GLOBAL.channel) || 'ImreadH5',
+    'Info-appid': (isNode ? global.query.appid : GLOBAL.appid) || '1',
     'Info-Version': '2.4.1',
     'Info-Model': '',
     'Info-Os': '',
