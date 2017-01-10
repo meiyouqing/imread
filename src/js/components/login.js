@@ -55,7 +55,7 @@ const Login = React.createClass({
      });
      if (data.code == 200) {
        if (!storage.set('userToken', data.token)) {
-         POP.alert('无法正常登录！您可能已开启无痕浏览。如需继续登录，请关闭无痕浏览模式！');
+         POP.alert('无法正常登录！您可能已开启无痕浏览。如需继续登录，请退出无痕浏览');
          return;
        }
        that.disPatch('updateUser');
