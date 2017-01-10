@@ -84,7 +84,6 @@ app.get('*', (req, res) => {
     } else if (redirect) {
       res.redirect(redirect.pathname + redirect.search);
     } else if (props) {
-      console.log('sss')
       if (/\/pay|\/login/.test(req.url)) {
         res.setHeader('Cache-Control', 'private,no-cache');
       } else {
