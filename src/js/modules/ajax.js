@@ -125,6 +125,8 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
     Curtime: new Date().Format('yyyyMMddhhmmss'),
     WidthHeight: isNode ? 1 : (window.screen.height / window.screen.width).toFixed(2)
   });
+  if(/\/api\/v1\/upload\/log/.test(url)) headers.append("Content-type", "application/x-www-form-urlencoded ");
+
   const request = method === 'GET' ?
 					new Request(getGETUrl(url, postdata), {
   method,
