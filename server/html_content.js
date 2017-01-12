@@ -16,7 +16,7 @@ export const renderFullPage = (html, preloadedState) => `
         <link rel="apple-touch-icon" href="/src/img/weblogo.png" />
         <script>
             if(location.protocol === 'http:'){
-              location.protocol === 'https:'
+              location.protocol = 'https:'
             }
             (function () {   
                 var ua = window.navigator.userAgent.toLowerCase(), code;

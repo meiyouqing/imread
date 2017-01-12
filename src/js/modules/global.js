@@ -290,7 +290,10 @@ const GLOBAL = {
 		// }
   },
   defaultOnError(res) {
-    if (!res.error) { return; }
+    if (!res.error) {
+      POP.alert('请求异常:'+res);
+      return false; 
+    }
     if (GLOBAL.isArray(res.error)) {
       let errorMsg = '';
       for (const key in res.error[0]) {
