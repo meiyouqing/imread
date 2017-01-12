@@ -243,7 +243,7 @@ const Balance = React.createClass({
               const activeClass = active ? ' active' : '';
                 return (
                   <li key={i} className={`f-fl f-wx${activeClass}`} onClick={this.handleClick} data-index={i}>
-                    <span className="count">{`${item.fee / 100}艾豆`}</span>
+                    <span className="count">{`${item.fee / 100}元`}</span>
                     <p data-index={i}>获得{item.fee / 100}艾豆，送{(item.productPrice - item.fee) / 100}艾豆</p>
                   </li>
                 );
