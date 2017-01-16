@@ -13,12 +13,12 @@ if (typeof window !== 'undefined') {
   if (/appid=\w+/.test(window.location.search) && !GLOBAL.appid) {
     const appid = window.location.search.match(/appid=(\w+)&?/)[1];
     GLOBAL.header.appid = appid;
-    //GLOBAL.cookie('jndl_appid', appid);
+    GLOBAL.cookie('jndl_appid', appid);
   }
   if (/channel=\w+/.test(window.location.search) && !GLOBAL.channel) {
     const channel = window.location.search.match(/channel=(\w+)&?/)[1];
     GLOBAL.header.channel = channel;
-    //GLOBAL.cookie('jndl_channel', channel);
+    GLOBAL.cookie('jndl_channel', channel);
   }
 	// 处理服务端渲染失败
   if (window.__PRELOADED_STATE__ === null) {

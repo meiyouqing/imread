@@ -106,14 +106,23 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
   }
 
   const isNode = typeof window === 'undefined';
-  if(isNode) console.log(global.query.appid)
+  let appid = 1;
+  let channel = 'ImreadH5';
+  if(isNode) {
+    appid = global.cookie.jndl_appid || appid;
+    channel = global.cookie.jndl_channel || channel;
+  }else{
+    appid = GLOBAL.cookie('jndl_appid') || appid;
+    channel = GLOBAL.cookie('jndl_channel') || channel;
+  }
+  console.log(appid);console.log(channel)
   const headers = new Headers({
     'Info-Imsi': '',
     'Info-Imei': '',
     // 'Info-Channel': (isNode ? global.query.channel : GLOBAL.cookie('jndl_channel')) || 'ImreadH5',
     // 'Info-appid': (isNode ? global.query.appid : GLOBAL.cookie('jndl_appid')) || '1',
-    'Info-Channel': (isNode ? global.query.channel : GLOBAL.header.channel) || 'ImreadH5',
-    'Info-appid': (isNode ? global.query.appid : GLOBAL.header.appid) || '1',
+    'Info-Channel': channel,
+    'Info-appid': appid,
     'Info-Version': '2.4.1',
     'Info-Model': '',
     'Info-Os': '',
