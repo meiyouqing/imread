@@ -115,7 +115,6 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
     appid = GLOBAL.cookie('jndl_appid') || appid;
     channel = GLOBAL.cookie('jndl_channel') || channel;
   }
-  console.log(appid);console.log(channel)
   const headers = new Headers({
     'Info-Imsi': '',
     'Info-Imei': '',

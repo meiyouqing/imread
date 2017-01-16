@@ -55,7 +55,7 @@ app.get('/baiduClientCredentials', (req, res) => {
     res.status('402').send(JSON.stringify(error));
   }
 });
-app.get(/(error|undefined|null|favicon\.ico)$/, (req, res) => {
+app.get(/(error|undefined|null|favicon\.ico|loading)$/, (req, res) => {
   console.log(`zzzzzzzz > ${req.url}`);
   res.end();
 });

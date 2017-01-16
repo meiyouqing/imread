@@ -15,13 +15,13 @@ const MallNav = React.createClass({
 						this.props.navList.map((v, i) => {
   const href = `page.${v.pgid}`;
 
-  let appid = '';
-  let channel = '';
-  if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
-  if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
+  // let appid = '';
+  // let channel = '';
+  // if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
+  // if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
   
   return (
-    <MallNavLink to={`/mall/${href}${appid}${channel}`} key={i} className="f-flex1">{v.name}</MallNavLink>
+    <MallNavLink to={`/mall/${href}`} key={i} className="f-flex1">{v.name}</MallNavLink>
   );
 })
 					}

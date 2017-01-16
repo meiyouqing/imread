@@ -60,11 +60,11 @@ const GLOBAL = {
       }
       return `${global.pathname}/${str}`;
     } else {
-      let appid = '';
-      let channel = '';
-      if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
-      if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
-      return `${location.pathname}/${str}${appid}${channel}`;
+      // let appid = '';
+      // let channel = '';
+      // if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
+      // if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
+      return `${location.pathname}/${str}`;
     }
   },
   isRouter(route) {
