@@ -109,8 +109,8 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
   let appid = 1;
   let channel = 'ImreadH5';
   if(isNode) {
-    appid = global.cookie.jndl_appid || appid;
-    channel = global.cookie.jndl_channel || channel;
+    appid = global.query.appid || global.cookie.jndl_appid || appid;
+    channel = global.query.channel || global.cookie.jndl_channel || channel;
   }else{
     appid = GLOBAL.cookie('jndl_appid') || appid;
     channel = GLOBAL.cookie('jndl_channel') || channel;
