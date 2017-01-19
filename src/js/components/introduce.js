@@ -153,7 +153,7 @@ const Introduce = React.createClass({
     let page;
     if (this.state.seq)			{ page = this.state.page + 1; } else			{
       page = this.state.page - 1;
-    }
+    };
     if (page == 0)	return;
 
     this.setState({
@@ -163,9 +163,20 @@ const Introduce = React.createClass({
     const AJAX = new Ajax(`chapterlist.${this.state.book.bid}.${this.state.page_size}.9.asc.${page}`);
 
     AJAX.get((data) => {
+      let chapterlist = [];
+      if(this.state.seq){
+        chapterlist= this.lastBookid !== this.state.book.bid?
+                      data.chapterList:
+                      (this.state.chapterlist || []).concat(data.chapterList);
+      }else{
+        chapterlist = this.lastBookid !== this.state.book.bid?
+                      data.chapterList:
+                      data.chapterList.concat(this.state.chapterlist || []);
+      }
+      this.lastBookid = this.state.book.bid;
       this.setState({
         noMoreChapterlist: this.state.seq ? (Math.ceil(data.totalSize / this.state.page_size) <= (this.state.page + 1)) : (page <= 1),
-        chapterlist: (this.state.seq ? (this.state.chapterlist || []).concat(data.chapterList) : data.chapterList.concat(this.state.chapterlist || [])),
+        chapterlist,
         page,
         getChapterlistLoading: false
       });
@@ -293,7 +304,7 @@ const IntroduceTabs = React.createClass({
       current: index
     });
     if (index == 1) {
-      if (!this.props.chapterlist) this.props.getChapterlist();
+      this.props.getChapterlist();
       this.setState({ showOrderIcon: true });
     } else {
       this.setState({ showOrderIcon: false });
@@ -369,7 +380,7 @@ const IntroduceTabs = React.createClass({
           </div>
         </div>
         <div className="contents" ref="contents">
-          <div className={`content content-0${this.state.current == 0 ? ' active' : ''}`}>{GLOBAL.htmlContent(this.props.book_brief)}</div>
+          <div className={`content content-0${this.state.current == 0 ? ' active' : ''}`} dangerouslySetInnerHTML={{ __html: this.props.book_brief }}></div>
           <div className={`content content-1${this.state.current == 1 ? ' active' : ''}`}>
             <Chapterlist hrefBase={`${path}/reading`} source_id={this.props.source_id} book={this.props.book} order={this.state.orderSeq} source_bid={this.props.source_bid} bid={this.props.bid} chapterlist={list} loading={this.props.getChapterlistLoading} />
           </div>

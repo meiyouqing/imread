@@ -1,5 +1,6 @@
 import React from 'react';
 import MallNavLink from './mallNavLink';
+import GLOBAL from '../modules/global';
 
 const MallNav = React.createClass({
   render() {
@@ -13,6 +14,12 @@ const MallNav = React.createClass({
           {
 						this.props.navList.map((v, i) => {
   const href = `page.${v.pgid}`;
+
+  // let appid = '';
+  // let channel = '';
+  // if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
+  // if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
+  
   return (
     <MallNavLink to={`/mall/${href}`} key={i} className="f-flex1">{v.name}</MallNavLink>
   );

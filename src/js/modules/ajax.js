@@ -99,16 +99,29 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
 
   let GETUrl;
   function getGETUrl() {
+    //postdata && postdata.appid = (isNode ? global.query.appid : GLOBAL.header.appid) || 'ImreadH5';
+    //postdata && postdata.channel = (isNode ? global.query.channel : GLOBAL.header.channel) || 'ImreadH5';
     if (!GETUrl) GETUrl = url + (/\?/.test(url) ? '' : '?') + transformRequest(postdata);
     return GETUrl;
   }
 
   const isNode = typeof window === 'undefined';
+  let appid = 1;
+  let channel = 'ImreadH5';
+  if(isNode) {
+    appid = global.query.appid || global.cookie.jndl_appid || appid;
+    channel = global.query.channel || global.cookie.jndl_channel || channel;
+  }else{
+    appid = GLOBAL.cookie('jndl_appid') || appid;
+    channel = GLOBAL.cookie('jndl_channel') || channel;
+  }
   const headers = new Headers({
     'Info-Imsi': '',
     'Info-Imei': '',
-    'Info-Channel': (isNode ? global.query.channel : GLOBAL.header.channel) || 'ImreadH5',
-    'Info-appid': (isNode ? global.query.appid : GLOBAL.header.appid) || 'ImreadH5',
+    // 'Info-Channel': (isNode ? global.query.channel : GLOBAL.cookie('jndl_channel')) || 'ImreadH5',
+    // 'Info-appid': (isNode ? global.query.appid : GLOBAL.cookie('jndl_appid')) || '1',
+    'Info-Channel': channel,
+    'Info-appid': appid,
     'Info-Version': '2.4.1',
     'Info-Model': '',
     'Info-Os': '',
@@ -120,6 +133,8 @@ Ajax.prototype.getJSON = function (method, url, postdata = {}, callback, onError
     Curtime: new Date().Format('yyyyMMddhhmmss'),
     WidthHeight: isNode ? 1 : (window.screen.height / window.screen.width).toFixed(2)
   });
+  if(/\/api\/v1\/upload\/log/.test(url)) headers.append("Content-type", "application/x-www-form-urlencoded ");
+
   const request = method === 'GET' ?
 					new Request(getGETUrl(url, postdata), {
   method,

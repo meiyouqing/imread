@@ -224,7 +224,7 @@ const UserList = React.createClass({
         <div className="avatar-wrap" onClick={this.login}>
           {
 								this.state.userInfo.portraitUrl ?
-  <img src={this.state.userInfo.portraitUrl} /> :
+  <img src={this.state.userInfo.portraitUrl.replace(/^http:\/\//, 'https://')} /> :
   <span className="iconfont icon-shu_1" />
 							}
         </div>

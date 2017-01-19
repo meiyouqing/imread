@@ -47,7 +47,7 @@ const GLOBAL = {
 		// else
 		// 	browserHistory.goBack();
     if (typeof path === 'string')			{
-      browserHistory.push(path);
+      browserHistory.push(path+location.search);
     } else			{
       browserHistory.goBack();
     }
@@ -60,6 +60,10 @@ const GLOBAL = {
       }
       return `${global.pathname}/${str}`;
     } else {
+      // let appid = '';
+      // let channel = '';
+      // if(GLOBAL.header.appid) appid = '?appid='+GLOBAL.header.appid;
+      // if(GLOBAL.header.channel) channel = '&channel='+GLOBAL.header.channel;
       return `${location.pathname}/${str}`;
     }
   },
@@ -286,7 +290,10 @@ const GLOBAL = {
 		// }
   },
   defaultOnError(res) {
-    if (!res.error) { return; }
+    if (!res.error) {
+      POP.alert('请求异常:'+res);
+      return false; 
+    }
     if (GLOBAL.isArray(res.error)) {
       let errorMsg = '';
       for (const key in res.error[0]) {
@@ -334,7 +341,7 @@ const GLOBAL = {
     }
   },
   htmlContent(str) {
-    return str.replace(/<br>/g, '\n');
+    return str.replace(/<\s*br\s*>|<\s*br\s*\/>/g, '\n');
   }
 };
 

@@ -63,6 +63,8 @@ const Header = React.createClass({
     };
   },
   getBacks() {
+    // console.log(this.props.path)
+    this.props.path.path = this.props.path.path || '/';
     const route = this.props.path.path.replace(/:([^"]*)/, '');
     const arrs = window.location.pathname.split(`/${route}`);
     if (arrs.length > 2) {
