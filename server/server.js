@@ -27,7 +27,7 @@ app.use(compression());
 app.disable('x-powered-by');
 
 
-app.use(express.static(path.join(__dirname, '../../public'), { setHeaders: setHeader }));
+app.use(express.static(path.join(__dirname, '../public'), { setHeaders: setHeader }));
 // 语音朗读api
 app.get('/baiduClientCredentials', (req, res) => {
     global.query = req.query || {};
@@ -96,7 +96,7 @@ app.get('*', (req, res) => {
   });
 });
 
-const port = process.argv[2] || 9099;
+const port = process.argv[2] || 8080;
 app.listen(port, (error) => {
   if (error) {
     console.error(error);
